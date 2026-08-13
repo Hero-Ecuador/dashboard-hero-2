@@ -48,23 +48,33 @@
     --text-muted:#898781;
     --grid:#e6e8ee;
     --border:rgba(11,11,11,0.08);
-    --series-1:#1a1a1a; /* negro   - Tiendas Hero */
-    --series-2:#d8241b; /* rojo    - AAP */
-    --series-3:#4d4d4d; /* gris    - Retail */
-    --series-4:#a81c14; /* rojo oscuro - Mayoristas */
-    --zone-1:#5c0f0b; /* rojo oscuro ramp - Mayoristas zonas (mayor a menor) */
-    --zone-2:#7e140f;
-    --zone-3:#a81c14;
-    --zone-4:#c94f3f;
-    --zone-5:#e8998c;
-    --retail-1:#262626; /* gris ramp - Retail retailers (mayor a menor) */
-    --retail-2:#4d4d4d;
-    --retail-3:#808080;
-    --retail-4:#bfbfbf;
-    --tienda-1:#000000; /* negro ramp - Tiendas (mayor a menor) */
-    --tienda-2:#595959;
-    --tienda-3:#999999;
-    --tienda-4:#d1d1d1;
+    --series-1:#1a1a1a; /* negro          - Tiendas Hero */
+    --series-2:#d8241b; /* rojo vivo      - AAP */
+    --series-3:#d9d9d9; /* gris claro     - Retail */
+    --series-4:#e8998c; /* salmón/rojo claro - Mayoristas (bien separado en claridad del rojo vivo de AAP) */
+    /* Paletas de ranking: cada posición cambia de familia (negro / rojo / gris / salmón claro / gris claro)
+       para que CUALQUIER par de colores del set se distinga a simple vista -no solo los contiguos-,
+       evitando el degradé de un solo tono que se prestaba a confusión. */
+    --zone-1:#1a1a1a; /* negro         - Mayoristas zonas */
+    --zone-2:#a81c14; /* rojo oscuro */
+    --zone-3:#808080; /* gris medio */
+    --zone-4:#e8998c; /* salmón claro */
+    --zone-5:#d9d9d9; /* gris claro */
+    --retail-1:#1a1a1a; /* negro         - Retail retailers */
+    --retail-2:#a81c14; /* rojo oscuro */
+    --retail-3:#808080; /* gris medio */
+    --retail-4:#e8998c; /* salmón claro */
+    --tienda-1:#1a1a1a; /* negro         - Tiendas */
+    --tienda-2:#a81c14; /* rojo oscuro */
+    --tienda-3:#808080; /* gris medio */
+    --tienda-4:#e8998c; /* salmón claro */
+    --categoria-1:#1a1a1a; /* negro         - Repuestos categorías */
+    --categoria-2:#a81c14; /* rojo oscuro */
+    --categoria-3:#808080; /* gris medio */
+    --categoria-4:#e8998c; /* salmón claro */
+    --categoria-5:#d9d9d9; /* gris claro */
+    --canal-1:#1a1a1a; /* negro         - Repuestos canales (Mostrador) */
+    --canal-2:#a81c14; /* rojo oscuro    - Repuestos canales (Taller) */
     --good:#0ca30c;
   }
   *{box-sizing:border-box;}
@@ -182,6 +192,12 @@
     transition:background .15s ease, color .15s ease;
   }
   .aap-toggle button.active{ background:var(--orange); color:#fff; }
+  /* Repuestos tiene 3 grupos de toggle (métrica/canal/mes) + range-chip en el topbar — se compactan
+     ligeramente para que todo entre en una sola línea sin que el topbar crezca y desborde el layout. */
+  #page-repuestos .topbar-controls{ gap:5px; }
+  #page-repuestos .topbar-controls .aap-toggle{ gap:1px; padding:2px; }
+  #page-repuestos .topbar-controls .aap-toggle button{ padding:5px 6px; font-size:9.5px; }
+  #page-repuestos .topbar-controls .range-chip{ padding:5px 7px; gap:4px; font-size:10px; }
 
   .retail-subnav{ display:flex; gap:8px; margin-bottom:10px; flex:0 0 auto; }
   .retail-subnav button{
@@ -351,6 +367,10 @@
       <div class="nav-item" data-page="tiendas">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 4.5 4h15L21 9.5"></path><path d="M4 9.5V20h16V9.5"></path><path d="M9.5 20v-5.5h5V20"></path></svg>
         TIENDAS
+      </div>
+      <div class="nav-item" data-page="repuestos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+        REPUESTOS
       </div>
     </nav>
 
@@ -676,7 +696,7 @@
               <thead><tr><th>Zona</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
               <tbody id="tblMayoristas"></tbody>
             </table>
-            <div class="footnote">Incluye ORIENTE, ST DOMINGO / MANABI, LOS RIOS, GUAYAS y SIERRA — coincide exactamente con el total "Mayoristas" de la hoja RESUMEN (537). Fuente: REPORTE_FACTURACION 2026.</div>
+            <div class="footnote">Incluye ORIENTE, ST DOMINGO / MANABI, LOS RIOS, GUAYAS y SIERRA — coincide exactamente con el total "Mayoristas" de la hoja RESUMEN (522). Fuente: REPORTE_FACTURACION 2026.</div>
           </div>
         </div>
       </div>
@@ -854,7 +874,7 @@
               <thead><tr><th>Retailer</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
               <tbody id="tblRetail"></tbody>
             </table>
-            <div class="footnote" id="footnoteRetail">Incluye AAP, OTOM, CRESA y MASTER MOTO (con ventas registradas); ESPAÑA, MARCIMEX y ARTEFACTA no registran unidades en el periodo — coincide exactamente con el total "Retail" de la hoja RESUMEN (184). Fuente: REPORTE_FACTURACION 2026.</div>
+            <div class="footnote" id="footnoteRetail">Incluye AAP, OTOM, CRESA y MASTER MOTO (con ventas registradas); ESPAÑA, MARCIMEX y ARTEFACTA no registran unidades en el periodo — coincide exactamente con el total "Retail" de la hoja RESUMEN (201). Fuente: REPORTE_FACTURACION 2026.</div>
           </div>
         </div>
       </div>
@@ -1102,7 +1122,7 @@
               <thead><tr><th>Tienda</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
               <tbody id="tblTiendas"></tbody>
             </table>
-            <div class="footnote">Incluye HERO GYE y HERO QUITO (con ventas registradas); HERO ST DOMINGO y HERO PORTOVIEJO no registran unidades en el periodo — coincide exactamente con el total "Tiendas Hero" de la hoja RESUMEN (71). Fuente: REPORTE_FACTURACION 2026.</div>
+            <div class="footnote">Incluye HERO GYE y HERO QUITO (con ventas registradas); HERO ST DOMINGO y HERO PORTOVIEJO no registran unidades en el periodo — coincide exactamente con el total "Tiendas Hero" de la hoja RESUMEN (72). Fuente: REPORTE_FACTURACION 2026.</div>
           </div>
         </div>
       </div>
@@ -1181,10 +1201,12 @@
                 <div class="panel-sub" id="modelosSubtitleTiendas">Unidades vendidas</div>
               </div>
             </div>
-            <table class="data-table compact">
-              <thead><tr><th>Modelo</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
-              <tbody id="tblModelosTiendas"></tbody>
-            </table>
+            <div class="table-scroll" style="max-height:182px;">
+              <table class="data-table compact">
+                <thead><tr><th>Modelo</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
+                <tbody id="tblModelosTiendas"></tbody>
+              </table>
+            </div>
             <div class="footnote" id="modelosFootnoteTiendas">Canal Tiendas propias Hero. Azul = más unidades ese mes. % = participación sobre el total de ese mes. Fuente: CONSOLIDADO_HERO 2026, columna "modelo".</div>
           </div>
         </div>
@@ -1216,6 +1238,302 @@
       </div>
     </section>
 
+    <!-- ================= PAGE: REPUESTOS ================= -->
+    <section class="page" id="page-repuestos">
+      <div class="topbar">
+        <div>
+          <h1>Repuestos</h1>
+          <div class="subtitle">Ventas de repuestos — Mayo a Agosto 2026 (Mayo y Agosto son datos parciales)</div>
+        </div>
+        <div class="topbar-controls">
+          <div class="aap-toggle" data-metric-toggle="repuestos">
+            <button class="active" data-metric="unidades">UNIDADES</button>
+            <button data-metric="ventas">$</button>
+          </div>
+          <div class="aap-toggle" data-canal-toggle>
+            <button class="active" data-canal="todos">TODOS</button>
+            <button data-canal="mostrador">MOSTRADOR</button>
+            <button data-canal="taller">TALLER</button>
+          </div>
+          <div class="aap-toggle" data-sucursal-toggle>
+            <button class="active" data-sucursal="todos">TODOS</button>
+            <button data-sucursal="amer">AV. AMÉRICAS</button>
+            <button data-sucursal="naciones">NACIONES UNIDAS</button>
+          </div>
+          <div class="aap-toggle" data-month-toggle>
+            <button class="active" data-month="todos">TODOS</button>
+            <button data-month="mayo">MAYO</button>
+            <button data-month="junio">JUNIO</button>
+            <button data-month="julio">JULIO</button>
+            <button data-month="agosto">AGOSTO</button>
+          </div>
+          <div class="range-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18"></path><path d="M8 3v4"></path><path d="M16 3v4"></path></svg>
+            <span class="dot"></span> Mayo – Agosto 2026
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-row">
+        <div class="kpi-card accent">
+          <div class="kpi-top"><span class="kpi-label" id="kpiRepuestosTotalLabel">Ventas netas repuestos</span>
+            <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
+          </div>
+          <div class="kpi-value" id="kpiRepuestosTotalValue">8.770</div>
+          <div class="kpi-delta" id="kpiRepuestosTotalDelta">Acumulado Mayo-Agosto 2026</div>
+          <div class="kpi-delta" id="kpiRepuestosUtilidad" style="margin-top:2px;"></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top"><span class="kpi-label">Categoría líder</span>
+            <div class="kpi-icon" style="background:rgba(27,175,122,0.14);"><svg viewBox="0 0 24 24" fill="none" stroke="#1baf7a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"></path><path d="M8 19V9M13 19V5M18 19v12"></path></svg></div>
+          </div>
+          <div class="kpi-value" id="kpiRepuestosLeaderValue">3.616</div>
+          <div class="kpi-delta muted" id="kpiRepuestosLeaderDelta">MOTOR · 41% del total</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top"><span class="kpi-label">2da categoría</span>
+            <div class="kpi-icon" style="background:rgba(42,120,214,0.14);"><svg viewBox="0 0 24 24" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"></path><path d="M8 19V9M13 19V5M18 19v12"></path></svg></div>
+          </div>
+          <div class="kpi-value" id="kpiRepuestosSecondValue">2.641</div>
+          <div class="kpi-delta muted" id="kpiRepuestosSecondDelta">ACCESORIOS Y OTROS</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top"><span class="kpi-label">Julio vs. Junio</span>
+            <div class="kpi-icon" style="background:rgba(211,60,60,0.12);"><svg viewBox="0 0 24 24" fill="none" stroke="#d03b3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7 7 17M17 7H9M17 7v8"></path></svg></div>
+          </div>
+          <div class="kpi-value" style="color:#0ca30c;" id="kpiRepuestosDeltaValue">+148%</div>
+          <div class="kpi-delta muted" id="kpiRepuestosDeltaSub">$2.000 → $4.953</div>
+        </div>
+      </div>
+
+      <div class="retail-subnav" data-subnav data-prefix="repuestos-subview">
+        <button class="active" data-subview="categorias">1. Canales</button>
+        <button data-subview="top">2. Top Repuestos</button>
+        <button data-subview="provincia">3. Provincia y Categorías</button>
+        <button data-subview="modelos">4. Modelos</button>
+      </div>
+
+      <div class="retail-subview active" id="repuestos-subview-categorias">
+        <div class="grid-2" style="margin-bottom:2px;">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Ventas por Canal</div>
+                <div class="panel-sub" id="repuestosBarsSub">Comparativo mensual · Mayo, Junio, Julio, Agosto 2026</div>
+              </div>
+              <button class="cta">Ver detalle</button>
+            </div>
+            <div class="legend-row" id="legendRepuestosCategorias" style="margin-top:0; margin-bottom:8px;"></div>
+            <div class="chart-box h280" style="height:150px;"><canvas id="chartRepuestosBars"></canvas></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Participación por Canal</div>
+                <div class="panel-sub" id="repuestosDonutSub">Acumulado Mayo–Agosto</div>
+              </div>
+            </div>
+            <div class="chart-box h220 donut-wrap" style="height:138px;">
+              <canvas id="chartRepuestosDonut"></canvas>
+              <div class="donut-center"><div class="pct" id="donutRepuestosTotal">1.089</div><div class="lbl" id="donutRepuestosLabel">unidades</div></div>
+            </div>
+            <div class="legend-row" id="legendRepuestosDonut" style="justify-content:center;"></div>
+          </div>
+        </div>
+
+        <div class="grid-2b">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Tendencia de ventas totales</div>
+                <div class="panel-sub">Total general por mes</div>
+              </div>
+            </div>
+            <div class="chart-box h180" style="height:108px;"><canvas id="chartRepuestosTrend"></canvas></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Detalle mensual por Canal</div>
+                <div class="panel-sub">Unidades vendidas</div>
+              </div>
+            </div>
+            <table class="data-table compact dense">
+              <thead><tr><th>Canal</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
+              <tbody id="tblRepuestosCategorias"></tbody>
+            </table>
+            <div class="footnote">Mostrador = venta directa en bodega; Taller = repuestos instalados en servicio técnico. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="retail-subview" id="repuestos-subview-top">
+        <div class="grid-2r">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Ranking de Repuestos</div>
+                <div class="panel-sub" id="repuestosTopSub">Unidades vendidas · Mayo-Agosto 2026</div>
+              </div>
+            </div>
+            <div class="chart-box" style="height:220px;"><canvas id="chartRepuestosTop"></canvas></div>
+            <div class="footnote" id="repuestosTopFootnote">Top 10 según la métrica activa. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.</div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Detalle mensual — Top 10 repuestos</div>
+                <div class="panel-sub" id="repuestosTopTableSub">Unidades vendidas</div>
+              </div>
+            </div>
+            <div class="table-scroll" style="max-height:182px;">
+              <table class="data-table compact dense">
+                <thead><tr><th>Repuesto</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
+                <tbody id="tblRepuestosTop"></tbody>
+              </table>
+            </div>
+            <div class="footnote" id="repuestosTopTableFootnote">Azul = mayor valor ese mes. % = participación sobre el total de ese mes.</div>
+          </div>
+        </div>
+        <div class="grid-2r">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Ventas por Sucursal</div>
+                <div class="panel-sub" id="repuestosSucursalSub">Unidades y $ por sucursal · Mayo–Agosto 2026</div>
+              </div>
+            </div>
+            <div class="chart-box" style="height:96px;"><canvas id="chartRepuestosSucursal"></canvas></div>
+            <div class="footnote" id="repuestosSucursalFootnote">HERO Guayaquil = Av. Américas; HERO Quito = Naciones Unidas. Fuente: hoja BASE_DATOS, columna Sucursal.</div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Detalle mensual por Sucursal</div>
+                <div class="panel-sub" id="repuestosSucursalTableSub">Unidades vendidas</div>
+              </div>
+            </div>
+            <div class="table-scroll" style="max-height:72px;">
+              <table class="data-table compact dense">
+                <thead><tr><th>Sucursal</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
+                <tbody id="tblRepuestosSucursal"></tbody>
+              </table>
+            </div>
+            <div class="footnote" id="repuestosSucursalTableFootnote">Azul = mayor valor ese mes. % = participación sobre el total de ese mes.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="retail-subview" id="repuestos-subview-provincia">
+        <div class="grid-2r">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Ventas por Provincia</div>
+                <div class="panel-sub" id="repuestosProvinciaSub">Unidades y $ por provincia · Mayo–Agosto 2026</div>
+              </div>
+            </div>
+            <div class="chart-box" style="height:245px;"><canvas id="chartRepuestosProvincia"></canvas></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Detalle mensual por Provincia</div>
+                <div class="panel-sub" id="repuestosProvinciaTableSub">Unidades vendidas</div>
+              </div>
+            </div>
+            <table class="data-table compact dense">
+              <thead><tr><th>Provincia</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
+              <tbody id="tblRepuestosProvincia"></tbody>
+            </table>
+            <div class="footnote" id="repuestosProvinciaFootnote">Top 10 de 16 provincias con ventas en el periodo, por venta neta. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.</div>
+          </div>
+        </div>
+        <div class="grid-2r">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Ventas por Categoría</div>
+                <div class="panel-sub" id="repuestosCanalSub">Unidades y $ por categoría · Mayo–Agosto 2026</div>
+              </div>
+            </div>
+            <div class="chart-box" style="height:120px;"><canvas id="chartRepuestosCanal"></canvas></div>
+            <div class="footnote">MOTOR, ACCESORIOS Y OTROS, MANTENIMIENTO, TRANSMISIÓN/EMBRAGUE y FRENOS.</div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Detalle mensual por Categoría</div>
+                <div class="panel-sub" id="repuestosCanalTableSub">Unidades vendidas</div>
+              </div>
+            </div>
+            <table class="data-table compact dense">
+              <thead><tr><th>Categoría</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
+              <tbody id="tblRepuestosCanal"></tbody>
+            </table>
+            <div class="footnote" id="repuestosCanalFootnote">Azul = mayor valor ese mes. % = participación sobre el total de ese mes. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="retail-subview" id="repuestos-subview-modelos">
+        <div class="grid-2r">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Ranking de Modelos</div>
+                <div class="panel-sub" id="repuestosModelosRankingSub">Unidades vendidas · Mayo-Agosto 2026</div>
+              </div>
+            </div>
+            <div class="chart-box" style="height:220px;"><canvas id="chartRepuestosModelosRanking"></canvas></div>
+            <div class="footnote" id="repuestosModelosRankingFootnote">Top 10 de 18 modelos HERO. Reparte la venta entre modelos cuando aplica a varios. Fuente: hoja MODELOS.</div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Detalle mensual por modelo</div>
+                <div class="panel-sub" id="repuestosModelosTableSub">Unidades vendidas</div>
+              </div>
+            </div>
+            <div class="table-scroll" style="max-height:182px;">
+              <table class="data-table compact dense">
+                <thead><tr><th>Modelo</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
+                <tbody id="tblRepuestosModelos"></tbody>
+              </table>
+            </div>
+            <div class="footnote" id="repuestosModelosFootnote">18 modelos HERO. Azul = mayor valor ese mes. % = participación del total de ese mes.</div>
+          </div>
+        </div>
+        <div class="grid-2r">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Ticket Promedio por Modelo</div>
+                <div class="panel-sub" id="repuestosTicketPromedioSub">Ventas ÷ Unidades · Mayo-Agosto 2026</div>
+              </div>
+            </div>
+            <div class="chart-box" style="height:120px;"><canvas id="chartRepuestosTicketPromedio"></canvas></div>
+            <div class="footnote" id="repuestosTicketPromedioFootnote">Top 8 modelos con mayor ticket promedio (Ventas $ ÷ Unidades). Fuente: hoja MODELOS.</div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Detalle mensual de Ticket Promedio</div>
+                <div class="panel-sub">Ticket promedio ($) · Mayo-Agosto 2026</div>
+              </div>
+            </div>
+            <div class="table-scroll" style="max-height:96px;">
+              <table class="data-table compact dense">
+                <thead><tr><th>Modelo</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Prom. 4M</th></tr></thead>
+                <tbody id="tblRepuestosTicketMensual"></tbody>
+              </table>
+            </div>
+            <div class="footnote" id="repuestosTicketMensualFootnote">Ventas $ ÷ Unidades por modelo y mes. Azul = mayor ticket ese mes. Fuente: hoja MODELOS.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 </div>
 
@@ -1230,6 +1548,12 @@ function getVar(name){ return getComputedStyle(document.documentElement).getProp
 
 Chart.register(ChartDataLabels);
 Chart.defaults.font.family = "system-ui, -apple-system, 'Segoe UI', sans-serif";
+const FONT_FAMILY = "system-ui, -apple-system, 'Segoe UI', sans-serif";
+const _measureCtx = document.createElement('canvas').getContext('2d');
+function measureTextWidth(text, weight, size){
+  _measureCtx.font = `${weight} ${size}px ${FONT_FAMILY}`;
+  return _measureCtx.measureText(text).width;
+}
 Chart.defaults.color = PALETTE.muted;
 Chart.defaults.plugins.legend.display = false;
 Chart.defaults.plugins.datalabels = Chart.defaults.plugins.datalabels || {};
@@ -1240,60 +1564,62 @@ Chart.defaults.set('plugins.datalabels', { display:false }); // opt-in per chart
 //   TIENDAS    = tiendas propias HERO (GYE, Quito, Sto. Domingo, Portoviejo)
 //   RETAIL     = AAP, OTOM, ESPAÑA, MASTER MOTO, MARCIMEX, ARTEFACTA, CRESA
 //   MAYORISTAS = ORIENTE, ST DOMINGO / MANABI, LOS RIOS, GUAYAS, SIERRA
-// These three groups sum exactly to the "Total" row in la hoja RESUMEN (303, 238, 244).
-const TIENDAS_TOTAL    = [12,28,24,7];
-const AAP_DATA          = [16,30,84,12];
-const RETAIL_TOTAL     = [18,58,108,12];   // AAP + OTOM + ESPAÑA + MASTER MOTO + MARCIMEX + ARTEFACTA + CRESA
-const RETAIL_SIN_AAP   = [2,28,24,0];     // RETAIL_TOTAL minus AAP_DATA — used only in the Resumen channel chart below
-const MAYORISTAS_TOTAL = [273,152,112,0];
+// These three groups sum exactly to the "Total" row in la hoja RESUMEN (303, 238, 215).
+const TIENDAS_TOTAL    = [12,28,24,8];
+const AAP_DATA          = [16,30,84,15];
+const RETAIL_TOTAL     = [18,58,107,18];   // AAP + OTOM + ESPAÑA + MASTER MOTO + MARCIMEX + ARTEFACTA + CRESA
+const RETAIL_SIN_AAP   = [2,28,23,3];     // RETAIL_TOTAL minus AAP_DATA — used only in the Resumen channel chart below
+const MAYORISTAS_TOTAL = [273,152,84,13];
 
 // Ventas $ por mes (columna "Ventas" del CONSOLIDADO_HERO, filtrado Estado=Facturadas), por cuenta retail
-const RETAIL_VENTAS_TOTAL    = [26275, 88631, 163591, 18478];
-const RETAIL_VENTAS_SIN_AAP  = [2880, 43795, 35800, 0];
+const RETAIL_VENTAS_TOTAL    = [26275, 88631, 161861, 28688];
+const RETAIL_VENTAS_SIN_AAP  = [2880, 43795, 34070, 6760];
 
 // Modelos vendidos, canal Retail únicamente (con AAP). data = unidades [Mayo,Junio,Julio]; ventas = $ [Mayo,Junio,Julio].
 // Orden por unidades totales desc. Los totales por mes coinciden con RETAIL_TOTAL / RETAIL_VENTAS_TOTAL.
 const RETAIL_MODELOS = [
-  {name:'ECO DELUXE',   data:[11,23,42,3], ventas:[12650,26480,48420,3450]},
-  {name:'HUNK 125R',    data:[4,14,32,3],  ventas:[6920,24250,55420,5190]},
+  {name:'ECO DELUXE',   data:[11,23,42,6], ventas:[12650,26480,48420,6900]},
+  {name:'HUNK 125R',    data:[4,14,31,5],  ventas:[6920,24250,53690,8650]},
   {name:'XOOM 110',     data:[1,13,7,4],   ventas:[1605,20865,11235,6420]},
   {name:'ECO 150',      data:[0,2,15,1],   ventas:[0,2960,22200,1480]},
   {name:'HUNK 160 4V',  data:[2,4,5,0],    ventas:[5100,10200,12750,0]},
   {name:'XOOM 125R',    data:[0,2,7,1],    ventas:[0,3876,13566,1938]},
+  {name:'XPULSE 200 4V FI', data:[0,0,0,1], ventas:[0,0,0,3300]},
 ];
 
 // Vista "SIN AAP" (Retail): RETAIL_MODELOS menos la contribución de AAP por modelo. XOOM 125R no aparece
 // porque en Retail sus unidades son 100% de AAP. Los totales por mes coinciden con RETAIL_SIN_AAP / RETAIL_VENTAS_SIN_AAP.
 const RETAIL_MODELOS_SIN_AAP = [
-  {name:'HUNK 125R',    data:[1,8,7,0],  ventas:[1730,13870,12170,0]},
+  {name:'HUNK 125R',    data:[1,8,6,2],  ventas:[1730,13870,10440,3460]},
   {name:'ECO DELUXE',   data:[1,9,5,0],  ventas:[1150,10380,5870,0]},
   {name:'ECO 150',      data:[0,0,12,0], ventas:[0,0,17760,0]},
   {name:'XOOM 110',     data:[0,9,0,0],  ventas:[0,14445,0,0]},
   {name:'HUNK 160 4V',  data:[0,2,0,0],  ventas:[0,5100,0,0]},
+  {name:'XPULSE 200 4V FI', data:[0,0,0,1], ventas:[0,0,0,3300]},
 ];
 
 // Modelos vendidos, canal Tiendas propias Hero únicamente. data = unidades [Mayo,Junio,Julio]; ventas = $ [Mayo,Junio,Julio].
 // Orden por unidades totales desc. Los totales por mes coinciden con TIENDAS_TOTAL / TIENDAS_VENTAS.
 const TIENDAS_MODELOS = [
   {name:'HUNK 125R',         data:[2,10,10,2], ventas:[4138,23294,28866,6087]},
-  {name:'ECO DELUXE',        data:[6,9,2,0],   ventas:[8826,13266,4509,0]},
+  {name:'ECO DELUXE',        data:[6,9,2,0],   ventas:[8826,13266,4510,0]},
   {name:'XOOM 125R',         data:[0,4,7,2],   ventas:[0,8972,18342,4938]},
   {name:'HUNK 160 4V',       data:[1,3,3,2],   ventas:[2945,9300,13308,7646]},
+  {name:'ECO 150',           data:[0,1,1,1],   ventas:[0,1800,1800,2786]},
   {name:'XOOM 110',          data:[2,1,0,0],   ventas:[3022,3422,0,0]},
   {name:'XPULSE 200 4V FI',  data:[1,0,1,1],   ventas:[3800,0,3590,5817]},
-  {name:'ECO 150',           data:[0,1,1,0],   ventas:[0,1800,1800,0]},
 ];
 
 // Ventas $ por mes — canales (Resumen). AAP repite el mismo dato que su fila en retailAccounts.ventas.
-const TIENDAS_VENTAS     = [22731, 60053, 70415, 24489];    // HERO GYE + HERO QUITO
-const AAP_VENTAS         = [23395, 44836, 127791, 18478];
-const MAYORISTAS_VENTAS  = [472554, 234771, 198852, 0]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
+const TIENDAS_VENTAS     = [22731, 60053, 70415, 27274];    // HERO GYE + HERO QUITO
+const AAP_VENTAS         = [23395, 44836, 127791, 21928];
+const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 22860]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
 
 // Ventas $ por mes, por zona Mayoristas (columna Ventas, agrupado por Vendedor — mismo mapeo validado con el usuario)
 const MAYORISTAS_VENTAS_ZONA = {
-  'ORIENTE':              [303707, 93692, 124141, 0],
-  'ST DOMINGO / MANABI':  [40595,  37109, 32851,  0],
-  'LOS RIOS':             [40634,  64229, 30910,  0],
+  'ORIENTE':              [303707, 93692, 82092, 22860],
+  'ST DOMINGO / MANABI':  [40595,  37109, 30913,  0],
+  'LOS RIOS':             [40634,  64229, 22030,  0],
   'GUAYAS':               [73688,  31489, 5920,   0],
   'SIERRA':               [13930,  8252,  5030,   0],
 };
@@ -1301,27 +1627,59 @@ const MAYORISTAS_VENTAS_ZONA = {
 // Modelos vendidos, canal Mayoristas únicamente. data = unidades [Mayo,Junio,Julio]; ventas = $ [Mayo,Junio,Julio].
 // Orden por unidades totales desc. Los totales por mes coinciden con MAYORISTAS_TOTAL / MAYORISTAS_VENTAS.
 const MAYORISTAS_MODELOS = [
-  {name:'ECO DELUXE',        data:[85,24,17,0], ventas:[98028,27600,19550,0]},
-  {name:'ECO 150',           data:[0,90,30,0],  ventas:[0,133722,44400,0]},
-  {name:'XOOM 125R',         data:[46,13,29,0], ventas:[89148,25331,56202,0]},
-  {name:'XOOM 110',          data:[44,16,10,0], ventas:[70677,25680,16050,0]},
-  {name:'HUNK 125R',         data:[53,4,10,0],  ventas:[91336,7396,17300,0]},
-  {name:'HUNK 160 4V',       data:[34,3,11,0],  ventas:[86799,7559,28050,0]},
-  {name:'XPULSE 200 4V FI',  data:[11,2,5,0],   ventas:[36566,7483,17300,0]},
+  {name:'ECO DELUXE',        data:[85,24,16,6], ventas:[98028,27600,18400,6900]},
+  {name:'ECO 150',           data:[0,90,23,1],  ventas:[0,133722,34040,1480]},
+  {name:'XOOM 125R',         data:[46,13,20,0], ventas:[89148,25331,38760,0]},
+  {name:'HUNK 125R',         data:[53,4,7,1],   ventas:[91336,7396,12110,1730]},
+  {name:'XOOM 110',          data:[44,16,5,0],  ventas:[70677,25680,8025,0]},
+  {name:'HUNK 160 4V',       data:[34,3,11,5],  ventas:[86799,7560,28050,12750]},
+  {name:'XPULSE 200 4V FI',  data:[11,2,2,0],   ventas:[36567,7483,6600,0]},
 ];
 
 // Ventas $ por mes, por tienda propia Hero (columna Ventas, agrupado por Nombre Bodega)
 const TIENDAS_VENTAS_STORE = {
-  'HERO GYE':   [22731, 60053, 66515, 6779],
-  'HERO QUITO': [0,     0,     3900,  17710],
+  'HERO GYE':   [22731, 60053, 66515, 9822],
+  'HERO QUITO': [0,     0,     3900,  17452],
 };
 
 let aapMode = 'con'; // 'con' = incluye AAP, 'sin' = excluye AAP (toggle de comparación)
 // Estado independiente del toggle UNIDADES/$ por página — cada página filtra su propia vista.
-let metricState = { resumen:'unidades', mayoristas:'unidades', retail:'unidades', tiendas:'unidades' };
+let metricState = { resumen:'unidades', mayoristas:'unidades', retail:'unidades', tiendas:'unidades', repuestos:'unidades' };
 
 // Filtro global de mes (TODOS/MAYO/JUNIO/JULIO/AGOSTO) — afecta a las 4 páginas por igual.
 let monthFilter = 'todos';
+// Filtro de canal (TODOS/MOSTRADOR/TALLER) y de sucursal (TODOS/AV. AMÉRICAS/NACIONES UNIDAS) —
+// exclusivos de Repuestos, se combinan entre sí y afectan KPIs y las 4 pestañas.
+let canalFilter = 'todos';
+let sucursalFilter = 'todos'; // 'todos' | 'amer' | 'naciones'
+function sumArr(a,b){ return a.map((v,i)=> v+b[i]); }
+// Helper: aplica canalFilter y/o sucursalFilter (combinados) a un arreglo de filas con
+// byCombo:{mostrador:{amer,naciones}, taller:{amer,naciones}}, cada celda {data,ventas}.
+function canalRows(rawArray){
+  if(canalFilter==='todos' && sucursalFilter==='todos') return rawArray;
+  return rawArray.map(item=>{
+    const combo = item.byCombo;
+    let cell;
+    if(canalFilter!=='todos' && sucursalFilter!=='todos'){
+      cell = combo[canalFilter][sucursalFilter];
+    } else if(canalFilter!=='todos'){
+      const a = combo[canalFilter].amer, b = combo[canalFilter].naciones;
+      cell = { data: sumArr(a.data,b.data), ventas: sumArr(a.ventas,b.ventas) };
+    } else {
+      const a = combo.mostrador[sucursalFilter], b = combo.taller[sucursalFilter];
+      cell = { data: sumArr(a.data,b.data), ventas: sumArr(a.ventas,b.ventas) };
+    }
+    return {...item, data: cell.data, ventas: cell.ventas};
+  });
+}
+// Helper: selecciona/combina el total plano (4 meses) correspondiente al canal y/o sucursal activos.
+// byComboMap tiene forma { mostrador:{amer:[4], naciones:[4]}, taller:{amer:[4], naciones:[4]} }.
+function canalTotal(base, byComboMap){
+  if(canalFilter==='todos' && sucursalFilter==='todos') return base;
+  if(canalFilter!=='todos' && sucursalFilter!=='todos') return byComboMap[canalFilter][sucursalFilter];
+  if(canalFilter!=='todos') return sumArr(byComboMap[canalFilter].amer, byComboMap[canalFilter].naciones);
+  return sumArr(byComboMap.mostrador[sucursalFilter], byComboMap.taller[sucursalFilter]);
+}
 const MONTH_IDX = { mayo:0, junio:1, julio:2, agosto:3 };
 const MONTH_LABEL = { todos:'Mayo-Agosto 2026', mayo:'Mayo 2026', junio:'Junio 2026', julio:'Julio 2026', agosto:'Agosto 2026' };
 const MONTH_LABEL_SHORT = { todos:'Mayo-Agosto', mayo:'Mayo', junio:'Junio', julio:'Julio', agosto:'Agosto' };
@@ -1360,7 +1718,7 @@ const TIENDA_COLORS = ['--tienda-1','--tienda-2','--tienda-3','--tienda-4'].map(
 
 const tiendas = {
   stores:[
-    {name:'HERO GYE',   data:[12,28,22,2], ventas: TIENDAS_VENTAS_STORE['HERO GYE']},
+    {name:'HERO GYE',   data:[12,28,22,3], ventas: TIENDAS_VENTAS_STORE['HERO GYE']},
     {name:'HERO QUITO', data:[0,0,2,5],    ventas: TIENDAS_VENTAS_STORE['HERO QUITO']},
     {name:'HERO ST DO',  data:[0,0,0,0],   ventas:[0,0,0,0]},
     {name:'HERO PORTO',  data:[0,0,0,0],   ventas:[0,0,0,0]},
@@ -1381,9 +1739,9 @@ function computeTiendasModel(metric){
 const ZONE_COLORS = ['--zone-1','--zone-2','--zone-3','--zone-4','--zone-5'].map(getVar);
 
 const mayoristasAccounts = [
-  {name:'ORIENTE',              data:[181,60,64,0]},
-  {name:'ST DOMINGO / MANABI',  data:[28,24,20,0]},
-  {name:'LOS RIOS',             data:[24,45,22,0]},
+  {name:'ORIENTE',              data:[181,60,43,13]},
+  {name:'ST DOMINGO / MANABI',  data:[28,24,19,0]},
+  {name:'LOS RIOS',             data:[24,45,16,0]},
   {name:'GUAYAS',               data:[36,19,4,0]},
   {name:'SIERRA',               data:[4,4,2,0]},
 ].map(a=>({...a, ventas: MAYORISTAS_VENTAS_ZONA[a.name], total:a.data.reduce((x,y)=>x+y,0)})).sort((a,b)=>b.total-a.total)
@@ -1398,13 +1756,33 @@ function computeMayoristasModel(metric){
   return { active, total, metric };
 }
 
+function computeRepuestosModel(metric){
+  // Alimenta el KPI row de Repuestos (Categoría líder / 2da categoría) — se mantiene sobre categorías
+  // aunque el tab visual "1. Canales" ahora muestre canales (ver computeRepuestosCanalModel).
+  const active = canalRows(repuestosCategoriasRaw).map(c=>{
+    const series = metric==='ventas' ? c.ventas : c.data;
+    return { name:c.name, color:c.color, data: series, total: sum(series), view: mval(series) };
+  });
+  const total = MONTHS.map((_,i)=> sum(active.map(c=>c.data[i])));
+  return { active, total, metric };
+}
+// Alimenta los gráficos (barras/donut/tendencia/tabla) del tab "1. Canales".
+function computeRepuestosCanalModel(metric){
+  const active = canalRows(repuestosCanalesRaw).map(c=>{
+    const series = metric==='ventas' ? c.ventas : c.data;
+    return { name:c.name, color:c.color, data: series, total: sum(series), view: mval(series) };
+  });
+  const total = MONTHS.map((_,i)=> sum(active.map(c=>c.data[i])));
+  return { active, total, metric };
+}
+
 const RETAIL_COLORS = ['--retail-1','--retail-2','--retail-3','--retail-4'].map(getVar);
 
 const retailAccounts = [
-  {name:'AAP',          data:[16,30,84,12], ventas:[23395,44836,127791,18478]},
+  {name:'AAP',          data:[16,30,84,15], ventas:[23395,44836,127791,21928]},
   {name:'OTOM',         data:[0,28,12,0],   ventas:[0,43735,17760,0]},
   {name:'CRESA',        data:[2,0,7,0],     ventas:[2880,60,9390,0]},
-  {name:'MASTER MOTO',  data:[0,0,5,0],     ventas:[0,0,8650,0]},
+  {name:'MASTER MOTO',  data:[0,0,4,3],     ventas:[0,0,6920,6760]},
   {name:'ESPAÑA',       data:[0,0,0,0],     ventas:[0,0,0,0]},
   {name:'MARCIMEX',     data:[0,0,0,0],     ventas:[0,0,0,0]},
   {name:'ARTEFACTA',    data:[0,0,0,0],     ventas:[0,0,0,0]},
@@ -1413,22 +1791,23 @@ const retailAccounts = [
 // Origen_Ventas (CONSOLIDADO_HERO, Estado=Facturadas, Mayo–Julio) — AAP tiene 18 orígenes;
 // se muestran los 10 principales y se agrupan los 8 restantes (≤3 u. cada uno) en "Otros".
 const AAP_ORIGEN = [
-  {name:'BABAHOYO',           u:18, v:29661},
+  {name:'BABAHOYO',           u:20, v:32541},
   {name:'9 DE OCTUBRE',       u:16, v:24449},
-  {name:'DURÁN',              u:13, v:17808},
-  {name:'MILAGRO',            u:13, v:21060},
+  {name:'DURÁN',              u:15, v:20688},
+  {name:'MILAGRO',            u:15, v:24270},
+  {name:'ESMERALDAS',         u:10, v:12410},
+  {name:'PARQUE CALIFORNIA',  u:9,  v:13830},
+  {name:'LIBERTAD',           u:8,  v:11760},
   {name:'PORTOVIEJO',         u:8,  v:13211},
-  {name:'ESMERALDAS',         u:8,  v:9780},
-  {name:'PARQUE CALIFORNIA',  u:8,  v:12680},
-  {name:'LIBERTAD',           u:7,  v:10610},
-  {name:'VINCES',             u:7,  v:9210},
+  {name:'EMPRESARIAL',        u:7,  v:11065},
   {name:'SANTO DOMINGO',      u:7,  v:9790},
-  {name:'Otros (8 orígenes)', u:25, v:37763},
+  {name:'Otros (8 orígenes)', u:30, v:43936},
 ];
 
 const NONAAP_ORIGEN = [
   {name:'DAULE',          u:40, v:61495},
   {name:'GUAYAQUIL',      u:11, v:15790},
+  {name:'ORIENTE',        u:3,  v:6760},
   {name:'CUENCA',         u:2,  v:3460},
   {name:'SANTO DOMINGO',  u:1,  v:1730},
 ];
@@ -1436,54 +1815,56 @@ const NONAAP_ORIGEN = [
 // Detalle mensual por origen (Retail) — data = unidades [Mayo,Junio,Julio], ventas = $ [Mayo,Junio,Julio].
 // AAP: top 10 orígenes por unidades + "Otros (8 orígenes)" agrupa el resto — mismo criterio que AAP_ORIGEN.
 const AAP_ORIGEN_MENSUAL = [
-  {name:'BABAHOYO',           data:[2,8,8,1],   ventas:[3700,13118,12843,1730]},
+  {name:'BABAHOYO',           data:[2,8,8,2],   ventas:[3700,13118,12843,2880]},
   {name:'9 DE OCTUBRE',       data:[1,5,10,0],  ventas:[1150,8028,15271,0]},
+  {name:'DURÁN',              data:[3,4,6,2],   ventas:[3450,5510,8848,2880]},
   {name:'MILAGRO',            data:[3,2,8,2],   ventas:[3905,2755,14400,3210]},
-  {name:'DURÁN',              data:[3,4,6,1],   ventas:[3450,5510,8848,1730]},
-  {name:'PORTOVIEJO',         data:[1,2,5,0],   ventas:[2550,3335,7326,0]},
   {name:'ESMERALDAS',         data:[0,5,3,2],   ventas:[0,6330,3450,2630]},
   {name:'PARQUE CALIFORNIA',  data:[0,0,8,1],   ventas:[0,0,12680,1150]},
-  {name:'VINCES',             data:[1,0,6,0],   ventas:[1730,0,7480,0]},
-  {name:'SANTO DOMINGO',      data:[2,1,4,0],   ventas:[2880,1150,5760,0]},
   {name:'LIBERTAD',           data:[1,0,6,1],   ventas:[1150,0,9460,1150]},
-  {name:'Otros (8 orígenes)', data:[2,3,20,4],  ventas:[2880,4610,30273,6878]},
+  {name:'PORTOVIEJO',         data:[1,2,5,0],   ventas:[2550,3335,7326,0]},
+  {name:'EMPRESARIAL',        data:[0,0,6,1],   ventas:[0,0,9335,1730]},
+  {name:'SANTO DOMINGO',      data:[2,1,4,0],   ventas:[2880,1150,5760,0]},
+  {name:'Otros (8 orígenes)', data:[3,3,20,4],  ventas:[4610,4610,28418,6298]},
 ];
-const AAP_ORIGEN_MONTH_TOTAL = [16,30,84,12];
-const AAP_ORIGEN_MONTH_TOTAL_VENTAS = [23395,44836,127791,18478];
+const AAP_ORIGEN_MONTH_TOTAL = [16,30,84,15];
+const AAP_ORIGEN_MONTH_TOTAL_VENTAS = [23395,44836,127791,21928];
 
-// Sin AAP: los 4 orígenes con ventas registradas (OTOM, CRESA, Master Moto).
+// Sin AAP: los orígenes con ventas registradas (OTOM, CRESA, Master Moto).
 const NONAAP_ORIGEN_MENSUAL = [
   {name:'DAULE',          data:[0,28,12,0], ventas:[0,43735,17760,0]},
   {name:'GUAYAQUIL',      data:[2,0,9,0],   ventas:[2880,60,12850,0]},
-  {name:'CUENCA',         data:[0,0,2,0],   ventas:[0,0,3460,0]},
+  {name:'ORIENTE',        data:[0,0,0,3],   ventas:[0,0,0,6760]},
+  {name:'CUENCA',         data:[0,0,1,0],   ventas:[0,0,1730,0]},
   {name:'SANTO DOMINGO',  data:[0,0,1,0],   ventas:[0,0,1730,0]},
 ];
-const NONAAP_ORIGEN_MONTH_TOTAL = [2,28,24,0];
-const NONAAP_ORIGEN_MONTH_TOTAL_VENTAS = [2880,43795,35800,0];
+const NONAAP_ORIGEN_MONTH_TOTAL = [2,28,23,3];
+const NONAAP_ORIGEN_MONTH_TOTAL_VENTAS = [2880,43795,34070,6760];
 
 // Perfil de cliente (columna "Perfil Tiendas Hero/AAP"), acumulado Mayo-Junio-Julio 2026.
 // Orden fijo (escala de perfil, no ordenado por valor) — coincide exacto con el reporte del usuario.
 const PERFIL_AAP = [
   {name:'AAA',        v:51478, u:32},
-  {name:'AA',         v:49145, u:27},
-  {name:'A',          v:17353, u:13},
-  {name:'BBB',        v:10120, u:7},
+  {name:'AA',         v:54325, u:31},
+  {name:'A',          v:21713, u:16},
+  {name:'BBB',        v:11725, u:8},
   {name:'BB',         v:8060,  u:6},
-  {name:'B',          v:8960,  u:7},
-  {name:'B+',         v:10328, u:7},
+  {name:'B',          v:13775, u:10},
+  {name:'B+',         v:13996, u:9},
   {name:'B-',         v:13115, u:10},
   {name:'C+',         v:8050,  u:7},
   {name:'NSSA',       v:2880,  u:2},
-  {name:'CONTADO',    v:13778, u:10},
+  {name:'CONTADO',    v:14928, u:11},
   {name:'EXCEPCION',  v:2755,  u:2},
+  {name:'PENDIENTE',  v:1150,  u:1},
 ];
 
 // Detalle mensual por Perfil (Retail, AAP) — data = unidades [Mayo,Junio,Julio], ventas = $ [Mayo,Junio,Julio].
 // Mismo orden fijo de escala que PERFIL_AAP.
 const PERFIL_AAP_MENSUAL = [
   {name:'AAA',        data:[1,3,28,0], ventas:[2550,4818,44110,0]},
-  {name:'AA',         data:[2,9,16,3], ventas:[4280,15675,29190,4030]},
-  {name:'A',          data:[1,5,7,2],  ventas:[1730,6785,8838,3210]},
+  {name:'AA',         data:[2,9,16,4], ventas:[4280,15675,29190,5180]},
+  {name:'A',          data:[1,5,7,3],  ventas:[1730,6785,8838,4360]},
   {name:'BBB',        data:[1,1,5,1],  ventas:[1150,1480,7490,1605]},
   {name:'BB',         data:[1,1,4,0],  ventas:[1150,1150,5760,0]},
   {name:'B',          data:[1,1,5,3],  ventas:[1150,1480,6330,4815]},
@@ -1493,82 +1874,88 @@ const PERFIL_AAP_MENSUAL = [
   {name:'NSSA',       data:[0,0,2,0],  ventas:[0,0,2880,0]},
   {name:'CONTADO',    data:[1,3,6,1],  ventas:[1150,4818,7810,1150]},
   {name:'EXCEPCION',  data:[1,0,1,0],  ventas:[1150,0,1605,0]},
+  {name:'PENDIENTE',  data:[0,0,0,1],  ventas:[0,0,0,1150]},
 ];
-const PERFIL_AAP_MONTH_TOTAL = [16,30,84,12]; // unidades con perfil asignado, AAP, por mes
-const PERFIL_AAP_MONTH_TOTAL_VENTAS = [23395,44836,127791,18478]; // $ con perfil asignado, AAP, por mes
+const PERFIL_AAP_MONTH_TOTAL = [16,30,84,15]; // unidades con perfil asignado, AAP, por mes
+const PERFIL_AAP_MONTH_TOTAL_VENTAS = [23395,44836,127791,21928]; // $ con perfil asignado, AAP, por mes
 
 // Perfil de cliente por tienda propia Hero (columna Origen_Ventas = TIENDA AMERICAS / TIENDA NACIONES UNIDAS).
 // Orden fijo por tienda, coincide exacto con el reporte del usuario — acumulado Mayo-Junio-Julio 2026.
 const PERFIL_TIENDA_AMERICAS = [
-  {name:'AAA',         v:32472, u:14},
+  {name:'AAA',         v:32473, u:14},
   {name:'AA',          v:8587,  u:3},
   {name:'A',           v:6682,  u:2},
-  {name:'BBB',         v:5891,  u:2},
+  {name:'BBB',         v:5890,  u:2},
   {name:'BB',          v:19373, u:5},
   {name:'B+',          v:3887,  u:1},
-  {name:'B-',          v:5655,  u:2},
+  {name:'B-',          v:7888,  u:3},
   {name:'CONTADO',     v:45455, u:19},
-  {name:'COLABORADOR', v:21297, u:14},
+  {name:'COLABORADOR', v:21298, u:14},
+  {name:'PENDIENTE',   v:7589,  u:2},
 ];
 const PERFIL_TIENDA_NACIONES = [
-  {name:'AA',      v:1800, u:1},
-  {name:'CONTADO', v:2100, u:1},
+  {name:'AA',        v:1800, u:1},
+  {name:'A',         v:5817, u:1},
+  {name:'B-',        v:3100, u:1},
+  {name:'CONTADO',   v:2100, u:1},
+  {name:'PENDIENTE', v:8535, u:3},
 ];
 
 // Detalle mensual por Perfil, por tienda propia Hero — data = unidades [Mayo,Junio,Julio], ventas = $ [Mayo,Junio,Julio].
 // Mismo orden fijo que PERFIL_TIENDA_AMERICAS / PERFIL_TIENDA_NACIONES.
 const PERFIL_TIENDA_AMERICAS_MENSUAL = [
-  {name:'AAA',         data:[2,5,7,0],   ventas:[4248,6798,21426,0]},
+  {name:'AAA',         data:[2,5,7,0],   ventas:[4248,6798,21427,0]},
   {name:'AA',          data:[0,1,2,0],   ventas:[0,3100,5487,0]},
   {name:'A',           data:[0,1,1,0],   ventas:[0,3346,3336,0]},
-  {name:'BBB',         data:[0,1,1,0],   ventas:[0,3594,2297,0]},
+  {name:'BBB',         data:[0,1,1,0],   ventas:[0,3593,2297,0]},
   {name:'BB',          data:[0,2,3,0],   ventas:[0,5811,13562,0]},
   {name:'B+',          data:[0,0,1,0],   ventas:[0,0,3887,0]},
   {name:'B-',          data:[0,1,1,1],   ventas:[0,3422,2233,2233]},
   {name:'CONTADO',     data:[5,11,3,0],  ventas:[12241,24289,8925,0]},
-  {name:'COLABORADOR', data:[5,6,3,0],   ventas:[6241,9694,5362,0]},
-  {name:'PENDIENTE',   data:[0,0,0,1],   ventas:[0,0,0,4546]},
+  {name:'COLABORADOR', data:[5,6,3,0],   ventas:[6242,9694,5362,0]},
+  {name:'PENDIENTE',   data:[0,0,0,2],   ventas:[0,0,0,7589]},
 ];
-const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL = [12,28,22,2];
-const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS = [22731,60053,66515,6779];
+const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL = [12,28,22,3];
+const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS = [22731,60053,66515,9822];
 
 // A partir de Agosto aparecen perfiles A y B- en Naciones Unidas por primera vez (antes solo AA/CONTADO),
 // y "PENDIENTE" (perfil aún no asignado) en ambas tiendas.
 const PERFIL_TIENDA_NACIONES_MENSUAL = [
-  {name:'AA',        data:[0,0,1,1], ventas:[0,0,1800,3043]},
+  {name:'AA',        data:[0,0,1,0], ventas:[0,0,1800,0]},
   {name:'A',         data:[0,0,0,1], ventas:[0,0,0,5817]},
   {name:'B-',        data:[0,0,0,1], ventas:[0,0,0,3100]},
   {name:'CONTADO',   data:[0,0,1,0], ventas:[0,0,2100,0]},
-  {name:'PENDIENTE', data:[0,0,0,2], ventas:[0,0,0,5749]},
+  {name:'PENDIENTE', data:[0,0,0,3], ventas:[0,0,0,8535]},
 ];
 const PERFIL_TIENDA_NACIONES_MONTH_TOTAL = [0,0,2,5];
-const PERFIL_TIENDA_NACIONES_MONTH_TOTAL_VENTAS = [0,0,3900,17710];
+const PERFIL_TIENDA_NACIONES_MONTH_TOTAL_VENTAS = [0,0,3900,17452];
 
 // Vista combinada (Resumen): AAP + Tiendas Hero (Av. Américas + Naciones Unidas) — los dos únicos
 // canales con el campo "Perfil" registrado. Orden fijo por escala de perfil. Acumulado Mayo-Junio-Julio 2026.
 const PERFIL_RESUMEN = [
-  {name:'AAA',        v:83950, u:46},
-  {name:'AA',         v:59532, u:31},
-  {name:'A',          v:24035, u:15},
-  {name:'BBB',        v:16011, u:9},
+  {name:'AAA',        v:83951, u:46},
+  {name:'AA',         v:64712, u:35},
+  {name:'A',          v:34212, u:19},
+  {name:'BBB',        v:17615, u:10},
   {name:'BB',         v:27433, u:11},
-  {name:'B',          v:8960,  u:7},
-  {name:'B+',         v:14215, u:8},
-  {name:'B-',         v:18770, u:12},
+  {name:'B',          v:13775, u:10},
+  {name:'B+',         v:17883, u:10},
+  {name:'B-',         v:24103, u:14},
   {name:'C+',         v:8050,  u:7},
   {name:'NSSA',       v:2880,  u:2},
-  {name:'CONTADO',    v:61333, u:30},
+  {name:'CONTADO',    v:62483, u:31},
   {name:'EXCEPCION',  v:2755,  u:2},
-  {name:'COLABORADOR',v:21297, u:14},
+  {name:'COLABORADOR',v:21298, u:14},
+  {name:'PENDIENTE',  v:17274, u:6},
 ];
 
 // Detalle mensual por Perfil (Resumen, combinado AAP + Tiendas Hero) — data = unidades [Mayo,Junio,Julio],
 // ventas = $ [Mayo,Junio,Julio]. Mismo orden fijo de escala que PERFIL_RESUMEN.
 const PERFIL_RESUMEN_MENSUAL = [
-  {name:'AAA',        data:[3,8,35,0],  ventas:[6798,11616,65536,0]},
-  {name:'AA',         data:[2,10,19,4], ventas:[4280,18775,36477,7073]},
-  {name:'A',          data:[1,6,8,3],   ventas:[1730,10131,12174,9027]},
-  {name:'BBB',        data:[1,2,6,1],   ventas:[1150,5074,9787,1605]},
+  {name:'AAA',        data:[3,8,35,0],  ventas:[6798,11616,65537,0]},
+  {name:'AA',         data:[2,10,19,4], ventas:[4280,18775,36477,5180]},
+  {name:'A',          data:[1,6,8,4],   ventas:[1730,10131,12174,10177]},
+  {name:'BBB',        data:[1,2,6,1],   ventas:[1150,5073,9787,1605]},
   {name:'BB',         data:[1,3,7,0],   ventas:[1150,6961,19322,0]},
   {name:'B',          data:[1,1,5,3],   ventas:[1150,1480,6330,4815]},
   {name:'B+',         data:[0,1,7,2],   ventas:[0,1730,12485,3668]},
@@ -1577,66 +1964,67 @@ const PERFIL_RESUMEN_MENSUAL = [
   {name:'NSSA',       data:[0,0,2,0],   ventas:[0,0,2880,0]},
   {name:'CONTADO',    data:[6,14,10,1], ventas:[13391,29107,18835,1150]},
   {name:'EXCEPCION',  data:[1,0,1,0],   ventas:[1150,0,1605,0]},
-  {name:'COLABORADOR',data:[5,6,3,0],   ventas:[6241,9694,5362,0]},
-  {name:'PENDIENTE',  data:[0,0,0,3],   ventas:[0,0,0,10294]},
+  {name:'COLABORADOR',data:[5,6,3,0],   ventas:[6242,9694,5362,0]},
+  {name:'PENDIENTE',  data:[0,0,0,6],   ventas:[0,0,0,17274]},
 ];
-const PERFIL_MONTH_TOTAL = [28,58,108,19]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
-const PERFIL_MONTH_TOTAL_VENTAS = [46126,104889,198206,42967]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL = [28,58,108,23]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL_VENTAS = [46126,104889,198206,49202]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
 
 // Vista "SIN AAP" (Resumen): PERFIL_RESUMEN menos AAP = solo Tiendas Hero (Av. Américas + Naciones Unidas).
 const PERFIL_RESUMEN_SIN_AAP = [
-  {name:'AAA',        v:32472, u:14},
+  {name:'AAA',        v:32473, u:14},
   {name:'AA',         v:10387, u:4},
-  {name:'A',          v:6682,  u:2},
-  {name:'BBB',        v:5891,  u:2},
+  {name:'A',          v:12499, u:3},
+  {name:'BBB',        v:5890,  u:2},
   {name:'BB',         v:19373, u:5},
   {name:'B+',         v:3887,  u:1},
-  {name:'B-',         v:5655,  u:2},
+  {name:'B-',         v:10988, u:4},
   {name:'CONTADO',    v:47555, u:20},
-  {name:'COLABORADOR',v:21297, u:14},
+  {name:'COLABORADOR',v:21298, u:14},
+  {name:'PENDIENTE',  v:16124, u:5},
 ];
 
 // Detalle mensual por Perfil, vista "SIN AAP" (solo Tiendas Hero). Mismo orden que PERFIL_RESUMEN_SIN_AAP.
 // Los totales por mes coinciden exactamente con TIENDAS_TOTAL / TIENDAS_VENTAS.
 const PERFIL_RESUMEN_MENSUAL_SIN_AAP = [
-  {name:'AAA',        data:[2,5,7,0],  ventas:[4248,6798,21426,0]},
-  {name:'AA',         data:[0,1,3,1],  ventas:[0,3100,7287,3043]},
+  {name:'AAA',        data:[2,5,7,0],  ventas:[4248,6798,21427,0]},
+  {name:'AA',         data:[0,1,3,0],  ventas:[0,3100,7287,0]},
   {name:'A',          data:[0,1,1,1],  ventas:[0,3346,3336,5817]},
-  {name:'BBB',        data:[0,1,1,0],  ventas:[0,3594,2297,0]},
+  {name:'BBB',        data:[0,1,1,0],  ventas:[0,3593,2297,0]},
   {name:'BB',         data:[0,2,3,0],  ventas:[0,5811,13562,0]},
   {name:'B+',         data:[0,0,1,0],  ventas:[0,0,3887,0]},
   {name:'B-',         data:[0,1,1,2],  ventas:[0,3422,2233,5333]},
   {name:'CONTADO',    data:[5,11,4,0], ventas:[12241,24289,11025,0]},
-  {name:'COLABORADOR',data:[5,6,3,0],  ventas:[6241,9694,5362,0]},
-  {name:'PENDIENTE',  data:[0,0,0,3],  ventas:[0,0,0,10294]},
+  {name:'COLABORADOR',data:[5,6,3,0],  ventas:[6242,9694,5362,0]},
+  {name:'PENDIENTE',  data:[0,0,0,5],  ventas:[0,0,0,16124]},
 ];
 
 // Modelos vendidos, los 3 canales combinados (Mayoristas + Retail + Tiendas), con AAP.
 // data = unidades [Mayo,Junio,Julio]; ventas = $ [Mayo,Junio,Julio]. Orden por unidades totales desc.
 const MODELOS = [
-  {name:'ECO DELUXE',        data:[102,56,61,3], ventas:[119503,67346,72480,3450]},
-  {name:'HUNK 125R',         data:[59,28,52,5],  ventas:[102395,54940,101586,11277]},
-  {name:'ECO 150',           data:[0,93,46,1],   ventas:[0,138482,68400,1480]},
-  {name:'XOOM 125R',         data:[46,19,43,3],  ventas:[89148,38179,88110,6876]},
-  {name:'XOOM 110',          data:[47,30,17,4],  ventas:[75304,49967,27285,6420]},
-  {name:'HUNK 160 4V',       data:[37,10,19,2],  ventas:[94844,27060,54108,7646]},
-  {name:'XPULSE 200 4V FI',  data:[12,2,6,1],    ventas:[40367,7483,20890,5817]},
+  {name:'ECO DELUXE',        data:[102,56,60,12], ventas:[119503,67346,71330,13800]},
+  {name:'HUNK 125R',         data:[59,28,48,8],   ventas:[102395,54940,94666,16467]},
+  {name:'ECO 150',           data:[0,93,39,3],    ventas:[0,138482,58040,5746]},
+  {name:'XOOM 125R',         data:[46,19,34,3],   ventas:[89148,38179,70668,6876]},
+  {name:'XOOM 110',          data:[47,30,12,4],   ventas:[75304,49967,19260,6420]},
+  {name:'HUNK 160 4V',       data:[37,10,19,7],   ventas:[94844,27060,54108,20396]},
+  {name:'XPULSE 200 4V FI',  data:[12,2,3,2],     ventas:[40367,7483,10190,9117]},
 ];
-const MODELOS_MONTH_TOTAL = [303,238,244,19]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
-const MODELOS_MONTH_TOTAL_VENTAS = [521560,383455,432858,42967]; // coincide con "Ventas totales" de Resumen (CON AAP)
+const MODELOS_MONTH_TOTAL = [303,238,215,39]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
+const MODELOS_MONTH_TOTAL_VENTAS = [521560,383455,378261,78822]; // coincide con "Ventas totales" de Resumen (CON AAP)
 
 // Vista "SIN AAP" (Resumen): MODELOS menos la contribución de AAP por modelo (3 canales, Retail sin AAP).
 const MODELOS_SIN_AAP = [
-  {name:'ECO DELUXE',        data:[92,42,24,0], ventas:[108003,51246,29929,0]},
-  {name:'ECO 150',           data:[0,91,43,0],  ventas:[0,135522,63960,0]},
-  {name:'HUNK 125R',         data:[56,22,27,2], ventas:[97204,44559,58336,6087]},
-  {name:'XOOM 125R',         data:[46,17,36,2], ventas:[89148,34303,74544,4938]},
-  {name:'XOOM 110',          data:[46,26,10,0], ventas:[73699,43546,16050,0]},
-  {name:'HUNK 160 4V',       data:[35,8,14,2],  ventas:[89744,21960,41358,7646]},
-  {name:'XPULSE 200 4V FI',  data:[12,2,6,1],   ventas:[40367,7483,20890,5817]},
+  {name:'ECO DELUXE',        data:[92,42,23,6], ventas:[108003,51246,28780,6900]},
+  {name:'ECO 150',           data:[0,91,36,2],  ventas:[0,135522,53600,4266]},
+  {name:'HUNK 125R',         data:[56,22,23,5], ventas:[97205,44560,51416,11277]},
+  {name:'XOOM 125R',         data:[46,17,27,2], ventas:[89148,34303,57102,4938]},
+  {name:'XOOM 110',          data:[46,26,5,0],  ventas:[73699,43547,8025,0]},
+  {name:'HUNK 160 4V',       data:[35,8,14,7],  ventas:[89744,21960,41358,20396]},
+  {name:'XPULSE 200 4V FI',  data:[12,2,3,2],   ventas:[40367,7483,10190,9117]},
 ];
-const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,160,7]; // MODELOS_MONTH_TOTAL menos AAP_DATA
-const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [498165,338619,305067,24489]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
+const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,131,24]; // MODELOS_MONTH_TOTAL menos AAP_DATA
+const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [498165,338619,250470,56894]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
 
 // Presupuesto asignado (CON AAP) por mes, para el KPI de cumplimiento en Resumen.
 const RESUMEN_BUDGET_UNITS = [300,400,400,485];
@@ -1660,6 +2048,241 @@ const RETAIL_TOTAL_BUDGET = { julio:{ ventas:79398.50, unidades:50 }, agosto:{ v
 const MAYORISTAS_TOTAL_BUDGET = { julio:{ ventas:476391.26, unidades:300 }, agosto:{ ventas:616023.75, unidades:390 } };
 
 const sum = arr => arr.reduce((a,b)=>a+b,0);
+/* ================= REPUESTOS — datos fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS (676 líneas) ================= */
+// Totales generales por mes. Mayo = solo 10 transacciones (21-26 mayo, no es el mes completo);
+// Agosto = corte parcial al día 12. Ninguno de los dos es comparable 1:1 contra un mes cerrado.
+const REPUESTOS_TOTAL_UNIDADES = [10, 278, 596, 205];
+const REPUESTOS_TOTAL_VENTA = [110.36, 1999.63, 4952.97, 1707.33];
+const REPUESTOS_TOTAL_COSTO = [152.92, 1050.63, 2599.07, 839.46];
+const REPUESTOS_TOTAL_UTILIDAD = [-42.56, 948.99, 2353.89, 867.87];
+const REPUESTOS_TOTAL_MARGEN = [-0.3856, 0.4746, 0.4752, 0.5083];
+// Mismos totales, combinados por canal (Mostrador/Taller) y sucursal (AV. Américas/Naciones Unidas).
+const REPUESTOS_TOTAL_UNIDADES_BY_COMBO = { mostrador:{amer:[6, 276, 312, 106], naciones:[0, 0, 55, 62]}, taller:{amer:[4, 2, 229, 14], naciones:[0, 0, 0, 23]} };
+const REPUESTOS_TOTAL_VENTA_BY_COMBO = { mostrador:{amer:[78.93, 1975.48, 2896.75, 666.44], naciones:[0.0, 0.0, 651.98, 825.33]}, taller:{amer:[31.42, 24.15, 1404.24, 87.6], naciones:[0.0, 0.0, 0.0, 127.95]} };
+const REPUESTOS_TOTAL_COSTO_BY_COMBO = { mostrador:{amer:[125.84, 1040.06, 1476.6, 311.46], naciones:[0.0, 0.0, 337.08, 408.69]}, taller:{amer:[27.08, 10.57, 785.4, 47.59], naciones:[0.0, 0.0, 0.0, 71.71]} };
+const REPUESTOS_TOTAL_UTILIDAD_BY_COMBO = { mostrador:{amer:[-46.91, 935.42, 1420.15, 354.98], naciones:[0.0, 0.0, 314.9, 416.64]}, taller:{amer:[4.34, 13.58, 618.84, 40.01], naciones:[0.0, 0.0, 0.0, 56.24]} };
+
+// Categorías (clasificadas por palabra clave sobre el nombre del repuesto), ordenadas de mayor a menor venta neta.
+const CATEGORIA_COLORS = ['--categoria-1','--categoria-2','--categoria-3','--categoria-4','--categoria-5'].map(getVar);
+const repuestosCategoriasRaw = [
+  {name:'MOTOR', data:[5, 127, 133, 30], ventas:[19.55, 1320.19, 1863.29, 413.4], byCanal:{mostrador:{data:[2, 127, 111, 29], ventas:[6.04, 1320.19, 1543.48, 409.92]}, taller:{data:[3, 0, 22, 1], ventas:[13.5, 0.0, 319.81, 3.48]}},
+    byCombo:{mostrador:{amer:{data:[2, 127, 87, 13], ventas:[6.04, 1320.19, 1195.68, 124.51]}, naciones:{data:[0, 0, 24, 16], ventas:[0.0, 0.0, 347.8, 285.4]}}, taller:{amer:{data:[3, 0, 22, 1], ventas:[13.5, 0.0, 319.81, 3.48]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'ACCESORIOS Y OTROS', data:[2, 8, 274, 68], ventas:[66.55, 25.92, 2003.22, 545.22], byCanal:{mostrador:{data:[2, 7, 114, 50], ventas:[66.55, 13.0, 1253.52, 432.13]}, taller:{data:[0, 1, 160, 18], ventas:[0.0, 12.92, 749.7, 113.1]}},
+    byCombo:{mostrador:{amer:{data:[2, 7, 107, 34], ventas:[66.55, 13.0, 1076.03, 217.8]}, naciones:{data:[0, 0, 7, 16], ventas:[0.0, 0.0, 177.48, 214.33]}}, taller:{amer:{data:[0, 1, 160, 3], ventas:[0.0, 12.92, 749.7, 10.98]}, naciones:{data:[0, 0, 0, 15], ventas:[0.0, 0.0, 0.0, 102.11]}}}},
+  {name:'MANTENIMIENTO', data:[1, 88, 129, 44], ventas:[3.4, 274.33, 678.47, 213.9], byCanal:{mostrador:{data:[1, 87, 95, 32], ventas:[3.4, 263.11, 471.65, 153.32]}, taller:{data:[0, 1, 34, 12], ventas:[0.0, 11.23, 206.82, 60.57]}},
+    byCombo:{mostrador:{amer:{data:[1, 87, 78, 30], ventas:[3.4, 263.11, 393.82, 134.86]}, naciones:{data:[0, 0, 17, 2], ventas:[0.0, 0.0, 77.83, 18.46]}}, taller:{amer:{data:[0, 1, 34, 9], ventas:[0.0, 11.23, 206.82, 45.96]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 14.61]}}}},
+  {name:'TRANSMISIÓN/EMBRAGUE', data:[2, 42, 46, 48], ventas:[20.86, 198.53, 343.09, 341.64], byCanal:{mostrador:{data:[1, 42, 33, 43], ventas:[2.94, 198.53, 215.18, 330.41]}, taller:{data:[1, 0, 13, 5], ventas:[17.92, 0.0, 127.91, 11.23]}},
+    byCombo:{mostrador:{amer:{data:[1, 42, 28, 20], ventas:[2.94, 198.53, 172.69, 92.29]}, naciones:{data:[0, 0, 5, 23], ventas:[0.0, 0.0, 42.49, 238.12]}}, taller:{amer:{data:[1, 0, 13, 0], ventas:[17.92, 0.0, 127.91, 0.0]}, naciones:{data:[0, 0, 0, 5], ventas:[0.0, 0.0, 0.0, 11.23]}}}},
+  {name:'FRENOS', data:[0, 13, 14, 15], ventas:[0.0, 180.65, 64.91, 193.17], byCanal:{mostrador:{data:[0, 13, 14, 14], ventas:[0.0, 180.65, 64.91, 165.99]}, taller:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 27.18]}},
+    byCombo:{mostrador:{amer:{data:[0, 13, 12, 9], ventas:[0.0, 180.65, 58.52, 96.97]}, naciones:{data:[0, 0, 2, 5], ventas:[0.0, 0.0, 6.38, 69.02]}}, taller:{amer:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 27.18]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+].map((c,i)=>({...c, color: CATEGORIA_COLORS[i], total: sum(c.data)}));
+// Margen % total por categoría (agregado del periodo completo, no varía por mes) — para referencia en tooltips/tabla.
+const CATEGORIA_MARGEN = { 'MOTOR':0.5023, 'ACCESORIOS Y OTROS':0.4241, 'MANTENIMIENTO':0.4527, 'TRANSMISIÓN/EMBRAGUE':0.4934, 'FRENOS':0.4916 };
+
+// Universo de 46 repuestos (top 25 por venta neta ∪ top 25 por unidades) con desglose mensual,
+// para que el ranking Top Repuestos respete el filtro de mes y el toggle UNIDADES/$ sin perder el top-10 real en ningún cruce.
+// Cubren el 56.8% de la venta neta total; los nombres repetidos (mismo repuesto, distinto código SKU) llevan el código entre paréntesis.
+const REPUESTOS_ITEMS = [
+  {name:'ACEITE POWER PRO 10W30 SL MA2 T (1200 ML) SP', data:[0, 7, 21, 9], ventas:[0.0, 86.08, 252.43, 113.49], byCanal:{mostrador:{data:[0, 7, 14, 6], ventas:[0.0, 86.08, 166.79, 75.66]}, taller:{data:[0, 0, 7, 3], ventas:[0.0, 0.0, 85.64, 37.83]}},
+    byCombo:{mostrador:{amer:{data:[0, 7, 13, 6], ventas:[0.0, 86.08, 157.79, 75.66]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 9.0, 0.0]}}, taller:{amer:{data:[0, 0, 7, 2], ventas:[0.0, 0.0, 85.64, 25.22]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 12.61]}}}},
+  {name:'CULATA COMPLETA', data:[0, 1, 1, 1], ventas:[0.0, 141.34, 141.34, 141.34], byCanal:{mostrador:{data:[0, 1, 1, 1], ventas:[0.0, 141.34, 141.34, 141.34]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 1, 1, 0], ventas:[0.0, 141.34, 141.34, 0.0]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 141.34]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'COMPONENTE DEL CIGÜEÑAL', data:[0, 2, 1, 0], ventas:[0.0, 242.15, 121.08, 0.0], byCanal:{mostrador:{data:[0, 2, 1, 0], ventas:[0.0, 242.15, 121.08, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 2, 0, 0], ventas:[0.0, 242.15, 0.0, 0.0]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 121.08, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CIGÜEÑAL COMPLETO (13000ABF000S)', data:[0, 1, 1, 0], ventas:[0.0, 177.06, 177.06, 0.0], byCanal:{mostrador:{data:[0, 1, 0, 0], ventas:[0.0, 177.06, 0.0, 0.0]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 177.06, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 1, 0, 0], ventas:[0.0, 177.06, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 177.06, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CILINDRO COMPLETO (12100ABF000S)', data:[0, 2, 1, 0], ventas:[0.0, 221.55, 110.77, 0.0], byCanal:{mostrador:{data:[0, 2, 1, 0], ventas:[0.0, 221.55, 110.77, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 2, 1, 0], ventas:[0.0, 221.55, 110.77, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CONJUNTO DE AMORTIGUADOR TRASERO', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'ALTERNADOR COMPLETO (31100ABG201S)', data:[0, 0, 1, 1], ventas:[0.0, 0.0, 91.58, 91.58], byCanal:{mostrador:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 91.58]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 91.58, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 91.58]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 91.58, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CIGÜEÑAL COMPLETO (13000AAN410S)', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 177.23, 0.0], byCanal:{mostrador:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 177.23, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 177.23, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'KIT DE CILINDRO (K12121ABFA000S)', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 141.61, 0.0], byCanal:{mostrador:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 141.61, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 141.61, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'FILTRO DE AIRE', data:[0, 4, 8, 1], ventas:[0.0, 40.8, 81.59, 10.2], byCanal:{mostrador:{data:[0, 4, 7, 1], ventas:[0.0, 40.8, 71.39, 10.2]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 10.2, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 4, 4, 0], ventas:[0.0, 40.8, 40.8, 0.0]}, naciones:{data:[0, 0, 3, 1], ventas:[0.0, 0.0, 30.6, 10.2]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 10.2, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'DISCO DE EMBRAGUE DE FRICCIÓN (22201KPM850EES)', data:[0, 13, 3, 3], ventas:[0.0, 88.39, 20.4, 20.4], byCanal:{mostrador:{data:[0, 13, 0, 3], ventas:[0.0, 88.39, 0.0, 20.4]}, taller:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 20.4, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 13, 0, 0], ventas:[0.0, 88.39, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 20.4]}}, taller:{amer:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 20.4, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CONJUNTO DE MEDIDOR COMBINADO', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 126.68, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 126.68, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 126.68, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CONJUNTO DE MEDIDOR. PEINE', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 125.32, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 125.32, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 125.32, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'ACEITE POWER PRO 10W30 SL MA I (900ML)', data:[0, 5, 5, 2], ventas:[0.0, 52.15, 52.15, 20.86], byCanal:{mostrador:{data:[0, 5, 1, 1], ventas:[0.0, 52.15, 10.43, 10.43]}, taller:{data:[0, 0, 4, 1], ventas:[0.0, 0.0, 41.72, 10.43]}},
+    byCombo:{mostrador:{amer:{data:[0, 5, 1, 1], ventas:[0.0, 52.15, 10.43, 10.43]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 4, 1], ventas:[0.0, 0.0, 41.72, 10.43]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CILINDRO COMPLETO (12101KST940S)', data:[0, 1, 1, 0], ventas:[0.0, 56.75, 56.75, 0.0], byCanal:{mostrador:{data:[0, 1, 1, 0], ventas:[0.0, 56.75, 56.75, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 1, 0, 0], ventas:[0.0, 56.75, 0.0, 0.0]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 56.75, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'ALTERNADOR COMPLETO (31100AAN411S)', data:[0, 0, 2, 0], ventas:[0.0, 0.0, 112.36, 0.0], byCanal:{mostrador:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 112.36, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 112.36, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'PASTILLAS DE FRENO DELANTERO', data:[0, 2, 0, 2], ventas:[0.0, 51.16, 0.0, 54.36], byCanal:{mostrador:{data:[0, 2, 0, 1], ventas:[0.0, 51.16, 0.0, 27.18]}, taller:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 27.18]}},
+    byCombo:{mostrador:{amer:{data:[0, 2, 0, 0], ventas:[0.0, 51.16, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 27.18]}}, taller:{amer:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 27.18]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CADENA DE DISTRIBUCIÓN', data:[0, 1, 4, 0], ventas:[0.0, 20.19, 80.74, 0.0], byCanal:{mostrador:{data:[0, 1, 3, 0], ventas:[0.0, 20.19, 60.56, 0.0]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 20.19, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 1, 2, 0], ventas:[0.0, 20.19, 40.37, 0.0]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 20.19, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 20.19, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'KIT DE PIÑÓN DE CADENA (ACHIEVER)', data:[0, 0, 1, 1], ventas:[0.0, 0.0, 56.52, 36.17], byCanal:{mostrador:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 56.52, 36.17]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 56.52, 0.0]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 36.17]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'KIT DE CILINDRO (K12121AAHAH00S)', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 90.98, 0.0], byCanal:{mostrador:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 90.98, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 90.98, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'JUEGO DE PASTILLAS RR', data:[0, 2, 0, 1], ventas:[0.0, 57.2, 0.0, 28.6], byCanal:{mostrador:{data:[0, 2, 0, 1], ventas:[0.0, 57.2, 0.0, 28.6]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 2, 0, 0], ventas:[0.0, 57.2, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 28.6]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'KIT DE PIÑÓN Y CADENA (HF DWN / HF DLX)', data:[0, 0, 1, 2], ventas:[0.0, 0.0, 27.49, 54.98], byCanal:{mostrador:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 27.49, 54.98]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 54.98]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 27.49, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CONJUNTO DE LA BOMBA DE COMBUSTIBLE', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 82.4, 0.0], byCanal:{mostrador:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 82.4, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 82.4, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'JUEGO DE ARRASTRE', data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 81.78], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 81.78]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 81.78]}}}},
+  {name:'CILINDRO COMPLETO (12100AAN410S)', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 78.78, 0.0], byCanal:{mostrador:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 78.78, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 78.78, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'FRENO COMPLETO DE ZAPATA', data:[0, 4, 6, 6], ventas:[0.0, 19.45, 29.17, 29.17], byCanal:{mostrador:{data:[0, 4, 6, 6], ventas:[0.0, 19.45, 29.17, 29.17]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 4, 6, 4], ventas:[0.0, 19.45, 29.17, 19.45]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 9.72]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'EMPAQUE DE CULATA', data:[1, 6, 6, 1], ventas:[4.91, 31.55, 31.55, 5.26], byCanal:{mostrador:{data:[1, 6, 5, 1], ventas:[4.91, 31.55, 26.29, 5.26]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 5.26, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[1, 6, 4, 0], ventas:[4.91, 31.55, 21.03, 0.0]}, naciones:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 5.26, 5.26]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 5.26, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'JUNTA, TAPA DERECHA', data:[1, 6, 7, 4], ventas:[3.25, 20.87, 24.35, 13.91], byCanal:{mostrador:{data:[0, 6, 6, 3], ventas:[0.0, 20.87, 20.87, 10.44]}, taller:{data:[1, 0, 1, 1], ventas:[3.25, 0.0, 3.48, 3.48]}},
+    byCombo:{mostrador:{amer:{data:[0, 6, 5, 1], ventas:[0.0, 20.87, 17.39, 3.48]}, naciones:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 3.48, 6.96]}}, taller:{amer:{data:[1, 0, 1, 1], ventas:[3.25, 0.0, 3.48, 3.48]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'FILTRO DE ACEITE DE ELEMENTO', data:[0, 3, 11, 6], ventas:[0.0, 9.13, 33.48, 18.26], byCanal:{mostrador:{data:[0, 3, 5, 5], ventas:[0.0, 9.13, 15.22, 15.22]}, taller:{data:[0, 0, 6, 1], ventas:[0.0, 0.0, 18.26, 3.04]}},
+    byCombo:{mostrador:{amer:{data:[0, 3, 5, 5], ventas:[0.0, 9.13, 15.22, 15.22]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 6, 1], ventas:[0.0, 0.0, 18.26, 3.04]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'DISCO DE EMBRAGUE DE FRICCIÓN (22201GF6000EES)', data:[0, 4, 4, 8], ventas:[0.0, 14.07, 14.07, 24.63], byCanal:{mostrador:{data:[0, 4, 4, 8], ventas:[0.0, 14.07, 14.07, 24.63]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 4, 4, 8], ventas:[0.0, 14.07, 14.07, 24.63]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'AMORTIGUADOR, RUEDA TRASERA', data:[0, 0, 12, 24], ventas:[0.0, 0.0, 16.56, 33.12], byCanal:{mostrador:{data:[0, 0, 8, 12], ventas:[0.0, 0.0, 11.04, 16.56]}, taller:{data:[0, 0, 4, 12], ventas:[0.0, 0.0, 5.52, 16.56]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 8, 4], ventas:[0.0, 0.0, 11.04, 5.52]}, naciones:{data:[0, 0, 0, 8], ventas:[0.0, 0.0, 0.0, 11.04]}}, taller:{amer:{data:[0, 0, 4, 0], ventas:[0.0, 0.0, 5.52, 0.0]}, naciones:{data:[0, 0, 0, 12], ventas:[0.0, 0.0, 0.0, 16.56]}}}},
+  {name:'JUNTA DE LA TAPA DE LA CULATA (12391AAK900S)', data:[0, 7, 8, 4], ventas:[0.0, 18.11, 20.7, 10.35], byCanal:{mostrador:{data:[0, 7, 7, 4], ventas:[0.0, 18.11, 18.11, 10.35]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 2.59, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 7, 7, 4], ventas:[0.0, 18.11, 18.11, 10.35]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 2.59, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'COMPONENTE DE CABLE, EMBRAGUE', data:[0, 0, 7, 3], ventas:[0.0, 0.0, 23.24, 9.96], byCanal:{mostrador:{data:[0, 0, 7, 3], ventas:[0.0, 0.0, 23.24, 9.96]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 5, 3], ventas:[0.0, 0.0, 16.6, 9.96]}, naciones:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 6.64, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'PLATO DE EMBRAGUE', data:[0, 0, 8, 12], ventas:[0.0, 0.0, 12.42, 18.63], byCanal:{mostrador:{data:[0, 0, 4, 8], ventas:[0.0, 0.0, 6.21, 12.42]}, taller:{data:[0, 0, 4, 4], ventas:[0.0, 0.0, 6.21, 6.21]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 4, 0], ventas:[0.0, 0.0, 6.21, 0.0]}, naciones:{data:[0, 0, 0, 8], ventas:[0.0, 0.0, 0.0, 12.42]}}, taller:{amer:{data:[0, 0, 4, 0], ventas:[0.0, 0.0, 6.21, 0.0]}, naciones:{data:[0, 0, 0, 4], ventas:[0.0, 0.0, 0.0, 6.21]}}}},
+  {name:'TUERCA DE RADIO DELANTERA', data:[0, 0, 36, 0], ventas:[0.0, 0.0, 20.18, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 36, 0], ventas:[0.0, 0.0, 20.18, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 36, 0], ventas:[0.0, 0.0, 20.18, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'SELLO, VÁSTAGO DE VÁLVULA', data:[0, 4, 6, 2], ventas:[0.0, 6.38, 9.57, 3.19], byCanal:{mostrador:{data:[0, 4, 4, 2], ventas:[0.0, 6.38, 6.38, 3.19]}, taller:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 3.19, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 4, 2, 0], ventas:[0.0, 6.38, 3.19, 0.0]}, naciones:{data:[0, 0, 2, 2], ventas:[0.0, 0.0, 3.19, 3.19]}}, taller:{amer:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 3.19, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'RESORTE, EMBRAGUE', data:[0, 12, 0, 0], ventas:[0.0, 17.08, 0.0, 0.0], byCanal:{mostrador:{data:[0, 12, 0, 0], ventas:[0.0, 17.08, 0.0, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 12, 0, 0], ventas:[0.0, 17.08, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'TUERCA DE RADIO TRASERA', data:[0, 0, 36, 0], ventas:[0.0, 0.0, 13.97, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 36, 0], ventas:[0.0, 0.0, 13.97, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 36, 0], ventas:[0.0, 0.0, 13.97, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'RADIO DE RUEDA TRASERA (97660ABW100S)', data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'RADIO DE RUEDA DELANTERA (97278ABW100S)', data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'RADIO DE RUEDA TRASERA (97252ABW100S)', data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.2, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.2, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.2, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'JUNTA DE LA TAPA DE LA CULATA (12191ABF000S)', data:[1, 5, 4, 0], ventas:[1.13, 6.04, 5.3, 0.0], byCanal:{mostrador:{data:[1, 5, 3, 0], ventas:[1.13, 6.04, 4.1, 0.0]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 1.21, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[1, 5, 2, 0], ventas:[1.13, 6.04, 2.89, 0.0]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 1.21, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 1.21, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'RADIO DE RUEDA DELANTERA (97550ABW100S)', data:[0, 0, 18, 0], ventas:[0.0, 0.0, 12.42, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 12.42, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 12.42, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'ARANDELA, TAPÓN, DESAGÜE', data:[0, 39, 8, 9], ventas:[0.0, 4.88, 2.15, 4.5], byCanal:{mostrador:{data:[0, 39, 6, 7], ventas:[0.0, 4.88, 1.89, 3.5]}, taller:{data:[0, 0, 2, 2], ventas:[0.0, 0.0, 0.26, 1.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 39, 6, 7], ventas:[0.0, 4.88, 1.89, 3.5]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 2, 2], ventas:[0.0, 0.0, 0.26, 1.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'SELLO, CUBIERTA DEL FILTRO DE ACEITE', data:[0, 0, 5, 5], ventas:[0.0, 0.0, 4.03, 5.0], byCanal:{mostrador:{data:[0, 0, 4, 4], ventas:[0.0, 0.0, 3.52, 4.0]}, taller:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 0.52, 1.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 4, 4], ventas:[0.0, 0.0, 3.52, 4.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 0.52, 1.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'FIN DEL MANGO DE CUERDA', data:[0, 0, 10, 2], ventas:[0.0, 0.0, 6.9, 2.0], byCanal:{mostrador:{data:[0, 0, 10, 2], ventas:[0.0, 0.0, 6.9, 2.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 10, 2], ventas:[0.0, 0.0, 6.9, 2.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+].map(it=>({...it, total: sum(it.data), totalVenta: sum(it.ventas)}));
+
+// Top 10 provincias por venta neta (de 16 con ventas en el periodo).
+const repuestosProvinciasRaw = [
+  {name:'GUAYAS', data:[10, 179, 442, 99], ventas:[110.36, 903.1, 2788.16, 844.03], byCanal:{mostrador:{data:[6, 177, 214, 85], ventas:[78.93, 878.95, 1616.04, 756.42]}, taller:{data:[4, 2, 228, 14], ventas:[31.42, 24.15, 1172.11, 87.6]}},
+    byCombo:{mostrador:{amer:{data:[6, 177, 212, 70], ventas:[78.93, 878.95, 1602.37, 517.72]}, naciones:{data:[0, 0, 2, 15], ventas:[0.0, 0.0, 13.68, 238.7]}}, taller:{amer:{data:[4, 2, 228, 14], ventas:[31.42, 24.15, 1172.11, 87.6]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'PICHINCHA', data:[0, 43, 38, 42], ventas:[0.0, 164.26, 376.02, 345.44], byCanal:{mostrador:{data:[0, 43, 38, 19], ventas:[0.0, 164.26, 376.02, 217.48]}, taller:{data:[0, 0, 0, 23], ventas:[0.0, 0.0, 0.0, 127.95]}},
+    byCombo:{mostrador:{amer:{data:[0, 43, 9, 0], ventas:[0.0, 164.26, 167.28, 0.0]}, naciones:{data:[0, 0, 29, 19], ventas:[0.0, 0.0, 208.74, 217.48]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 23], ventas:[0.0, 0.0, 0.0, 127.95]}}}},
+  {name:'LOS RIOS', data:[0, 26, 19, 12], ventas:[0.0, 436.86, 304.93, 55.18], byCanal:{mostrador:{data:[0, 26, 19, 12], ventas:[0.0, 436.86, 304.93, 55.18]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 26, 19, 11], ventas:[0.0, 436.86, 304.93, 52.24]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 2.94]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'SUCUMBIOS', data:[0, 0, 30, 1], ventas:[0.0, 0.0, 653.97, 36.17], byCanal:{mostrador:{data:[0, 0, 29, 1], ventas:[0.0, 0.0, 421.85, 36.17]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 25, 0], ventas:[0.0, 0.0, 338.48, 0.0]}, naciones:{data:[0, 0, 4, 1], ventas:[0.0, 0.0, 83.37, 36.17]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'EL ORO', data:[0, 19, 0, 8], ventas:[0.0, 434.14, 0.0, 25.28], byCanal:{mostrador:{data:[0, 19, 0, 8], ventas:[0.0, 434.14, 0.0, 25.28]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 19, 0, 8], ventas:[0.0, 434.14, 0.0, 25.28]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'SANTO DOMINGO', data:[0, 0, 20, 8], ventas:[0.0, 0.0, 288.4, 65.47], byCanal:{mostrador:{data:[0, 0, 20, 8], ventas:[0.0, 0.0, 288.4, 65.47]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 11, 3], ventas:[0.0, 0.0, 96.86, 10.55]}, naciones:{data:[0, 0, 9, 5], ventas:[0.0, 0.0, 191.53, 54.92]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'MORONA SANTIAGO', data:[0, 0, 1, 19], ventas:[0.0, 0.0, 38.36, 204.29], byCanal:{mostrador:{data:[0, 0, 1, 19], ventas:[0.0, 0.0, 38.36, 204.29]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 38.36, 0.0]}, naciones:{data:[0, 0, 0, 19], ventas:[0.0, 0.0, 0.0, 204.29]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'AZUAY', data:[0, 8, 11, 0], ventas:[0.0, 46.69, 99.96, 0.0], byCanal:{mostrador:{data:[0, 8, 11, 0], ventas:[0.0, 46.69, 99.96, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 8, 4, 0], ventas:[0.0, 46.69, 58.54, 0.0]}, naciones:{data:[0, 0, 7, 0], ventas:[0.0, 0.0, 41.42, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'MANABÍ', data:[0, 0, 6, 0], ventas:[0.0, 0.0, 140.89, 0.0], byCanal:{mostrador:{data:[0, 0, 6, 0], ventas:[0.0, 0.0, 140.89, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 110.06, 0.0]}, naciones:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 30.84, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'LOJA', data:[0, 0, 4, 2], ventas:[0.0, 0.0, 48.4, 70.82], byCanal:{mostrador:{data:[0, 0, 4, 2], ventas:[0.0, 0.0, 48.4, 70.82]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 4, 0], ventas:[0.0, 0.0, 48.4, 0.0]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 70.82]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+].map(p=>({...p, total: sum(p.data)}));
+
+const CANAL_COLORS = ['--canal-1','--canal-2'].map(getVar);
+const ZERO4 = [0,0,0,0];
+const repuestosCanalesRaw = [
+  {name:'MOSTRADOR', data:[6, 276, 367, 168], ventas:[78.93, 1975.48, 3548.73, 1491.77],
+    byCanal:{mostrador:{data:[6, 276, 367, 168], ventas:[78.93, 1975.48, 3548.73, 1491.77]}, taller:{data:ZERO4, ventas:ZERO4}},
+    byCombo:{mostrador:{amer:{data:[6, 276, 312, 106], ventas:[78.93, 1975.48, 2896.75, 666.44]}, naciones:{data:[0, 0, 55, 62], ventas:[0.0, 0.0, 651.98, 825.33]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'TALLER', data:[4, 2, 229, 37], ventas:[31.42, 24.15, 1404.24, 215.56],
+    byCanal:{mostrador:{data:ZERO4, ventas:ZERO4}, taller:{data:[4, 2, 229, 37], ventas:[31.42, 24.15, 1404.24, 215.56]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[4, 2, 229, 14], ventas:[31.42, 24.15, 1404.24, 87.6]}, naciones:{data:[0, 0, 0, 23], ventas:[0.0, 0.0, 0.0, 127.95]}}}},
+].map((c,i)=>({...c, color: CANAL_COLORS[i], total: sum(c.data)}));
+
+// Ventas de repuestos por sucursal (columna "Sucursal" de BASE_DATOS). Se muestran con los mismos
+// nombres que usa la página Tiendas: HERO GUAYAQUIL = AV. AMÉRICAS, HERO QUITO = NACIONES UNIDAS.
+const REPUESTOS_SUCURSALES = [
+  {name:'AV. AMÉRICAS', data:[10, 278, 541, 120], ventas:[110.36, 1999.63, 4300.99, 754.04],
+    byCanal:{mostrador:{data:[6, 276, 312, 106], ventas:[78.93, 1975.48, 2896.75, 666.44]}, taller:{data:[4, 2, 229, 14], ventas:[31.42, 24.15, 1404.24, 87.60]}},
+    byCombo:{mostrador:{amer:{data:[6, 276, 312, 106], ventas:[78.93, 1975.48, 2896.75, 666.44]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[4, 2, 229, 14], ventas:[31.42, 24.15, 1404.24, 87.6]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'NACIONES UNIDAS', data:[0, 0, 55, 85], ventas:[0.0, 0.0, 651.98, 953.28],
+    byCanal:{mostrador:{data:[0, 0, 55, 62], ventas:[0.0, 0.0, 651.98, 825.33]}, taller:{data:[0, 0, 0, 23], ventas:[0.0, 0.0, 0.0, 127.95]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 55, 62], ventas:[0.0, 0.0, 651.98, 825.33]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 23], ventas:[0.0, 0.0, 0.0, 127.95]}}}},
+].map(s=>({...s, total: sum(s.data)}));
+
+// Modelo HERO compatible por repuesto (hoja MODELOS del archivo de ventas de repuestos).
+// Cuando un repuesto aplica a varios modelos, su venta/unidades se reparten en partes iguales entre ellos.
+// Cubre el 100% de la venta neta de repuestos del periodo ($8.770). Ordenado por venta total descendente.
+const REPUESTOS_MODELOS = [
+  {name:'XPULSE 200 4V', data:[3, 38, 199, 24], ventas:[44.22, 489.4, 1052.02, 389.8],
+    byCanal:{mostrador:{data:[3, 38, 41, 18], ventas:[40.62, 489.4, 537.15, 286.03]}, taller:{data:[1, 0, 158, 7], ventas:[3.6, 0.0, 514.87, 103.77]}},
+    byCombo:{mostrador:{amer:{data:[3, 38, 33, 4], ventas:[40.62, 489.4, 457.95, 17.64]}, naciones:{data:[0, 0, 8, 13], ventas:[0.0, 0.0, 79.2, 268.39]}}, taller:{amer:{data:[1, 0, 158, 2], ventas:[3.6, 0.0, 514.87, 15.93]}, naciones:{data:[0, 0, 0, 5], ventas:[0.0, 0.0, 0.0, 87.84]}}}},
+  {name:'HUNK 200R', data:[2, 32, 39, 19], ventas:[7.34, 431.81, 561.94, 189.73],
+    byCanal:{mostrador:{data:[1, 32, 29, 13], ventas:[3.74, 431.81, 396.35, 167.74]}, taller:{data:[1, 0, 10, 6], ventas:[3.6, 0.0, 165.6, 21.99]}},
+    byCombo:{mostrador:{amer:{data:[1, 32, 25, 4], ventas:[3.74, 431.81, 367.42, 19.17]}, naciones:{data:[0, 0, 4, 9], ventas:[0.0, 0.0, 28.93, 148.57]}}, taller:{amer:{data:[1, 0, 10, 2], ventas:[3.6, 0.0, 165.6, 15.93]}, naciones:{data:[0, 0, 0, 4], ventas:[0.0, 0.0, 0.0, 6.06]}}}},
+  {name:'HUNK 160 4V', data:[1, 20, 57, 24], ventas:[34.3, 108.84, 711.47, 225.47],
+    byCanal:{mostrador:{data:[1, 20, 45, 21], ventas:[30.96, 108.84, 518.6, 210.36]}, taller:{data:[0, 0, 12, 3], ventas:[3.34, 0.0, 192.87, 15.12]}},
+    byCombo:{mostrador:{amer:{data:[1, 20, 42, 14], ventas:[30.96, 108.84, 413.74, 83.04]}, naciones:{data:[0, 0, 2, 7], ventas:[0.0, 0.0, 104.86, 127.32]}}, taller:{amer:{data:[0, 0, 12, 2], ventas:[3.34, 0.0, 192.87, 9.67]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 5.45]}}}},
+  {name:'ECO DELUXE', data:[0, 39, 33, 24], ventas:[0.0, 257.68, 358.51, 205.49],
+    byCanal:{mostrador:{data:[0, 39, 29, 23], ventas:[0.0, 257.68, 333.81, 194.94]}, taller:{data:[0, 0, 3, 1], ventas:[0.0, 0.0, 24.7, 10.55]}},
+    byCombo:{mostrador:{amer:{data:[0, 39, 21, 19], ventas:[0.0, 257.68, 226.18, 110.33]}, naciones:{data:[0, 0, 9, 4], ventas:[0.0, 0.0, 107.63, 84.61]}}, taller:{amer:{data:[0, 0, 3, 1], ventas:[0.0, 0.0, 24.7, 7.4]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 3.15]}}}},
+  {name:'ECO 150', data:[1, 14, 41, 20], ventas:[4.51, 58.9, 344.16, 157.85],
+    byCanal:{mostrador:{data:[0, 14, 35, 16], ventas:[0.91, 58.9, 298.49, 142.19]}, taller:{data:[1, 0, 6, 4], ventas:[3.6, 0.0, 45.68, 15.66]}},
+    byCombo:{mostrador:{amer:{data:[0, 14, 31, 9], ventas:[0.91, 58.9, 267.95, 69.56]}, naciones:{data:[0, 0, 3, 7], ventas:[0.0, 0.0, 30.54, 72.63]}}, taller:{amer:{data:[1, 0, 6, 1], ventas:[3.6, 0.0, 45.68, 8.14]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 7.52]}}}},
+  {name:'DASH', data:[0, 9, 18, 5], ventas:[0.0, 54.1, 198.7, 175.96],
+    byCanal:{mostrador:{data:[0, 7, 12, 5], ventas:[0.0, 29.95, 55.21, 175.86]}, taller:{data:[0, 2, 6, 0], ventas:[0.0, 24.15, 143.49, 0.1]}},
+    byCombo:{mostrador:{amer:{data:[0, 7, 10, 4], ventas:[0.0, 29.95, 48.09, 174.87]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 7.12, 0.98]}}, taller:{amer:{data:[0, 2, 6, 0], ventas:[0.0, 24.15, 143.49, 0.1]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'ECO 100', data:[0, 30, 17, 10], ventas:[0.0, 179.23, 187.18, 59.91],
+    byCanal:{mostrador:{data:[0, 30, 16, 10], ventas:[0.0, 179.23, 183.88, 58.82]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 3.29, 1.09]}},
+    byCombo:{mostrador:{amer:{data:[0, 30, 10, 8], ventas:[0.0, 179.23, 77.13, 50.2]}, naciones:{data:[0, 0, 6, 1], ventas:[0.0, 0.0, 106.75, 8.62]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 3.29, 1.09]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'IGNITOR 125', data:[0, 1, 18, 2], ventas:[1.79, 2.3, 378.78, 4.58],
+    byCanal:{mostrador:{data:[0, 1, 18, 1], ventas:[0.0, 2.3, 377.94, 3.49]}, taller:{data:[0, 0, 0, 0], ventas:[1.79, 0.0, 0.84, 1.09]}},
+    byCombo:{mostrador:{amer:{data:[0, 1, 18, 1], ventas:[0.0, 2.3, 377.64, 2.79]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.31, 0.69]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[1.79, 0.0, 0.84, 1.09]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'HF DELUXE', data:[0, 32, 19, 8], ventas:[0.0, 179.11, 154.1, 24.79],
+    byCanal:{mostrador:{data:[0, 32, 18, 8], ventas:[0.0, 179.11, 150.81, 23.69]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 3.29, 1.09]}},
+    byCombo:{mostrador:{amer:{data:[0, 32, 11, 7], ventas:[0.0, 179.11, 54.4, 22.71]}, naciones:{data:[0, 0, 7, 0], ventas:[0.0, 0.0, 96.42, 0.98]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 3.29, 1.09]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'HUNK 125', data:[0, 5, 31, 13], ventas:[2.88, 28.39, 273.7, 51.23],
+    byCanal:{mostrador:{data:[0, 5, 22, 10], ventas:[0.0, 28.39, 96.04, 37.93]}, taller:{data:[0, 0, 9, 3], ventas:[2.88, 0.0, 177.66, 13.31]}},
+    byCombo:{mostrador:{amer:{data:[0, 5, 21, 10], ventas:[0.0, 28.39, 92.63, 37.23]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 3.41, 0.69]}}, taller:{amer:{data:[0, 0, 9, 2], ventas:[2.88, 0.0, 177.66, 9.46]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 3.85]}}}},
+  {name:'DAWN 125', data:[1, 14, 35, 16], ventas:[4.51, 40.99, 207.61, 67.88],
+    byCanal:{mostrador:{data:[0, 14, 30, 13], ventas:[0.91, 40.99, 182.99, 61.22]}, taller:{data:[1, 0, 5, 4], ventas:[3.6, 0.0, 24.62, 6.66]}},
+    byCombo:{mostrador:{amer:{data:[0, 14, 27, 7], ventas:[0.91, 40.99, 154.4, 24.76]}, naciones:{data:[0, 0, 3, 6], ventas:[0.0, 0.0, 28.59, 36.46]}}, taller:{amer:{data:[1, 0, 5, 1], ventas:[3.6, 0.0, 24.62, 2.3]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 4.36]}}}},
+  {name:'DAWN 150', data:[1, 12, 32, 15], ventas:[4.51, 37.38, 194.25, 55.99],
+    byCanal:{mostrador:{data:[0, 12, 27, 12], ventas:[0.91, 37.38, 169.98, 49.79]}, taller:{data:[1, 0, 5, 3], ventas:[3.6, 0.0, 24.27, 6.2]}},
+    byCombo:{mostrador:{amer:{data:[0, 12, 25, 6], ventas:[0.91, 37.38, 146.87, 18.5]}, naciones:{data:[0, 0, 3, 6], ventas:[0.0, 0.0, 23.12, 31.29]}}, taller:{amer:{data:[1, 0, 5, 1], ventas:[3.6, 0.0, 24.27, 1.84]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 4.36]}}}},
+  {name:'THRILLER', data:[1, 11, 21, 15], ventas:[4.51, 30.63, 94.2, 41.06],
+    byCanal:{mostrador:{data:[0, 11, 16, 11], ventas:[0.91, 30.63, 68.84, 34.16]}, taller:{data:[1, 0, 5, 4], ventas:[3.6, 0.0, 25.36, 6.9]}},
+    byCombo:{mostrador:{amer:{data:[0, 11, 15, 6], ventas:[0.91, 30.63, 60.04, 16.59]}, naciones:{data:[0, 0, 1, 6], ventas:[0.0, 0.0, 8.81, 17.57]}}, taller:{amer:{data:[1, 0, 5, 1], ventas:[3.6, 0.0, 25.36, 1.84]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 5.06]}}}},
+  {name:'VARIOS / UNIVERSAL', data:[0, 5, 13, 2], ventas:[0.0, 52.15, 81.41, 20.86],
+    byCanal:{mostrador:{data:[0, 5, 9, 1], ventas:[0.0, 52.15, 39.69, 10.43]}, taller:{data:[0, 0, 4, 1], ventas:[0.0, 0.0, 41.72, 10.43]}},
+    byCombo:{mostrador:{amer:{data:[0, 5, 6, 1], ventas:[0.0, 52.15, 38.27, 10.43]}, naciones:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 1.42, 0.0]}}, taller:{amer:{data:[0, 0, 4, 1], ventas:[0.0, 0.0, 41.72, 10.43]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'XOOM 110', data:[0, 8, 10, 2], ventas:[0.0, 35.13, 68.26, 6.88],
+    byCanal:{mostrador:{data:[0, 8, 8, 2], ventas:[0.0, 35.13, 60.8, 6.78]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 7.46, 0.1]}},
+    byCombo:{mostrador:{amer:{data:[0, 8, 6, 1], ventas:[0.0, 35.13, 45.08, 1.96]}, naciones:{data:[0, 0, 2, 1], ventas:[0.0, 0.0, 15.72, 4.82]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 7.46, 0.1]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'GLAMOUR', data:[0, 2, 6, 2], ventas:[1.79, 4.94, 50.97, 5.51],
+    byCanal:{mostrador:{data:[0, 2, 5, 2], ventas:[0.0, 4.94, 49.84, 4.42]}, taller:{data:[0, 0, 1, 0], ventas:[1.79, 0.0, 1.13, 1.09]}},
+    byCombo:{mostrador:{amer:{data:[0, 2, 5, 1], ventas:[0.0, 4.94, 49.24, 3.43]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.6, 0.98]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[1.79, 0.0, 1.13, 1.09]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'XOOM 125', data:[0, 6, 6, 3], ventas:[0.0, 7.63, 31.79, 22.76],
+    byCanal:{mostrador:{data:[0, 6, 5, 3], ventas:[0.0, 7.63, 24.4, 22.66]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 7.4, 0.1]}},
+    byCombo:{mostrador:{amer:{data:[0, 6, 4, 1], ventas:[0.0, 7.63, 15.83, 1.96]}, naciones:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 8.57, 20.7]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 7.4, 0.1]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'HUNK 250', data:[0, 1, 1, 1], ventas:[0.0, 1.01, 3.9, 1.56],
+    byCanal:{mostrador:{data:[0, 1, 1, 0], ventas:[0.0, 1.01, 3.9, 1.25]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.31]}},
+    byCombo:{mostrador:{amer:{data:[0, 1, 1, 0], ventas:[0.0, 1.01, 3.9, 1.25]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.31]}}}},
+];
+
 const fmt = n => n.toLocaleString('es-EC');
 const fmtMoney = n => '$' + Math.round(n).toLocaleString('es-EC');
 function readableTextColor(hex){
@@ -1673,6 +2296,8 @@ let resumen = computeResumenModel(aapMode, metricState.resumen);
 let retailModel = computeRetailModel(aapMode, metricState.retail);
 let mayoristasModel = computeMayoristasModel(metricState.mayoristas);
 let tiendasModel = computeTiendasModel(metricState.tiendas);
+let repuestosModel = computeRepuestosModel(metricState.repuestos);
+let repuestosCanalModel = computeRepuestosCanalModel(metricState.repuestos);
 
 /* ---------- shared plugin defaults ---------- */
 const dataLabelBase = {
@@ -1696,7 +2321,7 @@ function pctCell(curr, prev, monthTotal, formatter){
   formatter = formatter || fmt;
   const val = formatter(curr);
   let variationHtml = '';
-  if(prev !== undefined && prev !== 0){
+  if(prev !== undefined && prev !== null && prev !== 0){
     const pct = Math.round((curr-prev)/prev*100);
     const sign = pct>0 ? '+' : '';
     const color = pct>=0 ? '#0ca30c' : '#d03b3b';
@@ -2216,7 +2841,7 @@ function renderRetailKpis(){
     : `${formatter(junio)} → ${formatter(julio)} unidades`;
 
   document.getElementById('footnoteRetail').textContent = aapMode==='con'
-    ? 'Incluye AAP, OTOM, CRESA y MASTER MOTO (con ventas registradas); ESPAÑA, MARCIMEX y ARTEFACTA no registran unidades en el periodo — coincide exactamente con el total "Retail" de la hoja RESUMEN (184). Fuente: REPORTE_FACTURACION 2026.'
+    ? 'Incluye AAP, OTOM, CRESA y MASTER MOTO (con ventas registradas); ESPAÑA, MARCIMEX y ARTEFACTA no registran unidades en el periodo — coincide exactamente con el total "Retail" de la hoja RESUMEN (201). Fuente: REPORTE_FACTURACION 2026.'
     : 'Vista "SIN AAP": excluye a AAP del canal Retail. Incluye OTOM, CRESA y MASTER MOTO (con ventas registradas); ESPAÑA, MARCIMEX y ARTEFACTA no registran unidades en el periodo. Fuente: REPORTE_FACTURACION 2026.';
 }
 
@@ -2363,8 +2988,28 @@ function initRetail(){
 }
 
 /* ---------- Retail / Origen de Ventas (sub-vista) ---------- */
-function makeOrigenRankingChart(canvasId, rows, barColor){
+function makeOrigenRankingChart(canvasId, rows, barColor, opts){
+  opts = opts || {};
   const maxVal = Math.max(...rows.map(r=>r.u)) || 1;
+  const showPct = !!opts.showPct;
+  const totalU = sum(rows.map(r=>r.u));
+  const valueLabel = (ctx)=> `${fmt(rows[ctx.dataIndex].u)} u. · ${fmtMoney(rows[ctx.dataIndex].v)}`;
+  const datalabelsCfg = !showPct ? {
+    display:true, color: PALETTE.ink, font:{weight:700, size:10.5}, anchor:'end', align:'right', offset:4,
+    formatter:(v,ctx)=> valueLabel(ctx)
+  } : {
+    labels:{
+      value:{
+        display:true, color: PALETTE.ink, font:{weight:700, size:10.5}, anchor:'end', align:'right', offset:4,
+        formatter:(v,ctx)=> valueLabel(ctx)
+      },
+      pct:{
+        display:true, color: PALETTE.muted, font:{weight:600, size:10}, anchor:'end', align:'right',
+        offset:(ctx)=> 4 + measureTextWidth(valueLabel(ctx), 700, 10.5) + 6,
+        formatter:(v,ctx)=> `(${totalU>0 ? Math.round(rows[ctx.dataIndex].u/totalU*100) : 0}%)`
+      }
+    }
+  };
   return new Chart(document.getElementById(canvasId), {
     type:'bar',
     data:{
@@ -2374,7 +3019,7 @@ function makeOrigenRankingChart(canvasId, rows, barColor){
     options:{
       indexAxis:'y',
       responsive:true, maintainAspectRatio:false,
-      layout:{ padding:{right:96} },
+      layout:{ padding:{right: opts.rightPad || 96} },
       scales:{
         x:{ display:false, beginAtZero:true, max: maxVal * 1.55 },
         y:{ grid:{display:false}, border:{display:false}, ticks:{color: PALETTE.ink, font:{size:10.5, weight:600}} }
@@ -2382,10 +3027,7 @@ function makeOrigenRankingChart(canvasId, rows, barColor){
       plugins:{
         legend:{display:false},
         tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
-        datalabels:{
-          display:true, color: PALETTE.ink, font:{weight:700, size:10.5}, anchor:'end', align:'right', offset:4,
-          formatter:(v,ctx)=> `${fmt(v)} u. · ${fmtMoney(rows[ctx.dataIndex].v)}`
-        }
+        datalabels: datalabelsCfg
       }
     }
   });
@@ -3669,10 +4311,487 @@ function initTiendas(){
   renderTiendas();
 }
 
+/* ================= REPUESTOS ================= */
+/* Tabla mensual genérica: rows = [{name, data:[4], ventas:[4], color?}], respeta el toggle UNIDADES/$ de Repuestos. */
+function buildRepuestosGenericTable(rows, tbodyId, opts){
+  opts = opts || {};
+  const metric = metricState.repuestos;
+  const series = r => metric==='ventas' ? r.ventas : r.data;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
+  const monthTotal = [0,1,2,3].map(mi=> sum(rows.map(r=>series(r)[mi])));
+  const leaders = [0,1,2,3].map(mi=>{
+    let bestIdx=0, bestV=-1;
+    rows.forEach((r,i)=>{ const v=series(r)[mi]; if(v>bestV){ bestV=v; bestIdx=i; } });
+    return bestIdx;
+  });
+  const tbody = document.getElementById(tbodyId);
+  tbody.innerHTML = rows.map((r,i)=>{
+    const s = series(r);
+    const swatch = (opts.showColor && r.color) ? `<span class="legend-swatch" style="background:${r.color};display:inline-block;margin-right:6px;"></span>` : '';
+    const cells = [0,1,2,3].map(mi=>{
+      const curr = s[mi], prev = mi>0 ? s[mi-1] : undefined;
+      const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${formatter(v)}</span>` : formatter;
+      return `<td class="num">${pctCell(curr, prev, monthTotal[mi], cellFormatter)}</td>`;
+    }).join('');
+    return `<tr><td style="font-weight:700;">${swatch}${r.name}</td>${cells}<td class="num">${formatter(sum(s))}</td></tr>`;
+  }).join('') +
+  `<tr style="font-weight:800;background:var(--page-plane);">
+    <td>Total</td>
+    <td class="num">${formatter(monthTotal[0])}</td>
+    <td class="num">${pctCell(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
+    <td class="num">${pctCell(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
+    <td class="num">${pctCell(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${formatter(sum(monthTotal))}</td>
+  </tr>`;
+  if(opts.subtitleId) document.getElementById(opts.subtitleId).textContent = metric==='ventas' ? 'Ventas en $' : 'Unidades vendidas';
+}
+
+/* ---------- 1. Categorías ---------- */
+function buildRepuestosCategoriaTable(){
+  buildRepuestosGenericTable(canalRows(repuestosCanalesRaw), 'tblRepuestosCategorias', { showColor:true });
+}
+
+function renderRepuestosLegends(){
+  const catTotal = sum(repuestosCanalModel.active.map(a=>a.view));
+  document.getElementById('legendRepuestosCategorias').innerHTML = repuestosCanalModel.active.map(a=>
+    `<span class="legend-item"><span class="legend-swatch" style="background:${a.color}"></span>${a.name}</span>`).join('');
+  document.getElementById('legendRepuestosDonut').innerHTML = repuestosCanalModel.active.map(a=>
+    `<span class="legend-item"><span class="legend-swatch" style="background:${a.color}"></span>${a.name} ${catTotal>0 ? Math.round(a.view/catTotal*100) : 0}%</span>`).join('');
+}
+
+function renderRepuestosKpis(){
+  const metric = metricState.repuestos;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
+  const active = repuestosModel.active;
+  const leader = active[0], second = active[1];
+  const grandSel = mval(repuestosModel.total);
+  const grandVenta = mval(canalTotal(REPUESTOS_TOTAL_VENTA, REPUESTOS_TOTAL_VENTA_BY_COMBO));
+  const grandUtilidad = mval(canalTotal(REPUESTOS_TOTAL_UTILIDAD, REPUESTOS_TOTAL_UTILIDAD_BY_COMBO));
+  const grandMargen = grandVenta>0 ? grandUtilidad/grandVenta : 0;
+
+  document.getElementById('kpiRepuestosTotalLabel').textContent = metric==='ventas' ? 'Ventas netas repuestos' : 'Unidades vendidas repuestos';
+  document.getElementById('kpiRepuestosTotalValue').textContent = formatter(grandSel);
+  document.getElementById('kpiRepuestosTotalDelta').textContent = monthFilter==='todos'
+    ? 'Acumulado Mayo-Agosto 2026'
+    : `Vista de un solo mes · ${MONTH_LABEL[monthFilter]}`;
+  const margenColor = grandMargen>=0 ? '#0ca30c' : '#d03b3b';
+  document.getElementById('kpiRepuestosUtilidad').innerHTML = `Utilidad: <b style="color:${margenColor};">${fmtMoney(grandUtilidad)}</b> · Margen ${Math.round(grandMargen*100)}%`;
+
+  document.getElementById('kpiRepuestosLeaderValue').textContent = formatter(leader.view);
+  document.getElementById('kpiRepuestosLeaderDelta').textContent = `${leader.name} · ${grandSel>0 ? Math.round(leader.view/grandSel*100) : 0}% del total`;
+
+  document.getElementById('kpiRepuestosSecondValue').textContent = formatter(second.view);
+  document.getElementById('kpiRepuestosSecondDelta').textContent = second.name;
+
+  const ventaSerie = canalTotal(REPUESTOS_TOTAL_VENTA, REPUESTOS_TOTAL_VENTA_BY_COMBO);
+  const junio = ventaSerie[1], julio = ventaSerie[2];
+  const pct = junio>0 ? Math.round((julio-junio)/junio*100) : 0;
+  const sign = pct>0 ? '+' : '';
+  const deltaColor = pct>=0 ? '#0ca30c' : '#d03b3b';
+  const deltaValueEl = document.getElementById('kpiRepuestosDeltaValue');
+  deltaValueEl.textContent = `${sign}${pct}%`;
+  deltaValueEl.style.color = deltaColor;
+  document.getElementById('kpiRepuestosDeltaSub').textContent = `${fmtMoney(junio)} → ${fmtMoney(julio)}`;
+}
+
+let chartRepuestosBarsInst=null, chartRepuestosDonutInst=null, chartRepuestosTrendInst=null;
+function renderRepuestosCharts(){
+  if(chartRepuestosBarsInst) chartRepuestosBarsInst.destroy();
+  if(chartRepuestosDonutInst) chartRepuestosDonutInst.destroy();
+
+  const active = repuestosCanalModel.active;
+  const T = repuestosCanalModel.total;
+  const catTotal = mval(T);
+  const metric = repuestosCanalModel.metric;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
+  const barLabels = monthFilter==='todos' ? MONTHS : [MONTH_LABEL_SHORT[monthFilter]];
+  const barSlice = (arr)=> monthFilter==='todos' ? arr : [arr[MONTH_IDX[monthFilter]]];
+
+  document.getElementById('donutRepuestosTotal').textContent = formatter(catTotal);
+  document.getElementById('donutRepuestosLabel').textContent = metric==='ventas' ? 'en ventas' : 'unidades';
+  document.getElementById('repuestosBarsSub').textContent = monthFilter==='todos'
+    ? 'Comparativo mensual · Mayo, Junio, Julio, Agosto 2026' : `Vista de un solo mes · ${MONTH_LABEL[monthFilter]}`;
+  document.getElementById('repuestosDonutSub').textContent = monthFilter==='todos' ? 'Acumulado Mayo–Agosto' : MONTH_LABEL[monthFilter];
+  const maxPad = metric==='ventas' ? Math.ceil(Math.max(...active.flatMap(a=>a.data))*0.12) : 10;
+
+  chartRepuestosBarsInst = new Chart(document.getElementById('chartRepuestosBars'), {
+    type:'bar',
+    data:{
+      labels: barLabels,
+      datasets: active.map(a=>({
+        label:a.name, data: barSlice(a.data), backgroundColor:a.color, borderRadius:0, borderSkipped:false,
+        barPercentage:1, categoryPercentage:0.92, maxBarThickness:46
+      }))
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{mode:'index', intersect:false},
+      layout:{ padding:{top:16} },
+      scales:{
+        x:{ grid:{display:false}, border:{display:false}, ticks:{color: PALETTE.ink, font:{size:11.5, weight:600}, padding:2} },
+        y:{ display:false, beginAtZero:true, max: Math.max(...active.flatMap(a=>a.data)) + maxPad }
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8, titleFont:{size:12}, bodyFont:{size:12}},
+        datalabels:{
+          display:true, color: PALETTE.ink, font:{weight:700, size:10.5}, anchor:'end', align:'top', offset:2,
+          formatter:v=> v ? formatter(v) : ''
+        }
+      }
+    }
+  });
+
+  chartRepuestosDonutInst = new Chart(document.getElementById('chartRepuestosDonut'), {
+    type:'doughnut',
+    data:{
+      labels: active.map(a=>a.name),
+      datasets:[{ data: active.map(a=>a.view), backgroundColor: active.map(a=>a.color), borderWidth:3, borderColor:'#fff' }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'70%',
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
+        datalabels:{
+          display:true, font:{weight:800, size: metric==='ventas' ? 10 : 11.5},
+          color:(ctx)=> readableTextColor(active[ctx.dataIndex].color),
+          textStrokeColor:(ctx)=> readableTextColor(active[ctx.dataIndex].color)==='#fff' ? 'rgba(0,0,0,0.35)' : 'rgba(255,255,255,0.55)',
+          textStrokeWidth:2,
+          formatter:(v)=> {
+            if(metric==='ventas' && (v/catTotal*100) < 8) return '';
+            return formatter(v);
+          }
+        }
+      }
+    }
+  });
+
+  if(!chartRepuestosTrendInst){
+    chartRepuestosTrendInst = new Chart(document.getElementById('chartRepuestosTrend'), {
+      type:'line',
+      data:{
+        labels: MONTHS,
+        datasets:[{
+          label:'Total repuestos', data: T,
+          borderColor: getVar('--canal-1'), backgroundColor:'transparent',
+          fill:false, tension:0,
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+          pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--categoria-3'),
+          pointBorderColor: getVar('--canal-1'), pointBorderWidth:2, borderWidth:2.5
+        }]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        layout:{ padding:{top:18, right: metric==='ventas' ? 108 : 48, left: metric==='ventas' ? 56 : 36} },
+        scales:{
+          x:{ grid:{display:false}, border:{display:false}, ticks:{color: PALETTE.ink, font:{size:11.5, weight:600}} },
+          y:{ display:false, beginAtZero:false, grace:'20%' }
+        },
+        plugins:{
+          legend:{display:false},
+          tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
+          datalabels:{
+            display:true, font:{weight:700, size:10.5},
+            anchor:'end', align:'top', offset:6,
+            color:(ctx)=>{
+              const i = ctx.dataIndex;
+              if(i===0) return PALETTE.ink;
+              const prev = repuestosCanalModel.total[i-1];
+              const diff = ctx.dataset.data[i]-prev;
+              return diff>=0 ? '#0ca30c' : '#d03b3b';
+            },
+            formatter:(v,ctx)=>{
+              const i = ctx.dataIndex;
+              const f = repuestosCanalModel.metric==='ventas' ? fmtMoney : fmt;
+              const contrib = Math.round(v/sum(repuestosCanalModel.total)*100);
+              if(i===0) return `${f(v)} · ${contrib}%`;
+              const prev = repuestosCanalModel.total[i-1];
+              const pct = prev>0 ? Math.round((v-prev)/prev*100) : 0;
+              const sign = pct>0 ? '+' : '';
+              return `${f(v)} (${sign}${pct}%) · ${contrib}%`;
+            }
+          }
+        }
+      }
+    });
+  } else {
+    chartRepuestosTrendInst.options.layout.padding.right = metric==='ventas' ? 108 : 48;
+    chartRepuestosTrendInst.options.layout.padding.left = metric==='ventas' ? 56 : 36;
+    chartRepuestosTrendInst.data.datasets[0].data = T;
+    chartRepuestosTrendInst.update();
+  }
+}
+
+function renderRepuestos(){
+  repuestosModel = computeRepuestosModel(metricState.repuestos);
+  repuestosCanalModel = computeRepuestosCanalModel(metricState.repuestos);
+  buildRepuestosCategoriaTable();
+  renderRepuestosLegends();
+  renderRepuestosKpis();
+  renderRepuestosCharts();
+}
+
+function initRepuestos(){
+  if(chartsInit.repuestos) return; chartsInit.repuestos = true;
+  renderRepuestos();
+}
+
+/* ---------- 2. Top Repuestos ---------- */
+let chartRepuestosTopInst = null;
+function repuestosTopRows(){
+  const metric = metricState.repuestos;
+  return canalRows(REPUESTOS_ITEMS).slice()
+    .sort((a,b)=> metric==='ventas' ? mval(b.ventas)-mval(a.ventas) : mval(b.data)-mval(a.data))
+    .slice(0,10);
+}
+function renderRepuestosTopChart(){
+  const metric = metricState.repuestos;
+  const rows = repuestosTopRows();
+  const values = rows.map(r=> metric==='ventas' ? mval(r.ventas) : mval(r.data));
+  const totalMetric = sum(values);
+  const barColor = metric==='ventas' ? PALETTE.s1 : PALETTE.s2;
+  const periodo = monthFilter==='todos' ? 'Mayo-Agosto 2026' : MONTH_LABEL[monthFilter];
+  const periodoLower = monthFilter==='todos' ? 'acumulado mayo-junio-julio-agosto 2026' : `vista de ${MONTH_LABEL[monthFilter]}`;
+
+  document.getElementById('repuestosTopSub').textContent = (metric==='ventas' ? 'Ventas en $' : 'Unidades vendidas') + ' · ' + periodo;
+  document.getElementById('repuestosTopFootnote').textContent = `Top 10 dentro de un universo de 46 repuestos con seguimiento mensual (cubre el 57% de la venta neta total de 272 SKUs), ${periodoLower}. Orden de mayor a menor según la métrica activa. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.`;
+
+  if(chartRepuestosTopInst) chartRepuestosTopInst.destroy();
+  const maxVal = Math.max(...values) || 1;
+  chartRepuestosTopInst = new Chart(document.getElementById('chartRepuestosTop'), {
+    type:'bar',
+    data:{
+      labels: rows.map(r=>r.name),
+      datasets:[{ data: values, backgroundColor: barColor, borderRadius:0, barPercentage:0.75, maxBarThickness:28 }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true, maintainAspectRatio:false,
+      layout:{ padding:{right: 130} },
+      scales:{
+        x:{ display:false, beginAtZero:true, max: maxVal * 1.5 },
+        y:{ grid:{display:false}, border:{display:false}, afterFit(scale){ scale.width = 160; },
+          ticks:{color: PALETTE.ink, font:{size:10.5, weight:600},
+          callback(value){ const l = this.getLabelForValue(value); return l.length>18 ? l.slice(0,16)+'…' : l; } } }
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
+        datalabels:{
+          display:true, color: PALETTE.ink, font:{weight:700, size:10.5}, anchor:'end', align:'right', offset:4,
+          formatter:(v,ctx)=>{
+            const r = rows[ctx.dataIndex];
+            const u = mval(r.data), ve = mval(r.ventas);
+            const pct = totalMetric>0 ? Math.round((metric==='ventas'?ve:u)/totalMetric*100) : 0;
+            return metric==='ventas' ? `${fmtMoney(ve)} (${pct}%) · ${fmt(u)} u.` : `${fmt(u)} u. (${pct}%) · ${fmtMoney(ve)}`;
+          }
+        }
+      }
+    }
+  });
+}
+function buildRepuestosTopTable(){
+  buildRepuestosGenericTable(repuestosTopRows(), 'tblRepuestosTop', { subtitleId:'repuestosTopTableSub' });
+}
+
+let chartRepuestosSucursalInst = null;
+function renderRepuestosSucursalChart(){
+  const metric = metricState.repuestos;
+  const rows = canalRows(REPUESTOS_SUCURSALES).map(s=>({ name:s.name, u: mval(s.data), v: mval(s.ventas) })).sort((a,b)=> b.u-a.u);
+  const barColor = metric==='ventas' ? PALETTE.s1 : PALETTE.s2;
+  const periodo = monthFilter==='todos' ? 'Mayo–Agosto 2026' : MONTH_LABEL[monthFilter];
+  document.getElementById('repuestosSucursalSub').textContent = `Unidades y $ por sucursal · ${periodo}`;
+  if(chartRepuestosSucursalInst) chartRepuestosSucursalInst.destroy();
+  chartRepuestosSucursalInst = makeOrigenRankingChart('chartRepuestosSucursal', rows, barColor, { showPct:true, rightPad:150 });
+}
+function buildRepuestosSucursalTable(){
+  buildRepuestosGenericTable(canalRows(REPUESTOS_SUCURSALES), 'tblRepuestosSucursal', { subtitleId:'repuestosSucursalTableSub' });
+}
+
+function initRepuestosTop(){
+  if(chartsInit.repuestosTop) return; chartsInit.repuestosTop = true;
+  renderRepuestosTopChart();
+  buildRepuestosTopTable();
+  renderRepuestosSucursalChart();
+  buildRepuestosSucursalTable();
+}
+
+/* ---------- 3. Provincia y Canal ---------- */
+let chartRepuestosProvinciaInst = null, chartRepuestosCanalInst = null;
+function renderRepuestosProvinciaChart(){
+  const rows = canalRows(repuestosProvinciasRaw).map(p=>({ name:p.name, u: mval(p.data), v: mval(p.ventas) })).sort((a,b)=> b.u-a.u);
+  const periodo = monthFilter==='todos' ? 'Mayo–Agosto 2026' : MONTH_LABEL[monthFilter];
+  document.getElementById('repuestosProvinciaSub').textContent = `Unidades y $ por provincia · ${periodo}`;
+  if(chartRepuestosProvinciaInst) chartRepuestosProvinciaInst.destroy();
+  chartRepuestosProvinciaInst = makeOrigenRankingChart('chartRepuestosProvincia', rows, PALETTE.s1, { showPct:true, rightPad:150 });
+}
+function buildRepuestosProvinciaTable(){
+  buildRepuestosGenericTable(canalRows(repuestosProvinciasRaw), 'tblRepuestosProvincia', { subtitleId:'repuestosProvinciaTableSub' });
+}
+function renderRepuestosCanalChart(){
+  // "TRANSMISIÓN/EMBRAGUE" se acorta solo para la etiqueta del gráfico (el eje Y no tiene espacio para el nombre completo);
+  // la tabla de al lado sigue mostrando el nombre completo de la categoría.
+  const rows = canalRows(repuestosCategoriasRaw).map(c=>({ name: c.name==='TRANSMISIÓN/EMBRAGUE' ? 'TRANSMISIÓN/EMB.' : c.name, u: mval(c.data), v: mval(c.ventas) })).sort((a,b)=> b.u-a.u);
+  const periodo = monthFilter==='todos' ? 'Mayo–Agosto 2026' : MONTH_LABEL[monthFilter];
+  document.getElementById('repuestosCanalSub').textContent = `Unidades y $ por categoría · ${periodo}`;
+  if(chartRepuestosCanalInst) chartRepuestosCanalInst.destroy();
+  chartRepuestosCanalInst = makeOrigenRankingChart('chartRepuestosCanal', rows, PALETTE.s3);
+}
+function buildRepuestosCanalTable(){
+  buildRepuestosGenericTable(canalRows(repuestosCategoriasRaw), 'tblRepuestosCanal', { subtitleId:'repuestosCanalTableSub' });
+}
+function initRepuestosProvincia(){
+  if(chartsInit.repuestosProvincia) return; chartsInit.repuestosProvincia = true;
+  renderRepuestosProvinciaChart();
+  buildRepuestosProvinciaTable();
+  renderRepuestosCanalChart();
+  buildRepuestosCanalTable();
+}
+
+/* ---------- 4. Modelos (mapeo repuesto → modelo HERO compatible, hoja MODELOS) ---------- */
+let chartRepuestosModelosRankingInst = null;
+function renderRepuestosModelosRankingChart(){
+  const metric = metricState.repuestos;
+  const rows = canalRows(REPUESTOS_MODELOS).map(m=>({ name:m.name, value: metric==='ventas' ? mval(m.ventas) : mval(m.data) }))
+                       .sort((a,b)=> b.value - a.value).slice(0,10);
+  const formatter = metric==='ventas' ? fmtMoney : (v)=> `${fmt(v)} u.`;
+  const maxVal = Math.max(...rows.map(r=>r.value)) || 1;
+  const barColor = metric==='ventas' ? PALETTE.s1 : PALETTE.s2;
+  const periodo = monthFilter==='todos' ? 'Mayo-Agosto 2026' : MONTH_LABEL[monthFilter];
+  const periodoLower = monthFilter==='todos' ? 'Acumulado mayo-junio-julio-agosto 2026' : `Vista de ${MONTH_LABEL[monthFilter]}`;
+
+  document.getElementById('repuestosModelosRankingSub').textContent = (metric==='ventas' ? 'Ventas en $' : 'Unidades vendidas') + ' · ' + periodo;
+  document.getElementById('repuestosModelosRankingFootnote').textContent = `Top 10 de 18 modelos HERO, ${periodoLower[0].toLowerCase()+periodoLower.slice(1)}. Reparte la venta entre modelos cuando aplica a varios. Fuente: hoja MODELOS.`;
+
+  if(chartRepuestosModelosRankingInst) chartRepuestosModelosRankingInst.destroy();
+  chartRepuestosModelosRankingInst = new Chart(document.getElementById('chartRepuestosModelosRanking'), {
+    type:'bar',
+    data:{
+      labels: rows.map(r=>r.name),
+      datasets:[{ data: rows.map(r=>r.value), backgroundColor: barColor, borderRadius:0, barPercentage:0.8, maxBarThickness:18 }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true, maintainAspectRatio:false,
+      layout:{ padding:{right: metric==='ventas' ? 92 : 76} },
+      scales:{
+        x:{ display:false, beginAtZero:true, max: maxVal * 1.5 },
+        y:{ grid:{display:false}, border:{display:false}, afterFit(scale){ scale.width = 130; },
+          ticks:{color: PALETTE.ink, font:{size:10, weight:600},
+          callback(value){ const l = this.getLabelForValue(value); return l.length>16 ? l.slice(0,14)+'…' : l; } } }
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#101f38', padding:10, cornerRadius:8,
+          callbacks:{ label:(ctx)=> `${metric==='ventas' ? 'Ventas' : 'Unidades'}: ${formatter(rows[ctx.dataIndex].value)}` }
+        },
+        datalabels:{
+          display:true, color: PALETTE.ink, font:{weight:700, size:10}, anchor:'end', align:'right', offset:4,
+          formatter:(v,ctx)=> formatter(rows[ctx.dataIndex].value)
+        }
+      }
+    }
+  });
+}
+function buildRepuestosModelosTable(){
+  buildRepuestosGenericTable(canalRows(REPUESTOS_MODELOS), 'tblRepuestosModelos', { subtitleId:'repuestosModelosTableSub' });
+}
+let chartRepuestosTicketPromedioInst = null;
+function renderRepuestosTicketPromedioChart(){
+  const rows = canalRows(REPUESTOS_MODELOS).filter(m=> mval(m.data)>0).map(m=>({ name:m.name, ticket: Math.round(mval(m.ventas)/mval(m.data)) }))
+                       .sort((a,b)=> b.ticket - a.ticket).slice(0,8);
+  const maxVal = Math.max(...rows.map(r=>r.ticket)) || 1;
+  const periodo = monthFilter==='todos' ? 'Mayo-Agosto 2026' : MONTH_LABEL[monthFilter];
+  const periodoLower = monthFilter==='todos' ? 'acumulado mayo-junio-julio-agosto 2026' : `vista de ${MONTH_LABEL[monthFilter]}`;
+  document.getElementById('repuestosTicketPromedioSub').textContent = 'Ventas ÷ Unidades · ' + periodo;
+  document.getElementById('repuestosTicketPromedioFootnote').textContent = `Top 8 modelos con mayor ticket promedio (Ventas $ ÷ Unidades), ${periodoLower}. Fuente: hoja MODELOS.`;
+  if(chartRepuestosTicketPromedioInst) chartRepuestosTicketPromedioInst.destroy();
+  chartRepuestosTicketPromedioInst = new Chart(document.getElementById('chartRepuestosTicketPromedio'), {
+    type:'bar',
+    data:{
+      labels: rows.map(r=>r.name),
+      datasets:[{ data: rows.map(r=>r.ticket), backgroundColor: PALETTE.s2, borderRadius:0, barPercentage:0.8, maxBarThickness:14 }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true, maintainAspectRatio:false,
+      layout:{ padding:{right:64} },
+      scales:{
+        x:{ display:false, beginAtZero:true, max: maxVal * 1.5 },
+        y:{ grid:{display:false}, border:{display:false}, afterFit(scale){ scale.width = 130; },
+          ticks:{color: PALETTE.ink, font:{size:10, weight:600},
+          callback(value){ const l = this.getLabelForValue(value); return l.length>16 ? l.slice(0,14)+'…' : l; } } }
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#101f38', padding:10, cornerRadius:8,
+          callbacks:{ label:(ctx)=> `Ticket promedio: ${fmtMoney(rows[ctx.dataIndex].ticket)}` }
+        },
+        datalabels:{
+          display:true, color: PALETTE.ink, font:{weight:700, size:10}, anchor:'end', align:'right', offset:4,
+          formatter:(v,ctx)=> fmtMoney(rows[ctx.dataIndex].ticket)
+        }
+      }
+    }
+  });
+}
+function buildRepuestosTicketMensualTable(){
+  const modelRows = canalRows(REPUESTOS_MODELOS);
+  const rows = modelRows.map(m=>{
+    const tickets = m.data.map((u,mi)=> u>0 ? Math.round(m.ventas[mi]/u) : null);
+    const totalU = sum(m.data), totalV = sum(m.ventas);
+    return { name:m.name, tickets, blended: totalU>0 ? Math.round(totalV/totalU) : null };
+  });
+  const unidadesSerie = canalTotal(REPUESTOS_TOTAL_UNIDADES, REPUESTOS_TOTAL_UNIDADES_BY_COMBO);
+  const ventaSerie = canalTotal(REPUESTOS_TOTAL_VENTA, REPUESTOS_TOTAL_VENTA_BY_COMBO);
+  const monthBlended = [0,1,2,3].map(mi=> unidadesSerie[mi]>0 ? Math.round(ventaSerie[mi]/unidadesSerie[mi]) : null);
+  const totalBlended = sum(unidadesSerie)>0 ? Math.round(sum(ventaSerie)/sum(unidadesSerie)) : 0;
+
+  const leaders = [0,1,2,3].map(mi=>{
+    let bestIdx = -1, bestV = -1;
+    rows.forEach((r,i)=>{
+      const v = r.tickets[mi];
+      if(v!==null && v>bestV){ bestV = v; bestIdx = i; }
+    });
+    return bestIdx;
+  });
+
+  const tbody = document.getElementById('tblRepuestosTicketMensual');
+  tbody.innerHTML = rows.map((r,i)=>{
+    const cells = [0,1,2,3].map(mi=>{
+      const curr = r.tickets[mi];
+      if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;">—</td>`;
+      const prev = mi>0 ? r.tickets[mi-1] : undefined;
+      const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${fmtMoney(v)}</span>` : fmtMoney;
+      const cell = pctCell(curr, prev===null ? undefined : prev, undefined, cellFormatter);
+      return `<td class="num">${cell}</td>`;
+    }).join('');
+    return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? fmtMoney(r.blended) : '—'}</td></tr>`;
+  }).join('') +
+  `<tr style="font-weight:800;background:var(--page-plane);">
+    <td>Promedio</td>
+    <td class="num">${monthBlended[0]!==null ? fmtMoney(monthBlended[0]) : '—'}</td>
+    <td class="num">${monthBlended[1]!==null ? pctCell(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[2]!==null ? pctCell(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[3]!==null ? pctCell(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${fmtMoney(totalBlended)}</td>
+  </tr>`;
+}
+function initRepuestosModelos(){
+  if(chartsInit.repuestosModelos) return; chartsInit.repuestosModelos = true;
+  buildRepuestosModelosTable();
+  buildRepuestosTicketMensualTable();
+  renderRepuestosModelosRankingChart();
+  renderRepuestosTicketPromedioChart();
+}
+
 /* ================= NAV / TABS ================= */
 const navItems = document.querySelectorAll('.nav-item');
 const pages = document.querySelectorAll('.page');
-const initFns = { resumen:initResumen, mayoristas:initMayoristas, retail:initRetail, tiendas:initTiendas };
+const initFns = { resumen:initResumen, mayoristas:initMayoristas, retail:initRetail, tiendas:initTiendas, repuestos:initRepuestos };
 
 navItems.forEach(item=>{
   item.addEventListener('click', ()=>{
@@ -3716,6 +4835,7 @@ const METRIC_RENDER = {
   mayoristas:  ()=>{ if(chartsInit.mayoristas) renderMayoristas(); if(chartsInit.mayoristasModelos){ buildMayoristasModelosTable(); renderMayoristasModelosRankingChart(); } },
   retail:      ()=>{ if(chartsInit.retail) renderRetail(); if(chartsInit.retailOrigen){ buildAapOrigenTable(); buildNonAapOrigenTable(); } if(chartsInit.retailPerfiles) buildRetailPerfilesTable(); if(chartsInit.retailModelos){ buildRetailModelosTable(); renderRetailModelosRankingChart(); } },
   tiendas:     ()=>{ if(chartsInit.tiendas) renderTiendas(); if(chartsInit.tiendasPerfiles){ buildTiendaPerfilMensualTable(PERFIL_TIENDA_AMERICAS_MENSUAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS, 'tblTiendaAmericasMensual', 'tiendaAmericasMensualSubtitle', 'tiendaAmericasMensualFootnote', 'Tienda Av. Américas.'); buildTiendaPerfilMensualTable(PERFIL_TIENDA_NACIONES_MENSUAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL_VENTAS, 'tblTiendaNacionesMensual', 'tiendaNacionesMensualSubtitle', 'tiendaNacionesMensualFootnote', 'Tienda Naciones Unidas.'); } if(chartsInit.tiendasModelos){ buildTiendasModelosTable(); buildTiendasTicketMensualTable(); renderTiendasModelosRankingChart(); } },
+  repuestos:   ()=>{ if(chartsInit.repuestos) renderRepuestos(); if(chartsInit.repuestosTop){ renderRepuestosTopChart(); buildRepuestosTopTable(); renderRepuestosSucursalChart(); buildRepuestosSucursalTable(); } if(chartsInit.repuestosProvincia){ renderRepuestosProvinciaChart(); buildRepuestosProvinciaTable(); renderRepuestosCanalChart(); buildRepuestosCanalTable(); } if(chartsInit.repuestosModelos){ buildRepuestosModelosTable(); renderRepuestosModelosRankingChart(); } },
 };
 document.querySelectorAll('[data-metric-toggle]').forEach(group=>{
   const page = group.dataset.metricToggle;
@@ -3761,10 +4881,54 @@ function setMonthFilter(mode){
     buildTiendaPerfilMensualTable(PERFIL_TIENDA_NACIONES_MENSUAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL_VENTAS, 'tblTiendaNacionesMensual', 'tiendaNacionesMensualSubtitle', 'tiendaNacionesMensualFootnote', 'Tienda Naciones Unidas.');
   }
   if(chartsInit.tiendasModelos){ buildTiendasModelosTable(); buildTiendasTicketMensualTable(); renderTiendasModelosRankingChart(); initTiendasTicketPromedioChart(); }
+  // Repuestos
+  rerenderRepuestosAll();
 }
 monthToggles.forEach(group=>{
   group.querySelectorAll('button').forEach(btn=>{
     btn.addEventListener('click', ()=> setMonthFilter(btn.dataset.month));
+  });
+});
+
+/* ================= CANAL / SUCURSAL TOGGLES (Repuestos) ================= */
+// Re-renderiza todo lo ya inicializado de Repuestos; usado tanto por el filtro de canal como por el de sucursal.
+function rerenderRepuestosAll(){
+  if(chartsInit.repuestos) renderRepuestos();
+  if(chartsInit.repuestosTop){ renderRepuestosTopChart(); buildRepuestosTopTable(); renderRepuestosSucursalChart(); buildRepuestosSucursalTable(); }
+  if(chartsInit.repuestosProvincia){ renderRepuestosProvinciaChart(); buildRepuestosProvinciaTable(); renderRepuestosCanalChart(); buildRepuestosCanalTable(); }
+  if(chartsInit.repuestosModelos){ buildRepuestosModelosTable(); buildRepuestosTicketMensualTable(); renderRepuestosModelosRankingChart(); renderRepuestosTicketPromedioChart(); }
+}
+const canalToggles = document.querySelectorAll('[data-canal-toggle]');
+function setCanalFilter(mode){
+  if(mode===canalFilter) return;
+  canalFilter = mode;
+  canalToggles.forEach(group=>{
+    group.querySelectorAll('button').forEach(btn=>{
+      btn.classList.toggle('active', btn.dataset.canal===mode);
+    });
+  });
+  rerenderRepuestosAll();
+}
+canalToggles.forEach(group=>{
+  group.querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click', ()=> setCanalFilter(btn.dataset.canal));
+  });
+});
+
+const sucursalToggles = document.querySelectorAll('[data-sucursal-toggle]');
+function setSucursalFilter(mode){
+  if(mode===sucursalFilter) return;
+  sucursalFilter = mode;
+  sucursalToggles.forEach(group=>{
+    group.querySelectorAll('button').forEach(btn=>{
+      btn.classList.toggle('active', btn.dataset.sucursal===mode);
+    });
+  });
+  rerenderRepuestosAll();
+}
+sucursalToggles.forEach(group=>{
+  group.querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click', ()=> setSucursalFilter(btn.dataset.sucursal));
   });
 });
 
@@ -3796,6 +4960,11 @@ document.querySelectorAll('[data-subnav]').forEach(nav=>{
       }
       if(prefix==='mayoristas-subview'){
         if(btn.dataset.subview==='modelos') initMayoristasModelos();
+      }
+      if(prefix==='repuestos-subview'){
+        if(btn.dataset.subview==='top') initRepuestosTop();
+        if(btn.dataset.subview==='provincia') initRepuestosProvincia();
+        if(btn.dataset.subview==='modelos') initRepuestosModelos();
       }
     });
   });
