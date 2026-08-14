@@ -68,6 +68,7 @@
     --tienda-2:#a81c14; /* rojo oscuro */
     --tienda-3:#808080; /* gris medio */
     --tienda-4:#e8998c; /* salmón claro */
+    --tienda-5:#d9d9d9; /* gris claro */
     --categoria-1:#1a1a1a; /* negro         - Repuestos categorías */
     --categoria-2:#a81c14; /* rojo oscuro */
     --categoria-3:#808080; /* gris medio */
@@ -815,7 +816,7 @@
               <thead><tr><th>Zona</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
               <tbody id="tblMayoristas"></tbody>
             </table>
-            <div class="footnote">Incluye ORIENTE, ST DOMINGO / MANABI, LOS RIOS, GUAYAS y SIERRA — coincide exactamente con el total "Mayoristas" de la hoja RESUMEN (522). Fuente: REPORTE_FACTURACION 2026.</div>
+            <div class="footnote">Incluye ORIENTE, ST DOMINGO / MANABI, LOS RIOS, GUAYAS y SIERRA — coincide exactamente con el total "Mayoristas" de la hoja RESUMEN (525). Fuente: REPORTE_FACTURACION 2026.</div>
           </div>
         </div>
       </div>
@@ -1180,8 +1181,8 @@
         </div>
         <div class="kpi-card">
           <div class="kpi-top"><span class="kpi-label">Tiendas activas</span></div>
-          <div class="kpi-value">2 / 4</div>
-          <div class="kpi-delta muted">GYE y Quito</div>
+          <div class="kpi-value">3 / 5</div>
+          <div class="kpi-delta muted">GYE, Quito y Canal Digital</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-top"><span class="kpi-label">Julio</span></div>
@@ -1245,7 +1246,7 @@
               <thead><tr><th>Tienda</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
               <tbody id="tblTiendas"></tbody>
             </table>
-            <div class="footnote">Incluye HERO GYE y HERO QUITO (con ventas registradas); HERO ST DOMINGO y HERO PORTOVIEJO no registran unidades en el periodo — coincide exactamente con el total "Tiendas Hero" de la hoja RESUMEN (72). Fuente: REPORTE_FACTURACION 2026.</div>
+            <div class="footnote">Incluye HERO GYE, HERO QUITO y CANAL DIGITAL (con ventas registradas); HERO ST DOMINGO y HERO PORTOVIEJO no registran unidades en el periodo — coincide exactamente con el total "Tiendas Hero" de la hoja RESUMEN (74). Canal Digital: 1 u. / $2.705,22 en agosto, despachada desde la bodega HERO QUITO. Fuente: REPORTE_FACTURACION 2026.</div>
           </div>
         </div>
       </div>
@@ -1300,7 +1301,7 @@
               <thead><tr><th>Perfil</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
               <tbody id="tblTiendaNacionesMensual"></tbody>
             </table>
-            <div class="footnote" id="tiendaNacionesMensualFootnote">Tienda Naciones Unidas. En azul: el perfil con más unidades dentro de cada mes. % = participación sobre el total de unidades de ese mes. Fuente: CONSOLIDADO_HERO 2026 (Estado=Facturadas), columna "Perfil Tiendas Hero/AAP".</div>
+            <div class="footnote" id="tiendaNacionesMensualFootnote">Tienda Naciones Unidas (incluye 1 u. / $2.705 de Canal Digital en agosto). En azul: el perfil con más unidades dentro de cada mes. % = participación sobre el total de unidades de ese mes. Fuente: CONSOLIDADO_HERO 2026 (Estado=Facturadas), columna "Perfil Tiendas Hero/AAP".</div>
           </div>
         </div>
       </div>
@@ -1693,11 +1694,11 @@ Chart.defaults.set('plugins.datalabels', { display:false }); // opt-in per chart
 //   RETAIL     = AAP, OTOM, ESPAÑA, MASTER MOTO, MARCIMEX, ARTEFACTA, CRESA
 //   MAYORISTAS = ORIENTE, ST DOMINGO / MANABI, LOS RIOS, GUAYAS, SIERRA
 // These three groups sum exactly to the "Total" row in la hoja RESUMEN (303, 238, 215).
-const TIENDAS_TOTAL    = [12,28,24,8];
+const TIENDAS_TOTAL    = [12,28,24,10];
 const AAP_DATA          = [16,30,84,15];
 const RETAIL_TOTAL     = [18,58,107,18];   // AAP + OTOM + ESPAÑA + MASTER MOTO + MARCIMEX + ARTEFACTA + CRESA
 const RETAIL_SIN_AAP   = [2,28,23,3];     // RETAIL_TOTAL minus AAP_DATA — used only in the Resumen channel chart below
-const MAYORISTAS_TOTAL = [273,152,84,13];
+const MAYORISTAS_TOTAL = [273,152,84,16];
 
 // Ventas $ por mes (columna "Ventas" del CONSOLIDADO_HERO, filtrado Estado=Facturadas), por cuenta retail
 const RETAIL_VENTAS_TOTAL    = [26275, 88631, 161861, 28688];
@@ -1729,24 +1730,24 @@ const RETAIL_MODELOS_SIN_AAP = [
 // Modelos vendidos, canal Tiendas propias Hero únicamente. data = unidades [Mayo,Junio,Julio]; ventas = $ [Mayo,Junio,Julio].
 // Orden por unidades totales desc. Los totales por mes coinciden con TIENDAS_TOTAL / TIENDAS_VENTAS.
 const TIENDAS_MODELOS = [
-  {name:'HUNK 125R',         data:[2,10,10,2], ventas:[4138,23294,28866,6087]},
+  {name:'HUNK 125R',         data:[2,10,10,3], ventas:[4138,23294,28866,9130]},
   {name:'ECO DELUXE',        data:[6,9,2,0],   ventas:[8826,13266,4510,0]},
   {name:'XOOM 125R',         data:[0,4,7,2],   ventas:[0,8972,18342,4938]},
   {name:'HUNK 160 4V',       data:[1,3,3,2],   ventas:[2945,9300,13308,7646]},
+  {name:'XOOM 110',          data:[2,1,0,1],   ventas:[3022,3422,0,3453]},
   {name:'ECO 150',           data:[0,1,1,1],   ventas:[0,1800,1800,2786]},
-  {name:'XOOM 110',          data:[2,1,0,0],   ventas:[3022,3422,0,0]},
   {name:'XPULSE 200 4V FI',  data:[1,0,1,1],   ventas:[3800,0,3590,5817]},
 ];
 
 // Ventas $ por mes — canales (Resumen). AAP repite el mismo dato que su fila en retailAccounts.ventas.
-const TIENDAS_VENTAS     = [22731, 60053, 70415, 27274];    // HERO GYE + HERO QUITO
+const TIENDAS_VENTAS     = [22731, 60053, 70415, 33771];    // HERO GYE + HERO QUITO + CANAL DIGITAL (desde agosto)
 const AAP_VENTAS         = [23395, 44836, 127791, 21928];
-const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 22860]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
+const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 26310]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
 
 // Ventas $ por mes, por zona Mayoristas (columna Ventas, agrupado por Vendedor — mismo mapeo validado con el usuario)
 const MAYORISTAS_VENTAS_ZONA = {
   'ORIENTE':              [303707, 93692, 82092, 22860],
-  'ST DOMINGO / MANABI':  [40595,  37109, 30913,  0],
+  'ST DOMINGO / MANABI':  [40595,  37109, 30913,  3450],
   'LOS RIOS':             [40634,  64229, 22030,  0],
   'GUAYAS':               [73688,  31489, 5920,   0],
   'SIERRA':               [13930,  8252,  5030,   0],
@@ -1755,7 +1756,7 @@ const MAYORISTAS_VENTAS_ZONA = {
 // Modelos vendidos, canal Mayoristas únicamente. data = unidades [Mayo,Junio,Julio]; ventas = $ [Mayo,Junio,Julio].
 // Orden por unidades totales desc. Los totales por mes coinciden con MAYORISTAS_TOTAL / MAYORISTAS_VENTAS.
 const MAYORISTAS_MODELOS = [
-  {name:'ECO DELUXE',        data:[85,24,16,6], ventas:[98028,27600,18400,6900]},
+  {name:'ECO DELUXE',        data:[85,24,16,9], ventas:[98028,27600,18400,10350]},
   {name:'ECO 150',           data:[0,90,23,1],  ventas:[0,133722,34040,1480]},
   {name:'XOOM 125R',         data:[46,13,20,0], ventas:[89148,25331,38760,0]},
   {name:'HUNK 125R',         data:[53,4,7,1],   ventas:[91336,7396,12110,1730]},
@@ -1766,8 +1767,9 @@ const MAYORISTAS_MODELOS = [
 
 // Ventas $ por mes, por tienda propia Hero (columna Ventas, agrupado por Nombre Bodega)
 const TIENDAS_VENTAS_STORE = {
-  'HERO GYE':   [22731, 60053, 66515, 9822],
-  'HERO QUITO': [0,     0,     3900,  17452],
+  'HERO GYE':      [22731, 60053, 66515, 16319],
+  'HERO QUITO':    [0,     0,     3900,  14746.78],
+  'CANAL DIGITAL': [0,     0,     0,     2705.22],
 };
 
 let aapMode = 'con'; // 'con' = incluye AAP, 'sin' = excluye AAP (toggle de comparación)
@@ -1852,12 +1854,13 @@ function computeRetailModel(mode, metric){
   return {roster, active, total, metric};
 }
 
-const TIENDA_COLORS = ['--tienda-1','--tienda-2','--tienda-3','--tienda-4'].map(getVar);
+const TIENDA_COLORS = ['--tienda-1','--tienda-2','--tienda-3','--tienda-4','--tienda-5'].map(getVar);
 
 const tiendas = {
   stores:[
-    {name:'HERO GYE',   data:[12,28,22,3], ventas: TIENDAS_VENTAS_STORE['HERO GYE']},
-    {name:'HERO QUITO', data:[0,0,2,5],    ventas: TIENDAS_VENTAS_STORE['HERO QUITO']},
+    {name:'HERO GYE',      data:[12,28,22,5], ventas: TIENDAS_VENTAS_STORE['HERO GYE']},
+    {name:'HERO QUITO',    data:[0,0,2,4],    ventas: TIENDAS_VENTAS_STORE['HERO QUITO']},
+    {name:'CANAL DIGITAL', data:[0,0,0,1],    ventas: TIENDAS_VENTAS_STORE['CANAL DIGITAL']},
     {name:'HERO ST DO',  data:[0,0,0,0],   ventas:[0,0,0,0]},
     {name:'HERO PORTO',  data:[0,0,0,0],   ventas:[0,0,0,0]},
   ].map(s=>({...s, total:s.data.reduce((x,y)=>x+y,0)}))
@@ -1878,7 +1881,7 @@ const ZONE_COLORS = ['--zone-1','--zone-2','--zone-3','--zone-4','--zone-5'].map
 
 const mayoristasAccounts = [
   {name:'ORIENTE',              data:[181,60,43,13]},
-  {name:'ST DOMINGO / MANABI',  data:[28,24,19,0]},
+  {name:'ST DOMINGO / MANABI',  data:[28,24,19,3]},
   {name:'LOS RIOS',             data:[24,45,16,0]},
   {name:'GUAYAS',               data:[36,19,4,0]},
   {name:'SIERRA',               data:[4,4,2,0]},
@@ -1972,8 +1975,7 @@ const AAP_ORIGEN_MONTH_TOTAL_VENTAS = [23395,44836,127791,21928];
 const NONAAP_ORIGEN_MENSUAL = [
   {name:'DAULE',          data:[0,28,12,0], ventas:[0,43735,17760,0]},
   {name:'GUAYAQUIL',      data:[2,0,9,0],   ventas:[2880,60,12850,0]},
-  {name:'ORIENTE',        data:[0,0,0,3],   ventas:[0,0,0,6760]},
-  {name:'CUENCA',         data:[0,0,1,0],   ventas:[0,0,1730,0]},
+  {name:'CUENCA',         data:[0,0,1,3],   ventas:[0,0,1730,6760]},
   {name:'SANTO DOMINGO',  data:[0,0,1,0],   ventas:[0,0,1730,0]},
 ];
 const NONAAP_ORIGEN_MONTH_TOTAL = [2,28,23,3];
@@ -2051,10 +2053,10 @@ const PERFIL_TIENDA_AMERICAS_MENSUAL = [
   {name:'B-',          data:[0,1,1,1],   ventas:[0,3422,2233,2233]},
   {name:'CONTADO',     data:[5,11,3,0],  ventas:[12241,24289,8925,0]},
   {name:'COLABORADOR', data:[5,6,3,0],   ventas:[6242,9694,5362,0]},
-  {name:'PENDIENTE',   data:[0,0,0,2],   ventas:[0,0,0,7589]},
+  {name:'PENDIENTE',   data:[0,0,0,4],   ventas:[0,0,0,14086]},
 ];
-const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL = [12,28,22,3];
-const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS = [22731,60053,66515,9822];
+const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL = [12,28,22,5];
+const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS = [22731,60053,66515,16319];
 
 // A partir de Agosto aparecen perfiles A y B- en Naciones Unidas por primera vez (antes solo AA/CONTADO),
 // y "PENDIENTE" (perfil aún no asignado) en ambas tiendas.
@@ -2103,10 +2105,10 @@ const PERFIL_RESUMEN_MENSUAL = [
   {name:'CONTADO',    data:[6,14,10,1], ventas:[13391,29107,18835,1150]},
   {name:'EXCEPCION',  data:[1,0,1,0],   ventas:[1150,0,1605,0]},
   {name:'COLABORADOR',data:[5,6,3,0],   ventas:[6242,9694,5362,0]},
-  {name:'PENDIENTE',  data:[0,0,0,6],   ventas:[0,0,0,17274]},
+  {name:'PENDIENTE',  data:[0,0,0,8],   ventas:[0,0,0,23771]},
 ];
-const PERFIL_MONTH_TOTAL = [28,58,108,23]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
-const PERFIL_MONTH_TOTAL_VENTAS = [46126,104889,198206,49202]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL = [28,58,108,25]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL_VENTAS = [46126,104889,198206,55699]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
 
 // Vista "SIN AAP" (Resumen): PERFIL_RESUMEN menos AAP = solo Tiendas Hero (Av. Américas + Naciones Unidas).
 const PERFIL_RESUMEN_SIN_AAP = [
@@ -2134,35 +2136,35 @@ const PERFIL_RESUMEN_MENSUAL_SIN_AAP = [
   {name:'B-',         data:[0,1,1,2],  ventas:[0,3422,2233,5333]},
   {name:'CONTADO',    data:[5,11,4,0], ventas:[12241,24289,11025,0]},
   {name:'COLABORADOR',data:[5,6,3,0],  ventas:[6242,9694,5362,0]},
-  {name:'PENDIENTE',  data:[0,0,0,5],  ventas:[0,0,0,16124]},
+  {name:'PENDIENTE',  data:[0,0,0,7],  ventas:[0,0,0,22621]},
 ];
 
 // Modelos vendidos, los 3 canales combinados (Mayoristas + Retail + Tiendas), con AAP.
 // data = unidades [Mayo,Junio,Julio]; ventas = $ [Mayo,Junio,Julio]. Orden por unidades totales desc.
 const MODELOS = [
-  {name:'ECO DELUXE',        data:[102,56,60,12], ventas:[119503,67346,71330,13800]},
-  {name:'HUNK 125R',         data:[59,28,48,8],   ventas:[102395,54940,94666,16467]},
+  {name:'ECO DELUXE',        data:[102,56,60,15], ventas:[119503,67346,71330,17250]},
+  {name:'HUNK 125R',         data:[59,28,48,9],   ventas:[102395,54940,94666,19510]},
   {name:'ECO 150',           data:[0,93,39,3],    ventas:[0,138482,58040,5746]},
   {name:'XOOM 125R',         data:[46,19,34,3],   ventas:[89148,38179,70668,6876]},
-  {name:'XOOM 110',          data:[47,30,12,4],   ventas:[75304,49967,19260,6420]},
+  {name:'XOOM 110',          data:[47,30,12,5],   ventas:[75304,49967,19260,9873]},
   {name:'HUNK 160 4V',       data:[37,10,19,7],   ventas:[94844,27060,54108,20396]},
   {name:'XPULSE 200 4V FI',  data:[12,2,3,2],     ventas:[40367,7483,10190,9117]},
 ];
-const MODELOS_MONTH_TOTAL = [303,238,215,39]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
-const MODELOS_MONTH_TOTAL_VENTAS = [521560,383455,378261,78822]; // coincide con "Ventas totales" de Resumen (CON AAP)
+const MODELOS_MONTH_TOTAL = [303,238,215,44]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
+const MODELOS_MONTH_TOTAL_VENTAS = [521560,383455,378261,88769]; // coincide con "Ventas totales" de Resumen (CON AAP)
 
 // Vista "SIN AAP" (Resumen): MODELOS menos la contribución de AAP por modelo (3 canales, Retail sin AAP).
 const MODELOS_SIN_AAP = [
-  {name:'ECO DELUXE',        data:[92,42,23,6], ventas:[108003,51246,28780,6900]},
+  {name:'ECO DELUXE',        data:[92,42,23,9], ventas:[108003,51246,28780,10350]},
   {name:'ECO 150',           data:[0,91,36,2],  ventas:[0,135522,53600,4266]},
-  {name:'HUNK 125R',         data:[56,22,23,5], ventas:[97205,44560,51416,11277]},
+  {name:'HUNK 125R',         data:[56,22,23,6], ventas:[97205,44560,51416,14320]},
   {name:'XOOM 125R',         data:[46,17,27,2], ventas:[89148,34303,57102,4938]},
-  {name:'XOOM 110',          data:[46,26,5,0],  ventas:[73699,43547,8025,0]},
+  {name:'XOOM 110',          data:[46,26,5,1],  ventas:[73699,43547,8025,3453]},
   {name:'HUNK 160 4V',       data:[35,8,14,7],  ventas:[89744,21960,41358,20396]},
   {name:'XPULSE 200 4V FI',  data:[12,2,3,2],   ventas:[40367,7483,10190,9117]},
 ];
-const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,131,24]; // MODELOS_MONTH_TOTAL menos AAP_DATA
-const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [498165,338619,250470,56894]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
+const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,131,29]; // MODELOS_MONTH_TOTAL menos AAP_DATA
+const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [498165,338619,250470,66841]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
 
 // Presupuesto asignado (CON AAP) por mes, para el KPI de cumplimiento en Resumen.
 const RESUMEN_BUDGET_UNITS = [300,400,400,485];
@@ -3627,7 +3629,7 @@ function initTiendasPerfiles(){
   renderTiendaAmericasPerfilChart();
   renderTiendaNacionesPerfilChart();
   buildTiendaPerfilMensualTable(PERFIL_TIENDA_AMERICAS_MENSUAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS, 'tblTiendaAmericasMensual', 'tiendaAmericasMensualSubtitle', 'tiendaAmericasMensualFootnote', 'Tienda Av. Américas.');
-  buildTiendaPerfilMensualTable(PERFIL_TIENDA_NACIONES_MENSUAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL_VENTAS, 'tblTiendaNacionesMensual', 'tiendaNacionesMensualSubtitle', 'tiendaNacionesMensualFootnote', 'Tienda Naciones Unidas.');
+  buildTiendaPerfilMensualTable(PERFIL_TIENDA_NACIONES_MENSUAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL_VENTAS, 'tblTiendaNacionesMensual', 'tiendaNacionesMensualSubtitle', 'tiendaNacionesMensualFootnote', 'Tienda Naciones Unidas (incluye 1 u. / $2.705 de Canal Digital en agosto).');
 }
 
 /* ---------- Tiendas / Perfiles (tabla mensual por tienda) — misma mecánica que buildPerfilesTable() de Resumen, conectada al toggle UNIDADES/$ de Tiendas ---------- */
@@ -5211,7 +5213,7 @@ const METRIC_RENDER = {
   resumen:     ()=>{ if(chartsInit.resumen) renderResumen(); if(chartsInit.resumenModelos){ buildModelosTable(); renderModelosRankingChart(); } if(chartsInit.resumenPerfiles) buildPerfilesTable(); },
   mayoristas:  ()=>{ if(chartsInit.mayoristas) renderMayoristas(); if(chartsInit.mayoristasModelos){ buildMayoristasModelosTable(); renderMayoristasModelosRankingChart(); } },
   retail:      ()=>{ if(chartsInit.retail) renderRetail(); if(chartsInit.retailOrigen){ buildAapOrigenTable(); buildNonAapOrigenTable(); } if(chartsInit.retailPerfiles) buildRetailPerfilesTable(); if(chartsInit.retailModelos){ buildRetailModelosTable(); renderRetailModelosRankingChart(); } },
-  tiendas:     ()=>{ if(chartsInit.tiendas) renderTiendas(); if(chartsInit.tiendasPerfiles){ buildTiendaPerfilMensualTable(PERFIL_TIENDA_AMERICAS_MENSUAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS, 'tblTiendaAmericasMensual', 'tiendaAmericasMensualSubtitle', 'tiendaAmericasMensualFootnote', 'Tienda Av. Américas.'); buildTiendaPerfilMensualTable(PERFIL_TIENDA_NACIONES_MENSUAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL_VENTAS, 'tblTiendaNacionesMensual', 'tiendaNacionesMensualSubtitle', 'tiendaNacionesMensualFootnote', 'Tienda Naciones Unidas.'); } if(chartsInit.tiendasModelos){ buildTiendasModelosTable(); buildTiendasTicketMensualTable(); renderTiendasModelosRankingChart(); } },
+  tiendas:     ()=>{ if(chartsInit.tiendas) renderTiendas(); if(chartsInit.tiendasPerfiles){ buildTiendaPerfilMensualTable(PERFIL_TIENDA_AMERICAS_MENSUAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS, 'tblTiendaAmericasMensual', 'tiendaAmericasMensualSubtitle', 'tiendaAmericasMensualFootnote', 'Tienda Av. Américas.'); buildTiendaPerfilMensualTable(PERFIL_TIENDA_NACIONES_MENSUAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL_VENTAS, 'tblTiendaNacionesMensual', 'tiendaNacionesMensualSubtitle', 'tiendaNacionesMensualFootnote', 'Tienda Naciones Unidas (incluye 1 u. / $2.705 de Canal Digital en agosto).'); } if(chartsInit.tiendasModelos){ buildTiendasModelosTable(); buildTiendasTicketMensualTable(); renderTiendasModelosRankingChart(); } },
   repuestos:   ()=>{ if(chartsInit.repuestos) renderRepuestos(); if(chartsInit.repuestosTop){ renderRepuestosTopChart(); buildRepuestosTopTable(); renderRepuestosSucursalChart(); buildRepuestosSucursalTable(); } if(chartsInit.repuestosProvincia){ renderRepuestosProvinciaChart(); buildRepuestosProvinciaTable(); renderRepuestosCanalChart(); buildRepuestosCanalTable(); } if(chartsInit.repuestosModelos){ buildRepuestosModelosTable(); renderRepuestosModelosRankingChart(); } },
 };
 document.querySelectorAll('[data-metric-toggle]').forEach(group=>{
@@ -5257,7 +5259,7 @@ function setMonthFilter(mode){
   if(chartsInit.tiendasPerfiles){
     renderTiendaAmericasPerfilChart(); renderTiendaNacionesPerfilChart();
     buildTiendaPerfilMensualTable(PERFIL_TIENDA_AMERICAS_MENSUAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS, 'tblTiendaAmericasMensual', 'tiendaAmericasMensualSubtitle', 'tiendaAmericasMensualFootnote', 'Tienda Av. Américas.');
-    buildTiendaPerfilMensualTable(PERFIL_TIENDA_NACIONES_MENSUAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL_VENTAS, 'tblTiendaNacionesMensual', 'tiendaNacionesMensualSubtitle', 'tiendaNacionesMensualFootnote', 'Tienda Naciones Unidas.');
+    buildTiendaPerfilMensualTable(PERFIL_TIENDA_NACIONES_MENSUAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL_VENTAS, 'tblTiendaNacionesMensual', 'tiendaNacionesMensualSubtitle', 'tiendaNacionesMensualFootnote', 'Tienda Naciones Unidas (incluye 1 u. / $2.705 de Canal Digital en agosto).');
   }
   if(chartsInit.tiendasModelos){ buildTiendasModelosTable(); buildTiendasTicketMensualTable(); renderTiendasModelosRankingChart(); initTiendasTicketPromedioChart(); }
   // Repuestos
