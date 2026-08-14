@@ -126,6 +126,9 @@
     font-size:10px;letter-spacing:1px;color:rgba(255,255,255,0.35);
     text-transform:uppercase;padding:6px 12px 5px;
   }
+  .nav-label.grp{ margin-top:4px; padding-top:9px; border-top:1px solid rgba(255,255,255,0.08); }
+  .nav-item.sub{ padding-left:30px; }
+  .nav-item.sub svg{width:13px;height:13px;flex:0 0 13px;}
   .nav-item{
     display:flex;align-items:center;gap:10px;
     padding:8px 12px;
@@ -151,6 +154,7 @@
     border-radius:4px;
     background: var(--orange);
   }
+  .nav-item.sub.active::before{ left:10px; }
   .sidebar-footer{
     margin-top:auto;
     padding:10px 18px 0;
@@ -352,23 +356,29 @@
 
     <nav class="menu">
       <div class="nav-label">Panel</div>
-      <div class="nav-item active" data-page="resumen">
+      <div class="nav-item" data-page="general">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.2"></rect><rect x="14" y="3" width="7" height="5" rx="1.2"></rect><rect x="14" y="12" width="7" height="9" rx="1.2"></rect><rect x="3" y="16" width="7" height="5" rx="1.2"></rect></svg>
+        GENERAL
+      </div>
+      <div class="nav-label grp">Motos</div>
+      <div class="nav-item sub active" data-page="resumen">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg>
         RESUMEN
       </div>
-      <div class="nav-item" data-page="mayoristas">
+      <div class="nav-item sub" data-page="mayoristas">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"></circle><path d="M2.8 20c0-3.4 2.8-6 6.2-6s6.2 2.6 6.2 6"></path><circle cx="17.5" cy="9" r="2.6"></circle><path d="M15.5 14.2c2.6.3 4.7 2.3 5.7 5"></path></svg>
         MAYORISTAS
       </div>
-      <div class="nav-item" data-page="retail">
+      <div class="nav-item sub" data-page="retail">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16l-1.2 11.2a1.6 1.6 0 0 1-1.6 1.4H6.8a1.6 1.6 0 0 1-1.6-1.4L4 8Z"></path><path d="M8 8V6a4 4 0 0 1 8 0v2"></path></svg>
         RETAIL
       </div>
-      <div class="nav-item" data-page="tiendas">
+      <div class="nav-item sub" data-page="tiendas">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 4.5 4h15L21 9.5"></path><path d="M4 9.5V20h16V9.5"></path><path d="M9.5 20v-5.5h5V20"></path></svg>
         TIENDAS
       </div>
-      <div class="nav-item" data-page="repuestos">
+      <div class="nav-label grp">Repuestos</div>
+      <div class="nav-item sub" data-page="repuestos">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
         REPUESTOS
       </div>
@@ -379,6 +389,115 @@
 
   <!-- ============= MAIN ============= -->
   <main>
+
+    <!-- ================= PAGE: GENERAL ================= -->
+    <section class="page" id="page-general">
+      <div class="topbar">
+        <div>
+          <h1>Vista general</h1>
+          <div class="subtitle">Motos + Repuestos — Mayo a Agosto 2026</div>
+        </div>
+        <div class="topbar-controls">
+          <div class="aap-toggle" data-metric-toggle="general">
+            <button class="active" data-metric="unidades">UNIDADES</button>
+            <button data-metric="ventas">$</button>
+          </div>
+          <div class="aap-toggle" data-month-toggle>
+            <button class="active" data-month="todos">TODOS</button>
+            <button data-month="mayo">MAYO</button>
+            <button data-month="junio">JUNIO</button>
+            <button data-month="julio">JULIO</button>
+            <button data-month="agosto">AGOSTO</button>
+          </div>
+          <div class="range-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18"></path><path d="M8 3v4"></path><path d="M16 3v4"></path></svg>
+            <span class="dot"></span> Mayo – Agosto 2026
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-row">
+        <div class="kpi-card accent">
+          <div class="kpi-top"><span class="kpi-label" id="kpiGeneralTotalLabel">Unidades totales</span>
+            <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.2"></rect><rect x="14" y="3" width="7" height="5" rx="1.2"></rect><rect x="14" y="12" width="7" height="9" rx="1.2"></rect><rect x="3" y="16" width="7" height="5" rx="1.2"></rect></svg></div>
+          </div>
+          <div class="kpi-value" id="kpiGeneralTotalValue">1.884</div>
+          <div class="kpi-delta" id="kpiGeneralTotalDelta">Mayo 313 · Junio 516 · Julio 811 · Agosto 244</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top"><span class="kpi-label">Motos</span>
+            <div class="kpi-icon" style="background:rgba(42,120,214,0.14);"><svg viewBox="0 0 24 24" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"></path><path d="M5 10v10h14V10"></path></svg></div>
+          </div>
+          <div class="kpi-value" id="kpiGeneralMotosValue">795</div>
+          <div class="kpi-delta muted" id="kpiGeneralMotosDelta">42% del total</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top"><span class="kpi-label">Repuestos</span>
+            <div class="kpi-icon" style="background:rgba(216,36,27,0.14);"><svg viewBox="0 0 24 24" fill="none" stroke="#d8241b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
+          </div>
+          <div class="kpi-value" id="kpiGeneralRepuestosValue">1.089</div>
+          <div class="kpi-delta muted" id="kpiGeneralRepuestosDelta">58% del total</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top"><span class="kpi-label">Julio vs. Junio</span>
+            <div class="kpi-icon" style="background:rgba(11,163,12,0.12);"><svg viewBox="0 0 24 24" fill="none" stroke="#0ca30c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 17 7 7M7 17V7h10"></path></svg></div>
+          </div>
+          <div class="kpi-value" style="color:#0ca30c;" id="kpiGeneralDeltaValue">+57%</div>
+          <div class="kpi-delta muted" id="kpiGeneralDeltaSub">516 → 811 unidades</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:10px;">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Ventas por línea de negocio</div>
+              <div class="panel-sub" id="generalBarsSub">Comparativo mensual · Mayo, Junio, Julio, Agosto 2026</div>
+            </div>
+          </div>
+          <div class="legend-row" id="legendGeneralBars" style="margin-top:0; margin-bottom:8px;"></div>
+          <div class="chart-box" style="height:150px;"><canvas id="chartGeneralBars"></canvas></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Participación por línea de negocio</div>
+              <div class="panel-sub" id="generalDonutSub">Acumulado Mayo–Agosto</div>
+            </div>
+          </div>
+          <div class="chart-box donut-wrap" style="height:138px;">
+            <canvas id="chartGeneralDonut"></canvas>
+            <div class="donut-center"><div class="pct" id="donutGeneralTotal">1.884</div><div class="lbl" id="donutGeneralLabel">unidades</div></div>
+          </div>
+          <div class="legend-row" id="legendGeneralDonut" style="justify-content:center;"></div>
+        </div>
+      </div>
+
+      <div class="grid-2b">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Tendencia del total combinado</div>
+              <div class="panel-sub">Motos + Repuestos por mes</div>
+            </div>
+          </div>
+          <div class="chart-box" style="height:108px;"><canvas id="chartGeneralTrend"></canvas></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Detalle mensual por línea de negocio</div>
+              <div class="panel-sub">Unidades vendidas</div>
+            </div>
+          </div>
+          <table class="data-table compact">
+            <thead><tr><th>Línea</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
+            <tbody id="tblGeneral"></tbody>
+          </table>
+          <div class="footnote" id="footnoteGeneral">Motos = Mayoristas + Retail + Tiendas (con AAP), fuente CONSOLIDADO_HERO 2026. Repuestos = ventas de repuestos y accesorios, fuente DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026.</div>
+        </div>
+      </div>
+    </section>
 
     <!-- ================= PAGE: RESUMEN ================= -->
     <section class="page active" id="page-resumen">
@@ -648,7 +767,7 @@
       </div>
 
       <div class="retail-subview active" id="mayoristas-subview-metrics">
-        <div class="grid-2" style="margin-bottom:2px;">
+        <div class="grid-2" style="margin-bottom:10px;">
           <div class="panel">
             <div class="panel-head">
               <div>
@@ -720,10 +839,12 @@
                 <div class="panel-sub" id="modelosSubtitleMayoristas">Unidades vendidas</div>
               </div>
             </div>
-            <table class="data-table compact">
-              <thead><tr><th>Modelo</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
-              <tbody id="tblModelosMayoristas"></tbody>
-            </table>
+            <div class="table-scroll" style="max-height:169px;">
+              <table class="data-table compact">
+                <thead><tr><th>Modelo</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
+                <tbody id="tblModelosMayoristas"></tbody>
+              </table>
+            </div>
             <div class="footnote" id="modelosFootnoteMayoristas">Canal Mayoristas. Azul = más unidades ese mes. % = participación sobre el total de ese mes. Fuente: CONSOLIDADO_HERO 2026, columna "modelo".</div>
           </div>
         </div>
@@ -826,7 +947,7 @@
       </div>
 
       <div class="retail-subview active" id="retail-subview-metrics">
-        <div class="grid-2" style="margin-bottom:6px;">
+        <div class="grid-2" style="margin-bottom:10px;">
           <div class="panel">
             <div class="panel-head">
               <div>
@@ -978,10 +1099,12 @@
                 <div class="panel-sub" id="modelosSubtitleRetail">Unidades vendidas</div>
               </div>
             </div>
-            <table class="data-table compact">
-              <thead><tr><th>Modelo</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
-              <tbody id="tblModelosRetail"></tbody>
-            </table>
+            <div class="table-scroll" style="max-height:169px;">
+              <table class="data-table compact">
+                <thead><tr><th>Modelo</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
+                <tbody id="tblModelosRetail"></tbody>
+              </table>
+            </div>
             <div class="footnote" id="modelosFootnoteRetail">Canal Retail (con AAP). Azul = más unidades ese mes. % = participación sobre el total de ese mes. Fuente: CONSOLIDADO_HERO 2026, columna "modelo".</div>
           </div>
         </div>
@@ -1287,15 +1410,15 @@
           <div class="kpi-top"><span class="kpi-label">Categoría líder</span>
             <div class="kpi-icon" style="background:rgba(27,175,122,0.14);"><svg viewBox="0 0 24 24" fill="none" stroke="#1baf7a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"></path><path d="M8 19V9M13 19V5M18 19v12"></path></svg></div>
           </div>
-          <div class="kpi-value" id="kpiRepuestosLeaderValue">3.616</div>
-          <div class="kpi-delta muted" id="kpiRepuestosLeaderDelta">MOTOR · 41% del total</div>
+          <div class="kpi-value" id="kpiRepuestosLeaderValue">297</div>
+          <div class="kpi-delta muted" id="kpiRepuestosLeaderDelta">MOTOR · 27% del total</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-top"><span class="kpi-label">2da categoría</span>
             <div class="kpi-icon" style="background:rgba(42,120,214,0.14);"><svg viewBox="0 0 24 24" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"></path><path d="M8 19V9M13 19V5M18 19v12"></path></svg></div>
           </div>
-          <div class="kpi-value" id="kpiRepuestosSecondValue">2.641</div>
-          <div class="kpi-delta muted" id="kpiRepuestosSecondDelta">ACCESORIOS Y OTROS</div>
+          <div class="kpi-value" id="kpiRepuestosSecondValue">54</div>
+          <div class="kpi-delta muted" id="kpiRepuestosSecondDelta">ELECTRICO</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-top"><span class="kpi-label">Julio vs. Junio</span>
@@ -1314,7 +1437,7 @@
       </div>
 
       <div class="retail-subview active" id="repuestos-subview-categorias">
-        <div class="grid-2" style="margin-bottom:2px;">
+        <div class="grid-2" style="margin-bottom:10px;">
           <div class="panel">
             <div class="panel-head">
               <div>
@@ -1433,7 +1556,8 @@
                 <div class="panel-sub" id="repuestosProvinciaSub">Unidades y $ por provincia · Mayo–Agosto 2026</div>
               </div>
             </div>
-            <div class="chart-box" style="height:245px;"><canvas id="chartRepuestosProvincia"></canvas></div>
+            <div class="chart-box" style="height:198px;"><canvas id="chartRepuestosProvincia"></canvas></div>
+            <div class="footnote">Faltan 6 de 16 provincias: ZAMORA CHINCHIPE, TUNGURAHUA, ESMERALDAS, BOLÍVAR, CAÑAR y SANTA ELENA — 42 u. · $289 combinados (3,9% u. / 3,3% $ del total).</div>
           </div>
           <div class="panel">
             <div class="panel-head">
@@ -1454,11 +1578,13 @@
             <div class="panel-head">
               <div>
                 <div class="panel-title">Ventas por Categoría</div>
-                <div class="panel-sub" id="repuestosCanalSub">Unidades y $ por categoría · Mayo–Agosto 2026</div>
+                <div class="panel-sub" id="repuestosCanalSub">Unidades y $ por categoría · 17 categorías · Mayo–Agosto 2026</div>
               </div>
             </div>
-            <div class="chart-box" style="height:120px;"><canvas id="chartRepuestosCanal"></canvas></div>
-            <div class="footnote">MOTOR, ACCESORIOS Y OTROS, MANTENIMIENTO, TRANSMISIÓN/EMBRAGUE y FRENOS.</div>
+            <div class="chart-box" style="height:120px; overflow-y:auto;">
+              <div style="position:relative; height:410px;"><canvas id="chartRepuestosCanal"></canvas></div>
+            </div>
+            <div class="footnote">Las 17 categorías de "Categoria 2", ordenadas por ventas $ (% = participación en $). Scroll dentro del gráfico para ver todas.</div>
           </div>
           <div class="panel">
             <div class="panel-head">
@@ -1467,11 +1593,13 @@
                 <div class="panel-sub" id="repuestosCanalTableSub">Unidades vendidas</div>
               </div>
             </div>
-            <table class="data-table compact dense">
-              <thead><tr><th>Categoría</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
-              <tbody id="tblRepuestosCanal"></tbody>
-            </table>
-            <div class="footnote" id="repuestosCanalFootnote">Azul = mayor valor ese mes. % = participación sobre el total de ese mes. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.</div>
+            <div class="table-scroll" style="max-height:119px;">
+              <table class="data-table compact dense">
+                <thead><tr><th>Categoría</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
+                <tbody id="tblRepuestosCanal"></tbody>
+              </table>
+            </div>
+            <div class="footnote" id="repuestosCanalFootnote">Azul = mayor valor ese mes. % = participación sobre el total de ese mes. Clasificación "Categoria 2" (17 categorías, con scroll). Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.</div>
           </div>
         </div>
       </div>
@@ -1644,7 +1772,7 @@ const TIENDAS_VENTAS_STORE = {
 
 let aapMode = 'con'; // 'con' = incluye AAP, 'sin' = excluye AAP (toggle de comparación)
 // Estado independiente del toggle UNIDADES/$ por página — cada página filtra su propia vista.
-let metricState = { resumen:'unidades', mayoristas:'unidades', retail:'unidades', tiendas:'unidades', repuestos:'unidades' };
+let metricState = { general:'unidades', resumen:'unidades', mayoristas:'unidades', retail:'unidades', tiendas:'unidades', repuestos:'unidades' };
 
 // Filtro global de mes (TODOS/MAYO/JUNIO/JULIO/AGOSTO) — afecta a las 4 páginas por igual.
 let monthFilter = 'todos';
@@ -1685,6 +1813,16 @@ const MONTH_LABEL = { todos:'Mayo-Agosto 2026', mayo:'Mayo 2026', junio:'Junio 2
 const MONTH_LABEL_SHORT = { todos:'Mayo-Agosto', mayo:'Mayo', junio:'Junio', julio:'Julio', agosto:'Agosto' };
 // Devuelve el acumulado de 3 meses (TODOS) o el valor de un único mes, según el filtro global activo.
 function mval(arr){ return monthFilter==='todos' ? sum(arr) : arr[MONTH_IDX[monthFilter]]; }
+
+/* ================= GENERAL (Motos + Repuestos combinado) ================= */
+function computeGeneralModel(metric){
+  const categories = [
+    {name:'Motos',      data: metric==='ventas' ? MODELOS_MONTH_TOTAL_VENTAS   : MODELOS_MONTH_TOTAL,      color: PALETTE.s1},
+    {name:'Repuestos',  data: metric==='ventas' ? REPUESTOS_TOTAL_VENTA        : REPUESTOS_TOTAL_UNIDADES, color: getVar('--orange')},
+  ];
+  const total = MONTHS.map((_,i)=> sum(categories.map(c=>c.data[i])));
+  return {categories, total, metric};
+}
 
 function computeResumenModel(mode, metric){
   const raw = mode==='sin' ? [
@@ -2062,22 +2200,47 @@ const REPUESTOS_TOTAL_VENTA_BY_COMBO = { mostrador:{amer:[78.93, 1975.48, 2896.7
 const REPUESTOS_TOTAL_COSTO_BY_COMBO = { mostrador:{amer:[125.84, 1040.06, 1476.6, 311.46], naciones:[0.0, 0.0, 337.08, 408.69]}, taller:{amer:[27.08, 10.57, 785.4, 47.59], naciones:[0.0, 0.0, 0.0, 71.71]} };
 const REPUESTOS_TOTAL_UTILIDAD_BY_COMBO = { mostrador:{amer:[-46.91, 935.42, 1420.15, 354.98], naciones:[0.0, 0.0, 314.9, 416.64]}, taller:{amer:[4.34, 13.58, 618.84, 40.01], naciones:[0.0, 0.0, 0.0, 56.24]} };
 
-// Categorías (clasificadas por palabra clave sobre el nombre del repuesto), ordenadas de mayor a menor venta neta.
+// Categorías (columna "Categoria 2" de BASE_DATOS, reclasificación más granular hecha por el cliente sobre el nombre del repuesto),
+// ordenadas de mayor a menor venta neta. 17 categorías en total — el ranking/tabla curan a las principales (ver renderRepuestosCanalChart).
 const CATEGORIA_COLORS = ['--categoria-1','--categoria-2','--categoria-3','--categoria-4','--categoria-5'].map(getVar);
 const repuestosCategoriasRaw = [
-  {name:'MOTOR', data:[5, 127, 133, 30], ventas:[19.55, 1320.19, 1863.29, 413.4], byCanal:{mostrador:{data:[2, 127, 111, 29], ventas:[6.04, 1320.19, 1543.48, 409.92]}, taller:{data:[3, 0, 22, 1], ventas:[13.5, 0.0, 319.81, 3.48]}},
-    byCombo:{mostrador:{amer:{data:[2, 127, 87, 13], ventas:[6.04, 1320.19, 1195.68, 124.51]}, naciones:{data:[0, 0, 24, 16], ventas:[0.0, 0.0, 347.8, 285.4]}}, taller:{amer:{data:[3, 0, 22, 1], ventas:[13.5, 0.0, 319.81, 3.48]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'ACCESORIOS Y OTROS', data:[2, 8, 274, 68], ventas:[66.55, 25.92, 2003.22, 545.22], byCanal:{mostrador:{data:[2, 7, 114, 50], ventas:[66.55, 13.0, 1253.52, 432.13]}, taller:{data:[0, 1, 160, 18], ventas:[0.0, 12.92, 749.7, 113.1]}},
-    byCombo:{mostrador:{amer:{data:[2, 7, 107, 34], ventas:[66.55, 13.0, 1076.03, 217.8]}, naciones:{data:[0, 0, 7, 16], ventas:[0.0, 0.0, 177.48, 214.33]}}, taller:{amer:{data:[0, 1, 160, 3], ventas:[0.0, 12.92, 749.7, 10.98]}, naciones:{data:[0, 0, 0, 15], ventas:[0.0, 0.0, 0.0, 102.11]}}}},
-  {name:'MANTENIMIENTO', data:[1, 88, 129, 44], ventas:[3.4, 274.33, 678.47, 213.9], byCanal:{mostrador:{data:[1, 87, 95, 32], ventas:[3.4, 263.11, 471.65, 153.32]}, taller:{data:[0, 1, 34, 12], ventas:[0.0, 11.23, 206.82, 60.57]}},
-    byCombo:{mostrador:{amer:{data:[1, 87, 78, 30], ventas:[3.4, 263.11, 393.82, 134.86]}, naciones:{data:[0, 0, 17, 2], ventas:[0.0, 0.0, 77.83, 18.46]}}, taller:{amer:{data:[0, 1, 34, 9], ventas:[0.0, 11.23, 206.82, 45.96]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 14.61]}}}},
-  {name:'TRANSMISIÓN/EMBRAGUE', data:[2, 42, 46, 48], ventas:[20.86, 198.53, 343.09, 341.64], byCanal:{mostrador:{data:[1, 42, 33, 43], ventas:[2.94, 198.53, 215.18, 330.41]}, taller:{data:[1, 0, 13, 5], ventas:[17.92, 0.0, 127.91, 11.23]}},
-    byCombo:{mostrador:{amer:{data:[1, 42, 28, 20], ventas:[2.94, 198.53, 172.69, 92.29]}, naciones:{data:[0, 0, 5, 23], ventas:[0.0, 0.0, 42.49, 238.12]}}, taller:{amer:{data:[1, 0, 13, 0], ventas:[17.92, 0.0, 127.91, 0.0]}, naciones:{data:[0, 0, 0, 5], ventas:[0.0, 0.0, 0.0, 11.23]}}}},
-  {name:'FRENOS', data:[0, 13, 14, 15], ventas:[0.0, 180.65, 64.91, 193.17], byCanal:{mostrador:{data:[0, 13, 14, 14], ventas:[0.0, 180.65, 64.91, 165.99]}, taller:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 27.18]}},
-    byCombo:{mostrador:{amer:{data:[0, 13, 12, 9], ventas:[0.0, 180.65, 58.52, 96.97]}, naciones:{data:[0, 0, 2, 5], ventas:[0.0, 0.0, 6.38, 69.02]}}, taller:{amer:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 27.18]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-].map((c,i)=>({...c, color: CATEGORIA_COLORS[i], total: sum(c.data)}));
+  {name:'MOTOR', data:[3, 99, 158, 37], ventas:[16.99, 1297.46, 2065.96, 342.7], byCanal:{mostrador:{data:[2, 98, 129, 32], ventas:[8.31, 1284.54, 1695.5, 335.66]}, taller:{data:[1, 1, 29, 5], ventas:[8.68, 12.92, 370.46, 7.04]}},
+    byCombo:{mostrador:{amer:{data:[2, 98, 104, 21], ventas:[8.31, 1284.54, 1277.48, 99.88]}, naciones:{data:[0, 0, 25, 11], ventas:[0.0, 0.0, 418.01, 235.78]}}, taller:{amer:{data:[1, 1, 29, 3], ventas:[8.68, 12.92, 370.46, 5.04]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 2.0]}}}},
+  {name:'ELECTRICO', data:[1, 5, 41, 7], ventas:[59.35, 8.37, 861.23, 190.59], byCanal:{mostrador:{data:[1, 5, 34, 6], ventas:[59.35, 8.37, 503.12, 186.32]}, taller:{data:[0, 0, 7, 1], ventas:[0.0, 0.0, 358.11, 4.27]}},
+    byCombo:{mostrador:{amer:{data:[1, 5, 32, 3], ventas:[59.35, 8.37, 443.8, 93.58]}, naciones:{data:[0, 0, 2, 3], ventas:[0.0, 0.0, 59.32, 92.74]}}, taller:{amer:{data:[0, 0, 7, 1], ventas:[0.0, 0.0, 358.11, 4.27]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'EMBRAGUE', data:[2, 39, 38, 46], ventas:[20.86, 166.05, 236.97, 312.32], byCanal:{mostrador:{data:[1, 39, 26, 41], ventas:[2.94, 166.05, 120.69, 301.09]}, taller:{data:[1, 0, 12, 5], ventas:[17.92, 0.0, 116.29, 11.23]}},
+    byCombo:{mostrador:{amer:{data:[1, 39, 24, 18], ventas:[2.94, 166.05, 114.05, 62.97]}, naciones:{data:[0, 0, 2, 23], ventas:[0.0, 0.0, 6.64, 238.12]}}, taller:{amer:{data:[1, 0, 12, 0], ventas:[17.92, 0.0, 116.29, 0.0]}, naciones:{data:[0, 0, 0, 5], ventas:[0.0, 0.0, 0.0, 11.23]}}}},
+  {name:'LUBRICANTES', data:[0, 17, 34, 13], ventas:[0.0, 148.04, 344.46, 143.11], byCanal:{mostrador:{data:[0, 17, 21, 9], ventas:[0.0, 148.04, 202.48, 94.85]}, taller:{data:[0, 0, 13, 4], ventas:[0.0, 0.0, 141.98, 48.26]}},
+    byCombo:{mostrador:{amer:{data:[0, 17, 15, 8], ventas:[0.0, 148.04, 175.53, 86.59]}, naciones:{data:[0, 0, 6, 1], ventas:[0.0, 0.0, 26.94, 8.26]}}, taller:{amer:{data:[0, 0, 13, 3], ventas:[0.0, 0.0, 141.98, 35.65]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 12.61]}}}},
+  {name:'RUEDAS Y TRANSMISION', data:[0, 1, 163, 34], ventas:[0.0, 4.55, 225.22, 297.41], byCanal:{mostrador:{data:[0, 1, 15, 21], ventas:[0.0, 4.55, 131.98, 199.07]}, taller:{data:[0, 0, 148, 13], ventas:[0.0, 0.0, 93.23, 98.34]}},
+    byCombo:{mostrador:{amer:{data:[0, 1, 14, 11], ventas:[0.0, 4.55, 104.49, 79.06]}, naciones:{data:[0, 0, 1, 10], ventas:[0.0, 0.0, 27.49, 120.01]}}, taller:{amer:{data:[0, 0, 148, 0], ventas:[0.0, 0.0, 93.23, 0.0]}, naciones:{data:[0, 0, 0, 13], ventas:[0.0, 0.0, 0.0, 98.34]}}}},
+  {name:'CARROCERIA', data:[2, 31, 37, 11], ventas:[4.82, 102.88, 259.66, 34.37], byCanal:{mostrador:{data:[0, 30, 31, 10], ventas:[0.0, 91.65, 222.2, 30.89]}, taller:{data:[2, 1, 6, 1], ventas:[4.82, 11.23, 37.46, 3.48]}},
+    byCombo:{mostrador:{amer:{data:[0, 30, 26, 7], ventas:[0.0, 91.65, 204.56, 21.57]}, naciones:{data:[0, 0, 5, 3], ventas:[0.0, 0.0, 17.65, 9.32]}}, taller:{amer:{data:[2, 1, 6, 1], ventas:[4.82, 11.23, 37.46, 3.48]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'SUSPENSION', data:[0, 0, 8, 0], ventas:[0.0, 0.0, 367.96, 0.0], byCanal:{mostrador:{data:[0, 0, 7, 0], ventas:[0.0, 0.0, 135.84, 0.0]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 7, 0], ventas:[0.0, 0.0, 135.84, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'FRENOS', data:[0, 11, 15, 14], ventas:[0.0, 123.45, 63.41, 164.57], byCanal:{mostrador:{data:[0, 11, 15, 13], ventas:[0.0, 123.45, 63.41, 137.39]}, taller:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 27.18]}},
+    byCombo:{mostrador:{amer:{data:[0, 11, 13, 9], ventas:[0.0, 123.45, 57.03, 96.97]}, naciones:{data:[0, 0, 2, 4], ventas:[0.0, 0.0, 6.38, 40.42]}}, taller:{amer:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 27.18]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'KITS', data:[0, 2, 3, 2], ventas:[0.0, 57.2, 101.91, 56.09], byCanal:{mostrador:{data:[0, 2, 3, 2], ventas:[0.0, 57.2, 101.91, 56.09]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 2, 3, 1], ventas:[0.0, 57.2, 101.91, 27.49]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 28.6]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'TORNILLERIA', data:[0, 49, 19, 11], ventas:[0.0, 58.72, 90.08, 30.58], byCanal:{mostrador:{data:[0, 49, 16, 9], ventas:[0.0, 58.72, 79.62, 29.58]}, taller:{data:[0, 0, 3, 2], ventas:[0.0, 0.0, 10.46, 1.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 49, 13, 7], ventas:[0.0, 58.72, 49.02, 3.5]}, naciones:{data:[0, 0, 3, 2], ventas:[0.0, 0.0, 30.6, 26.08]}}, taller:{amer:{data:[0, 0, 3, 2], ventas:[0.0, 0.0, 10.46, 1.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'MANILLAR Y CONTROLES', data:[0, 3, 18, 12], ventas:[0.0, 7.33, 115.62, 55.66], byCanal:{mostrador:{data:[0, 3, 17, 9], ventas:[0.0, 7.33, 106.57, 49.12]}, taller:{data:[0, 0, 1, 3], ventas:[0.0, 0.0, 9.05, 6.53]}},
+    byCombo:{mostrador:{amer:{data:[0, 3, 15, 9], ventas:[0.0, 7.33, 95.04, 49.12]}, naciones:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 11.52, 0.0]}}, taller:{amer:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 9.05, 2.76]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 3.77]}}}},
+  {name:'CABLES Y MANGUERAS', data:[1, 1, 11, 7], ventas:[7.2, 3.12, 47.87, 28.82], byCanal:{mostrador:{data:[1, 1, 11, 7], ventas:[7.2, 3.12, 47.87, 28.82]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[1, 1, 10, 6], ventas:[7.2, 3.12, 40.72, 21.5]}, naciones:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 7.16, 7.31]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'RODAMIENTOS', data:[0, 0, 14, 4], ventas:[0.0, 0.0, 71.04, 13.91], byCanal:{mostrador:{data:[0, 0, 10, 2], ventas:[0.0, 0.0, 41.19, 5.69]}, taller:{data:[0, 0, 4, 2], ventas:[0.0, 0.0, 29.85, 8.22]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 10, 2], ventas:[0.0, 0.0, 41.19, 5.69]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 4, 2], ventas:[0.0, 0.0, 29.85, 8.22]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'DIRECCION', data:[0, 6, 17, 6], ventas:[0.0, 9.92, 31.98, 36.2], byCanal:{mostrador:{data:[0, 6, 15, 6], ventas:[0.0, 9.92, 28.79, 36.2]}, taller:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 3.19, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 6, 12, 3], ventas:[0.0, 9.92, 10.09, 17.5]}, naciones:{data:[0, 0, 3, 3], ventas:[0.0, 0.0, 18.7, 18.7]}}, taller:{amer:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 3.19, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'SELLOS Y EMPAQUES', data:[1, 14, 15, 1], ventas:[1.13, 12.55, 41.74, 1.0], byCanal:{mostrador:{data:[1, 14, 12, 1], ventas:[1.13, 12.55, 39.71, 1.0]}, taller:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 2.03, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[1, 14, 9, 1], ventas:[1.13, 12.55, 18.14, 1.0]}, naciones:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 21.57, 0.0]}}, taller:{amer:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 2.03, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'MANTENIMIENTO', data:[0, 0, 2, 0], ventas:[0.0, 0.0, 19.42, 0.0], byCanal:{mostrador:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 19.42, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 19.42, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'ACCESORIOS Y OTROS', data:[0, 0, 3, 0], ventas:[0.0, 0.0, 8.42, 0.0], byCanal:{mostrador:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 8.42, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
+    byCombo:{mostrador:{amer:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 8.42, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+].map((c,i)=>({...c, color: CATEGORIA_COLORS[i % CATEGORIA_COLORS.length], total: sum(c.data)}));
 // Margen % total por categoría (agregado del periodo completo, no varía por mes) — para referencia en tooltips/tabla.
-const CATEGORIA_MARGEN = { 'MOTOR':0.5023, 'ACCESORIOS Y OTROS':0.4241, 'MANTENIMIENTO':0.4527, 'TRANSMISIÓN/EMBRAGUE':0.4934, 'FRENOS':0.4916 };
+const CATEGORIA_MARGEN = { 'MOTOR':0.4948, 'ELECTRICO':0.3566, 'EMBRAGUE':0.5011, 'LUBRICANTES':0.3606, 'RUEDAS Y TRANSMISION':0.5419, 'CARROCERIA':0.4701, 'SUSPENSION':0.4655, 'FRENOS':0.4968, 'KITS':0.5014, 'TORNILLERIA':0.5305, 'MANILLAR Y CONTROLES':0.4692, 'CABLES Y MANGUERAS':0.5696, 'RODAMIENTOS':0.6856, 'DIRECCION':0.4756, 'SELLOS Y EMPAQUES':0.5225, 'MANTENIMIENTO':0.2503, 'ACCESORIOS Y OTROS':0.2494 };
 
 // Universo de 46 repuestos (top 25 por venta neta ∪ top 25 por unidades) con desglose mensual,
 // para que el ranking Top Repuestos respete el filtro de mes y el toggle UNIDADES/$ sin perder el top-10 real en ningún cruce.
@@ -2292,6 +2455,7 @@ function readableTextColor(hex){
   return luminance > 0.62 ? '#3a2c00' : '#fff';
 }
 
+let general = computeGeneralModel(metricState.general);
 let resumen = computeResumenModel(aapMode, metricState.resumen);
 let retailModel = computeRetailModel(aapMode, metricState.retail);
 let mayoristasModel = computeMayoristasModel(metricState.mayoristas);
@@ -2527,6 +2691,202 @@ function renderResumenCharts(){
     chartResumenTrendInst.data.datasets[0].data = resumen.total;
     chartResumenTrendInst.update();
   }
+}
+
+function buildGeneralTable(){
+  const tbody = document.getElementById('tblGeneral');
+  const T = general.total;
+  const formatter = general.metric==='ventas' ? fmtMoney : fmt;
+  tbody.innerHTML = general.categories.map(c=>`
+    <tr>
+      <td style="font-weight:700;"><span class="legend-swatch" style="background:${c.color};display:inline-block;margin-right:6px;"></span>${c.name}</td>
+      <td class="num">${pctCell(c.data[0], undefined, T[0], formatter)}</td>
+      <td class="num">${pctCell(c.data[1], c.data[0], T[1], formatter)}</td>
+      <td class="num">${pctCell(c.data[2], c.data[1], T[2], formatter)}</td>
+      <td class="num">${pctCell(c.data[3], c.data[2], T[3], formatter)}</td>
+      <td class="num">${formatter(sum(c.data))}</td>
+    </tr>`).join('') +
+    `<tr style="font-weight:800;background:var(--page-plane);">
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCell(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCell(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCell(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+    </tr>`;
+}
+
+function renderGeneralLegends(){
+  document.getElementById('legendGeneralBars').innerHTML = general.categories.map(c=>
+    `<span class="legend-item"><span class="legend-swatch" style="background:${c.color}"></span>${c.name}</span>`).join('');
+  const grand = mval(general.total);
+  document.getElementById('legendGeneralDonut').innerHTML = general.categories.map(c=>
+    `<span class="legend-item"><span class="legend-swatch" style="background:${c.color}"></span>${c.name} ${Math.round(mval(c.data)/grand*100)}%</span>`).join('');
+}
+
+function renderGeneralKpis(){
+  const metric = general.metric;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
+  const grand = mval(general.total);
+  const motosTotal = mval(general.categories[0].data);
+  const repuestosTotal = mval(general.categories[1].data);
+
+  document.getElementById('kpiGeneralTotalLabel').textContent = metric==='ventas' ? 'Ventas totales' : 'Unidades totales';
+  document.getElementById('kpiGeneralTotalValue').textContent = formatter(grand);
+  document.getElementById('kpiGeneralTotalDelta').textContent = monthFilter==='todos'
+    ? `Mayo ${formatter(general.total[0])} · Junio ${formatter(general.total[1])} · Julio ${formatter(general.total[2])} · Agosto ${formatter(general.total[3])}`
+    : `Vista de un solo mes · ${MONTH_LABEL[monthFilter]}`;
+
+  document.getElementById('kpiGeneralMotosValue').textContent = formatter(motosTotal);
+  document.getElementById('kpiGeneralMotosDelta').textContent = `${Math.round(motosTotal/grand*100)}% del total`;
+
+  document.getElementById('kpiGeneralRepuestosValue').textContent = formatter(repuestosTotal);
+  document.getElementById('kpiGeneralRepuestosDelta').textContent = `${Math.round(repuestosTotal/grand*100)}% del total`;
+
+  const junio = general.total[1], julio = general.total[2];
+  const deltaPct = junio ? Math.round((julio-junio)/junio*100) : 0;
+  const sign = deltaPct>=0 ? '+' : '';
+  const deltaEl = document.getElementById('kpiGeneralDeltaValue');
+  deltaEl.textContent = `${sign}${deltaPct}%`;
+  deltaEl.style.color = deltaPct>=0 ? '#0ca30c' : '#d03b3b';
+  document.getElementById('kpiGeneralDeltaSub').textContent = `${formatter(junio)} → ${formatter(julio)} ${metric==='ventas' ? '' : 'unidades'}`.trim();
+}
+
+let chartGeneralBarsInst=null, chartGeneralDonutInst=null, chartGeneralTrendInst=null;
+
+function renderGeneralCharts(){
+  if(chartGeneralBarsInst) chartGeneralBarsInst.destroy();
+  if(chartGeneralDonutInst) chartGeneralDonutInst.destroy();
+
+  const metric = general.metric;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
+  const maxVal = Math.max(...general.categories.flatMap(c=>c.data));
+  const maxPad = Math.ceil(maxVal*0.15) || 1;
+  const barLabels = monthFilter==='todos' ? MONTHS : [MONTH_LABEL_SHORT[monthFilter]];
+  const barSlice = (arr)=> monthFilter==='todos' ? arr : [arr[MONTH_IDX[monthFilter]]];
+
+  document.getElementById('donutGeneralTotal').textContent = formatter(mval(general.total));
+  document.getElementById('donutGeneralLabel').textContent = metric==='ventas' ? 'en ventas' : 'unidades';
+  document.getElementById('generalBarsSub').textContent = monthFilter==='todos'
+    ? 'Comparativo mensual · Mayo, Junio, Julio, Agosto 2026' : `Vista de un solo mes · ${MONTH_LABEL[monthFilter]}`;
+  document.getElementById('generalDonutSub').textContent = monthFilter==='todos' ? 'Acumulado Mayo–Agosto' : MONTH_LABEL[monthFilter];
+
+  chartGeneralBarsInst = new Chart(document.getElementById('chartGeneralBars'), {
+    type:'bar',
+    data:{
+      labels: barLabels,
+      datasets: general.categories.map(c=>({
+        label:c.name, data: barSlice(c.data), backgroundColor:c.color, borderRadius:0, borderSkipped:false,
+        barPercentage:1, categoryPercentage:0.92, maxBarThickness:58
+      }))
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{mode:'index', intersect:false},
+      layout:{ padding:{top:16} },
+      scales:{
+        x:{ grid:{display:false}, border:{display:false}, ticks:{color: PALETTE.ink, font:{size:11.5, weight:600}, padding:2} },
+        y:{ display:false, beginAtZero:true, max: maxVal + maxPad }
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8, titleFont:{size:12}, bodyFont:{size:12}},
+        datalabels:{
+          display:true, color: PALETTE.ink, font:{weight:700, size:10.5}, anchor:'end', align:'top', offset:2,
+          formatter:v=> v ? formatter(v) : ''
+        }
+      }
+    }
+  });
+
+  const generalTotalSum = mval(general.total);
+  chartGeneralDonutInst = new Chart(document.getElementById('chartGeneralDonut'), {
+    type:'doughnut',
+    data:{
+      labels: general.categories.map(c=>c.name),
+      datasets:[{ data: general.categories.map(c=>mval(c.data)), backgroundColor: general.categories.map(c=>c.color), borderWidth:3, borderColor:'#fff' }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'70%',
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
+        datalabels:{
+          display:true, color:'#fff', font:{weight:800, size: metric==='ventas' ? 10 : 11.5},
+          textStrokeColor:'rgba(0,0,0,0.35)', textStrokeWidth:2,
+          formatter:(v)=> {
+            const share = v/generalTotalSum*100;
+            if(share < 6 || share > 90) return ''; // evita choque con el texto central cuando una línea domina el donut
+            return formatter(v);
+          }
+        }
+      }
+    }
+  });
+
+  if(!chartGeneralTrendInst){
+    chartGeneralTrendInst = new Chart(document.getElementById('chartGeneralTrend'), {
+      type:'line',
+      data:{
+        labels: MONTHS,
+        datasets:[{
+          label:'Total', data: general.total,
+          borderColor: PALETTE.s1, backgroundColor:'transparent',
+          fill:false, tension:0,
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+          pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : PALETTE.s4,
+          pointBorderColor:PALETTE.s1, pointBorderWidth:2, borderWidth:2.5
+        }]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        layout:{ padding:{top:18, right: metric==='ventas' ? 108 : 48, left: metric==='ventas' ? 56 : 36} },
+        scales:{
+          x:{ grid:{display:false}, border:{display:false}, ticks:{color: PALETTE.ink, font:{size:11.5, weight:600}} },
+          y:{ display:false, beginAtZero:false, grace:'20%' }
+        },
+        plugins:{
+          legend:{display:false},
+          tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
+          datalabels:{
+            display:true, font:{weight:700, size:10.5},
+            anchor:'end', align:'top', offset:6,
+            color:(ctx)=>{
+              const i = ctx.dataIndex;
+              if(i===0) return PALETTE.ink;
+              const prev = general.total[i-1];
+              const diff = ctx.dataset.data[i]-prev;
+              return diff>=0 ? '#0ca30c' : '#d03b3b';
+            },
+            formatter:(v,ctx)=>{
+              const i = ctx.dataIndex;
+              const f = general.metric==='ventas' ? fmtMoney : fmt;
+              const grandTotal = sum(general.total);
+              const contrib = Math.round(v/grandTotal*100);
+              if(i===0) return `${f(v)} · ${contrib}%`;
+              const prev = general.total[i-1];
+              const pct = prev ? Math.round((v-prev)/prev*100) : 0;
+              const sign = pct>0 ? '+' : '';
+              return `${f(v)} (${sign}${pct}%) · ${contrib}%`;
+            }
+          }
+        }
+      }
+    });
+  } else {
+    chartGeneralTrendInst.options.layout.padding.right = metric==='ventas' ? 108 : 48;
+    chartGeneralTrendInst.options.layout.padding.left = metric==='ventas' ? 56 : 36;
+    chartGeneralTrendInst.data.datasets[0].data = general.total;
+    chartGeneralTrendInst.update();
+  }
+}
+
+function renderGeneral(){
+  general = computeGeneralModel(metricState.general);
+  buildGeneralTable();
+  renderGeneralLegends();
+  renderGeneralKpis();
+  renderGeneralCharts();
+}
+
+function initGeneral(){
+  if(chartsInit.general) return; chartsInit.general = true;
+  renderGeneral();
 }
 
 function renderResumen(){
@@ -2990,9 +3350,15 @@ function initRetail(){
 /* ---------- Retail / Origen de Ventas (sub-vista) ---------- */
 function makeOrigenRankingChart(canvasId, rows, barColor, opts){
   opts = opts || {};
-  const maxVal = Math.max(...rows.map(r=>r.u)) || 1;
+  // rankBy determina qué magnitud dimensiona las barras y el %: 'u' (unidades, comportamiento histórico/default)
+  // o 'v' (ventas $) — usado por el ranking de Categoría, que ordena y participa en dólares.
+  const rankBy = opts.rankBy === 'ventas' ? 'v' : 'u';
+  const maxVal = Math.max(...rows.map(r=>r[rankBy])) || 1;
   const showPct = !!opts.showPct;
-  const totalU = sum(rows.map(r=>r.u));
+  // Por defecto el % es sobre la suma de las filas mostradas. Si el set está curado a un top-N (p. ej. Provincia,
+  // top 10 de 16), opts.totalOverride permite pasar el total real (todas las filas) para que el % represente
+  // la participación de verdad y no un 100% artificial calculado solo entre las filas visibles.
+  const totalMetric = opts.totalOverride != null ? opts.totalOverride : sum(rows.map(r=>r[rankBy]));
   const valueLabel = (ctx)=> `${fmt(rows[ctx.dataIndex].u)} u. · ${fmtMoney(rows[ctx.dataIndex].v)}`;
   const datalabelsCfg = !showPct ? {
     display:true, color: PALETTE.ink, font:{weight:700, size:10.5}, anchor:'end', align:'right', offset:4,
@@ -3006,7 +3372,7 @@ function makeOrigenRankingChart(canvasId, rows, barColor, opts){
       pct:{
         display:true, color: PALETTE.muted, font:{weight:600, size:10}, anchor:'end', align:'right',
         offset:(ctx)=> 4 + measureTextWidth(valueLabel(ctx), 700, 10.5) + 6,
-        formatter:(v,ctx)=> `(${totalU>0 ? Math.round(rows[ctx.dataIndex].u/totalU*100) : 0}%)`
+        formatter:(v,ctx)=> `(${totalMetric>0 ? Math.round(rows[ctx.dataIndex][rankBy]/totalMetric*100) : 0}%)`
       }
     }
   };
@@ -3014,7 +3380,7 @@ function makeOrigenRankingChart(canvasId, rows, barColor, opts){
     type:'bar',
     data:{
       labels: rows.map(r=>r.name),
-      datasets:[{ data: rows.map(r=>r.u), backgroundColor: barColor, borderRadius:0, barPercentage:0.8, maxBarThickness:20 }]
+      datasets:[{ data: rows.map(r=>r[rankBy]), backgroundColor: barColor, borderRadius:0, barPercentage:0.8, maxBarThickness:20 }]
     },
     options:{
       indexAxis:'y',
@@ -4539,23 +4905,23 @@ function initRepuestos(){
 
 /* ---------- 2. Top Repuestos ---------- */
 let chartRepuestosTopInst = null;
+// El ranking Top 10 es siempre por UNIDADES (no cambia con el toggle $/unidades) — mismo criterio para
+// la selección de los 10 repuestos, el orden, el largo de barra y el % de participación.
 function repuestosTopRows(){
-  const metric = metricState.repuestos;
   return canalRows(REPUESTOS_ITEMS).slice()
-    .sort((a,b)=> metric==='ventas' ? mval(b.ventas)-mval(a.ventas) : mval(b.data)-mval(a.data))
+    .sort((a,b)=> mval(b.data)-mval(a.data))
     .slice(0,10);
 }
 function renderRepuestosTopChart(){
-  const metric = metricState.repuestos;
   const rows = repuestosTopRows();
-  const values = rows.map(r=> metric==='ventas' ? mval(r.ventas) : mval(r.data));
-  const totalMetric = sum(values);
-  const barColor = metric==='ventas' ? PALETTE.s1 : PALETTE.s2;
+  const values = rows.map(r=> mval(r.data));
+  const totalUnidades = sum(values);
+  const barColor = PALETTE.s2;
   const periodo = monthFilter==='todos' ? 'Mayo-Agosto 2026' : MONTH_LABEL[monthFilter];
   const periodoLower = monthFilter==='todos' ? 'acumulado mayo-junio-julio-agosto 2026' : `vista de ${MONTH_LABEL[monthFilter]}`;
 
-  document.getElementById('repuestosTopSub').textContent = (metric==='ventas' ? 'Ventas en $' : 'Unidades vendidas') + ' · ' + periodo;
-  document.getElementById('repuestosTopFootnote').textContent = `Top 10 dentro de un universo de 46 repuestos con seguimiento mensual (cubre el 57% de la venta neta total de 272 SKUs), ${periodoLower}. Orden de mayor a menor según la métrica activa. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.`;
+  document.getElementById('repuestosTopSub').textContent = 'Unidades vendidas · ' + periodo;
+  document.getElementById('repuestosTopFootnote').textContent = `Top 10 dentro de un universo de 46 repuestos con seguimiento mensual (cubre el 57% de la venta neta total de 272 SKUs), ${periodoLower}, por unidades vendidas. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.`;
 
   if(chartRepuestosTopInst) chartRepuestosTopInst.destroy();
   const maxVal = Math.max(...values) || 1;
@@ -4583,8 +4949,8 @@ function renderRepuestosTopChart(){
           formatter:(v,ctx)=>{
             const r = rows[ctx.dataIndex];
             const u = mval(r.data), ve = mval(r.ventas);
-            const pct = totalMetric>0 ? Math.round((metric==='ventas'?ve:u)/totalMetric*100) : 0;
-            return metric==='ventas' ? `${fmtMoney(ve)} (${pct}%) · ${fmt(u)} u.` : `${fmt(u)} u. (${pct}%) · ${fmtMoney(ve)}`;
+            const pct = totalUnidades>0 ? Math.round(u/totalUnidades*100) : 0;
+            return `${fmt(u)} u. (${pct}%) · ${fmtMoney(ve)}`;
           }
         }
       }
@@ -4624,19 +4990,29 @@ function renderRepuestosProvinciaChart(){
   const periodo = monthFilter==='todos' ? 'Mayo–Agosto 2026' : MONTH_LABEL[monthFilter];
   document.getElementById('repuestosProvinciaSub').textContent = `Unidades y $ por provincia · ${periodo}`;
   if(chartRepuestosProvinciaInst) chartRepuestosProvinciaInst.destroy();
-  chartRepuestosProvinciaInst = makeOrigenRankingChart('chartRepuestosProvincia', rows, PALETTE.s1, { showPct:true, rightPad:150 });
+  // Provincia solo muestra el top 10 de 16 (repuestosProvinciasRaw ya viene pre-curado — ver comentario junto a su definición).
+  // El % de cada barra se calcula por UNIDADES (no $, aunque el toggle esté en $) y usa como base el total real de
+  // las 16 provincias (REPUESTOS_TOTAL_UNIDADES), no solo la suma de las 10 mostradas — así el % de estas 10 más el de
+  // las 6 que faltan (ver footnote) sí suma 100% del total real, en vez de un 100% artificial entre solo las 10 visibles.
+  const trueTotalU = mval(canalTotal(REPUESTOS_TOTAL_UNIDADES, REPUESTOS_TOTAL_UNIDADES_BY_COMBO));
+  chartRepuestosProvinciaInst = makeOrigenRankingChart('chartRepuestosProvincia', rows, PALETTE.s1, { showPct:true, rightPad:150, totalOverride: trueTotalU });
 }
 function buildRepuestosProvinciaTable(){
   buildRepuestosGenericTable(canalRows(repuestosProvinciasRaw), 'tblRepuestosProvincia', { subtitleId:'repuestosProvinciaTableSub' });
 }
+// Nombres largos de "Categoria 2" se acortan solo para la etiqueta del gráfico (el eje Y no tiene espacio para el nombre completo);
+// la tabla de al lado sigue mostrando el nombre completo de la categoría.
+const CATEGORIA_LABEL_SHORT = { 'RUEDAS Y TRANSMISION':'RUEDAS Y TRANSM.', 'MANILLAR Y CONTROLES':'MANILLAR Y CONTR.', 'SELLOS Y EMPAQUES':'SELLOS Y EMPAQ.' };
 function renderRepuestosCanalChart(){
-  // "TRANSMISIÓN/EMBRAGUE" se acorta solo para la etiqueta del gráfico (el eje Y no tiene espacio para el nombre completo);
-  // la tabla de al lado sigue mostrando el nombre completo de la categoría.
-  const rows = canalRows(repuestosCategoriasRaw).map(c=>({ name: c.name==='TRANSMISIÓN/EMBRAGUE' ? 'TRANSMISIÓN/EMB.' : c.name, u: mval(c.data), v: mval(c.ventas) })).sort((a,b)=> b.u-a.u);
+  // Muestra las 17 categorías; el chart-box tiene su propio scroll interno (ver HTML) porque a esta altura de panel no entran todas a la vez.
+  // Ordenadas por ventas $ (no por unidades) — el % en gris entre paréntesis también es participación en $.
+  const rows = canalRows(repuestosCategoriasRaw).map(c=>({ name: CATEGORIA_LABEL_SHORT[c.name] || c.name, u: mval(c.data), v: mval(c.ventas) }))
+    .sort((a,b)=> b.v-a.v);
   const periodo = monthFilter==='todos' ? 'Mayo–Agosto 2026' : MONTH_LABEL[monthFilter];
-  document.getElementById('repuestosCanalSub').textContent = `Unidades y $ por categoría · ${periodo}`;
+  document.getElementById('repuestosCanalSub').textContent = `Unidades y $ por categoría · 17 categorías · ${periodo}`;
   if(chartRepuestosCanalInst) chartRepuestosCanalInst.destroy();
-  chartRepuestosCanalInst = makeOrigenRankingChart('chartRepuestosCanal', rows, PALETTE.s3);
+  const trueTotalV = mval(canalTotal(REPUESTOS_TOTAL_VENTA, REPUESTOS_TOTAL_VENTA_BY_COMBO));
+  chartRepuestosCanalInst = makeOrigenRankingChart('chartRepuestosCanal', rows, PALETTE.s3, { showPct:true, rankBy:'ventas', totalOverride: trueTotalV });
 }
 function buildRepuestosCanalTable(){
   buildRepuestosGenericTable(canalRows(repuestosCategoriasRaw), 'tblRepuestosCanal', { subtitleId:'repuestosCanalTableSub' });
@@ -4791,7 +5167,7 @@ function initRepuestosModelos(){
 /* ================= NAV / TABS ================= */
 const navItems = document.querySelectorAll('.nav-item');
 const pages = document.querySelectorAll('.page');
-const initFns = { resumen:initResumen, mayoristas:initMayoristas, retail:initRetail, tiendas:initTiendas, repuestos:initRepuestos };
+const initFns = { general:initGeneral, resumen:initResumen, mayoristas:initMayoristas, retail:initRetail, tiendas:initTiendas, repuestos:initRepuestos };
 
 navItems.forEach(item=>{
   item.addEventListener('click', ()=>{
@@ -4831,6 +5207,7 @@ aapToggles.forEach(group=>{
 /* ================= METRIC TOGGLE (Unidades / $ en Retail) ================= */
 /* ================= METRIC TOGGLE (UNIDADES / $) — independiente por página ================= */
 const METRIC_RENDER = {
+  general:     ()=>{ if(chartsInit.general) renderGeneral(); },
   resumen:     ()=>{ if(chartsInit.resumen) renderResumen(); if(chartsInit.resumenModelos){ buildModelosTable(); renderModelosRankingChart(); } if(chartsInit.resumenPerfiles) buildPerfilesTable(); },
   mayoristas:  ()=>{ if(chartsInit.mayoristas) renderMayoristas(); if(chartsInit.mayoristasModelos){ buildMayoristasModelosTable(); renderMayoristasModelosRankingChart(); } },
   retail:      ()=>{ if(chartsInit.retail) renderRetail(); if(chartsInit.retailOrigen){ buildAapOrigenTable(); buildNonAapOrigenTable(); } if(chartsInit.retailPerfiles) buildRetailPerfilesTable(); if(chartsInit.retailModelos){ buildRetailModelosTable(); renderRetailModelosRankingChart(); } },
@@ -4861,6 +5238,8 @@ function setMonthFilter(mode){
       btn.classList.toggle('active', btn.dataset.month===mode);
     });
   });
+  // General
+  if(chartsInit.general) renderGeneral();
   // Resumen
   if(chartsInit.resumen) renderResumen();
   if(chartsInit.resumenPerfiles){ renderResumenPerfilChart(); buildPerfilesTable(); }
