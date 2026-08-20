@@ -85,6 +85,7 @@
     --manoobra-1:#1a1a1a; /* negro           - Mano de Obra de Servicios (mano de obra) */
     --manoobra-2:#a81c14; /* rojo oscuro      - Mano de Obra de Servicios (repuestos instalados, referencia) */
     --good:#0ca30c;
+    --warn:#c98a12;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -207,10 +208,10 @@
   .aap-toggle button.active{ background:var(--orange); color:#fff; }
   /* Repuestos tiene 3 grupos de toggle (métrica/canal/mes) + range-chip en el topbar — se compactan
      ligeramente para que todo entre en una sola línea sin que el topbar crezca y desborde el layout. */
-  #page-repuestos .topbar-controls{ gap:5px; }
-  #page-repuestos .topbar-controls .aap-toggle{ gap:1px; padding:2px; }
-  #page-repuestos .topbar-controls .aap-toggle button{ padding:5px 6px; font-size:9.5px; }
-  #page-repuestos .topbar-controls .range-chip{ padding:5px 7px; gap:4px; font-size:10px; }
+  #page-repuestos .topbar-controls{ gap:7px; }
+  #page-repuestos .topbar-controls .aap-toggle{ gap:2px; padding:2px; }
+  #page-repuestos .topbar-controls .aap-toggle button{ padding:5px 9px; font-size:10px; }
+  #page-repuestos .topbar-controls .range-chip{ padding:5px 9px; gap:5px; font-size:10px; }
 
   .retail-subnav{ display:flex; gap:8px; margin-bottom:10px; flex:0 0 auto; }
   .retail-subnav button{
@@ -269,9 +270,11 @@
   .kpi-hero{font-size:25px;font-weight:800;letter-spacing:-.5px;line-height:1;margin:3px 0 5px;}
   .kpi-hero.good{color:var(--good);}
   .kpi-hero.bad{color:#d03b3b;}
+  .kpi-hero.warn{color:var(--warn);}
   .kpi-hero.neutral{color:var(--text-muted);}
   .kpi-state-tag{font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;letter-spacing:.2px;flex:0 0 auto;}
   .kpi-state-tag.behind{background:rgba(208,59,59,0.12);color:#d03b3b;}
+  .kpi-state-tag.warn{background:rgba(201,138,18,0.14);color:var(--warn);}
   .kpi-state-tag.ahead{background:rgba(12,163,12,0.12);color:var(--good);}
   .kpi-state-tag.neutral{background:rgba(107,106,102,0.12);color:var(--text-muted);}
   .kpi-channel-row{display:flex;align-items:center;justify-content:space-between;font-size:10.5px;margin-top:3px;}
@@ -347,20 +350,23 @@
   .rank-bar-bg{flex:1;height:6px;border-radius:4px;background:var(--grid);overflow:hidden;margin-left:8px;}
   .rank-bar-fill{height:100%;border-radius:4px;background:var(--series-1);}
 
-  /* Tabla "Detalle mensual por línea de negocio" (Vista general) — deltas como pill de color y % muted
-     debajo, en vez del formato "(±%) · %" en línea usado por pctCell() en el resto del dashboard. */
-  table.general-table td{padding:8px 8px;}
-  table.general-table .linea-name{display:flex;align-items:center;gap:7px;font-weight:700;}
-  table.general-table .linea-dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px;}
-  table.general-table .cell-pct{display:block;font-size:9px;font-weight:600;color:var(--text-muted);margin-top:2px;}
-  table.general-table .pill{
+  /* Deltas como píldora de color + % muted, en vez del formato "(±%) · %" en línea — mismo diseño
+     estético de "Detalle mensual por línea de negocio" (Vista general), aplicado a TODAS las tablas
+     del dashboard vía pctCellPill(). El % de participación va inline (no en línea aparte) para no
+     aumentar la altura de fila en las tablas compactas y así respetar el layout de 800px por página. */
+  .cell-main{font-weight:700;}
+  .linea-name{display:flex;align-items:center;gap:7px;font-weight:700;}
+  .linea-dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px;}
+  .cell-pct{display:inline-block;font-size:9px;font-weight:600;color:var(--text-muted);margin-left:4px;}
+  .pill{
     display:inline-block; font-size:9px; font-weight:700; padding:1px 5px; border-radius:20px;
     margin-left:4px; vertical-align:1px;
   }
-  table.general-table .pill.up{background:rgba(12,163,12,0.12); color:var(--good);}
-  table.general-table .pill.down{background:rgba(208,59,59,0.12); color:#d03b3b;}
-  table.general-table .pill.flat{background:rgba(137,135,129,0.15); color:var(--text-muted);}
-  table.general-table tr.total-row td{font-weight:800; padding-top:11px; border-top:2px solid var(--text-primary); border-bottom:none; background:transparent;}
+  .pill.up{background:rgba(12,163,12,0.12); color:var(--good);}
+  .pill.down{background:rgba(208,59,59,0.12); color:#d03b3b;}
+  .pill.flat{background:rgba(137,135,129,0.15); color:var(--text-muted);}
+  tr.total-row td{font-weight:800; padding-top:11px; border-top:2px solid var(--text-primary); border-bottom:none; background:transparent;}
+  table.general-table td{padding:8px 8px;}
 
   .table-scroll{ overflow-y:auto; min-height:0; flex:1 1 auto; }
   .store-scroll{ /* sin límite de alto: el panel crece y la página completa se desplaza */ }
@@ -3515,14 +3521,14 @@ function buildResumenTable(){
   tbody.innerHTML = resumen.categories.map(c=>`
     <tr>
       <td style="font-weight:700;"><span class="legend-swatch" style="background:${c.color};display:inline-block;margin-right:6px;"></span>${c.name}</td>
-      <td class="num">${pctCell(c.data[0], undefined, T[0], formatter)}</td>
-      <td class="num">${pctCell(c.data[1], c.data[0], T[1], formatter)}</td>
-      <td class="num">${pctCell(c.data[2], c.data[1], T[2], formatter)}</td>
-      <td class="num">${pctCell(c.data[3], c.data[2], T[3], formatter)}</td>
+      <td class="num">${pctCellPill(c.data[0], undefined, T[0], formatter)}</td>
+      <td class="num">${pctCellPill(c.data[1], c.data[0], T[1], formatter)}</td>
+      <td class="num">${pctCellPill(c.data[2], c.data[1], T[2], formatter)}</td>
+      <td class="num">${pctCellPill(c.data[3], c.data[2], T[3], formatter)}</td>
       <td class="num">${formatter(sum(c.data))}</td>
     </tr>`).join('') +
     `<tr style="font-weight:800;background:var(--page-plane);">
-      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCell(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCell(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCell(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
     </tr>`;
 }
 
@@ -3609,14 +3615,16 @@ function renderBudgetCards(prefix, grand, budgetArr, metric, formatter){
   const textEl = document.getElementById(prefix+'ProgressText');
   if(hasBudget){
     const pct = Math.round(grand/budget*100);
-    const isGood = pct>=100;
-    const barColor = isGood ? 'var(--good)' : '#d03b3b';
+    // Semáforo de 3 niveles: 0-33% rojo, 33-70% amarillo, 70%+ verde (para que el rojo no "mate tanto")
+    const tier = pct<33 ? 'bad' : (pct<70 ? 'warn' : 'good');
+    const barColor = tier==='good' ? 'var(--good)' : (tier==='warn' ? 'var(--warn)' : '#d03b3b');
+    const tagClass = tier==='good' ? 'ahead' : (tier==='warn' ? 'warn' : 'behind');
     fillEl.style.width = `${Math.min(pct,100)}%`;
     fillEl.style.background = barColor;
     heroEl.textContent = `${pct}%`;
-    heroEl.className = 'kpi-hero ' + (isGood ? 'good' : 'bad');
-    tagEl.textContent = pct>100 ? 'SUPERADO' : (pct===100 ? 'EN META' : 'POR DEBAJO');
-    tagEl.className = 'kpi-state-tag ' + (isGood ? 'ahead' : 'behind');
+    heroEl.className = 'kpi-hero ' + tier;
+    tagEl.textContent = pct>100 ? 'SUPERADO' : (pct===100 ? 'EN META' : (tier==='warn' ? 'EN PROGRESO' : 'POR DEBAJO'));
+    tagEl.className = 'kpi-state-tag ' + tagClass;
     const faltante = budget - grand;
     textEl.innerHTML = faltante>0
       ? `Faltan <b>${formatter(faltante)}</b> ${metric==='ventas' ? '' : 'u. '}(${formatter(grand)} / ${formatter(budget)})`
@@ -3781,28 +3789,7 @@ function renderResumenCharts(){
         plugins:{
           legend:{display:false},
           tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
-          datalabels:{
-            display:true, font:{weight:700, size:10.5},
-            anchor:'end', align:'top', offset:6,
-            color:(ctx)=>{
-              const i = ctx.dataIndex;
-              if(i===0) return PALETTE.ink;
-              const prev = resumen.total[i-1];
-              const diff = ctx.dataset.data[i]-prev;
-              return diff>=0 ? '#0ca30c' : '#d03b3b';
-            },
-            formatter:(v,ctx)=>{
-              const i = ctx.dataIndex;
-              const f = resumen.metric==='ventas' ? fmtMoney : fmt;
-              const grandTotal = sum(resumen.total);
-              const contrib = Math.round(v/grandTotal*100);
-              if(i===0) return `${f(v)} · ${contrib}%`;
-              const prev = resumen.total[i-1];
-              const pct = Math.round((v-prev)/prev*100);
-              const sign = pct>0 ? '+' : '';
-              return `${f(v)} (${sign}${pct}%) · ${contrib}%`;
-            }
-          }
+          datalabels: trendPillLabels(()=>resumen.total, ()=>(resumen.metric==='ventas' ? fmtMoney : fmt))
         }
       }
     });
@@ -3814,9 +3801,9 @@ function renderResumenCharts(){
   }
 }
 
-// Igual que pctCell() pero con la variación (%) como una píldora de color en vez de texto "(±%)" en línea,
-// y el "% del mes" como una línea muted debajo — usado solo por la tabla de Vista general (opción A del
-// rediseño pedido por el cliente). No reemplaza pctCell(), que sigue usándose en el resto del dashboard.
+// Variación (%) como píldora de color en vez de texto "(±%)" en línea, y "% del mes" en gris muted junto
+// al valor. Usada ahora por TODAS las tablas del dashboard (pedido del cliente); pctCell() (arriba) queda
+// sin uso, se conserva solo como referencia del formato anterior.
 function pctCellPill(curr, prev, monthTotal, formatter){
   formatter = formatter || fmt;
   const val = `<span class="cell-main">${formatter(curr)}</span>`;
@@ -3833,6 +3820,65 @@ function pctCellPill(curr, prev, monthTotal, formatter){
     pctHtml = `<span class="cell-pct">${share}%</span>`;
   }
   return `${val}${pillHtml}${pctHtml}`;
+}
+
+// Datalabels de los gráficos de "Tendencia... mes a mes": separa lo que antes era un solo string de un
+// color ("$824 (+433%) · 27%") en dos etiquetas independientes del plugin chartjs-plugin-datalabels
+// (sub-config `labels`), para que el valor y el % de participación queden siempre en negro (PALETTE.ink)
+// y SOLO la variación mes a mes se pinte de rojo/verde — ahora como una píldora de color (con fondo y
+// bordes redondeados, igual que .pill en las tablas) en vez del texto "(±%)" entre paréntesis.
+// getData/getFormatter son funciones (no arrays/valores directos) a propósito: varios de estos charts
+// se crean una sola vez y solo actualizan `data` en renders posteriores (ver `if(!chartXTrendInst)` en
+// cada renderXCharts()), así que los callbacks deben releer el modelo vigente en cada evaluación en vez
+// de cerrar sobre un array/formatter capturado en el momento de creación (que quedaría obsoleto).
+function trendPillLabels(getData, getFormatter, opts){
+  opts = opts || {};
+  const anchor = opts.anchor !== undefined ? opts.anchor : 'end';
+  const align = opts.align !== undefined ? opts.align : 'top';
+  const baseOffset = opts.offset !== undefined ? opts.offset : 6;
+  return {
+    display:true, font:{weight:700, size:10.5},
+    labels:{
+      value:{
+        anchor, align, offset: baseOffset,
+        color: PALETTE.ink,
+        formatter:(v)=>{
+          if(v===null || v===undefined) return '';
+          const data = getData();
+          const grandTotal = sum(data.filter(x=>x!==null && x!==undefined));
+          const contrib = grandTotal ? Math.round(v/grandTotal*100) : 0;
+          return `${getFormatter()(v)} · ${contrib}%`;
+        }
+      },
+      variation:{
+        anchor, align, offset: baseOffset+15,
+        font:{weight:800, size:9}, borderRadius:8, padding:{top:2,right:5,bottom:2,left:5},
+        display:(ctx)=>{
+          const i = ctx.dataIndex;
+          if(i===0) return false;
+          const prev = getData()[i-1];
+          return prev !== null && prev !== undefined && prev !== 0;
+        },
+        backgroundColor:(ctx)=>{
+          const i = ctx.dataIndex, data = getData();
+          const diff = data[i]-data[i-1];
+          return diff>=0 ? 'rgba(12,163,12,0.14)' : 'rgba(208,59,59,0.14)';
+        },
+        color:(ctx)=>{
+          const i = ctx.dataIndex, data = getData();
+          const diff = data[i]-data[i-1];
+          return diff>=0 ? '#0ca30c' : '#d03b3b';
+        },
+        formatter:(v,ctx)=>{
+          const i = ctx.dataIndex, data = getData();
+          const prev = data[i-1];
+          const pct = Math.round((v-prev)/prev*100);
+          const sign = pct>0 ? '+' : '';
+          return `${sign}${pct}%`;
+        }
+      }
+    }
+  };
 }
 
 function buildGeneralTable(){
@@ -3973,7 +4019,7 @@ function renderGeneralCharts(){
           textStrokeColor:'rgba(0,0,0,0.35)', textStrokeWidth:2,
           formatter:(v)=> {
             const share = v/generalTotalSum*100;
-            if(share < 6 || share > 90) return ''; // evita choque con el texto central cuando una línea domina el donut
+            if(share < 6) return ''; // franja demasiado angosta para un % legible sin solaparse
             return Math.round(share)+'%';
           }
         }
@@ -4005,28 +4051,7 @@ function renderGeneralCharts(){
         plugins:{
           legend:{display:false},
           tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
-          datalabels:{
-            display:true, font:{weight:700, size:10.5},
-            anchor:'end', align:'top', offset:6,
-            color:(ctx)=>{
-              const i = ctx.dataIndex;
-              if(i===0) return PALETTE.ink;
-              const prev = general.total[i-1];
-              const diff = ctx.dataset.data[i]-prev;
-              return diff>=0 ? '#0ca30c' : '#d03b3b';
-            },
-            formatter:(v,ctx)=>{
-              const i = ctx.dataIndex;
-              const f = general.metric==='ventas' ? fmtMoney : fmt;
-              const grandTotal = sum(general.total);
-              const contrib = Math.round(v/grandTotal*100);
-              if(i===0) return `${f(v)} · ${contrib}%`;
-              const prev = general.total[i-1];
-              const pct = prev ? Math.round((v-prev)/prev*100) : 0;
-              const sign = pct>0 ? '+' : '';
-              return `${f(v)} (${sign}${pct}%) · ${contrib}%`;
-            }
-          }
+          datalabels: trendPillLabels(()=>general.total, ()=>(general.metric==='ventas' ? fmtMoney : fmt))
         }
       }
     });
@@ -4077,14 +4102,14 @@ function buildRepuestosResumenTable(){
   tbody.innerHTML = repuestosResumen.categories.map(c=>`
     <tr>
       <td style="font-weight:700;"><span class="legend-swatch" style="background:${c.color};display:inline-block;margin-right:6px;"></span>${c.name}</td>
-      <td class="num">${pctCell(c.data[0], undefined, T[0], formatter)}</td>
-      <td class="num">${pctCell(c.data[1], c.data[0], T[1], formatter)}</td>
-      <td class="num">${pctCell(c.data[2], c.data[1], T[2], formatter)}</td>
-      <td class="num">${pctCell(c.data[3], c.data[2], T[3], formatter)}</td>
+      <td class="num">${pctCellPill(c.data[0], undefined, T[0], formatter)}</td>
+      <td class="num">${pctCellPill(c.data[1], c.data[0], T[1], formatter)}</td>
+      <td class="num">${pctCellPill(c.data[2], c.data[1], T[2], formatter)}</td>
+      <td class="num">${pctCellPill(c.data[3], c.data[2], T[3], formatter)}</td>
       <td class="num">${formatter(sum(c.data))}</td>
     </tr>`).join('') +
     `<tr style="font-weight:800;background:var(--page-plane);">
-      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCell(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCell(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCell(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
     </tr>`;
 }
 
@@ -4241,28 +4266,7 @@ function renderRepuestosResumenCharts(){
         plugins:{
           legend:{display:false},
           tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
-          datalabels:{
-            display:true, font:{weight:700, size:10.5},
-            anchor:'end', align:'top', offset:6,
-            color:(ctx)=>{
-              const i = ctx.dataIndex;
-              if(i===0) return PALETTE.ink;
-              const prev = repuestosResumen.total[i-1];
-              const diff = ctx.dataset.data[i]-prev;
-              return diff>=0 ? '#0ca30c' : '#d03b3b';
-            },
-            formatter:(v,ctx)=>{
-              const i = ctx.dataIndex;
-              const f = repuestosResumen.metric==='ventas' ? fmtMoney : fmt;
-              const grandTotal = sum(repuestosResumen.total);
-              const contrib = grandTotal ? Math.round(v/grandTotal*100) : 0;
-              if(i===0) return `${f(v)} · ${contrib}%`;
-              const prev = repuestosResumen.total[i-1];
-              const pct = prev ? Math.round((v-prev)/prev*100) : 0;
-              const sign = pct>0 ? '+' : '';
-              return `${f(v)} (${sign}${pct}%) · ${contrib}%`;
-            }
-          }
+          datalabels: trendPillLabels(()=>repuestosResumen.total, ()=>(repuestosResumen.metric==='ventas' ? fmtMoney : fmt))
         }
       }
     });
@@ -4351,14 +4355,14 @@ function buildRepuestosServicioTable(){
   tbody.innerHTML = repuestosServicio.sucursales.map(s=>`
     <tr>
       <td style="font-weight:700;"><span class="legend-swatch" style="background:${s.color};display:inline-block;margin-right:6px;"></span>${s.name}</td>
-      <td class="num">${pctCell(s.data[0], undefined, T[0], formatter)}</td>
-      <td class="num">${pctCell(s.data[1], s.data[0], T[1], formatter)}</td>
-      <td class="num">${pctCell(s.data[2], s.data[1], T[2], formatter)}</td>
-      <td class="num">${pctCell(s.data[3], s.data[2], T[3], formatter)}</td>
+      <td class="num">${pctCellPill(s.data[0], undefined, T[0], formatter)}</td>
+      <td class="num">${pctCellPill(s.data[1], s.data[0], T[1], formatter)}</td>
+      <td class="num">${pctCellPill(s.data[2], s.data[1], T[2], formatter)}</td>
+      <td class="num">${pctCellPill(s.data[3], s.data[2], T[3], formatter)}</td>
       <td class="num">${formatter(s.total)}</td>
     </tr>`).join('') +
     `<tr style="font-weight:800;background:var(--page-plane);">
-      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCell(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCell(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCell(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
     </tr>`;
 }
 
@@ -4457,28 +4461,7 @@ function renderRepuestosServicioCharts(){
         plugins:{
           legend:{display:false},
           tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
-          datalabels:{
-            display:true, font:{weight:700, size:10.5},
-            anchor:'end', align:'top', offset:6,
-            color:(ctx)=>{
-              const i = ctx.dataIndex;
-              if(i===0) return PALETTE.ink;
-              const prev = repuestosServicio.total[i-1];
-              const diff = ctx.dataset.data[i]-prev;
-              return diff>=0 ? '#0ca30c' : '#d03b3b';
-            },
-            formatter:(v,ctx)=>{
-              const i = ctx.dataIndex;
-              const f = repuestosServicio.metric==='ventas' ? fmtMoney : fmt;
-              const grandTotal = sum(repuestosServicio.total);
-              const contrib = grandTotal ? Math.round(v/grandTotal*100) : 0;
-              if(i===0) return `${f(v)} · ${contrib}%`;
-              const prev = repuestosServicio.total[i-1];
-              const pct = prev ? Math.round((v-prev)/prev*100) : 0;
-              const sign = pct>0 ? '+' : '';
-              return `${f(v)} (${sign}${pct}%) · ${contrib}%`;
-            }
-          }
+          datalabels: trendPillLabels(()=>repuestosServicio.total, ()=>(repuestosServicio.metric==='ventas' ? fmtMoney : fmt))
         }
       }
     });
@@ -4598,9 +4581,9 @@ function buildManoObraTable(){
   const sinDesgloseRow = `
     <tr>
       <td><span class="legend-swatch" style="background:${getVar('--servicio-3')};display:inline-block;margin-right:6px;"></span>Sin desglose (estimado)</td>
-      <td class="num">${pctCell(sinDesglose[0], undefined, undefined, formatter)}</td>
-      <td class="num">${pctCell(sinDesglose[1], sinDesglose[0], undefined, formatter)}</td>
-      <td class="num">${pctCell(sinDesglose[2], sinDesglose[1], undefined, formatter)}</td>
+      <td class="num">${pctCellPill(sinDesglose[0], undefined, undefined, formatter)}</td>
+      <td class="num">${pctCellPill(sinDesglose[1], sinDesglose[0], undefined, formatter)}</td>
+      <td class="num">${pctCellPill(sinDesglose[2], sinDesglose[1], undefined, formatter)}</td>
       <td class="num">${dash}</td>
       <td class="num">${formatter(sum(sinDesglose))}</td>
     </tr>`;
@@ -4608,10 +4591,10 @@ function buildManoObraTable(){
   const totalRow = `
     <tr style="font-weight:800;background:var(--page-plane);">
       <td>Total</td>
-      <td class="num">${pctCell(M[0], undefined, undefined, formatter)}</td>
-      <td class="num">${pctCell(M[1], M[0], undefined, formatter)}</td>
-      <td class="num">${pctCell(M[2], M[1], undefined, formatter)}</td>
-      <td class="num">${pctCell(M[3], M[2], undefined, formatter)}</td>
+      <td class="num">${pctCellPill(M[0], undefined, undefined, formatter)}</td>
+      <td class="num">${pctCellPill(M[1], M[0], undefined, formatter)}</td>
+      <td class="num">${pctCellPill(M[2], M[1], undefined, formatter)}</td>
+      <td class="num">${pctCellPill(M[3], M[2], undefined, formatter)}</td>
       <td class="num">${formatter(sum(M))}</td>
     </tr>`;
 
@@ -4712,48 +4695,33 @@ function renderManoObraCharts(){
         plugins:{
           legend:{display:false},
           tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
-          datalabels:{
-            display:true, font:{weight:700, size:10.5},
-            // Cuando dos puntos consecutivos quedan muy cerca en $ (ej. Julio/Agosto reales similares),
-            // sus etiquetas se superponen si ambas van arriba; se alternan arriba/abajo en ese caso.
-            anchor:(ctx)=>{
-              const i = ctx.dataIndex, data = ctx.dataset.data;
-              const range = Math.max(...data) - Math.min(...data) || 1;
-              const closePrev = i>0 && Math.abs(data[i]-data[i-1]) < range*0.15;
-              const closeNext = i<data.length-1 && Math.abs(data[i]-data[i+1]) < range*0.15;
-              return (closePrev||closeNext) ? (i%2===0 ? 'end' : 'start') : 'end';
-            },
-            align:(ctx)=>{
-              const i = ctx.dataIndex, data = ctx.dataset.data;
-              const range = Math.max(...data) - Math.min(...data) || 1;
-              const closePrev = i>0 && Math.abs(data[i]-data[i-1]) < range*0.15;
-              const closeNext = i<data.length-1 && Math.abs(data[i]-data[i+1]) < range*0.15;
-              return (closePrev||closeNext) ? (i%2===0 ? 'top' : 'bottom') : 'top';
-            },
-            offset:6,
-            color:(ctx)=>{
-              const i = ctx.dataIndex;
-              if(i===0) return PALETTE.ink;
-              const prev = manoObra.manoObra[i-1];
-              const diff = ctx.dataset.data[i]-prev;
-              return diff>=0 ? '#0ca30c' : '#d03b3b';
-            },
-            formatter:(v,ctx)=>{
-              const i = ctx.dataIndex;
-              // Nota: no usar el `formatter` del closure de renderManoObraCharts() — el chart de tendencia
-              // solo se crea una vez (ver `if(!chartManoObraTrendInst)` abajo) y luego solo se actualiza su
-              // data, así que este callback debe leer manoObra.metric en tiempo de ejecución para reflejar
-              // el toggle UNIDADES/$ actual, no el que estaba activo cuando el chart fue creado.
-              const f = manoObra.metric==='unidades' ? fmt : fmtMoney;
-              const grandTotal = sum(manoObra.manoObra);
-              const contrib = grandTotal ? Math.round(v/grandTotal*100) : 0;
-              if(i===0) return `${f(v)} · ${contrib}%`;
-              const prev = manoObra.manoObra[i-1];
-              const pct = prev ? Math.round((v-prev)/prev*100) : 0;
-              const sign = pct>0 ? '+' : '';
-              return `${f(v)} (${sign}${pct}%) · ${contrib}%`;
+          // Cuando dos puntos consecutivos quedan muy cerca en $ (ej. Julio/Agosto reales similares),
+          // sus etiquetas se superponen si ambas van arriba; se alternan arriba/abajo en ese caso.
+          // Nota: no usar el `formatter`/metric del closure de renderManoObraCharts() — el chart de
+          // tendencia solo se crea una vez (ver `if(!chartManoObraTrendInst)` abajo) y luego solo se
+          // actualiza su data, así que trendPillLabels() debe releer manoObra.metric/manoObra.manoObra
+          // en tiempo de ejecución (via getData/getFormatter) para reflejar el toggle UNIDADES/$ actual.
+          datalabels: trendPillLabels(
+            ()=>manoObra.manoObra,
+            ()=>(manoObra.metric==='unidades' ? fmt : fmtMoney),
+            {
+              anchor:(ctx)=>{
+                const i = ctx.dataIndex, data = ctx.dataset.data;
+                const range = Math.max(...data) - Math.min(...data) || 1;
+                const closePrev = i>0 && Math.abs(data[i]-data[i-1]) < range*0.15;
+                const closeNext = i<data.length-1 && Math.abs(data[i]-data[i+1]) < range*0.15;
+                return (closePrev||closeNext) ? (i%2===0 ? 'end' : 'start') : 'end';
+              },
+              align:(ctx)=>{
+                const i = ctx.dataIndex, data = ctx.dataset.data;
+                const range = Math.max(...data) - Math.min(...data) || 1;
+                const closePrev = i>0 && Math.abs(data[i]-data[i-1]) < range*0.15;
+                const closeNext = i<data.length-1 && Math.abs(data[i]-data[i+1]) < range*0.15;
+                return (closePrev||closeNext) ? (i%2===0 ? 'top' : 'bottom') : 'top';
+              },
+              offset:6
             }
-          }
+          )
         }
       }
     });
@@ -4815,10 +4783,10 @@ function renderManoObraPuntoCharts(){
   const puntoTotalRow = `
     <tr style="font-weight:800;background:var(--page-plane);">
       <td>Total</td>
-      <td class="num">${pctCell(M[0], undefined, undefined, formatter)}</td>
-      <td class="num">${pctCell(M[1], M[0], undefined, formatter)}</td>
-      <td class="num">${pctCell(M[2], M[1], undefined, formatter)}</td>
-      <td class="num">${pctCell(M[3], M[2], undefined, formatter)}</td>
+      <td class="num">${pctCellPill(M[0], undefined, undefined, formatter)}</td>
+      <td class="num">${pctCellPill(M[1], M[0], undefined, formatter)}</td>
+      <td class="num">${pctCellPill(M[2], M[1], undefined, formatter)}</td>
+      <td class="num">${pctCellPill(M[3], M[2], undefined, formatter)}</td>
       <td class="num">${formatter(sum(M))}</td>
     </tr>`;
   document.getElementById('tblManoObraPunto').innerHTML = puntoRows + puntoTotalRow;
@@ -4869,14 +4837,14 @@ function buildMayoristasTable(){
   tbody.innerHTML = mayoristasModel.active.map(a=>`
     <tr>
       <td style="font-weight:700;"><span class="legend-swatch" style="background:${a.color};display:inline-block;margin-right:6px;"></span>${a.name}</td>
-      <td class="num">${pctCell(a.data[0], undefined, T[0], formatter)}</td>
-      <td class="num">${pctCell(a.data[1], a.data[0], T[1], formatter)}</td>
-      <td class="num">${pctCell(a.data[2], a.data[1], T[2], formatter)}</td>
-      <td class="num">${pctCell(a.data[3], a.data[2], T[3], formatter)}</td>
+      <td class="num">${pctCellPill(a.data[0], undefined, T[0], formatter)}</td>
+      <td class="num">${pctCellPill(a.data[1], a.data[0], T[1], formatter)}</td>
+      <td class="num">${pctCellPill(a.data[2], a.data[1], T[2], formatter)}</td>
+      <td class="num">${pctCellPill(a.data[3], a.data[2], T[3], formatter)}</td>
       <td class="num">${formatter(a.total)}</td>
     </tr>`).join('') +
     `<tr style="font-weight:800;background:var(--page-plane);">
-      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCell(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCell(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCell(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
     </tr>`;
 }
 
@@ -5004,27 +4972,7 @@ function renderMayoristasCharts(){
         plugins:{
           legend:{display:false},
           tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
-          datalabels:{
-            display:true, font:{weight:700, size:10.5},
-            anchor:'end', align:'top', offset:6,
-            color:(ctx)=>{
-              const i = ctx.dataIndex;
-              if(i===0) return PALETTE.ink;
-              const prev = mayoristasModel.total[i-1];
-              const diff = ctx.dataset.data[i]-prev;
-              return diff>=0 ? '#0ca30c' : '#d03b3b';
-            },
-            formatter:(v,ctx)=>{
-              const i = ctx.dataIndex;
-              const f = mayoristasModel.metric==='ventas' ? fmtMoney : fmt;
-              const contrib = Math.round(v/sum(mayoristasModel.total)*100);
-              if(i===0) return `${f(v)} · ${contrib}%`;
-              const prev = mayoristasModel.total[i-1];
-              const pct = Math.round((v-prev)/prev*100);
-              const sign = pct>0 ? '+' : '';
-              return `${f(v)} (${sign}${pct}%) · ${contrib}%`;
-            }
-          }
+          datalabels: trendPillLabels(()=>mayoristasModel.total, ()=>(mayoristasModel.metric==='ventas' ? fmtMoney : fmt))
         }
       }
     });
@@ -5057,14 +5005,14 @@ function buildRetailTable(){
   tbody.innerHTML = retailModel.active.map(a=>`
     <tr>
       <td style="font-weight:700;"><span class="legend-swatch" style="background:${a.color};display:inline-block;margin-right:6px;"></span>${a.name}</td>
-      <td class="num">${pctCell(a.data[0], undefined, T[0], formatter)}</td>
-      <td class="num">${pctCell(a.data[1], a.data[0], T[1], formatter)}</td>
-      <td class="num">${pctCell(a.data[2], a.data[1], T[2], formatter)}</td>
-      <td class="num">${pctCell(a.data[3], a.data[2], T[3], formatter)}</td>
+      <td class="num">${pctCellPill(a.data[0], undefined, T[0], formatter)}</td>
+      <td class="num">${pctCellPill(a.data[1], a.data[0], T[1], formatter)}</td>
+      <td class="num">${pctCellPill(a.data[2], a.data[1], T[2], formatter)}</td>
+      <td class="num">${pctCellPill(a.data[3], a.data[2], T[3], formatter)}</td>
       <td class="num">${formatter(a.total)}</td>
     </tr>`).join('') +
     `<tr style="font-weight:800;background:var(--page-plane);">
-      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCell(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCell(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCell(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
     </tr>`;
 }
 
@@ -5197,27 +5145,7 @@ function renderRetailCharts(){
         plugins:{
           legend:{display:false},
           tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
-          datalabels:{
-            display:true, font:{weight:700, size:10.5},
-            anchor:'end', align:'top', offset:6,
-            color:(ctx)=>{
-              const i = ctx.dataIndex;
-              if(i===0) return PALETTE.ink;
-              const prev = retailModel.total[i-1];
-              const diff = ctx.dataset.data[i]-prev;
-              return diff>=0 ? '#0ca30c' : '#d03b3b';
-            },
-            formatter:(v,ctx)=>{
-              const i = ctx.dataIndex;
-              const f = retailModel.metric==='ventas' ? fmtMoney : fmt;
-              const contrib = Math.round(v/sum(retailModel.total)*100);
-              if(i===0) return `${f(v)} · ${contrib}%`;
-              const prev = retailModel.total[i-1];
-              const pct = Math.round((v-prev)/prev*100);
-              const sign = pct>0 ? '+' : '';
-              return `${f(v)} (${sign}${pct}%) · ${contrib}%`;
-            }
-          }
+          datalabels: trendPillLabels(()=>retailModel.total, ()=>(retailModel.metric==='ventas' ? fmtMoney : fmt))
         }
       }
     });
@@ -5319,7 +5247,7 @@ function buildOrigenTable(rows, monthTotalUnidades, monthTotalVentas, tbodyId, s
       const curr = series[mi];
       const prev = mi>0 ? series[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${formatter(v)}</span>` : formatter;
-      const cell = pctCell(curr, prev, monthTotal[mi], cellFormatter);
+      const cell = pctCellPill(curr, prev, monthTotal[mi], cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${formatter(sum(series))}</td></tr>`;
@@ -5327,9 +5255,9 @@ function buildOrigenTable(rows, monthTotalUnidades, monthTotalVentas, tbodyId, s
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Total</td>
     <td class="num">${formatter(monthTotal[0])}</td>
-    <td class="num">${pctCell(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -5440,7 +5368,7 @@ function buildRetailPerfilesTable(){
       const curr = series[mi];
       const prev = mi>0 ? series[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${formatter(v)}</span>` : formatter;
-      const cell = pctCell(curr, prev, monthTotal[mi], cellFormatter);
+      const cell = pctCellPill(curr, prev, monthTotal[mi], cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${p.name}</td>${cells}<td class="num">${formatter(sum(series))}</td></tr>`;
@@ -5448,9 +5376,9 @@ function buildRetailPerfilesTable(){
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Total</td>
     <td class="num">${formatter(monthTotal[0])}</td>
-    <td class="num">${pctCell(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -5550,7 +5478,7 @@ function buildTiendaPerfilMensualTable(rows, monthTotalUnidades, monthTotalVenta
       const curr = series[mi];
       const prev = mi>0 ? series[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${formatter(v)}</span>` : formatter;
-      const cell = pctCell(curr, prev, monthTotal[mi], cellFormatter);
+      const cell = pctCellPill(curr, prev, monthTotal[mi], cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${formatter(sum(series))}</td></tr>`;
@@ -5558,9 +5486,9 @@ function buildTiendaPerfilMensualTable(rows, monthTotalUnidades, monthTotalVenta
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Total</td>
     <td class="num">${formatter(monthTotal[0])}</td>
-    <td class="num">${pctCell(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -5619,7 +5547,7 @@ function buildPerfilesTable(){
       const curr = series[mi];
       const prev = mi>0 ? series[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${formatter(v)}</span>` : formatter;
-      const cell = pctCell(curr, prev, monthTotal[mi], cellFormatter);
+      const cell = pctCellPill(curr, prev, monthTotal[mi], cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${p.name}</td>${cells}<td class="num">${formatter(sum(series))}</td></tr>`;
@@ -5627,9 +5555,9 @@ function buildPerfilesTable(){
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Total</td>
     <td class="num">${formatter(monthTotal[0])}</td>
-    <td class="num">${pctCell(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -5665,7 +5593,7 @@ function buildModelosTable(){
       const curr = series[mi];
       const prev = mi>0 ? series[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${formatter(v)}</span>` : formatter;
-      const cell = pctCell(curr, prev, monthTotal[mi], cellFormatter);
+      const cell = pctCellPill(curr, prev, monthTotal[mi], cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${m.name}</td>${cells}<td class="num">${formatter(sum(series))}</td></tr>`;
@@ -5673,9 +5601,9 @@ function buildModelosTable(){
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Total</td>
     <td class="num">${formatter(monthTotal[0])}</td>
-    <td class="num">${pctCell(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -5806,7 +5734,7 @@ function buildTicketMensualTable(){
       if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;">—</td>`;
       const prev = mi>0 ? r.tickets[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${fmtMoney(v)}</span>` : fmtMoney;
-      const cell = pctCell(curr, prev===null ? undefined : prev, undefined, cellFormatter);
+      const cell = pctCellPill(curr, prev===null ? undefined : prev, undefined, cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? fmtMoney(r.blended) : '—'}</td></tr>`;
@@ -5814,9 +5742,9 @@ function buildTicketMensualTable(){
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Promedio</td>
     <td class="num">${monthBlended[0]!==null ? fmtMoney(monthBlended[0]) : '—'}</td>
-    <td class="num">${monthBlended[1]!==null ? pctCell(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[2]!==null ? pctCell(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[3]!==null ? pctCell(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
     <td class="num">${fmtMoney(totalBlended)}</td>
   </tr>`;
 }
@@ -5854,7 +5782,7 @@ function buildMayoristasModelosTable(){
       const curr = series[mi];
       const prev = mi>0 ? series[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${formatter(v)}</span>` : formatter;
-      const cell = pctCell(curr, prev, monthTotal[mi], cellFormatter);
+      const cell = pctCellPill(curr, prev, monthTotal[mi], cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${m.name}</td>${cells}<td class="num">${formatter(sum(series))}</td></tr>`;
@@ -5862,9 +5790,9 @@ function buildMayoristasModelosTable(){
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Total</td>
     <td class="num">${formatter(monthTotal[0])}</td>
-    <td class="num">${pctCell(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -5975,7 +5903,7 @@ function buildMayoristasTicketMensualTable(){
       if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;">—</td>`;
       const prev = mi>0 ? r.tickets[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${fmtMoney(v)}</span>` : fmtMoney;
-      const cell = pctCell(curr, prev===null ? undefined : prev, undefined, cellFormatter);
+      const cell = pctCellPill(curr, prev===null ? undefined : prev, undefined, cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? fmtMoney(r.blended) : '—'}</td></tr>`;
@@ -5983,9 +5911,9 @@ function buildMayoristasTicketMensualTable(){
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Promedio</td>
     <td class="num">${monthBlended[0]!==null ? fmtMoney(monthBlended[0]) : '—'}</td>
-    <td class="num">${monthBlended[1]!==null ? pctCell(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[2]!==null ? pctCell(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[3]!==null ? pctCell(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
     <td class="num">${fmtMoney(totalBlended)}</td>
   </tr>`;
 }
@@ -6028,7 +5956,7 @@ function buildRetailModelosTable(){
       const curr = series[mi];
       const prev = mi>0 ? series[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${formatter(v)}</span>` : formatter;
-      const cell = pctCell(curr, prev, monthTotal[mi], cellFormatter);
+      const cell = pctCellPill(curr, prev, monthTotal[mi], cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${m.name}</td>${cells}<td class="num">${formatter(sum(series))}</td></tr>`;
@@ -6036,9 +5964,9 @@ function buildRetailModelosTable(){
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Total</td>
     <td class="num">${formatter(monthTotal[0])}</td>
-    <td class="num">${pctCell(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -6165,7 +6093,7 @@ function buildRetailTicketMensualTable(){
       if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;">—</td>`;
       const prev = mi>0 ? r.tickets[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${fmtMoney(v)}</span>` : fmtMoney;
-      const cell = pctCell(curr, prev===null ? undefined : prev, undefined, cellFormatter);
+      const cell = pctCellPill(curr, prev===null ? undefined : prev, undefined, cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? fmtMoney(r.blended) : '—'}</td></tr>`;
@@ -6173,9 +6101,9 @@ function buildRetailTicketMensualTable(){
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Promedio</td>
     <td class="num">${monthBlended[0]!==null ? fmtMoney(monthBlended[0]) : '—'}</td>
-    <td class="num">${monthBlended[1]!==null ? pctCell(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[2]!==null ? pctCell(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[3]!==null ? pctCell(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
     <td class="num">${fmtMoney(totalBlended)}</td>
   </tr>`;
 }
@@ -6213,7 +6141,7 @@ function buildTiendasModelosTable(){
       const curr = series[mi];
       const prev = mi>0 ? series[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${formatter(v)}</span>` : formatter;
-      const cell = pctCell(curr, prev, monthTotal[mi], cellFormatter);
+      const cell = pctCellPill(curr, prev, monthTotal[mi], cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${m.name}</td>${cells}<td class="num">${formatter(sum(series))}</td></tr>`;
@@ -6221,9 +6149,9 @@ function buildTiendasModelosTable(){
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Total</td>
     <td class="num">${formatter(monthTotal[0])}</td>
-    <td class="num">${pctCell(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -6334,7 +6262,7 @@ function buildTiendasTicketMensualTable(){
       if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;">—</td>`;
       const prev = mi>0 ? r.tickets[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${fmtMoney(v)}</span>` : fmtMoney;
-      const cell = pctCell(curr, prev===null ? undefined : prev, undefined, cellFormatter);
+      const cell = pctCellPill(curr, prev===null ? undefined : prev, undefined, cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? fmtMoney(r.blended) : '—'}</td></tr>`;
@@ -6342,9 +6270,9 @@ function buildTiendasTicketMensualTable(){
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Promedio</td>
     <td class="num">${monthBlended[0]!==null ? fmtMoney(monthBlended[0]) : '—'}</td>
-    <td class="num">${monthBlended[1]!==null ? pctCell(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[2]!==null ? pctCell(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[3]!==null ? pctCell(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
     <td class="num">${fmtMoney(totalBlended)}</td>
   </tr>`;
 }
@@ -6365,14 +6293,14 @@ function buildTiendasTable(){
   tbody.innerHTML = tiendasModel.active.map(s=>`
     <tr>
       <td style="font-weight:700;"><span class="legend-swatch" style="background:${s.color};display:inline-block;margin-right:6px;"></span>${s.name}</td>
-      <td class="num">${pctCell(s.data[0], undefined, T[0], formatter)}</td>
-      <td class="num">${pctCell(s.data[1], s.data[0], T[1], formatter)}</td>
-      <td class="num">${pctCell(s.data[2], s.data[1], T[2], formatter)}</td>
-      <td class="num">${pctCell(s.data[3], s.data[2], T[3], formatter)}</td>
+      <td class="num">${pctCellPill(s.data[0], undefined, T[0], formatter)}</td>
+      <td class="num">${pctCellPill(s.data[1], s.data[0], T[1], formatter)}</td>
+      <td class="num">${pctCellPill(s.data[2], s.data[1], T[2], formatter)}</td>
+      <td class="num">${pctCellPill(s.data[3], s.data[2], T[3], formatter)}</td>
       <td class="num">${formatter(s.total)}</td>
     </tr>`).join('') +
     `<tr style="font-weight:800;background:var(--page-plane);">
-      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCell(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCell(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCell(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
     </tr>`;
 }
 
@@ -6540,27 +6468,7 @@ function renderTiendasCharts(){
         plugins:{
           legend:{display:false},
           tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
-          datalabels:{
-            display:true, font:{weight:700, size:10.5},
-            anchor:'end', align:'top', offset:6,
-            color:(ctx)=>{
-              const i = ctx.dataIndex;
-              if(i===0) return PALETTE.ink;
-              const prev = tiendasModel.total[i-1];
-              const diff = ctx.dataset.data[i]-prev;
-              return diff>=0 ? '#0ca30c' : '#d03b3b';
-            },
-            formatter:(v,ctx)=>{
-              const i = ctx.dataIndex;
-              const f = tiendasModel.metric==='ventas' ? fmtMoney : fmt;
-              const contrib = Math.round(v/sum(tiendasModel.total)*100);
-              if(i===0) return `${f(v)} · ${contrib}%`;
-              const prev = tiendasModel.total[i-1];
-              const pct = prev ? Math.round((v-prev)/prev*100) : 0;
-              const sign = pct>0 ? '+' : '';
-              return `${f(v)} (${sign}${pct}%) · ${contrib}%`;
-            }
-          }
+          datalabels: trendPillLabels(()=>tiendasModel.total, ()=>(tiendasModel.metric==='ventas' ? fmtMoney : fmt))
         }
       }
     });
@@ -6606,16 +6514,16 @@ function buildRepuestosGenericTable(rows, tbodyId, opts){
     const cells = [0,1,2,3].map(mi=>{
       const curr = s[mi], prev = mi>0 ? s[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${formatter(v)}</span>` : formatter;
-      return `<td class="num">${pctCell(curr, prev, monthTotal[mi], cellFormatter)}</td>`;
+      return `<td class="num">${pctCellPill(curr, prev, monthTotal[mi], cellFormatter)}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${swatch}${r.name}</td>${cells}<td class="num">${formatter(sum(s))}</td></tr>`;
   }).join('') +
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Total</td>
     <td class="num">${formatter(monthTotal[0])}</td>
-    <td class="num">${pctCell(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
-    <td class="num">${pctCell(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
   if(opts.subtitleId) document.getElementById(opts.subtitleId).textContent = metric==='ventas' ? 'Ventas en $' : 'Unidades vendidas';
@@ -6749,27 +6657,7 @@ function renderRepuestosCharts(){
         plugins:{
           legend:{display:false},
           tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
-          datalabels:{
-            display:true, font:{weight:700, size:10.5},
-            anchor:'end', align:'top', offset:6,
-            color:(ctx)=>{
-              const i = ctx.dataIndex;
-              if(i===0) return PALETTE.ink;
-              const prev = repuestosCanalModel.total[i-1];
-              const diff = ctx.dataset.data[i]-prev;
-              return diff>=0 ? '#0ca30c' : '#d03b3b';
-            },
-            formatter:(v,ctx)=>{
-              const i = ctx.dataIndex;
-              const f = repuestosCanalModel.metric==='ventas' ? fmtMoney : fmt;
-              const contrib = Math.round(v/sum(repuestosCanalModel.total)*100);
-              if(i===0) return `${f(v)} · ${contrib}%`;
-              const prev = repuestosCanalModel.total[i-1];
-              const pct = prev>0 ? Math.round((v-prev)/prev*100) : 0;
-              const sign = pct>0 ? '+' : '';
-              return `${f(v)} (${sign}${pct}%) · ${contrib}%`;
-            }
-          }
+          datalabels: trendPillLabels(()=>repuestosCanalModel.total, ()=>(repuestosCanalModel.metric==='ventas' ? fmtMoney : fmt))
         }
       }
     });
@@ -7230,7 +7118,7 @@ function buildRepuestosTicketMensualTable(){
       if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;">—</td>`;
       const prev = mi>0 ? r.tickets[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${fmtMoney(v)}</span>` : fmtMoney;
-      const cell = pctCell(curr, prev===null ? undefined : prev, undefined, cellFormatter);
+      const cell = pctCellPill(curr, prev===null ? undefined : prev, undefined, cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
     return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? fmtMoney(r.blended) : '—'}</td></tr>`;
@@ -7238,9 +7126,9 @@ function buildRepuestosTicketMensualTable(){
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Promedio</td>
     <td class="num">${monthBlended[0]!==null ? fmtMoney(monthBlended[0]) : '—'}</td>
-    <td class="num">${monthBlended[1]!==null ? pctCell(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[2]!==null ? pctCell(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[3]!==null ? pctCell(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
     <td class="num">${fmtMoney(totalBlended)}</td>
   </tr>`;
 }
