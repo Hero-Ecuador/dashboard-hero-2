@@ -2173,11 +2173,10 @@
                 <div class="panel-sub">Unidades vendidas</div>
               </div>
             </div>
-            <table class="data-table compact dense">
+            <table class="data-table compact">
               <thead><tr><th>Canal</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
               <tbody id="tblRepuestosCategorias"></tbody>
             </table>
-            <div class="footnote">Mostrador = venta directa en bodega; Taller = repuestos instalados en servicio técnico. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.</div>
           </div>
         </div>
       </div>
@@ -2191,7 +2190,7 @@
                 <div class="panel-sub" id="repuestosTopSub">Unidades vendidas · Mayo-Agosto 2026</div>
               </div>
             </div>
-            <div class="chart-box" style="height:208px;"><canvas id="chartRepuestosTop"></canvas></div>
+            <div class="chart-box" style="height:192px;"><canvas id="chartRepuestosTop"></canvas></div>
             <div class="footnote" id="repuestosTopFootnote">Top 10 según la métrica activa. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.</div>
           </div>
           <div class="panel">
@@ -2202,7 +2201,7 @@
               </div>
             </div>
             <div class="table-scroll" style="max-height:182px;">
-              <table class="data-table compact dense">
+              <table class="data-table compact">
                 <thead><tr><th>Repuesto</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
                 <tbody id="tblRepuestosTop"></tbody>
               </table>
@@ -2218,7 +2217,7 @@
                 <div class="panel-sub" id="repuestosSucursalSub">Unidades y $ por sucursal · Mayo–Agosto 2026</div>
               </div>
             </div>
-            <div class="chart-box" style="height:96px;"><canvas id="chartRepuestosSucursal"></canvas></div>
+            <div class="chart-box" style="height:112px;"><canvas id="chartRepuestosSucursal"></canvas></div>
             <div class="footnote" id="repuestosSucursalFootnote">HERO Guayaquil = Av. Américas; HERO Quito = Naciones Unidas. Fuente: hoja BASE_DATOS, columna Sucursal.</div>
           </div>
           <div class="panel">
@@ -2228,8 +2227,8 @@
                 <div class="panel-sub" id="repuestosSucursalTableSub">Unidades vendidas</div>
               </div>
             </div>
-            <div class="table-scroll" style="max-height:72px;">
-              <table class="data-table compact dense">
+            <div class="table-scroll" style="max-height:90px;">
+              <table class="data-table compact">
                 <thead><tr><th>Sucursal</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
                 <tbody id="tblRepuestosSucursal"></tbody>
               </table>
@@ -2258,10 +2257,12 @@
                 <div class="panel-sub" id="repuestosProvinciaTableSub">Unidades vendidas</div>
               </div>
             </div>
-            <table class="data-table compact dense">
-              <thead><tr><th>Provincia</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
-              <tbody id="tblRepuestosProvincia"></tbody>
-            </table>
+            <div class="table-scroll" style="max-height:182px;">
+              <table class="data-table compact">
+                <thead><tr><th>Provincia</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
+                <tbody id="tblRepuestosProvincia"></tbody>
+              </table>
+            </div>
             <div class="footnote" id="repuestosProvinciaFootnote">Top 10 de 17 provincias con ventas en el periodo, por venta neta. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026_2, hoja BASE_DATOS.</div>
           </div>
         </div>
@@ -2286,7 +2287,7 @@
               </div>
             </div>
             <div class="table-scroll" style="max-height:119px;">
-              <table class="data-table compact dense">
+              <table class="data-table compact">
                 <thead><tr><th>Categoría</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
                 <tbody id="tblRepuestosCanal"></tbody>
               </table>
@@ -2316,7 +2317,7 @@
               </div>
             </div>
             <div class="table-scroll" style="max-height:182px;">
-              <table class="data-table compact dense">
+              <table class="data-table compact">
                 <thead><tr><th>Modelo</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
                 <tbody id="tblRepuestosModelos"></tbody>
               </table>
@@ -2343,7 +2344,7 @@
               </div>
             </div>
             <div class="table-scroll" style="max-height:96px;">
-              <table class="data-table compact dense">
+              <table class="data-table compact">
                 <thead><tr><th>Modelo</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Prom. 4M</th></tr></thead>
                 <tbody id="tblRepuestosTicketMensual"></tbody>
               </table>
@@ -2470,6 +2471,10 @@
           <h1>Mano de Obra de Servicios</h1>
         </div>
         <div class="topbar-controls">
+          <div class="aap-toggle" data-metric-toggle="manoobra">
+            <button data-metric="unidades">UNIDADES</button>
+            <button class="active" data-metric="ventas">$</button>
+          </div>
           <div class="aap-toggle" data-month-toggle>
             <button data-month="todos">TODOS</button>
             <button data-month="mayo">MAYO</button>
@@ -2493,7 +2498,7 @@
           <div class="kpi-delta muted" id="kpiManoObraBudgetDelta">Acumulado Mayo-Agosto 2026</div>
         </div>
         <div class="kpi-card accent">
-          <div class="kpi-top"><span class="kpi-label">Ventas totales</span>
+          <div class="kpi-top"><span class="kpi-label" id="kpiManoObraTotalLabel">Ventas totales</span>
             <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"></path></svg></div>
           </div>
           <div class="kpi-value" id="kpiManoObraTotalValue">0</div>
@@ -2515,55 +2520,69 @@
         </div>
       </div>
 
-      <div class="grid-2">
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <div class="panel-title" id="manoObraBarsTitle">Mano de obra por tipo</div>
-              <div class="panel-sub" id="manoObraBarsSub">Agosto 2026</div>
-            </div>
-          </div>
-          <div class="legend-row" id="legendManoObraBars" style="margin-top:0; margin-bottom:8px;"></div>
-          <div class="chart-box h280" style="height:170px;"><canvas id="chartManoObraBars"></canvas></div>
-        </div>
-        <div class="panel">
+      <div class="grid-2b">
+        <div class="panel" id="manoObraTipoDonutPanel">
           <div class="panel-head">
             <div>
               <div class="panel-title" id="manoObraDonutTitle">Participación por tipo</div>
               <div class="panel-sub" id="manoObraDonutSub">Agosto 2026</div>
             </div>
           </div>
-          <div class="chart-box h220 donut-wrap">
-            <canvas id="chartManoObraDonut"></canvas>
-            <div class="donut-center"><div class="pct" id="donutManoObraTotal">0</div><div class="lbl" id="donutManoObraLabel">Agosto</div></div>
-          </div>
-          <div class="legend-row" id="legendManoObraDonut" style="justify-content:center;"></div>
-        </div>
-      </div>
-
-      <div class="grid-2b">
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <div class="panel-title">Tendencia de la mano de obra</div>
-              <div class="panel-sub">Solo mano de obra, por mes</div>
+          <div style="max-width:280px;width:100%;margin:0 auto;">
+            <div class="chart-box h220 donut-wrap">
+              <canvas id="chartManoObraDonut"></canvas>
+              <div class="donut-center"><div class="pct" id="donutManoObraTotal">0</div><div class="lbl" id="donutManoObraLabel">Agosto</div></div>
             </div>
           </div>
-          <div class="chart-box h180"><canvas id="chartManoObraTrend"></canvas></div>
-        </div>
-        <div class="panel">
-          <div class="panel-head">
+          <div class="legend-row" id="legendManoObraDonut" style="justify-content:center;"></div>
+
+          <div class="panel-head" style="margin-top:14px;">
             <div>
               <div class="panel-title">Detalle mensual</div>
-              <div class="panel-sub">Ventas ($)</div>
+              <div class="panel-sub" id="manoObraTableSub">Ventas ($)</div>
             </div>
           </div>
           <table class="data-table compact">
             <thead><tr><th>Componente</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
             <tbody id="tblManoObra"></tbody>
           </table>
-          <div class="footnote" id="footnoteManoObra">Mano de obra (sin repuestos): Mayo/Junio/Julio = estimado (Ventas totales de Servicios, taller técnico, fuente ORDENES_DE_TRABAJO_DIARIAS − Repuestos de Servicio, canal Taller de Repuestos, fuente DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026_2). Agosto = dato real (reporte de mano de obra de agosto, con desglose por tipo arriba). Mayo se calcula en $0 por falta de registros de Servicios.</div>
         </div>
+        <div class="panel" id="manoObraPuntoDonutPanel" style="display:none;">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Participación por punto</div>
+              <div class="panel-sub" id="manoObraPuntoDonutSub">Agosto 2026</div>
+            </div>
+          </div>
+          <div style="max-width:280px;width:100%;margin:0 auto;">
+            <div class="chart-box h220 donut-wrap">
+              <canvas id="chartManoObraPuntoDonut"></canvas>
+              <div class="donut-center"><div class="pct" id="donutManoObraPuntoTotal">0</div><div class="lbl" id="donutManoObraPuntoLabel">Agosto</div></div>
+            </div>
+          </div>
+          <div class="legend-row" id="legendManoObraPuntoDonut" style="justify-content:center;"></div>
+
+          <div class="panel-head" style="margin-top:14px;">
+            <div>
+              <div class="panel-title">Detalle mensual por punto</div>
+              <div class="panel-sub" id="manoObraPuntoTableSub">Ventas ($)</div>
+            </div>
+          </div>
+          <table class="data-table compact">
+            <thead><tr><th>Punto</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
+            <tbody id="tblManoObraPunto"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel" id="manoObraTrendPanel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Tendencia de la mano de obra</div>
+            <div class="panel-sub">Solo mano de obra, por mes</div>
+          </div>
+        </div>
+        <div class="chart-box h180"><canvas id="chartManoObraTrend"></canvas></div>
       </div>
     </section>
 
@@ -2683,7 +2702,7 @@ const TIENDAS_VENTAS_STORE = {
 
 let aapMode = 'con'; // 'con' = incluye AAP, 'sin' = excluye AAP (toggle de comparación)
 // Estado independiente del toggle UNIDADES/$ por página — cada página filtra su propia vista.
-let metricState = { general:'ventas', resumen:'unidades', mayoristas:'unidades', retail:'unidades', tiendas:'unidades', repuestos:'ventas', repuestosresumen:'ventas', repuestosservicio:'ventas' };
+let metricState = { general:'ventas', resumen:'unidades', mayoristas:'unidades', retail:'unidades', tiendas:'unidades', repuestos:'ventas', repuestosresumen:'ventas', repuestosservicio:'ventas', manoobra:'ventas' };
 
 // Filtro global de mes (TODOS/MAYO/JUNIO/JULIO/AGOSTO) — afecta a las 4 páginas por igual.
 // Por defecto arranca en AGOSTO (el mes más reciente), no en TODOS.
@@ -3421,6 +3440,20 @@ const MANOOBRA_TIPOS_AGOSTO = [
   {name:'GARANTÍA',      color: getVar('--servicio-4'), cantidad: 12, valor: 49.00},
 ];
 const MANOOBRA_AGOSTO_REAL = sum(MANOOBRA_TIPOS_AGOSTO.map(t=>t.valor)); // 816.71
+
+// Mismo reporte real de mano de obra de Agosto (archivo agosto.xlsx, hoja "Hoja1"), pero desglosado por
+// "Punto" (taller) en vez de por tipo de servicio. El reporte original usa "Quito" como nombre del punto,
+// pero ese taller es el mismo de la tienda "Naciones Unidas" (la que en la página de Tiendas se muestra
+// como "HERO QUITO") — no es una tienda/punto distinto, por eso se etiqueta aquí como "Naciones Unidas
+// (Quito)" para que quede claro. "Talleres Autorizados" son talleres externos autorizados por HERO, no un
+// local propio. Solo existe este desglose real para Agosto — igual que el desglose por tipo, Mayo/Junio/
+// Julio no tienen este dato. cantidad+valor de los 3 puntos suman exactamente MANOOBRA_TIPOS_AGOSTO (73
+// unidades, $816.71).
+const MANOOBRA_PUNTO_AGOSTO = [
+  {name:'Av. Américas',            color: getVar('--servicio-3'), cantidad: 54, valor: 562.46},
+  {name:'Talleres Autorizados',    color: getVar('--servicio-2'), cantidad: 16, valor: 113.00},
+  {name:'Naciones Unidas (Quito)', color: getVar('--servicio-4'), cantidad: 3,  valor: 141.25},
+];
 
 const fmt = n => n.toLocaleString('es-EC');
 const fmtMoney = n => '$' + Math.round(n).toLocaleString('es-EC');
@@ -4471,26 +4504,34 @@ function initRepuestosServicio(){
 }
 
 /* ================= MANO DE OBRA DE SERVICIOS (Servicios − Repuestos de Servicio/Taller) =================
-   Página sin toggle de UNIDADES/$: "mano de obra" solo tiene sentido en $ (no hay una unidad física
-   comparable entre "servicios realizados" y "repuestos instalados"). Mano de obra (estimado) =
-   SERVICIOS_TOTAL_VALOR (Servicios, taller técnico) − ventas del canal TALLER de Repuestos (misma fila
-   TALLER que usa Repuestos de Servicio). Servicios no tiene registros de Mayo, así que ese mes se fija
-   en 0 (se documenta en el footnote) en vez de mostrar un negativo sin sentido de negocio.
-   Agosto es la excepción: el cliente entregó un reporte real de mano de obra de agosto ("agosto.xlsx",
-   3 puntos: AV. Américas, Talleres Autorizados, Quito), con m/o + terceros por fila (se excluyen las
-   columnas "repuesto" y "total" porque mezclan venta de repuestos). Ese dato real reemplaza al estimado
-   solo para Agosto; Mayo/Junio/Julio siguen calculándose con la fórmula derivada de Servicios − Taller. */
+   Toggle UNIDADES/$: en $ mide mano de obra (estimado) = SERVICIOS_TOTAL_VALOR (Servicios, taller
+   técnico) − ventas del canal TALLER de Repuestos (misma fila TALLER que usa Repuestos de Servicio).
+   En UNIDADES mide "servicios atendidos" = SERVICIOS_TOTAL_CANTIDAD (cantidad de órdenes, sin restar nada:
+   no hay una unidad de repuesto comparable que descontar de un conteo de servicios). Servicios no tiene
+   registros de Mayo, así que ese mes se fija en 0 en ambas métricas (se documenta en el footnote) en vez
+   de mostrar un negativo sin sentido de negocio.
+   Agosto es la excepción en ambas métricas: el cliente entregó un reporte real de mano de obra de agosto
+   ("agosto.xlsx", 3 puntos: AV. Américas, Talleres Autorizados, Quito) con m/o + terceros y "cantidad"
+   (servicios atendidos) por fila (se excluyen las columnas "repuesto" y "total" porque mezclan venta de
+   repuestos). Ese dato real reemplaza al estimado solo para Agosto, en $ Y en unidades; Mayo/Junio/Julio
+   siguen calculándose con la fórmula/conteo derivado de Servicios. Nota: el conteo real de Agosto (73,
+   MANOOBRA_TIPOS_AGOSTO) no coincide con SERVICIOS_TOTAL_CANTIDAD[3] (43, distinto desglose por tipo de
+   ORDENES_DE_TRABAJO_DIARIAS) — aquí se usa el real (73) porque esta página tiene el reporte dedicado;
+   otras vistas (Vista general, Resumen de Postventa) siguen usando SERVICIOS_TOTAL_CANTIDAD sin blend. */
 // MANOOBRA_TIPOS_AGOSTO / MANOOBRA_AGOSTO_REAL viven más arriba en el archivo (junto a SERVICIOS_TOTAL_*),
 // porque Vista general (computeGeneralModel) también las necesita y se inicializa antes de llegar aquí.
+const MANOOBRA_AGOSTO_REAL_CANTIDAD = sum(MANOOBRA_TIPOS_AGOSTO.map(t=>t.cantidad)); // 73
 
 let manoObra; // se calcula dentro de renderManoObra(), nunca de forma eager (evita TDZ)
 
-function computeManoObraModel(){
+function computeManoObraModel(metric){
   const tallerRow = repuestosCanalesRaw.find(c=>c.name==='TALLER');
   const repuestosTaller = tallerRow.ventas; // $ por mes, canal Taller de Repuestos — ya NO se muestra en esta
   const manoObraEstimado = MONTHS.map((_,i)=> Math.max(0, SERVICIOS_TOTAL_VALOR[i] - repuestosTaller[i])); // página (el cliente solo quiere mano de obra); se deja calculado solo como insumo de la fórmula de Agosto.
-  const manoObraVals = manoObraEstimado.map((v,i)=> i===3 ? MANOOBRA_AGOSTO_REAL : v); // Agosto = dato real
-  return { manoObra: manoObraVals };
+  const manoObraVentas = manoObraEstimado.map((v,i)=> i===3 ? MANOOBRA_AGOSTO_REAL : v); // Agosto = dato real
+  const manoObraUnidades = SERVICIOS_TOTAL_CANTIDAD.map((v,i)=> i===3 ? MANOOBRA_AGOSTO_REAL_CANTIDAD : v); // Agosto = dato real
+  const vals = metric==='unidades' ? manoObraUnidades : manoObraVentas;
+  return { manoObra: vals, ventas: manoObraVentas, unidades: manoObraUnidades, metric };
 }
 
 // Legends y charts de "por tipo" usan siempre MANOOBRA_TIPOS_AGOSTO (fijo), no dependen del filtro de mes:
@@ -4498,16 +4539,16 @@ function computeManoObraModel(){
 // Solo Agosto tiene desglose real por tipo; los demás meses (y "Todos") muestran una leyenda simple de
 // un solo ítem, para no insinuar un desglose que no existe en esos meses.
 function renderManoObraLegends(){
-  const formatter = fmtMoney;
+  const metric = manoObra.metric;
+  const formatter = metric==='unidades' ? fmt : fmtMoney;
   if(monthFilter === 'agosto'){
-    document.getElementById('legendManoObraBars').innerHTML = MANOOBRA_TIPOS_AGOSTO.map(t=>
-      `<span class="legend-item"><span class="legend-swatch" style="background:${t.color}"></span>${t.name}</span>`).join('');
-    document.getElementById('legendManoObraDonut').innerHTML = MANOOBRA_TIPOS_AGOSTO.map(t=>
-      `<span class="legend-item"><span class="legend-swatch" style="background:${t.color}"></span>${t.name} ${t.cantidad} uds.</span>`).join('');
+    document.getElementById('legendManoObraDonut').innerHTML = MANOOBRA_TIPOS_AGOSTO.map(t=>{
+      const v = metric==='unidades' ? t.cantidad : t.valor;
+      return `<span class="legend-item"><span class="legend-swatch" style="background:${t.color}"></span>${t.name} ${formatter(v)}${metric==='unidades' ? ' uds.' : ''}</span>`;
+    }).join('');
   } else {
     const grand = mval(manoObra.manoObra);
     const simple = `<span class="legend-item"><span class="legend-swatch" style="background:${getVar('--manoobra-1')}"></span>Mano de obra ${formatter(grand)}</span>`;
-    document.getElementById('legendManoObraBars').innerHTML = simple;
     document.getElementById('legendManoObraDonut').innerHTML = simple;
   }
 }
@@ -4516,36 +4557,43 @@ function renderManoObraLegends(){
 // "MANO DE OBRA" del Resumen de Postventa (renderRepuestosResumenLineas), para que ambas coincidan
 // exactamente en vez de mostrar cifras/KPIs distintos para lo mismo.
 function renderManoObraKpis(){
-  const formatter = fmtMoney;
+  const metric = manoObra.metric;
+  const formatter = metric==='unidades' ? fmt : fmtMoney;
   const grandManoObra = mval(manoObra.manoObra);
 
+  document.getElementById('kpiManoObraTotalLabel').textContent = metric==='unidades' ? 'Servicios atendidos' : 'Ventas totales';
   document.getElementById('kpiManoObraTotalValue').textContent = formatter(grandManoObra);
   document.getElementById('kpiManoObraTotalDelta').textContent = monthFilter==='todos'
     ? `Mayo ${formatter(manoObra.manoObra[0])} · Junio ${formatter(manoObra.manoObra[1])} · Julio ${formatter(manoObra.manoObra[2])} · Agosto ${formatter(manoObra.manoObra[3])}`
     : MONTH_LABEL[monthFilter];
 
-  renderBudgetCards('kpiManoObra', grandManoObra, SERVICIOS_BUDGET_VENTAS, 'ventas', formatter);
-  renderCompareCard('kpiManoObra', manoObra.manoObra, 'ventas', formatter);
+  const budgetArr = metric==='unidades' ? SERVICIOS_BUDGET_UNITS : SERVICIOS_BUDGET_VENTAS;
+  renderBudgetCards('kpiManoObra', grandManoObra, budgetArr, metric, formatter);
+  renderCompareCard('kpiManoObra', manoObra.manoObra, metric, formatter);
 }
 
 // Detalle mensual por tipo: Mayo/Junio/Julio no tienen desglose real (solo el estimado agregado, fila
 // "Sin desglose"); Agosto sí, así que se reparte en sus 3 tipos y la fila "Sin desglose" queda en — ese mes.
 function buildManoObraTable(){
   const tbody = document.getElementById('tblManoObra');
+  const metric = manoObra.metric;
   const M = manoObra.manoObra;
-  const formatter = fmtMoney;
+  const formatter = metric==='unidades' ? fmt : fmtMoney;
+  document.getElementById('manoObraTableSub').textContent = metric==='unidades' ? 'Unidades (servicios atendidos)' : 'Ventas ($)';
   const dash = '<span style="color:var(--text-muted);">—</span>';
   const sinDesglose = [M[0], M[1], M[2], 0]; // Agosto ya está 100% repartido por tipo
 
-  const tipoRows = MANOOBRA_TIPOS_AGOSTO.map(t=>`
+  const tipoRows = MANOOBRA_TIPOS_AGOSTO.map(t=>{
+    const v = metric==='unidades' ? t.cantidad : t.valor;
+    return `
     <tr>
       <td><span class="legend-swatch" style="background:${t.color};display:inline-block;margin-right:6px;"></span>${t.name[0]+t.name.slice(1).toLowerCase()}</td>
       <td class="num">${dash}</td>
       <td class="num">${dash}</td>
       <td class="num">${dash}</td>
-      <td class="num">${formatter(t.valor)}</td>
-      <td class="num">${formatter(t.valor)}</td>
-    </tr>`).join('');
+      <td class="num">${formatter(v)}</td>
+      <td class="num">${formatter(v)}</td>
+    </tr>`;}).join('');
 
   const sinDesgloseRow = `
     <tr>
@@ -4570,56 +4618,27 @@ function buildManoObraTable(){
   tbody.innerHTML = tipoRows + sinDesgloseRow + totalRow;
 }
 
-let chartManoObraBarsInst=null, chartManoObraDonutInst=null, chartManoObraTrendInst=null;
+let chartManoObraDonutInst=null, chartManoObraTrendInst=null;
+let chartManoObraPuntoDonutInst=null;
 
 function renderManoObraCharts(){
-  if(chartManoObraBarsInst) chartManoObraBarsInst.destroy();
   if(chartManoObraDonutInst) chartManoObraDonutInst.destroy();
 
-  const formatter = fmtMoney;
+  const metric = manoObra.metric;
+  const formatter = metric==='unidades' ? fmt : fmtMoney;
   const showTipo = monthFilter === 'agosto'; // solo Agosto tiene desglose real por tipo
 
   if(showTipo){
-    document.getElementById('manoObraBarsTitle').textContent = 'Mano de obra por tipo';
     document.getElementById('manoObraDonutTitle').textContent = 'Participación por tipo';
 
     const tipoLabels = MANOOBRA_TIPOS_AGOSTO.map(t=>t.name[0]+t.name.slice(1).toLowerCase());
-    const tipoValores = MANOOBRA_TIPOS_AGOSTO.map(t=>t.valor);
+    const tipoValores = MANOOBRA_TIPOS_AGOSTO.map(t=> metric==='unidades' ? t.cantidad : t.valor);
     const tipoColores = MANOOBRA_TIPOS_AGOSTO.map(t=>t.color);
-    const maxPad = Math.ceil(Math.max(...tipoValores)*0.18) || 2;
+    const donutTotalTipo = metric==='unidades' ? MANOOBRA_AGOSTO_REAL_CANTIDAD : MANOOBRA_AGOSTO_REAL;
 
-    document.getElementById('donutManoObraTotal').textContent = formatter(MANOOBRA_AGOSTO_REAL);
+    document.getElementById('donutManoObraTotal').textContent = formatter(donutTotalTipo);
     document.getElementById('donutManoObraLabel').textContent = 'Agosto';
-    document.getElementById('manoObraBarsSub').textContent = 'Agosto 2026';
     document.getElementById('manoObraDonutSub').textContent = 'Agosto 2026';
-
-    chartManoObraBarsInst = new Chart(document.getElementById('chartManoObraBars'), {
-      type:'bar',
-      data:{
-        labels: tipoLabels,
-        datasets: [{
-          data: tipoValores, backgroundColor: tipoColores, borderRadius:0, borderSkipped:false,
-          barPercentage:1, categoryPercentage:0.7, maxBarThickness:58
-        }]
-      },
-      options:{
-        responsive:true, maintainAspectRatio:false,
-        interaction:{mode:'index', intersect:false},
-        layout:{ padding:{top:16} },
-        scales:{
-          x:{ grid:{display:false}, border:{display:false}, ticks:{display:false} },
-          y:{ display:false, beginAtZero:true, max: Math.max(...tipoValores) + maxPad }
-        },
-        plugins:{
-          legend:{display:false},
-          tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8, titleFont:{size:12}, bodyFont:{size:12}},
-          datalabels:{
-            display:true, color: PALETTE.ink, font:{weight:700, size:10.5}, anchor:'end', align:'top', offset:2,
-            formatter:v=> v ? formatter(v) : ''
-          }
-        }
-      }
-    });
 
     chartManoObraDonutInst = new Chart(document.getElementById('chartManoObraDonut'), {
       type:'doughnut',
@@ -4635,9 +4654,9 @@ function renderManoObraCharts(){
           datalabels:{
             display:true, color:'#fff', font:{weight:800, size:10}, textStrokeColor:'rgba(0,0,0,0.35)', textStrokeWidth:2,
             formatter:(v)=> {
-              if(!MANOOBRA_AGOSTO_REAL) return '';
-              if((v/MANOOBRA_AGOSTO_REAL*100) < 8) return '';
-              return Math.round(v/MANOOBRA_AGOSTO_REAL*100)+'%';
+              if(!donutTotalTipo) return '';
+              if((v/donutTotalTipo*100) < 8) return '';
+              return Math.round(v/donutTotalTipo*100)+'%';
             }
           }
         }
@@ -4647,49 +4666,14 @@ function renderManoObraCharts(){
     // Mayo/Junio/Julio/Todos no tienen desglose real por tipo (esa fila queda como "Sin desglose (estimado)"
     // en la tabla de abajo) — aquí se muestra simple, solo el total de mano de obra, para no repetir el
     // desglose de Agosto en meses donde no aplica.
-    document.getElementById('manoObraBarsTitle').textContent = 'Mano de obra por mes';
     document.getElementById('manoObraDonutTitle').textContent = 'Participación en el total';
 
-    const barLabels = monthFilter==='todos' ? MONTHS : [MONTH_LABEL_SHORT[monthFilter]];
-    const barSlice = (arr)=> monthFilter==='todos' ? arr : [arr[MONTH_IDX[monthFilter]]];
-    const vals = barSlice(manoObra.manoObra);
-    const maxPad = Math.ceil(Math.max(...vals)*0.18) || 2;
     const grand = mval(manoObra.manoObra);
     const color1 = getVar('--manoobra-1');
 
     document.getElementById('donutManoObraTotal').textContent = formatter(grand);
     document.getElementById('donutManoObraLabel').textContent = monthFilter==='todos' ? 'Acumulado' : MONTH_LABEL[monthFilter];
-    document.getElementById('manoObraBarsSub').textContent = monthFilter==='todos'
-      ? 'Comparativo mensual · Mayo, Junio, Julio, Agosto 2026' : MONTH_LABEL[monthFilter];
     document.getElementById('manoObraDonutSub').textContent = 'Sin desglose por tipo (solo Agosto lo tiene)';
-
-    chartManoObraBarsInst = new Chart(document.getElementById('chartManoObraBars'), {
-      type:'bar',
-      data:{
-        labels: barLabels,
-        datasets: [{
-          data: vals, backgroundColor: color1, borderRadius:0, borderSkipped:false,
-          barPercentage:1, categoryPercentage:0.6, maxBarThickness:58
-        }]
-      },
-      options:{
-        responsive:true, maintainAspectRatio:false,
-        interaction:{mode:'index', intersect:false},
-        layout:{ padding:{top:16} },
-        scales:{
-          x:{ grid:{display:false}, border:{display:false}, ticks:{color: PALETTE.ink, font:{size:11.5, weight:600}, padding:2} },
-          y:{ display:false, beginAtZero:true, max: Math.max(...vals) + maxPad }
-        },
-        plugins:{
-          legend:{display:false},
-          tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8, titleFont:{size:12}, bodyFont:{size:12}},
-          datalabels:{
-            display:true, color: PALETTE.ink, font:{weight:700, size:10.5}, anchor:'end', align:'top', offset:2,
-            formatter:v=> v ? formatter(v) : ''
-          }
-        }
-      }
-    });
 
     chartManoObraDonutInst = new Chart(document.getElementById('chartManoObraDonut'), {
       type:'doughnut',
@@ -4756,7 +4740,11 @@ function renderManoObraCharts(){
             },
             formatter:(v,ctx)=>{
               const i = ctx.dataIndex;
-              const f = fmtMoney;
+              // Nota: no usar el `formatter` del closure de renderManoObraCharts() — el chart de tendencia
+              // solo se crea una vez (ver `if(!chartManoObraTrendInst)` abajo) y luego solo se actualiza su
+              // data, así que este callback debe leer manoObra.metric en tiempo de ejecución para reflejar
+              // el toggle UNIDADES/$ actual, no el que estaba activo cuando el chart fue creado.
+              const f = manoObra.metric==='unidades' ? fmt : fmtMoney;
               const grandTotal = sum(manoObra.manoObra);
               const contrib = grandTotal ? Math.round(v/grandTotal*100) : 0;
               if(i===0) return `${f(v)} · ${contrib}%`;
@@ -4775,12 +4763,97 @@ function renderManoObraCharts(){
   }
 }
 
+// Bloque "por punto" (Av. Américas / Talleres Autorizados / Naciones Unidas-Quito) — solo tiene datos
+// reales para Agosto (mismo reporte agosto.xlsx que alimenta MANOOBRA_TIPOS_AGOSTO), así que el panel
+// completo se oculta para Mayo/Junio/Julio/Todos en vez de mostrar un desglose vacío o estimado.
+function renderManoObraPuntoCharts(){
+  const donutPanel = document.getElementById('manoObraPuntoDonutPanel');
+  const tipoPanel = document.getElementById('manoObraTipoDonutPanel');
+  if(monthFilter !== 'agosto'){
+    donutPanel.style.display = 'none';
+    tipoPanel.style.gridColumn = '1 / -1'; // sin el panel "por punto" al lado, que ocupe todo el ancho
+    return;
+  }
+  donutPanel.style.display = '';
+  tipoPanel.style.gridColumn = '';
+
+  if(chartManoObraPuntoDonutInst) chartManoObraPuntoDonutInst.destroy();
+
+  const metric = manoObra.metric;
+  const formatter = metric==='unidades' ? fmt : fmtMoney;
+  const puntoLabels = MANOOBRA_PUNTO_AGOSTO.map(p=>p.name);
+  const puntoValores = MANOOBRA_PUNTO_AGOSTO.map(p=> metric==='unidades' ? p.cantidad : p.valor);
+  const puntoColores = MANOOBRA_PUNTO_AGOSTO.map(p=>p.color);
+  const puntoTotal = sum(puntoValores);
+
+  document.getElementById('manoObraPuntoDonutSub').textContent = 'Agosto 2026';
+  document.getElementById('donutManoObraPuntoTotal').textContent = formatter(puntoTotal);
+  document.getElementById('donutManoObraPuntoLabel').textContent = 'Agosto';
+
+  document.getElementById('legendManoObraPuntoDonut').innerHTML = MANOOBRA_PUNTO_AGOSTO.map(p=>{
+    const v = metric==='unidades' ? p.cantidad : p.valor;
+    return `<span class="legend-item"><span class="legend-swatch" style="background:${p.color}"></span>${p.name} ${formatter(v)}${metric==='unidades' ? ' uds.' : ''}</span>`;
+  }).join('');
+
+  // Tabla "Detalle mensual por punto" — misma estructura que la tabla por tipo, pero con los 3 puntos
+  // en vez de los 3 tipos de servicio. La fila Total reutiliza el mismo M (manoObra.manoObra) que la
+  // tabla por tipo, porque es el mismo total de mano de obra, solo visto con otro desglose.
+  const M = manoObra.manoObra;
+  const dash = '<span style="color:var(--text-muted);">—</span>';
+  document.getElementById('manoObraPuntoTableSub').textContent = metric==='unidades' ? 'Unidades (servicios atendidos)' : 'Ventas ($)';
+  const puntoRows = MANOOBRA_PUNTO_AGOSTO.map(p=>{
+    const v = metric==='unidades' ? p.cantidad : p.valor;
+    return `
+    <tr>
+      <td><span class="legend-swatch" style="background:${p.color};display:inline-block;margin-right:6px;"></span>${p.name}</td>
+      <td class="num">${dash}</td>
+      <td class="num">${dash}</td>
+      <td class="num">${dash}</td>
+      <td class="num">${formatter(v)}</td>
+      <td class="num">${formatter(v)}</td>
+    </tr>`;}).join('');
+  const puntoTotalRow = `
+    <tr style="font-weight:800;background:var(--page-plane);">
+      <td>Total</td>
+      <td class="num">${pctCell(M[0], undefined, undefined, formatter)}</td>
+      <td class="num">${pctCell(M[1], M[0], undefined, formatter)}</td>
+      <td class="num">${pctCell(M[2], M[1], undefined, formatter)}</td>
+      <td class="num">${pctCell(M[3], M[2], undefined, formatter)}</td>
+      <td class="num">${formatter(sum(M))}</td>
+    </tr>`;
+  document.getElementById('tblManoObraPunto').innerHTML = puntoRows + puntoTotalRow;
+
+  chartManoObraPuntoDonutInst = new Chart(document.getElementById('chartManoObraPuntoDonut'), {
+    type:'doughnut',
+    data:{
+      labels: puntoLabels,
+      datasets:[{ data: puntoValores, backgroundColor: puntoColores, borderWidth:3, borderColor:'#fff' }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'70%',
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8},
+        datalabels:{
+          display:true, color:'#fff', font:{weight:800, size:10}, textStrokeColor:'rgba(0,0,0,0.35)', textStrokeWidth:2,
+          formatter:(v)=> {
+            if(!puntoTotal) return '';
+            if((v/puntoTotal*100) < 8) return '';
+            return Math.round(v/puntoTotal*100)+'%';
+          }
+        }
+      }
+    }
+  });
+}
+
 function renderManoObra(){
-  manoObra = computeManoObraModel();
+  manoObra = computeManoObraModel(metricState.manoobra);
   buildManoObraTable();
   renderManoObraLegends();
   renderManoObraKpis();
   renderManoObraCharts();
+  renderManoObraPuntoCharts();
 }
 
 function initManoObra(){
@@ -7247,6 +7320,7 @@ const METRIC_RENDER = {
   repuestosresumen: ()=>{ if(chartsInit.repuestosresumen) renderRepuestosResumen(); },
   repuestos:   ()=>{ if(chartsInit.repuestos) renderRepuestos(); if(chartsInit.repuestosTop){ renderRepuestosTopChart(); buildRepuestosTopTable(); renderRepuestosSucursalChart(); buildRepuestosSucursalTable(); } if(chartsInit.repuestosProvincia){ renderRepuestosProvinciaChart(); buildRepuestosProvinciaTable(); renderRepuestosCanalChart(); buildRepuestosCanalTable(); } if(chartsInit.repuestosModelos){ buildRepuestosModelosTable(); renderRepuestosModelosRankingChart(); } },
   repuestosservicio: ()=>{ if(chartsInit.repuestosservicio) renderRepuestosServicio(); },
+  manoobra:    ()=>{ if(chartsInit.manoobra) renderManoObra(); },
 };
 document.querySelectorAll('[data-metric-toggle]').forEach(group=>{
   const page = group.dataset.metricToggle;
