@@ -84,6 +84,14 @@
     --repservicio-2:#a81c14; /* rojo oscuro   - Repuestos de Servicio (Naciones Unidas) */
     --manoobra-1:#1a1a1a; /* negro           - Mano de Obra de Servicios (mano de obra) */
     --manoobra-2:#a81c14; /* rojo oscuro      - Mano de Obra de Servicios (repuestos instalados, referencia) */
+    /* Subtipos de MANTENIMIENTO (Mano de Obra > Participación por tipo, Agosto) — rampa de un solo
+       tono (negro a gris claro) porque las 5 son la misma categoría desagregada; Alistamiento y Garantía
+       (--servicio-2/--servicio-4, rojos) quedan aparte y bien distinguibles de esta rampa de grises. */
+    --manttipo-1:#1a1a1a; /* negro      - Mantenimiento 500 */
+    --manttipo-2:#4d4d4d; /* gris oscuro - Mantenimiento 3000 */
+    --manttipo-3:#808080; /* gris medio  - Mantenimiento 9000 */
+    --manttipo-4:#a6a6a6; /* gris        - Mantenimiento correctivo */
+    --manttipo-5:#d9d9d9; /* gris claro  - Mantenimiento preventivo */
     --good:#0ca30c;
     --warn:#c98a12;
   }
@@ -2127,6 +2135,78 @@
         </div>
       </div>
 
+      <div class="panel" style="margin-bottom:10px;">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Cumplimiento por canal</div>
+            <div class="panel-sub">Presupuesto de Repuestos repartido por canal — Agosto 2026</div>
+          </div>
+        </div>
+        <div class="store-block">
+          <div class="store-block-name"><span class="legend-swatch" style="background:var(--canal-1);"></span>MOSTRADOR</div>
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-top"><span class="kpi-label">Presupuesto total</span></div>
+              <div class="kpi-value" id="kpiRepuestosCanalMostradorBudgetValue">—</div>
+              <div class="kpi-delta muted" id="kpiRepuestosCanalMostradorBudgetDelta">Agosto 2026</div>
+            </div>
+            <div class="kpi-card accent">
+              <div class="kpi-top"><span class="kpi-label" id="kpiRepuestosCanalMostradorTotalLabel">Ventas totales</span>
+                <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"></path><path d="M5 10v10h14V10"></path></svg></div>
+              </div>
+              <div class="kpi-value" id="kpiRepuestosCanalMostradorTotalValue">0</div>
+              <div class="kpi-delta" id="kpiRepuestosCanalMostradorTotalDelta"></div>
+              <div class="kpi-delta" id="kpiRepuestosCanalMostradorCumplimiento" style="margin-top:2px;"></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-top"><span class="kpi-label">Cumplimiento</span><span class="kpi-state-tag behind" id="kpiRepuestosCanalMostradorStateTag">POR DEBAJO</span></div>
+              <div class="kpi-hero bad" id="kpiRepuestosCanalMostradorHero">0%</div>
+              <div class="kpi-progress-track"><div class="kpi-progress-fill" id="kpiRepuestosCanalMostradorProgressFill" style="width:0%;"></div></div>
+              <div class="kpi-delta muted" id="kpiRepuestosCanalMostradorProgressText"></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-top"><span class="kpi-label" id="kpiRepuestosCanalMostradorCompareLabel">Julio vs. Junio</span>
+                <div class="kpi-icon" id="kpiRepuestosCanalMostradorCompareIcon" style="background:rgba(211,60,60,0.12);"><svg viewBox="0 0 24 24" fill="none" stroke="#d03b3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7 7 17M17 7H9M17 7v8"></path></svg></div>
+              </div>
+              <div class="kpi-value" style="color:#d03b3b;" id="kpiRepuestosCanalMostradorCompareValue">0%</div>
+              <div class="kpi-delta muted" id="kpiRepuestosCanalMostradorCompareSub"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="store-block">
+          <div class="store-block-name"><span class="legend-swatch" style="background:var(--canal-2);"></span>TALLER</div>
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-top"><span class="kpi-label">Presupuesto total</span></div>
+              <div class="kpi-value" id="kpiRepuestosCanalTallerBudgetValue">—</div>
+              <div class="kpi-delta muted" id="kpiRepuestosCanalTallerBudgetDelta">Agosto 2026</div>
+            </div>
+            <div class="kpi-card accent">
+              <div class="kpi-top"><span class="kpi-label" id="kpiRepuestosCanalTallerTotalLabel">Ventas totales</span>
+                <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"></path><path d="M5 10v10h14V10"></path></svg></div>
+              </div>
+              <div class="kpi-value" id="kpiRepuestosCanalTallerTotalValue">0</div>
+              <div class="kpi-delta" id="kpiRepuestosCanalTallerTotalDelta"></div>
+              <div class="kpi-delta" id="kpiRepuestosCanalTallerCumplimiento" style="margin-top:2px;"></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-top"><span class="kpi-label">Cumplimiento</span><span class="kpi-state-tag behind" id="kpiRepuestosCanalTallerStateTag">POR DEBAJO</span></div>
+              <div class="kpi-hero bad" id="kpiRepuestosCanalTallerHero">0%</div>
+              <div class="kpi-progress-track"><div class="kpi-progress-fill" id="kpiRepuestosCanalTallerProgressFill" style="width:0%;"></div></div>
+              <div class="kpi-delta muted" id="kpiRepuestosCanalTallerProgressText"></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-top"><span class="kpi-label" id="kpiRepuestosCanalTallerCompareLabel">Julio vs. Junio</span>
+                <div class="kpi-icon" id="kpiRepuestosCanalTallerCompareIcon" style="background:rgba(211,60,60,0.12);"><svg viewBox="0 0 24 24" fill="none" stroke="#d03b3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7 7 17M17 7H9M17 7v8"></path></svg></div>
+              </div>
+              <div class="kpi-value" style="color:#d03b3b;" id="kpiRepuestosCanalTallerCompareValue">0%</div>
+              <div class="kpi-delta muted" id="kpiRepuestosCanalTallerCompareSub"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="retail-subnav" data-subnav data-prefix="repuestos-subview">
         <button class="active" data-subview="categorias">1. Canales</button>
         <button data-subview="top">2. Top Repuestos</button>
@@ -2540,7 +2620,7 @@
               <div class="donut-center"><div class="pct" id="donutManoObraTotal">0</div><div class="lbl" id="donutManoObraLabel">Agosto</div></div>
             </div>
           </div>
-          <div class="legend-row" id="legendManoObraDonut" style="justify-content:center;"></div>
+          <div class="legend-row" id="legendManoObraDonut" style="justify-content:center;row-gap:3px;"></div>
 
           <div class="panel-head" style="margin-top:14px;">
             <div>
@@ -2548,7 +2628,7 @@
               <div class="panel-sub" id="manoObraTableSub">Ventas ($)</div>
             </div>
           </div>
-          <table class="data-table compact">
+          <table class="data-table compact tienda-perfil-tbl">
             <thead><tr><th>Componente</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Total</th></tr></thead>
             <tbody id="tblManoObra"></tbody>
           </table>
@@ -3195,9 +3275,16 @@ function computeGeneralBudget(metric){
   return MONTHS.map((_,i)=> motosBudget[i] + repuestosBudget[i] + manoObraBudget[i]);
 }
 
-// Presupuesto de Repuestos: $9.945 asignado únicamente a Agosto 2026 (no hay meta en unidades todavía).
-const REPUESTOS_BUDGET_VENTAS = [0, 0, 0, 9945];
-const REPUESTOS_BUDGET_UNITS = [0, 0, 0, 0];
+// Presupuesto de Repuestos, repartido por canal (pedido del cliente: el total de $12.928,42 se compone de
+// $9.945 para MOSTRADOR y $2.983,42 para TALLER) — ambos asignados únicamente a Agosto 2026 (no hay meta
+// en unidades todavía). El total combinado (usado por la tarjeta "Presupuesto total" de arriba, y por
+// Vista general/Resumen vía computeGeneralBudget/REPUESTOS_RESUMEN_BUDGET_*) es la suma de los dos.
+const REPUESTOS_BUDGET_MOSTRADOR_VENTAS = [0, 0, 0, 9945];
+const REPUESTOS_BUDGET_TALLER_VENTAS = [0, 0, 0, 2983.42];
+const REPUESTOS_BUDGET_MOSTRADOR_UNITS = [0, 0, 0, 0];
+const REPUESTOS_BUDGET_TALLER_UNITS = [0, 0, 0, 0];
+const REPUESTOS_BUDGET_VENTAS = REPUESTOS_BUDGET_MOSTRADOR_VENTAS.map((v,i)=> v + REPUESTOS_BUDGET_TALLER_VENTAS[i]);
+const REPUESTOS_BUDGET_UNITS = REPUESTOS_BUDGET_MOSTRADOR_UNITS.map((v,i)=> v + REPUESTOS_BUDGET_TALLER_UNITS[i]);
 
 /* ================= SELL IN / SELL OUT — datos fuente: CUADRO_SELL_IN_SELL_OUT 2026 =================
    Sell In = unidades que HERO entrega/factura al canal: Consignación (aún propiedad de HERO, no facturada)
@@ -3440,8 +3527,15 @@ const SERVICIOS_TOTAL_VALOR = MONTHS.map((_,i)=> sum(SERVICIOS_TIPOS.map(t=>t.ve
 // (computeGeneralModel, más abajo) también necesita MANOOBRA_AGOSTO_REAL y se inicializa antes de llegar
 // a la sección de Mano de Obra de Servicios.
 // cantidad = suma de la columna "cantidad" (servicios atendidos); valor = suma de "m/o" + "terceros" por fila.
+// MANTENIMIENTO se abrió en sus 5 subtipos reales del reporte (agosto.xlsx, hoja "Hoja1"): 500/3000/9000 son
+// mantenimientos programados por kilometraje, Correctivo y Preventivo son las otras dos etiquetas que usa el
+// reporte. Los 5 suman exactamente los $517.71/36 uds. que antes vivían en una sola fila "MANTENIMIENTO".
 const MANOOBRA_TIPOS_AGOSTO = [
-  {name:'MANTENIMIENTO', color: getVar('--servicio-1'), cantidad: 36, valor: 517.71},
+  {name:'MANTENIMIENTO 500',        color: getVar('--manttipo-1'), cantidad: 16, valor: 112.00},
+  {name:'MANTENIMIENTO 3000',       color: getVar('--manttipo-2'), cantidad: 4,  valor: 28.00},
+  {name:'MANTENIMIENTO 9000',       color: getVar('--manttipo-3'), cantidad: 1,  valor: 16.76},
+  {name:'MANTENIMIENTO CORRECTIVO', color: getVar('--manttipo-4'), cantidad: 6,  valor: 264.70},
+  {name:'MANTENIMIENTO PREVENTIVO', color: getVar('--manttipo-5'), cantidad: 9,  valor: 96.25},
   {name:'ALISTAMIENTO',  color: getVar('--servicio-2'), cantidad: 25, valor: 250.00},
   {name:'GARANTÍA',      color: getVar('--servicio-4'), cantidad: 12, valor: 49.00},
 ];
@@ -4527,7 +4621,8 @@ function renderManoObraLegends(){
   if(monthFilter === 'agosto'){
     document.getElementById('legendManoObraDonut').innerHTML = MANOOBRA_TIPOS_AGOSTO.map(t=>{
       const v = metric==='unidades' ? t.cantidad : t.valor;
-      return `<span class="legend-item"><span class="legend-swatch" style="background:${t.color}"></span>${t.name} ${formatter(v)}${metric==='unidades' ? ' uds.' : ''}</span>`;
+      const label = t.name[0]+t.name.slice(1).toLowerCase(); // "MANTENIMIENTO 500" -> "Mantenimiento 500" (7 ítems ya no entran en mayúsculas sin desbordar)
+      return `<span class="legend-item"><span class="legend-swatch" style="background:${t.color}"></span>${label} ${formatter(v)}${metric==='unidades' ? ' uds.' : ''}</span>`;
     }).join('');
   } else {
     const grand = mval(manoObra.manoObra);
@@ -4555,8 +4650,9 @@ function renderManoObraKpis(){
   renderCompareCard('kpiManoObra', manoObra.manoObra, metric, formatter);
 }
 
-// Detalle mensual por tipo: Mayo/Junio/Julio no tienen desglose real (solo el estimado agregado, fila
-// "Sin desglose"); Agosto sí, así que se reparte en sus 3 tipos y la fila "Sin desglose" queda en — ese mes.
+// Detalle mensual por tipo: solo Agosto tiene desglose real, así que las filas de tipo muestran — en
+// Mayo/Junio/Julio (pedido del cliente: sin fila "Sin desglose (estimado)"); el Total sí conserva el
+// estimado de esos 3 meses (manoObra.manoObra), sin depender de si hay desglose por tipo o no.
 function buildManoObraTable(){
   const tbody = document.getElementById('tblManoObra');
   const metric = manoObra.metric;
@@ -4564,7 +4660,6 @@ function buildManoObraTable(){
   const formatter = metric==='unidades' ? fmt : fmtMoney;
   document.getElementById('manoObraTableSub').textContent = metric==='unidades' ? 'Unidades (servicios atendidos)' : 'Ventas ($)';
   const dash = '<span style="color:var(--text-muted);">—</span>';
-  const sinDesglose = [M[0], M[1], M[2], 0]; // Agosto ya está 100% repartido por tipo
 
   const tipoRows = MANOOBRA_TIPOS_AGOSTO.map(t=>{
     const v = metric==='unidades' ? t.cantidad : t.valor;
@@ -4578,16 +4673,6 @@ function buildManoObraTable(){
       <td class="num">${formatter(v)}</td>
     </tr>`;}).join('');
 
-  const sinDesgloseRow = `
-    <tr>
-      <td><span class="legend-swatch" style="background:${getVar('--servicio-3')};display:inline-block;margin-right:6px;"></span>Sin desglose (estimado)</td>
-      <td class="num">${pctCellPill(sinDesglose[0], undefined, undefined, formatter)}</td>
-      <td class="num">${pctCellPill(sinDesglose[1], sinDesglose[0], undefined, formatter)}</td>
-      <td class="num">${pctCellPill(sinDesglose[2], sinDesglose[1], undefined, formatter)}</td>
-      <td class="num">${dash}</td>
-      <td class="num">${formatter(sum(sinDesglose))}</td>
-    </tr>`;
-
   const totalRow = `
     <tr style="font-weight:800;background:var(--page-plane);">
       <td>Total</td>
@@ -4598,7 +4683,7 @@ function buildManoObraTable(){
       <td class="num">${formatter(sum(M))}</td>
     </tr>`;
 
-  tbody.innerHTML = tipoRows + sinDesgloseRow + totalRow;
+  tbody.innerHTML = tipoRows + totalRow;
 }
 
 let chartManoObraDonutInst=null, chartManoObraTrendInst=null;
@@ -4646,9 +4731,8 @@ function renderManoObraCharts(){
       }
     });
   } else {
-    // Mayo/Junio/Julio/Todos no tienen desglose real por tipo (esa fila queda como "Sin desglose (estimado)"
-    // en la tabla de abajo) — aquí se muestra simple, solo el total de mano de obra, para no repetir el
-    // desglose de Agosto en meses donde no aplica.
+    // Mayo/Junio/Julio/Todos no tienen desglose real por tipo — aquí se muestra simple, solo el total de
+    // mano de obra, para no repetir el desglose de Agosto en meses donde no aplica.
     document.getElementById('manoObraDonutTitle').textContent = 'Participación en el total';
 
     const grand = mval(manoObra.manoObra);
@@ -6560,6 +6644,35 @@ function renderRepuestosKpis(){
   renderCompareCard('kpiRepuestos', total, metric, formatter);
 }
 
+// Panel "Cumplimiento por canal": mismas 4 tarjetas por canal (MOSTRADOR y TALLER) que renderRepuestosResumenLineas()
+// usa para REPUESTOS/MANO DE OBRA — el presupuesto de Repuestos ($12.928,42) se reparte en $9.945 (MOSTRADOR)
+// y $2.983,42 (TALLER), y cada canal se mide contra su propia meta con su propia venta real (repuestosCanalesRaw).
+function renderRepuestosCanalLineas(){
+  const metric = metricState.repuestos;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
+  const mostrador = repuestosCanalesRaw.find(c=>c.name==='MOSTRADOR');
+  const taller = repuestosCanalesRaw.find(c=>c.name==='TALLER');
+
+  const lineas = [
+    { prefix:'kpiRepuestosCanalMostrador', total: metric==='ventas' ? mostrador.ventas : mostrador.data,
+      budget: metric==='ventas' ? REPUESTOS_BUDGET_MOSTRADOR_VENTAS : REPUESTOS_BUDGET_MOSTRADOR_UNITS },
+    { prefix:'kpiRepuestosCanalTaller', total: metric==='ventas' ? taller.ventas : taller.data,
+      budget: metric==='ventas' ? REPUESTOS_BUDGET_TALLER_VENTAS : REPUESTOS_BUDGET_TALLER_UNITS },
+  ];
+
+  lineas.forEach(l=>{
+    const grand = mval(l.total);
+    document.getElementById(l.prefix+'TotalLabel').textContent = metric==='ventas' ? 'Ventas totales' : 'Unidades totales';
+    document.getElementById(l.prefix+'TotalValue').textContent = formatter(grand);
+    document.getElementById(l.prefix+'TotalDelta').textContent = monthFilter==='todos'
+      ? `Mayo ${formatter(l.total[0])} · Junio ${formatter(l.total[1])} · Julio ${formatter(l.total[2])} · Agosto ${formatter(l.total[3])}`
+      : MONTH_LABEL[monthFilter];
+
+    renderBudgetCards(l.prefix, grand, l.budget, metric, formatter);
+    renderCompareCard(l.prefix, l.total, metric, formatter);
+  });
+}
+
 let chartRepuestosBarsInst=null, chartRepuestosDonutInst=null, chartRepuestosTrendInst=null;
 function renderRepuestosCharts(){
   if(chartRepuestosBarsInst) chartRepuestosBarsInst.destroy();
@@ -6871,6 +6984,7 @@ function renderRepuestos(){
   buildRepuestosCategoriaTable();
   renderRepuestosLegends();
   renderRepuestosKpis();
+  renderRepuestosCanalLineas();
   renderRepuestosCharts();
 }
 
@@ -7141,9 +7255,12 @@ function initRepuestosModelos(){
 }
 
 /* ---------- SERVICIOS (taller de servicio técnico, hoja "ordenes de trabajo") — página principal ---------- */
-// Presupuesto del taller de Servicios: $4.262 asignado a Agosto 2026 (mismo criterio que Repuestos: sin desglose
-// mensual dado, se aplica al mes más reciente ya trackeado). No hay meta en cantidad de servicios todavía.
-const SERVICIOS_BUDGET_VENTAS = [0, 0, 0, 4262];
+// Presupuesto del taller de Servicios (Mano de Obra): $1.278,61 asignado a Agosto 2026 (mismo criterio que
+// Repuestos: sin desglose mensual dado, se aplica al mes más reciente ya trackeado). Corregido — antes tenía
+// $4.262 mal asignado; la diferencia ($2.983,42) en realidad pertenece al presupuesto de Repuestos > TALLER
+// (ver REPUESTOS_BUDGET_TALLER_VENTAS), así que el global combinado Repuestos+Mano de Obra sigue en $14.207,
+// solo que redistribuido entre las dos líneas. No hay meta en cantidad de servicios todavía.
+const SERVICIOS_BUDGET_VENTAS = [0, 0, 0, 1278.61];
 const SERVICIOS_BUDGET_UNITS = [0, 0, 0, 0];
 
 // Presupuesto combinado para la página "Resumen" de Repuestos: suma elemento a elemento de las metas de
