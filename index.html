@@ -3702,34 +3702,35 @@ function computePerfilGeneralRowsTiendas(){
 // Modelos vendidos, los 3 canales combinados (Mayoristas + Retail + Tiendas), con AAP.
 // data = unidades [Mayo,Junio,Julio]; ventas = $ [Mayo,Junio,Julio]. Orden por unidades totales desc.
 const MODELOS = [
-  {name:'ECO DELUXE',        data:[102,56,60,39], ventas:[119504,67346,71330,45912]},
-  {name:'HUNK 125R',         data:[59,28,48,54], ventas:[102394,54940,94666,107506]},
-  {name:'ECO 150',           data:[0,93,39,37],  ventas:[0,138482,58040,60064]},
+  {name:'ECO DELUXE',        data:[102,56,60,44], ventas:[119504,67346,71330,52724]},
+  {name:'HUNK 125R',         data:[59,28,48,57], ventas:[102394,54940,94666,115534]},
+  {name:'ECO 150',           data:[0,93,39,38],  ventas:[0,138482,58040,61544]},
   {name:'XOOM 125R',         data:[46,19,34,24], ventas:[89148,38179,70668,48339]},
   {name:'XOOM 110',          data:[47,30,12,16], ventas:[75304,49967,19260,27528]},
   {name:'HUNK 160 4V',       data:[37,10,19,18], ventas:[94844,27060,54108,52618]},
   {name:'XPULSE 200 4V FI',  data:[12,2,3,7],    ventas:[40367,7483,10190,25363]},
   {name:'XPULSE 200 RALLY',  data:[0,0,0,4],     ventas:[0,0,0,14800]},
 ];
-const MODELOS_MONTH_TOTAL = [303,238,215,199]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
-const MODELOS_MONTH_TOTAL_VENTAS = [521560,383455,378261,382131]; // coincide con "Ventas totales" de Resumen (CON AAP)
+const MODELOS_MONTH_TOTAL = [303,238,215,208]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
+const MODELOS_MONTH_TOTAL_VENTAS = [521560,383455,378261,398451]; // coincide con "Ventas totales" de Resumen (CON AAP)
 
 // Vista "SIN AAP" (Resumen): MODELOS menos la contribución de AAP por modelo (3 canales, Retail sin AAP).
-// Corregido 26-ago-2026: la columna Agosto de este arreglo llevaba tiempo sin sumar Mayoristas (solo traía
-// Retail sin AAP + Tiendas) — se detectó al auditar contra MODELOS_MONTH_TOTAL_SIN_AAP, que sí seguía la
-// fórmula correcta (MODELOS_MONTH_TOTAL menos AAP_DATA) y por lo tanto no cuadraba con esta tabla.
+// Resincronizado 27-ago-2026: esta tabla (y MODELOS arriba) no se habían recalculado en las últimas dos
+// actualizaciones de datos de Agosto, aunque los arreglos canónicos por canal (MAYORISTAS_TOTAL, AAP_DATA,
+// RETAIL_TOTAL, TIENDAS_TOTAL) sí quedaron correctos — por eso "Vista general" seguía mostrando 199
+// unidades de Motos en vez de 208. Recalculado desde los 3 canales para que ambas tablas cuadren siempre.
 const MODELOS_SIN_AAP = [
-  {name:'ECO DELUXE',        data:[92,42,23,21], ventas:[108004,51246,28780,25212]},
-  {name:'ECO 150',           data:[0,91,36,34],   ventas:[0,135522,53600,55624]},
-  {name:'HUNK 125R',         data:[56,22,23,39], ventas:[97204,44560,51416,81556]},
+  {name:'ECO DELUXE',        data:[92,42,23,24], ventas:[108004,51246,28780,29724]},
+  {name:'ECO 150',           data:[0,91,36,35],   ventas:[0,135522,53600,57104]},
+  {name:'HUNK 125R',         data:[56,22,23,41], ventas:[97204,44560,51416,87854]},
   {name:'XOOM 125R',         data:[46,17,27,21],  ventas:[89148,34303,57102,42525]},
   {name:'XOOM 110',          data:[46,26,5,10],   ventas:[73699,43547,8025,17898]},
   {name:'HUNK 160 4V',       data:[35,8,14,17],  ventas:[89744,21960,41358,50068]},
   {name:'XPULSE 200 4V FI',  data:[12,2,3,7],    ventas:[40367,7483,10190,25363]},
   {name:'XPULSE 200 RALLY',  data:[0,0,0,4],     ventas:[0,0,0,14800]},
 ];
-const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,131,153]; // MODELOS_MONTH_TOTAL menos AAP_DATA
-const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [498165,338619,250470,313047]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
+const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,131,159]; // MODELOS_MONTH_TOTAL menos AAP_DATA
+const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [498165,338619,250470,325337]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
 
 // Presupuesto en $ asignado a Tiendas Hero por mes, para el KPI de cumplimiento en Tiendas.
 const TIENDAS_BUDGET_VENTAS = [26835,67088,102650,147011.36];
