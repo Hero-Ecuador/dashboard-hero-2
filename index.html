@@ -3060,11 +3060,17 @@ Chart.defaults.set('plugins.datalabels', { display:false }); // opt-in per chart
 // cualquier venta normal — porque ambas partes son movimientos reales; solo "Anuladas" se excluye. Como la
 // venta y su reversión casi siempre caen en meses distintos, Ventas/Unidades sí cambian mes a mes frente a
 // contar solo "Facturadas" (el total acumulado Mayo-Agosto no cambia, solo cómo se reparte entre meses).
-const TIENDAS_TOTAL    = [12,28,24,32];
+// Actualización 27-ago-2026 (CONSOLIDADO_HERO_3_2.xlsx recibido ese día): se corrigieron los costos de julio
+// (Ventas de julio no cambian, solo Costo/Utilidad), llegaron 4 transacciones nuevas de agosto (3 Mayoristas
+// zona ST DOMINGO/MANABI, 1 Tienda Américas) y se asignó Perfil a 5 unidades de agosto que antes estaban en
+// PENDIENTE (3 en Av. Américas, 2 en Naciones Unidas) — no cambian unidades/ventas por tienda, solo el desglose
+// por perfil. También se corrigieron 2 comprobantes que tenían Estado="Facturadas" y debían ser "NC" (uno de
+// junio, uno de agosto); no afecta ningún total porque Facturadas y NC ya se cuentan igual.
+const TIENDAS_TOTAL    = [12,28,24,33];
 const AAP_DATA          = [16,30,84,46];
 const RETAIL_TOTAL     = [18,58,107,62];   // AAP + OTOM + MASTER MOTO + CRESA (ESPAÑA/MARCIMEX/ARTEFACTA sin ventas)
 const RETAIL_SIN_AAP   = [2,28,23,16];     // RETAIL_TOTAL minus AAP_DATA — used only in the Resumen channel chart below
-const MAYORISTAS_TOTAL = [273,152,84,105];
+const MAYORISTAS_TOTAL = [273,152,84,108];
 
 // Ventas $ por mes (columna "Ventas" del CONSOLIDADO_HERO, filtrado Estado en {Facturadas, NC}), por cuenta retail
 const RETAIL_VENTAS_TOTAL    = [26275, 88631, 161861, 98262];
@@ -3100,7 +3106,7 @@ const RETAIL_MODELOS_SIN_AAP = [
 // Modelos vendidos, canal Tiendas propias Hero únicamente. data = unidades [Mayo,Junio,Julio,Agosto]; ventas = $ [Mayo,Junio,Julio,Agosto].
 // Orden por unidades totales desc. Los totales por mes coinciden con TIENDAS_TOTAL / TIENDAS_VENTAS.
 const TIENDAS_MODELOS = [
-  {name:'HUNK 125R',         data:[2,10,10,12], ventas:[4138,23294,28866,34846]},
+  {name:'HUNK 125R',         data:[2,10,10,13], ventas:[4138,23294,28866,37890]},
   {name:'ECO DELUXE',        data:[6,9,2,1],   ventas:[8826,13266,4510,2212]},
   {name:'XOOM 125R',         data:[0,4,7,5],   ventas:[0,8972,18342,11517]},
   {name:'HUNK 160 4V',       data:[1,3,3,7],   ventas:[2945,9300,13308,24568]},
@@ -3110,9 +3116,9 @@ const TIENDAS_MODELOS = [
 ];
 
 // Ventas $ por mes — canales (Resumen). AAP repite el mismo dato que su fila en retailAccounts.ventas.
-const TIENDAS_VENTAS     = [22731, 60053, 70415, 96684];    // HERO GYE + HERO QUITO + CANAL DIGITAL
+const TIENDAS_VENTAS     = [22731, 60053, 70415, 99728];    // HERO GYE + HERO QUITO + CANAL DIGITAL
 const AAP_VENTAS         = [23395, 44836, 127791, 69084];
-const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 187185]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
+const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 190965]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
 
 // Ventas $ por mes, por zona Mayoristas (columna Ventas, agrupado por Vendedor — mismo mapeo validado con el usuario).
 // Agosto 2026: aparece un vendedor nuevo, "PLUAS NAVARRO GABRIEL ALEJANDRO" (7 u., $11.116) — confirmado con
@@ -3121,7 +3127,7 @@ const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 187185]; // suma de las 5 zo
 // al auditar el archivo CONSOLIDADO_HERO_3_2.xlsx del 26-ago-2026; el total de Mayoristas de julio no cambia).
 const MAYORISTAS_VENTAS_ZONA = {
   'ORIENTE':              [303707, 93692, 82092, 125713],
-  'ST DOMINGO / MANABI':  [40595,  37109, 30913, 13368],
+  'ST DOMINGO / MANABI':  [40595,  37109, 30913, 17148],
   'LOS RIOS':             [40634,  64229, 23510,  26650],
   'GUAYAS':               [73688,  31489, 4440,   11116],
   'SIERRA':               [13930,  8252, 5030,  10338],
@@ -3130,8 +3136,8 @@ const MAYORISTAS_VENTAS_ZONA = {
 // Modelos vendidos, canal Mayoristas únicamente. data = unidades [Mayo,Junio,Julio,Agosto]; ventas = $ [Mayo,Junio,Julio,Agosto].
 // Orden por unidades totales desc. Los totales por mes coinciden con MAYORISTAS_TOTAL / MAYORISTAS_VENTAS.
 const MAYORISTAS_MODELOS = [
-  {name:'ECO DELUXE',        data:[85,24,16,16], ventas:[98028,27600,18400,18400]},
-  {name:'ECO 150',           data:[0,90,23,27],  ventas:[0,133722,34040,39960]},
+  {name:'ECO DELUXE',        data:[85,24,16,18], ventas:[98028,27600,18400,20700]},
+  {name:'ECO 150',           data:[0,90,23,28],  ventas:[0,133722,34040,41440]},
   {name:'XOOM 125R',         data:[46,13,20,15], ventas:[89148,25331,38760,29070]},
   {name:'HUNK 125R',         data:[53,4,7,22],   ventas:[91336,7396,12110,38060]},
   {name:'XOOM 110',          data:[44,16,5,9],   ventas:[70677,25680,8025,14445]},
@@ -3142,7 +3148,7 @@ const MAYORISTAS_MODELOS = [
 
 // Ventas $ por mes, por tienda propia Hero (columna Origen_Ventas: TIENDA AMERICAS / TIENDA NACIONES UNIDAS / CANAL DIGITAL)
 const TIENDAS_VENTAS_STORE = {
-  'HERO GYE':      [22731.02, 60053.12, 66515.12, 57783.34],
+  'HERO GYE':      [22731.02, 60053.12, 66515.12, 60826.82],
   'HERO QUITO':    [0,        0,        3900,     29395.59],
   'CANAL DIGITAL': [0,        0,        0,        9505.28],
 };
@@ -3158,11 +3164,11 @@ const TIENDAS_VENTAS_STORE = {
 // dato anterior venía de la columna "Utilidad" de un archivo previo y no coincidía con Ventas−Costo del
 // archivo actual (encontrado al auditar CONSOLIDADO_HERO_3_2.xlsx del 26-ago-2026; Ventas de julio no cambia).
 const MAYORISTAS_MARGEN_VENTAS   = MAYORISTAS_VENTAS;
-const MAYORISTAS_MARGEN_UTILIDAD = [121998.51, 69563.71, 36969.69, 47660.09];
+const MAYORISTAS_MARGEN_UTILIDAD = [121998.51, 69563.71, 38941.68, 48560.08];
 const RETAIL_MARGEN_VENTAS       = RETAIL_VENTAS_TOTAL;
-const RETAIL_MARGEN_UTILIDAD     = [6345.33, 22101.19, 37791.76, 23129.10];
+const RETAIL_MARGEN_UTILIDAD     = [6345.33, 22101.19, 40251.64, 23129.10];
 const TIENDAS_MARGEN_VENTAS      = TIENDAS_VENTAS;
-const TIENDAS_MARGEN_UTILIDAD    = [8217.44, 25145.27, 35848.08, 48718.74];
+const TIENDAS_MARGEN_UTILIDAD    = [8217.44, 25145.27, 36351.70, 50719.96];
 
 // Margen bruto combinado (general de Resumen): Mayoristas + Retail (con AAP) + Tiendas — mismo universo de
 // canales que suma el total general de la página Resumen.
@@ -3288,7 +3294,7 @@ const TIENDA_COLORS = ['--tienda-1','--tienda-2','--tienda-3','--tienda-4','--ti
 
 const tiendas = {
   stores:[
-    {name:'HERO GYE',      data:[12,28,22,20], ventas: TIENDAS_VENTAS_STORE['HERO GYE']},
+    {name:'HERO GYE',      data:[12,28,22,21], ventas: TIENDAS_VENTAS_STORE['HERO GYE']},
     {name:'HERO QUITO',    data:[0,0,2,9],    ventas: TIENDAS_VENTAS_STORE['HERO QUITO']},
     {name:'CANAL DIGITAL', data:[0,0,0,3],    ventas: TIENDAS_VENTAS_STORE['CANAL DIGITAL']},
     {name:'HERO ST DO',  data:[0,0,0,0],   ventas:[0,0,0,0]},
@@ -3311,7 +3317,7 @@ const ZONE_COLORS = ['--zone-1','--zone-2','--zone-3','--zone-4','--zone-5'].map
 
 const mayoristasAccounts = [
   {name:'ORIENTE',              data:[181,60,43,69]},
-  {name:'ST DOMINGO / MANABI',  data:[28,24,19,8]},
+  {name:'ST DOMINGO / MANABI',  data:[28,24,19,11]},
   {name:'LOS RIOS',             data:[24,45,17,17]},
   {name:'GUAYAS',               data:[36,19,3,7]},
   {name:'SIERRA',               data:[4,4,2,4]},
@@ -3471,57 +3477,54 @@ const PERFIL_AAP_MONTH_TOTAL_VENTAS = [23395,44836,127791,69084]; // $ con perfi
 // CONSOLIDADO_HERO (archivo con costos corregidos). El archivo nuevo ya no trae el duplicado PEREZ VAN
 // HAASTER (ver nota en TIENDAS_TOTAL), así que ya no hace falta descontarlo aquí.
 const PERFIL_TIENDA_AMERICAS = [
-  {name:'AAA',         v:37035, u:16},
+  {name:'AAA',         v:40079, u:17},
   {name:'AA',          v:17717, u:6},
   {name:'A',           v:13826, u:5},
   {name:'BBB',         v:11890, u:4},
   {name:'BB',          v:19373, u:5},
   {name:'B',           v:7646,  u:2},
-  {name:'B+',          v:7340,  u:2},
+  {name:'B+',          v:11411, u:3},
   {name:'B-',          v:16107, u:6},
-  {name:'CONTADO',     v:43105, u:18},
-  {name:'COLABORADOR', v:24343, u:15},
-  {name:'PENDIENTE',   v:8699,  u:3},
+  {name:'CONTADO',     v:45850, u:19},
+  {name:'COLABORADOR', v:26226, u:16},
 ];
 // Naciones Unidas (incl. Canal Digital desde agosto).
 const PERFIL_TIENDA_NACIONES = [
-  {name:'AAA',       v:7304, u:2},
-  {name:'AA',        v:7630, u:3},
+  {name:'AAA',       v:9505, u:3},
+  {name:'AA',        v:10673, u:4},
   {name:'A',         v:5817, u:1},
   {name:'B+',        v:2100, u:1},
   {name:'B-',        v:3100, u:1},
   {name:'CONTADO',   v:2100, u:1},
-  {name:'PENDIENTE', v:5244, u:2},
 ];
 
 // Detalle mensual por Perfil, por tienda propia Hero — data = unidades [Mayo,Junio,Julio,Agosto], ventas = $ [Mayo,Junio,Julio,Agosto].
-// Mismo orden fijo que PERFIL_TIENDA_AMERICAS / PERFIL_TIENDA_NACIONES. Agosto 2026: 3 unidades nuevas (2 en
-// Av. Américas, 1 en Naciones Unidas) llegaron con la columna "Perfil Tiendas Hero/AAP" vacía en el archivo
-// fuente — se suman a PENDIENTE junto con los casos ya existentes (mismo criterio: sin perfil asignado).
+// Mismo orden fijo que PERFIL_TIENDA_AMERICAS / PERFIL_TIENDA_NACIONES. Actualización 27-ago-2026: las 5
+// unidades de agosto que estaban en PENDIENTE (3 Av. Américas, 2 Naciones Unidas) ya llegaron con Perfil
+// asignado en el archivo nuevo — se reparten en AAA/B+/CONTADO/COLABORADOR (Américas) y AA/AAA (Naciones); la
+// fila PENDIENTE queda en 0 y se elimina. También llegó 1 unidad nueva en Av. Américas con Perfil=AAA directo.
 const PERFIL_TIENDA_AMERICAS_MENSUAL = [
-  {name:'AAA',         data:[2,6,7,1],   ventas:[4248,9148,21427,2212]},
+  {name:'AAA',         data:[2,6,7,2],   ventas:[4248,9148,21427,5256]},
   {name:'AA',          data:[0,1,2,3],   ventas:[0,3100,5487,9130]},
   {name:'A',           data:[0,1,1,3],   ventas:[0,3346,3336,7144]},
   {name:'BBB',         data:[0,1,1,2],   ventas:[0,3593,2297,5999]},
   {name:'BB',          data:[0,2,3,0],   ventas:[0,5811,13562,0]},
   {name:'B',           data:[0,0,0,2],   ventas:[0,0,0,7646]},
-  {name:'B+',          data:[0,0,1,1],   ventas:[0,0,3887,3453]},
+  {name:'B+',          data:[0,0,1,2],   ventas:[0,0,3887,7524]},
   {name:'B-',          data:[0,1,1,4],   ventas:[0,3422,2233,10453]},
-  {name:'CONTADO',     data:[5,10,3,0],  ventas:[12241,21939,8925,0]},
-  {name:'COLABORADOR', data:[5,6,3,1],   ventas:[6242,9694,5362,3046]},
-  {name:'PENDIENTE',   data:[0,0,0,3],   ventas:[0,0,0,8699]},
+  {name:'CONTADO',     data:[5,10,3,1],  ventas:[12241,21939,8925,2745]},
+  {name:'COLABORADOR', data:[5,6,3,2],   ventas:[6242,9694,5362,4929]},
 ];
-const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL = [12,28,22,20];
-const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS = [22731,60053,66516,57783.34];
+const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL = [12,28,22,21];
+const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS = [22731,60053,66516,60826.82];
 
 const PERFIL_TIENDA_NACIONES_MENSUAL = [
-  {name:'AAA',      data:[0,0,0,2], ventas:[0,0,0,7304]},
-  {name:'AA',       data:[0,0,1,2], ventas:[0,0,1800,5830]},
+  {name:'AAA',      data:[0,0,0,3], ventas:[0,0,0,9505]},
+  {name:'AA',       data:[0,0,1,3], ventas:[0,0,1800,8873]},
   {name:'A',        data:[0,0,0,1], ventas:[0,0,0,5817]},
   {name:'B+',       data:[0,0,0,1], ventas:[0,0,0,2100]},
   {name:'B-',       data:[0,0,0,1], ventas:[0,0,0,3100]},
   {name:'CONTADO',  data:[0,0,1,0], ventas:[0,0,2100,0]},
-  {name:'PENDIENTE',data:[0,0,0,2], ventas:[0,0,0,5244]},
 ];
 const PERFIL_TIENDA_NACIONES_MONTH_TOTAL = [0,0,2,9];
 const PERFIL_TIENDA_NACIONES_MONTH_TOTAL_VENTAS = [0,0,3900,29395.59];
@@ -3539,74 +3542,70 @@ const PERFIL_CANAL_DIGITAL_MONTH_TOTAL_VENTAS = [0,0,0,9505.28];
 // Vista combinada (Resumen): AAP + Tiendas Hero (Av. Américas + Naciones Unidas, incl. Canal Digital) — los
 // dos únicos canales con el campo "Perfil" registrado. Orden fijo por escala de perfil. Acumulado Mayo-Agosto 2026.
 const PERFIL_RESUMEN = [
-  {name:'AAA',        v:101402, u:53},
-  {name:'AA',         v:85762, u:44},
+  {name:'AAA',        v:106647, u:55},
+  {name:'AA',         v:88805, u:45},
   {name:'A',          v:56003, u:31},
   {name:'BBB',        v:26495, u:14},
   {name:'BB',         v:35253, u:16},
   {name:'B',          v:28331, u:17},
-  {name:'B+',         v:27193, u:13},
+  {name:'B+',         v:31264, u:14},
   {name:'B-',         v:36602, u:19},
   {name:'C+',         v:9655,  u:8},
   {name:'NSSA',       v:2880,  u:2},
-  {name:'CONTADO',    v:63221, u:32},
+  {name:'CONTADO',    v:65966, u:33},
   {name:'EXCEPCION',  v:2755,  u:2},
-  {name:'COLABORADOR',v:24343, u:15},
+  {name:'COLABORADOR',v:26226, u:16},
   {name:'NSSB',       v:1150,  u:1},
-  {name:'PENDIENTE',  v:13944, u:5},
 ];
 
 // Detalle mensual por Perfil (Resumen, combinado AAP + Tiendas Hero) — data = unidades [Mayo,Junio,Julio,Agosto],
 // ventas = $ [Mayo,Junio,Julio,Agosto]. Mismo orden fijo de escala que PERFIL_RESUMEN.
 const PERFIL_RESUMEN_MENSUAL = [
-  {name:'AAA',        data:[3,9,35,6],  ventas:[6798,13966,65537,15102]},
-  {name:'AA',         data:[2,10,19,13],ventas:[4280,18775,36477,26230]},
+  {name:'AAA',        data:[3,9,35,8],  ventas:[6798,13966,65537,20347]},
+  {name:'AA',         data:[2,10,19,14],ventas:[4280,18775,36477,29273]},
   {name:'A',          data:[1,6,8,16],  ventas:[1730,10131,12174,31968]},
   {name:'BBB',        data:[1,2,6,5],   ventas:[1150,5073,9787,10484]},
   {name:'BB',         data:[1,3,7,5],   ventas:[1150,6961,19322,7820]},
   {name:'B',          data:[1,1,5,10],  ventas:[1150,1480,6330,19371]},
-  {name:'B+',         data:[0,1,7,5],   ventas:[0,1730,12485,12978]},
+  {name:'B+',         data:[0,1,7,6],   ventas:[0,1730,12485,17049]},
   {name:'B-',         data:[5,4,3,7],   ventas:[6785,6872,5113,17833]},
   {name:'C+',         data:[2,3,2,1],   ventas:[2300,3450,2300,1605]},
   {name:'NSSA',       data:[0,0,2,0],   ventas:[0,0,2880,0]},
-  {name:'CONTADO',    data:[6,13,10,3], ventas:[13391,26757,18835,4238]},
+  {name:'CONTADO',    data:[6,13,10,4], ventas:[13391,26757,18835,6983]},
   {name:'EXCEPCION',  data:[1,0,1,0],   ventas:[1150,0,1605,0]},
-  {name:'COLABORADOR',data:[5,6,3,1],   ventas:[6242,9694,5362,3046]},
+  {name:'COLABORADOR',data:[5,6,3,2],   ventas:[6242,9694,5362,4929]},
   {name:'NSSB',       data:[0,0,0,1],   ventas:[0,0,0,1150]},
-  {name:'PENDIENTE',  data:[0,0,0,5],   ventas:[0,0,0,13944]},
 ];
-const PERFIL_MONTH_TOTAL = [28,58,108,78]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
-const PERFIL_MONTH_TOTAL_VENTAS = [46126,104889,198207,165768]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL = [28,58,108,79]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL_VENTAS = [46126,104889,198207,168812]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
 
 // Vista "SIN AAP" (Resumen): PERFIL_RESUMEN menos AAP = solo Tiendas Hero (Av. Américas + Naciones Unidas + Canal Digital).
 const PERFIL_RESUMEN_SIN_AAP = [
-  {name:'AAA',        v:47044, u:19},
-  {name:'AA',         v:25347, u:9},
+  {name:'AAA',        v:52289, u:21},
+  {name:'AA',         v:28390, u:10},
   {name:'A',          v:22687, u:7},
   {name:'BBB',        v:11890, u:4},
   {name:'BB',         v:19373, u:5},
   {name:'B',          v:7646,  u:2},
-  {name:'B+',         v:13197, u:4},
+  {name:'B+',         v:17268, u:5},
   {name:'B-',         v:19207, u:7},
-  {name:'CONTADO',    v:45205, u:19},
-  {name:'COLABORADOR',v:24343, u:15},
-  {name:'PENDIENTE',  v:13944, u:5},
+  {name:'CONTADO',    v:47950, u:20},
+  {name:'COLABORADOR',v:26226, u:16},
 ];
 
 // Detalle mensual por Perfil, vista "SIN AAP" (solo Tiendas Hero). Mismo orden que PERFIL_RESUMEN_SIN_AAP.
 // Los totales por mes coinciden exactamente con TIENDAS_TOTAL / TIENDAS_VENTAS.
 const PERFIL_RESUMEN_MENSUAL_SIN_AAP = [
-  {name:'AAA',        data:[2,6,7,4],  ventas:[4248,9148,21427,12222]},
-  {name:'AA',         data:[0,1,3,5],  ventas:[0,3100,7287,14960]},
+  {name:'AAA',        data:[2,6,7,6],  ventas:[4248,9148,21427,17467]},
+  {name:'AA',         data:[0,1,3,6],  ventas:[0,3100,7287,18003]},
   {name:'A',          data:[0,1,1,5],  ventas:[0,3346,3336,16005]},
   {name:'BBB',        data:[0,1,1,2],  ventas:[0,3593,2297,5999]},
   {name:'BB',         data:[0,2,3,0],  ventas:[0,5811,13562,0]},
   {name:'B',          data:[0,0,0,2],  ventas:[0,0,0,7646]},
-  {name:'B+',         data:[0,0,1,3],  ventas:[0,0,3887,9310]},
+  {name:'B+',         data:[0,0,1,4],  ventas:[0,0,3887,13381]},
   {name:'B-',         data:[0,1,1,5],  ventas:[0,3422,2233,13553]},
-  {name:'CONTADO',    data:[5,10,4,0], ventas:[12241,21939,11025,0]},
-  {name:'COLABORADOR',data:[5,6,3,1],  ventas:[6242,9694,5362,3046]},
-  {name:'PENDIENTE',  data:[0,0,0,5],  ventas:[0,0,0,13944]},
+  {name:'CONTADO',    data:[5,10,4,1], ventas:[12241,21939,11025,2745]},
+  {name:'COLABORADOR',data:[5,6,3,2],  ventas:[6242,9694,5362,4929]},
 ];
 
 // Vista "Resumen general" (Perfiles): agrupa los 15 perfiles crudos de PERFIL_RESUMEN_MENSUAL /
@@ -4285,7 +4284,14 @@ function renderResumenLineas(){
       budget: metric==='ventas' ? MAYORISTAS_BUDGET_VENTAS : MAYORISTAS_BUDGET_UNITS,
       margenVentas: MAYORISTAS_MARGEN_VENTAS, margenUtilidad: MAYORISTAS_MARGEN_UTILIDAD,
       ventas: MAYORISTAS_VENTAS, unidades: MAYORISTAS_TOTAL },
-    { prefix:'kpiResumenLineaRetail', total: metric==='ventas' ? RETAIL_VENTAS_TOTAL : RETAIL_TOTAL,
+    // Total/presupuesto/comparativo SÍ responden al toggle CON/SIN AAP (igual que en la página Retail
+    // independiente — ver renderRetailKpis). Margen/Ticket se quedan siempre en la vista CON AAP porque el
+    // Costo fuente no está desglosado por cuenta AAP/no-AAP (mismo criterio ya documentado en renderRetailKpis
+    // y en la tendencia de Margen bruto de Resumen).
+    { prefix:'kpiResumenLineaRetail',
+      total: metric==='ventas'
+        ? (aapMode==='con' ? RETAIL_VENTAS_TOTAL : RETAIL_VENTAS_SIN_AAP)
+        : (aapMode==='con' ? RETAIL_TOTAL : RETAIL_SIN_AAP),
       budget: metric==='ventas'
         ? (aapMode==='con' ? RETAIL_BUDGET_VENTAS_CON_AAP : RETAIL_BUDGET_VENTAS)
         : (aapMode==='con' ? RETAIL_BUDGET_UNITS_CON_AAP : RETAIL_BUDGET_UNITS),
@@ -7434,11 +7440,11 @@ function renderTiendaStoreCards(){
   const formatter = metric==='ventas' ? fmtMoney : fmt;
 
   const stores = [
-    { prefix:'kpiTiendaGye',     unitsArr:[12,28,22,18],                       ventasArr: TIENDAS_VENTAS_STORE['HERO GYE'],
+    { prefix:'kpiTiendaGye',     unitsArr: tiendas.stores.find(s=>s.name==='HERO GYE').data,      ventasArr: TIENDAS_VENTAS_STORE['HERO GYE'],
       budgetUnits: HERO_GYE_BUDGET_UNITS,     budgetVentas: HERO_GYE_BUDGET_VENTAS },
-    { prefix:'kpiTiendaQuito',   unitsArr:[0,0,2,8],                          ventasArr: TIENDAS_VENTAS_STORE['HERO QUITO'],
+    { prefix:'kpiTiendaQuito',   unitsArr: tiendas.stores.find(s=>s.name==='HERO QUITO').data,    ventasArr: TIENDAS_VENTAS_STORE['HERO QUITO'],
       budgetUnits: HERO_QUITO_BUDGET_UNITS,   budgetVentas: HERO_QUITO_BUDGET_VENTAS },
-    { prefix:'kpiTiendaDigital', unitsArr:[0,0,0,3],                          ventasArr: TIENDAS_VENTAS_STORE['CANAL DIGITAL'],
+    { prefix:'kpiTiendaDigital', unitsArr: tiendas.stores.find(s=>s.name==='CANAL DIGITAL').data, ventasArr: TIENDAS_VENTAS_STORE['CANAL DIGITAL'],
       budgetUnits: CANAL_DIGITAL_BUDGET_UNITS, budgetVentas: CANAL_DIGITAL_BUDGET_VENTAS },
   ];
 
