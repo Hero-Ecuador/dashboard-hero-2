@@ -2098,14 +2098,7 @@
               </div>
             </div>
             <table class="data-table compact">
-              <tbody>
-                <tr><td>TIENDAS AAP</td><td class="num">39</td></tr>
-                <tr><td>TIENDAS HERO</td><td class="num">22</td></tr>
-                <tr><td>MAYORISTA</td><td class="num">29</td></tr>
-                <tr><td>RETAIL</td><td class="num">17</td></tr>
-                <tr><td>DIGITAL</td><td class="num">2</td></tr>
-                <tr style="font-weight:800;background:var(--page-plane);"><td>Total</td><td class="num">109</td></tr>
-              </tbody>
+              <tbody id="tblSioAgostoCanal"></tbody>
             </table>
           </div>
           <div class="panel">
@@ -2116,16 +2109,7 @@
               </div>
             </div>
             <table class="data-table compact">
-              <tbody>
-                <tr><td>HUNK 125</td><td class="num">27</td></tr>
-                <tr><td>ECO DELUXE</td><td class="num">26</td></tr>
-                <tr><td>ECO 150</td><td class="num">20</td></tr>
-                <tr><td>XOOM 125</td><td class="num">11</td></tr>
-                <tr><td>XOOM 110</td><td class="num">13</td></tr>
-                <tr><td>HUNK 160</td><td class="num">8</td></tr>
-                <tr><td>XPULSE 200</td><td class="num">4</td></tr>
-                <tr style="font-weight:800;background:var(--page-plane);"><td>Total</td><td class="num">109</td></tr>
-              </tbody>
+              <tbody id="tblSioAgostoModelo"></tbody>
             </table>
           </div>
         </div>
@@ -3116,25 +3100,35 @@ Chart.defaults.set('plugins.datalabels', { display:false }); // opt-in per chart
 // en este archivo — ya vuelven a decir "Facturadas" y no hizo falta ningún ajuste manual. De paso, al auditar
 // completo se encontró que RETAIL_MARGEN_UTILIDAD de agosto llevaba un tiempo mal calculado (23.129,10 en vez
 // de 23.978,91, aunque Ventas/Unidades de Retail no cambiaron) — corregido también.
+// Actualización 28-ago-2026, 3er archivo del día (CONSOLIDADO_HERO_3_2.xlsx): 13 filas nuevas de agosto (7
+// Mayoristas — 4 en MANABÍ: 1 ECO 150 + 3 HUNK 125R, y 2 en SIERRA: XPULSE 200 RALLY — y 6 AAP: MILAGRO,
+// BABAHOYO, ESMERALDAS, 9 DE OCTUBRE, EMPRESARIAL y PORTOVIEJO, 1 unidad cada una). Dos anomalías encontradas:
+// (1) las 6 filas nuevas de AAP llegaron con la columna "Ventas" vacía (solo traían Precio Unitario y Costo) —
+// se usó Precio Unitario como Ventas porque coincide exactamente con Ventas en cada fila de AAP de 1 unidad ya
+// validada históricamente, pero vale la pena que Santiago confirme en el sistema de origen por qué llegó así.
+// (2) la fila de Tienda Av. Américas de HUNK 125R ($3.254,18, comprobante 002-001-000000430) que llevaba varias
+// actualizaciones marcada "PENDIENTE AUTORIZAR" ahora aparece DUPLICADA: una copia sigue pendiente y otra ya
+// quedó "AUTORIZADA" con los mismos montos — es la misma venta, no dos; se descartó la copia pendiente y se
+// contó una sola vez para no duplicar la unidad ni los $3.254,18.
 const TIENDAS_TOTAL    = [12,28,24,35];
-const AAP_DATA          = [16,30,84,49];
-const RETAIL_TOTAL     = [18,58,107,65];   // AAP + OTOM + MASTER MOTO + CRESA (ESPAÑA/MARCIMEX/ARTEFACTA sin ventas)
+const AAP_DATA          = [16,30,84,55];
+const RETAIL_TOTAL     = [18,58,107,71];   // AAP + OTOM + MASTER MOTO + CRESA (ESPAÑA/MARCIMEX/ARTEFACTA sin ventas)
 const RETAIL_SIN_AAP   = [2,28,23,16];     // RETAIL_TOTAL minus AAP_DATA — used only in the Resumen channel chart below
-const MAYORISTAS_TOTAL = [273,152,84,109];
+const MAYORISTAS_TOTAL = [273,152,84,115];
 
 // Ventas $ por mes (columna "Ventas" del CONSOLIDADO_HERO, filtrado Estado en {Facturadas, NC}), por cuenta retail
-const RETAIL_VENTAS_TOTAL    = [26275, 88631, 161861, 102292];
+const RETAIL_VENTAS_TOTAL    = [26275, 88631, 161861, 111595];
 const RETAIL_VENTAS_SIN_AAP  = [2880, 43795, 34070, 29178];
 
 // Modelos vendidos, canal Retail únicamente (con AAP). data = unidades [Mayo,Junio,Julio,Agosto]; ventas = $ [Mayo,Junio,Julio,Agosto].
 // Orden por unidades totales desc. Los totales por mes coinciden con RETAIL_TOTAL / RETAIL_VENTAS_TOTAL.
 const RETAIL_MODELOS = [
-  {name:'ECO DELUXE',   data:[11,23,42,24], ventas:[12650,26480,48420,27600]},
-  {name:'HUNK 125R',    data:[4,14,31,21],  ventas:[6920,24250,53690,36330]},
-  {name:'XOOM 110',     data:[1,13,7,6],   ventas:[1605,20865,11235,9630]},
+  {name:'ECO DELUXE',   data:[11,23,42,26], ventas:[12650,26480,48420,29900]},
+  {name:'HUNK 125R',    data:[4,14,31,23],  ventas:[6920,24250,53690,39790]},
+  {name:'XOOM 110',     data:[1,13,7,7],   ventas:[1605,20865,11235,11235]},
   {name:'ECO 150',      data:[0,2,15,6],   ventas:[0,2960,22200,8880]},
   {name:'HUNK 160 4V',  data:[2,4,5,2],    ventas:[5100,10200,12750,5100]},
-  {name:'XOOM 125R',    data:[0,2,7,4],    ventas:[0,3876,13566,7752]},
+  {name:'XOOM 125R',    data:[0,2,7,5],    ventas:[0,3876,13566,9690]},
   {name:'XPULSE 200 RALLY', data:[0,0,0,1], ventas:[0,0,0,3700]},
   {name:'XPULSE 200 4V FI', data:[0,0,0,1], ventas:[0,0,0,3300]},
 ];
@@ -3167,8 +3161,8 @@ const TIENDAS_MODELOS = [
 
 // Ventas $ por mes — canales (Resumen). AAP repite el mismo dato que su fila en retailAccounts.ventas.
 const TIENDAS_VENTAS     = [22731, 60053, 70415, 104363];    // HERO GYE + HERO QUITO + CANAL DIGITAL
-const AAP_VENTAS         = [23395, 44836, 127791, 73114];
-const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 192903]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
+const AAP_VENTAS         = [23395, 44836, 127791, 82417];
+const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 206973]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
 
 // Ventas $ por mes, por zona Mayoristas (columna Ventas, agrupado por Vendedor — mismo mapeo validado con el usuario).
 // Agosto 2026: aparece un vendedor nuevo, "PLUAS NAVARRO GABRIEL ALEJANDRO" (7 u., $11.116) — confirmado con
@@ -3177,23 +3171,23 @@ const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 192903]; // suma de las 5 zo
 // al auditar el archivo CONSOLIDADO_HERO_3_2.xlsx del 26-ago-2026; el total de Mayoristas de julio no cambia).
 const MAYORISTAS_VENTAS_ZONA = {
   'ORIENTE':              [303707, 93692, 82092, 127651],
-  'ST DOMINGO / MANABI':  [40595,  37109, 30913, 17148],
+  'ST DOMINGO / MANABI':  [40595,  37109, 30913, 23818],
   'LOS RIOS':             [40634,  64229, 23510,  26650],
   'GUAYAS':               [73688,  31489, 4440,   11116],
-  'SIERRA':               [13930,  8252, 5030,  10338],
+  'SIERRA':               [13930,  8252, 5030,  17738],
 };
 
 // Modelos vendidos, canal Mayoristas únicamente. data = unidades [Mayo,Junio,Julio,Agosto]; ventas = $ [Mayo,Junio,Julio,Agosto].
 // Orden por unidades totales desc. Los totales por mes coinciden con MAYORISTAS_TOTAL / MAYORISTAS_VENTAS.
 const MAYORISTAS_MODELOS = [
   {name:'ECO DELUXE',        data:[85,24,16,18], ventas:[98028,27600,18400,20700]},
-  {name:'ECO 150',           data:[0,90,23,28],  ventas:[0,133722,34040,41440]},
+  {name:'ECO 150',           data:[0,90,23,29],  ventas:[0,133722,34040,42920]},
   {name:'XOOM 125R',         data:[46,13,20,16], ventas:[89148,25331,38760,31008]},
-  {name:'HUNK 125R',         data:[53,4,7,22],   ventas:[91336,7396,12110,38060]},
+  {name:'HUNK 125R',         data:[53,4,7,25],   ventas:[91336,7396,12110,43250]},
   {name:'XOOM 110',          data:[44,16,5,9],   ventas:[70677,25680,8025,14445]},
   {name:'HUNK 160 4V',       data:[34,3,11,9],  ventas:[86799,7560,28050,22950]},
   {name:'XPULSE 200 4V FI',  data:[11,2,2,4],   ventas:[36567,7483,6600,13200]},
-  {name:'XPULSE 200 RALLY',  data:[0,0,0,3],    ventas:[0,0,0,11100]},
+  {name:'XPULSE 200 RALLY',  data:[0,0,0,5],    ventas:[0,0,0,18500]},
 ];
 
 // Ventas $ por mes, por tienda propia Hero (columna Origen_Ventas: TIENDA AMERICAS / TIENDA NACIONES UNIDAS / CANAL DIGITAL)
@@ -3215,12 +3209,12 @@ const TIENDAS_VENTAS_STORE = {
 // dato anterior venía de la columna "Utilidad" de un archivo previo y no coincidía con Ventas−Costo del
 // archivo actual (encontrado al auditar CONSOLIDADO_HERO_3_2.xlsx del 26-ago-2026; Ventas de julio no cambia).
 const MAYORISTAS_MARGEN_VENTAS   = MAYORISTAS_VENTAS;
-const MAYORISTAS_MARGEN_UTILIDAD = [121998.51, 69563.71, 38941.68, 49055.92];
+const MAYORISTAS_MARGEN_UTILIDAD = [121998.51, 69563.71, 38941.68, 52932.59];
 const RETAIL_MARGEN_VENTAS       = RETAIL_VENTAS_TOTAL;
 // Corregido 28-ago-2026: Agosto quedó mal calculado en una actualización anterior (23129.10) — no coincidía
 // con Ventas−Costo del archivo fuente (23978.91), aunque Ventas/Unidades de Retail no cambiaron. Encontrado
 // al auditar el archivo CONSOLIDADO_HERO_3_2.xlsx del 28-ago-2026.
-const RETAIL_MARGEN_UTILIDAD     = [6345.33, 22101.19, 40251.64, 23978.91];
+const RETAIL_MARGEN_UTILIDAD     = [6345.33, 22101.19, 40251.64, 26113.76];
 const TIENDAS_MARGEN_VENTAS      = TIENDAS_VENTAS;
 const TIENDAS_MARGEN_UTILIDAD    = [8217.44, 25145.27, 36351.70, 53217.07];
 
@@ -3371,10 +3365,10 @@ const ZONE_COLORS = ['--zone-1','--zone-2','--zone-3','--zone-4','--zone-5'].map
 
 const mayoristasAccounts = [
   {name:'ORIENTE',              data:[181,60,43,70]},
-  {name:'ST DOMINGO / MANABI',  data:[28,24,19,11]},
+  {name:'ST DOMINGO / MANABI',  data:[28,24,19,15]},
   {name:'LOS RIOS',             data:[24,45,17,17]},
   {name:'GUAYAS',               data:[36,19,3,7]},
-  {name:'SIERRA',               data:[4,4,2,4]},
+  {name:'SIERRA',               data:[4,4,2,6]},
 ].map(a=>({...a, ventas: MAYORISTAS_VENTAS_ZONA[a.name], total:a.data.reduce((x,y)=>x+y,0)})).sort((a,b)=>b.total-a.total)
  .map((a,i)=>({...a, color: ZONE_COLORS[i]}));
 
@@ -3410,7 +3404,7 @@ function computeRepuestosCanalModel(metric){
 const RETAIL_COLORS = ['--retail-1','--retail-2','--retail-3','--retail-4'].map(getVar);
 
 const retailAccounts = [
-  {name:'AAP',          data:[16,30,84,49], ventas:[23395,44836,127791,73114]},
+  {name:'AAP',          data:[16,30,84,55], ventas:[23395,44836,127791,82417]},
   {name:'OTOM',         data:[0,28,12,12],  ventas:[0,43735,17760,20688]},
   {name:'CRESA',        data:[2,0,7,0],     ventas:[2880,60,9390,0]},
   {name:'MASTER MOTO',  data:[0,0,4,4],     ventas:[0,0,6920,8490]},
@@ -3425,15 +3419,15 @@ const retailAccounts = [
 // origen "CANAL DIGITAL" en agosto — es una cuenta AAP, no tiene sentido como canal digital de Tiendas Hero,
 // así que se sumó a EMPRESARIAL (confirmado con Santiago).
 const AAP_ORIGEN = [
-  {name:'BABAHOYO',           u:20, v:31471},
-  {name:'MILAGRO',            u:19, v:29905},
-  {name:'9 DE OCTUBRE',       u:19, v:29059},
+  {name:'BABAHOYO',           u:21, v:33201},
+  {name:'MILAGRO',            u:20, v:31635},
+  {name:'9 DE OCTUBRE',       u:20, v:30997},
   {name:'DURÁN',              u:19, v:25868},
-  {name:'ESMERALDAS',         u:13, v:18420},
-  {name:'PORTOVIEJO',         u:10, v:16299},
+  {name:'ESMERALDAS',         u:14, v:19570},
+  {name:'PORTOVIEJO',         u:11, v:17449},
   {name:'PARQUE CALIFORNIA',  u:10, v:15560},
   {name:'LIBERTAD',           u:10, v:14640},
-  {name:'EMPRESARIAL',        u:9,  v:13365},
+  {name:'EMPRESARIAL',        u:10, v:14970},
   {name:'BUENA FE',           u:8,  v:13708},
   {name:'SANTO DOMINGO',      u:8,  v:11270},
   {name:'VINCES',             u:8,  v:10360},
@@ -3455,15 +3449,15 @@ const NONAAP_ORIGEN = [
 // Detalle mensual por origen (Retail) — data = unidades [Mayo,Junio,Julio,Agosto], ventas = $ [Mayo,Junio,Julio,Agosto].
 // AAP: los 18 orígenes completos, sin agrupar en "Otros" — mismo criterio y orden que AAP_ORIGEN.
 const AAP_ORIGEN_MENSUAL = [
-  {name:'BABAHOYO',           data:[2,8,8,2],  ventas:[3700,13118,12843,1810]},
-  {name:'MILAGRO',            data:[3,2,8,6],  ventas:[3905,2755,14400,8845]},
-  {name:'9 DE OCTUBRE',       data:[1,5,10,3], ventas:[1150,8028,15271,4610]},
+  {name:'BABAHOYO',           data:[2,8,8,3],  ventas:[3700,13118,12843,3540]},
+  {name:'MILAGRO',            data:[3,2,8,7],  ventas:[3905,2755,14400,10575]},
+  {name:'9 DE OCTUBRE',       data:[1,5,10,4], ventas:[1150,8028,15271,6548]},
   {name:'DURÁN',              data:[3,4,6,6],  ventas:[3450,5510,8848,8060]},
-  {name:'ESMERALDAS',         data:[0,5,3,5],  ventas:[0,6330,3450,8640]},
-  {name:'PORTOVIEJO',         data:[1,2,5,2],  ventas:[2550,3335,7326,3088]},
+  {name:'ESMERALDAS',         data:[0,5,3,6],  ventas:[0,6330,3450,9790]},
+  {name:'PORTOVIEJO',         data:[1,2,5,3],  ventas:[2550,3335,7326,4238]},
   {name:'PARQUE CALIFORNIA',  data:[0,0,8,2],  ventas:[0,0,12680,2880]},
   {name:'LIBERTAD',           data:[1,0,6,3],  ventas:[1150,0,9460,4030]},
-  {name:'EMPRESARIAL',        data:[0,0,6,3],  ventas:[0,0,9335,4030]},
+  {name:'EMPRESARIAL',        data:[0,0,6,4],  ventas:[0,0,9335,5635]},
   {name:'BUENA FE',           data:[0,3,3,2],  ventas:[0,4610,5430,3668]},
   {name:'SANTO DOMINGO',      data:[2,1,4,1],  ventas:[2880,1150,5760,1480]},
   {name:'VINCES',             data:[1,0,6,1],  ventas:[1730,0,7480,1150]},
@@ -3474,8 +3468,8 @@ const AAP_ORIGEN_MENSUAL = [
   {name:'PEDERNALES',         data:[0,0,1,1],  ventas:[0,0,1938,1605]},
   {name:'CDC',                data:[1,0,0,0],  ventas:[1150,0,0,0]},
 ];
-const AAP_ORIGEN_MONTH_TOTAL = [16,30,84,49];
-const AAP_ORIGEN_MONTH_TOTAL_VENTAS = [23395,44836,127791,73114];
+const AAP_ORIGEN_MONTH_TOTAL = [16,30,84,55];
+const AAP_ORIGEN_MONTH_TOTAL_VENTAS = [23395,44836,127791,82417];
 
 // Sin AAP: los orígenes con ventas registradas (OTOM, CRESA, Master Moto). Agosto 2026: 1 u. nueva
 // ($3.700, XPULSE 200 RALLY, cuenta OTOM/MMOTASA) en origen DAULE.
@@ -3491,17 +3485,17 @@ const NONAAP_ORIGEN_MONTH_TOTAL_VENTAS = [2880,43795,34070,29178];
 // Perfil de cliente (columna "Perfil Tiendas Hero/AAP"), acumulado Mayo-Agosto 2026 (actualizado con
 // CONSOLIDADO_HERO_4.xlsx — los 1 u. "PENDIENTE" del corte anterior ya quedaron asignados a un perfil real).
 const PERFIL_AAP = [
-  {name:'AAA',        v:54358, u:34},
-  {name:'AA',         v:62145, u:36},
+  {name:'AAA',        v:55963, u:35},
+  {name:'AA',         v:63295, u:37},
   {name:'A',          v:33316, u:24},
-  {name:'BBB',        v:14605, u:10},
-  {name:'BB',         v:15880, u:11},
+  {name:'BBB',        v:16335, u:11},
+  {name:'BB',         v:17818, u:12},
   {name:'B',          v:21835, u:16},
-  {name:'B+',         v:13996, u:9},
+  {name:'B+',         v:15146, u:10},
   {name:'B-',         v:18545, u:13},
   {name:'C+',         v:9655,  u:8},
   {name:'NSSA',       v:2880,  u:2},
-  {name:'CONTADO',    v:18016, u:13},
+  {name:'CONTADO',    v:19746, u:14},
   {name:'EXCEPCION',  v:2755,  u:2},
   {name:'NSSB',       v:1150,  u:1},
 ];
@@ -3509,22 +3503,22 @@ const PERFIL_AAP = [
 // Detalle mensual por Perfil (Retail, AAP) — data = unidades [Mayo,Junio,Julio,Agosto], ventas = $ [Mayo,Junio,Julio,Agosto].
 // Mismo orden fijo de escala que PERFIL_AAP.
 const PERFIL_AAP_MENSUAL = [
-  {name:'AAA',        data:[1,3,28,2], ventas:[2550,4818,44110,2880]},
-  {name:'AA',         data:[2,9,16,9], ventas:[4280,15675,29190,13000]},
+  {name:'AAA',        data:[1,3,28,3], ventas:[2550,4818,44110,4485]},
+  {name:'AA',         data:[2,9,16,10], ventas:[4280,15675,29190,14150]},
   {name:'A',          data:[1,5,7,11], ventas:[1730,6785,8838,15963]},
-  {name:'BBB',        data:[1,1,5,3],  ventas:[1150,1480,7490,4485]},
-  {name:'BB',         data:[1,1,4,5],  ventas:[1150,1150,5760,7820]},
+  {name:'BBB',        data:[1,1,5,4],  ventas:[1150,1480,7490,6215]},
+  {name:'BB',         data:[1,1,4,6],  ventas:[1150,1150,5760,9758]},
   {name:'B',          data:[1,1,5,9],  ventas:[1150,1480,6330,12875]},
-  {name:'B+',         data:[0,1,6,2],  ventas:[0,1730,8598,3668]},
+  {name:'B+',         data:[0,1,6,3],  ventas:[0,1730,8598,4818]},
   {name:'B-',         data:[5,3,2,3],  ventas:[6785,3450,2880,5430]},
   {name:'C+',         data:[2,3,2,1],  ventas:[2300,3450,2300,1605]},
   {name:'NSSA',       data:[0,0,2,0],  ventas:[0,0,2880,0]},
-  {name:'CONTADO',    data:[1,3,6,3],  ventas:[1150,4818,7810,4238]},
+  {name:'CONTADO',    data:[1,3,6,4],  ventas:[1150,4818,7810,5968]},
   {name:'EXCEPCION',  data:[1,0,1,0],  ventas:[1150,0,1605,0]},
   {name:'NSSB',       data:[0,0,0,1],  ventas:[0,0,0,1150]},
 ];
-const PERFIL_AAP_MONTH_TOTAL = [16,30,84,49]; // unidades con perfil asignado, AAP, por mes
-const PERFIL_AAP_MONTH_TOTAL_VENTAS = [23395,44836,127791,73114]; // $ con perfil asignado, AAP, por mes
+const PERFIL_AAP_MONTH_TOTAL = [16,30,84,55]; // unidades con perfil asignado, AAP, por mes
+const PERFIL_AAP_MONTH_TOTAL_VENTAS = [23395,44836,127791,82417]; // $ con perfil asignado, AAP, por mes
 
 // Perfil de cliente por tienda propia Hero (columna Origen_Ventas = TIENDA AMERICAS / TIENDA NACIONES UNIDAS,
 // esta última incluyendo Canal Digital). Orden fijo por tienda — acumulado Mayo-Agosto 2026, actualizado con
@@ -3601,17 +3595,17 @@ const PERFIL_CANAL_DIGITAL_MONTH_TOTAL_VENTAS = [0,0,0,11717.45];
 // Vista combinada (Resumen): AAP + Tiendas Hero (Av. Américas + Naciones Unidas, incl. Canal Digital) — los
 // dos únicos canales con el campo "Perfil" registrado. Orden fijo por escala de perfil. Acumulado Mayo-Agosto 2026.
 const PERFIL_RESUMEN = [
-  {name:'AAA',        v:103603, u:54},
-  {name:'AA',         v:90535, u:46},
+  {name:'AAA',        v:105208, u:55},
+  {name:'AA',         v:91685, u:47},
   {name:'A',          v:56003, u:31},
-  {name:'BBB',        v:26495, u:14},
-  {name:'BB',         v:35253, u:16},
+  {name:'BBB',        v:28225, u:15},
+  {name:'BB',         v:37191, u:17},
   {name:'B',          v:29481, u:18},
-  {name:'B+',         v:31264, u:14},
+  {name:'B+',         v:32414, u:15},
   {name:'B-',         v:37752, u:20},
   {name:'C+',         v:9655,  u:8},
   {name:'NSSA',       v:2880,  u:2},
-  {name:'CONTADO',    v:65966, u:33},
+  {name:'CONTADO',    v:67697, u:34},
   {name:'EXCEPCION',  v:2755,  u:2},
   {name:'COLABORADOR',v:26226, u:16},
   {name:'NSSB',       v:1150,  u:1},
@@ -3621,24 +3615,24 @@ const PERFIL_RESUMEN = [
 // Detalle mensual por Perfil (Resumen, combinado AAP + Tiendas Hero) — data = unidades [Mayo,Junio,Julio,Agosto],
 // ventas = $ [Mayo,Junio,Julio,Agosto]. Mismo orden fijo de escala que PERFIL_RESUMEN.
 const PERFIL_RESUMEN_MENSUAL = [
-  {name:'AAA',        data:[3,9,35,7],  ventas:[6798,13966,65537,17303]},
-  {name:'AA',         data:[2,10,19,15],ventas:[4280,18775,36477,31003]},
+  {name:'AAA',        data:[3,9,35,8],  ventas:[6798,13966,65537,18908]},
+  {name:'AA',         data:[2,10,19,16],ventas:[4280,18775,36477,32153]},
   {name:'A',          data:[1,6,8,16],  ventas:[1730,10131,12174,31968]},
-  {name:'BBB',        data:[1,2,6,5],   ventas:[1150,5073,9787,10484]},
-  {name:'BB',         data:[1,3,7,5],   ventas:[1150,6961,19322,7820]},
+  {name:'BBB',        data:[1,2,6,6],   ventas:[1150,5073,9787,12214]},
+  {name:'BB',         data:[1,3,7,6],   ventas:[1150,6961,19322,9758]},
   {name:'B',          data:[1,1,5,11],  ventas:[1150,1480,6330,20521]},
-  {name:'B+',         data:[0,1,7,6],   ventas:[0,1730,12485,17049]},
+  {name:'B+',         data:[0,1,7,7],   ventas:[0,1730,12485,18198]},
   {name:'B-',         data:[5,4,3,8],   ventas:[6785,6872,5113,18983]},
   {name:'C+',         data:[2,3,2,1],   ventas:[2300,3450,2300,1605]},
   {name:'NSSA',       data:[0,0,2,0],   ventas:[0,0,2880,0]},
-  {name:'CONTADO',    data:[6,13,10,4], ventas:[13391,26757,18835,6983]},
+  {name:'CONTADO',    data:[6,13,10,5], ventas:[13391,26757,18835,8713]},
   {name:'EXCEPCION',  data:[1,0,1,0],   ventas:[1150,0,1605,0]},
   {name:'COLABORADOR',data:[5,6,3,2],   ventas:[6242,9694,5362,4929]},
   {name:'NSSB',       data:[0,0,0,1],   ventas:[0,0,0,1150]},
   {name:'PENDIENTE',  data:[0,0,0,3],   ventas:[0,0,0,7679]},
 ];
-const PERFIL_MONTH_TOTAL = [28,58,108,84]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
-const PERFIL_MONTH_TOTAL_VENTAS = [46126,104889,198207,177477]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL = [28,58,108,90]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL_VENTAS = [46126,104889,198207,186780]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
 
 // Vista "SIN AAP" (Resumen): PERFIL_RESUMEN menos AAP = solo Tiendas Hero (Av. Américas + Naciones Unidas + Canal Digital).
 const PERFIL_RESUMEN_SIN_AAP = [
@@ -3716,33 +3710,33 @@ function computePerfilGeneralRowsTiendas(){
 // Modelos vendidos, los 3 canales combinados (Mayoristas + Retail + Tiendas), con AAP.
 // data = unidades [Mayo,Junio,Julio]; ventas = $ [Mayo,Junio,Julio]. Orden por unidades totales desc.
 const MODELOS = [
-  {name:'ECO DELUXE',        data:[102,56,60,45], ventas:[119504,67346,71330,54937]},
-  {name:'HUNK 125R',         data:[59,28,48,56], ventas:[102394,54940,94666,112491]},
-  {name:'ECO 150',           data:[0,93,39,38],  ventas:[0,138482,58040,61544]},
-  {name:'XOOM 125R',         data:[46,19,34,25], ventas:[89148,38179,70668,50277]},
-  {name:'XOOM 110',          data:[47,30,12,16], ventas:[75304,49967,19260,27528]},
+  {name:'ECO DELUXE',        data:[102,56,60,47], ventas:[119504,67346,71330,57237]},
+  {name:'HUNK 125R',         data:[59,28,48,61], ventas:[102394,54940,94666,121141]},
+  {name:'ECO 150',           data:[0,93,39,39],  ventas:[0,138482,58040,63024]},
+  {name:'XOOM 125R',         data:[46,19,34,26], ventas:[89148,38179,70668,52215]},
+  {name:'XOOM 110',          data:[47,30,12,17], ventas:[75304,49967,19260,29133]},
   {name:'HUNK 160 4V',       data:[37,10,19,18], ventas:[94844,27060,54108,52618]},
   {name:'XPULSE 200 4V FI',  data:[12,2,3,7],    ventas:[40367,7483,10190,25363]},
-  {name:'XPULSE 200 RALLY',  data:[0,0,0,4],     ventas:[0,0,0,14800]},
+  {name:'XPULSE 200 RALLY',  data:[0,0,0,6],     ventas:[0,0,0,22200]},
 ];
-const MODELOS_MONTH_TOTAL = [303,238,215,209]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
-const MODELOS_MONTH_TOTAL_VENTAS = [521560,383455,378261,399558]; // coincide con "Ventas totales" de Resumen (CON AAP)
+const MODELOS_MONTH_TOTAL = [303,238,215,221]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
+const MODELOS_MONTH_TOTAL_VENTAS = [521560,383455,378261,422931]; // coincide con "Ventas totales" de Resumen (CON AAP)
 
 // Vista "SIN AAP" (Resumen): MODELOS menos la contribución de AAP por modelo (3 canales, Retail sin AAP).
 // Resincronizado 28-ago-2026 junto con MODELOS arriba, a partir de los 3 canales (Mayoristas + Retail sin
 // AAP + Tiendas), para que ambas tablas cuadren siempre con cada actualización de datos.
 const MODELOS_SIN_AAP = [
   {name:'ECO DELUXE',        data:[92,42,23,25], ventas:[108004,51246,28780,31937]},
-  {name:'ECO 150',           data:[0,91,36,35],   ventas:[0,135522,53600,57104]},
-  {name:'HUNK 125R',         data:[56,22,23,40], ventas:[97204,44560,51416,84811]},
+  {name:'ECO 150',           data:[0,91,36,36],   ventas:[0,135522,53600,58584]},
+  {name:'HUNK 125R',         data:[56,22,23,43], ventas:[97204,44560,51416,90001]},
   {name:'XOOM 125R',         data:[46,17,27,22],  ventas:[89148,34303,57102,44463]},
   {name:'XOOM 110',          data:[46,26,5,10],   ventas:[73699,43547,8025,17898]},
   {name:'HUNK 160 4V',       data:[35,8,14,17],  ventas:[89744,21960,41358,50068]},
   {name:'XPULSE 200 4V FI',  data:[12,2,3,7],    ventas:[40367,7483,10190,25363]},
-  {name:'XPULSE 200 RALLY',  data:[0,0,0,4],     ventas:[0,0,0,14800]},
+  {name:'XPULSE 200 RALLY',  data:[0,0,0,6],     ventas:[0,0,0,22200]},
 ];
-const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,131,160]; // MODELOS_MONTH_TOTAL menos AAP_DATA
-const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [498165,338619,250470,326444]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
+const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,131,166]; // MODELOS_MONTH_TOTAL menos AAP_DATA
+const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [498165,338619,250470,340514]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
 
 // Presupuesto en $ asignado a Tiendas Hero por mes, para el KPI de cumplimiento en Tiendas.
 const TIENDAS_BUDGET_VENTAS = [26835,67088,102650,147011.36];
@@ -3868,7 +3862,30 @@ const SELLINOUT_GROUPS = [
 ];
 const SELLIN_TOTAL_CONSIGNACION = [83,102,72,87];
 const SELLIN_TOTAL_FACTURACION  = [273,152,140,130];
-const SELLOUT_TOTAL             = [37,67,175,114];
+
+// Desglose real de Sell Out de Agosto, por canal y por modelo — fuente propia (cuadro aparte, sin desglose
+// mensual todavía; ver comentario junto a renderSioAgostoTables). Único origen de verdad de ambos: alimentan
+// las dos tablitas "Unidades por canal" / "Unidades por modelo" de esta página Y el total de Agosto de
+// SELLOUT_TOTAL más abajo, para que la tarjeta "Sell Out total" (y todo lo que dependa de ella) siempre
+// coincida con las tablitas — actualizar solo aquí basta.
+const SELLOUT_AGOSTO_CANAL = [
+  {name:'TIENDAS AAP',  u:57},
+  {name:'TIENDAS HERO', u:33},
+  {name:'MAYORISTA',    u:51},
+  {name:'RETAIL',       u:16},
+  {name:'DIGITAL',      u:4},
+];
+const SELLOUT_AGOSTO_MODELO = [
+  {name:'HUNK 125',      u:44},
+  {name:'ECO DELUXE',    u:40},
+  {name:'ECO 150',       u:26},
+  {name:'XOOM 125',      u:21},
+  {name:'XOOM 110',      u:12},
+  {name:'HUNK 160',      u:13},
+  {name:'XPULSE 200',    u:4},
+  {name:'XPULSE RALLY',  u:1},
+];
+const SELLOUT_TOTAL = [37,67,175, SELLOUT_AGOSTO_CANAL.reduce((a,c)=>a+c.u,0)];
 
 const sum = arr => arr.reduce((a,b)=>a+b,0);
 const SELLIN_TOTAL = sumArr(SELLIN_TOTAL_CONSIGNACION, SELLIN_TOTAL_FACTURACION);
@@ -8040,8 +8057,15 @@ function buildSioMensualTable(){
 // aparte, sin desglose mensual todavía) — se ocultan en Todos/Mayo/Junio/Julio en vez de mostrar un
 // número que no corresponde al mes filtrado, siguiendo el mismo criterio que el bloque "por punto" de
 // Mano de Obra (ver renderManoObraPuntoCharts).
+function renderSioAgostoBreakdownTable(tbodyId, rows){
+  const totalU = rows.reduce((a,r)=>a+r.u,0);
+  document.getElementById(tbodyId).innerHTML = rows.map(r=> `<tr><td>${r.name}</td><td class="num">${fmt(r.u)}</td></tr>`).join('')
+    + `<tr style="font-weight:800;background:var(--page-plane);"><td>Total</td><td class="num">${fmt(totalU)}</td></tr>`;
+}
 function renderSioAgostoTables(){
   document.getElementById('sioAgostoTablesRow').style.display = monthFilter==='agosto' ? '' : 'none';
+  renderSioAgostoBreakdownTable('tblSioAgostoCanal', SELLOUT_AGOSTO_CANAL);
+  renderSioAgostoBreakdownTable('tblSioAgostoModelo', SELLOUT_AGOSTO_MODELO);
 }
 
 function renderSio(){
