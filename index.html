@@ -2453,7 +2453,7 @@
       <div class="topbar">
         <div>
           <h1>Repuestos</h1>
-          <div class="subtitle">Ventas de repuestos — Mayo a Agosto 2026 (Mayo y Agosto son datos parciales)</div>
+          <div class="subtitle">Ventas de repuestos — Mayo a Agosto 2026 (Mayo es un dato parcial; Agosto ya es un mes cerrado)</div>
         </div>
         <div class="topbar-controls">
           <div class="aap-toggle" data-metric-toggle="repuestos">
@@ -2742,7 +2742,7 @@
               </div>
             </div>
             <div class="chart-box" style="height:198px;"><canvas id="chartRepuestosProvincia"></canvas></div>
-            <div class="footnote">Faltan 6 de 16 provincias: ZAMORA CHINCHIPE, TUNGURAHUA, ESMERALDAS, BOLÍVAR, CAÑAR y SANTA ELENA — 42 u. · $289 combinados (3,9% u. / 3,3% $ del total).</div>
+            <div class="footnote">Faltan 9 de 19 provincias: NAPO, ZAMORA CHINCHIPE, ESMERALDAS, TUNGURAHUA, BOLÍVAR, IMBABURA, CAÑAR, SANTA ELENA y ORELLANA — 55 u. · $466 combinados (3,8% u. / 3,8% $ del total).</div>
           </div>
           <div class="panel">
             <div class="panel-head">
@@ -2757,7 +2757,7 @@
                 <tbody id="tblRepuestosProvincia"></tbody>
               </table>
             </div>
-            <div class="footnote" id="repuestosProvinciaFootnote">Top 10 de 17 provincias con ventas en el periodo, por venta neta. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026_2, hoja BASE_DATOS.</div>
+            <div class="footnote" id="repuestosProvinciaFootnote">Top 10 de 19 provincias con ventas en el periodo, por venta neta. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.</div>
           </div>
         </div>
         <div class="grid-2r">
@@ -2786,7 +2786,7 @@
                 <tbody id="tblRepuestosCanal"></tbody>
               </table>
             </div>
-            <div class="footnote" id="repuestosCanalFootnote">Azul = mayor valor ese mes. % = participación sobre el total de ese mes. Clasificación por SKU (hoja SKU_CATEGORIAS, 16 categorías, con scroll). Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026_2, hoja BASE_DATOS.</div>
+            <div class="footnote" id="repuestosCanalFootnote">Azul = mayor valor ese mes. % = participación sobre el total de ese mes. Clasificación por SKU (hoja SKU_CATEGORIAS, 16 categorías, con scroll). Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.</div>
           </div>
         </div>
       </div>
@@ -2801,7 +2801,7 @@
               </div>
             </div>
             <div class="chart-box" style="height:212px;"><canvas id="chartRepuestosModelosRanking"></canvas></div>
-            <div class="footnote" id="repuestosModelosRankingFootnote">Top 10 de 18 modelos HERO. Reparte la venta entre modelos cuando aplica a varios. Fuente: hoja MODELOS.</div>
+            <div class="footnote" id="repuestosModelosRankingFootnote">Top 10 de 19 modelos HERO. Reparte la venta entre modelos cuando aplica a varios. Fuente: hoja MODELOS.</div>
           </div>
           <div class="panel">
             <div class="panel-head">
@@ -2816,7 +2816,7 @@
                 <tbody id="tblRepuestosModelos"></tbody>
               </table>
             </div>
-            <div class="footnote" id="repuestosModelosFootnote">18 modelos HERO. Azul = mayor valor ese mes. % = participación del total de ese mes.</div>
+            <div class="footnote" id="repuestosModelosFootnote">19 modelos HERO. Azul = mayor valor ese mes. % = participación del total de ese mes.</div>
           </div>
         </div>
         <div class="grid-2r">
@@ -3343,22 +3343,33 @@ Chart.defaults.set('plugins.datalabels', { display:false }); // opt-in per chart
 // Canal Digital (XPULSE 200 RALLY, $6.678,23, Perfil BB) y 1 en Tienda Av. Américas (XOOM 125R, $2.279,50,
 // Perfil CONTADO); en AAP (Retail), 4 unidades en BABAHOYO (XOOM 125R $1.938 AAA, ECO 150 $1.480 AA, ECO
 // DELUXE $1.150 A, HUNK 125R $1.730 AA) y 1 en LIBERTAD (HUNK 125R $1.730 B+).
+// Actualización 1-sep-2026 (CONSOLIDADO_HERO_3_2_1.xlsx): 1087→1108 filas en BASE, hoja GARANTIAS sin cambios
+// (siguen 5 filas — se dejó tal cual, sin tocar). 21 filas nuevas de agosto, todas facturas ya existentes que
+// llegaron con más líneas: 16 Mayoristas por $25.096 — ATENEAEC S.A.S. en GUAYAS 8 u. (7 ECO 150 + 1 XOOM 110,
+// comprobante 348), MURILLO RAMOS LADY VALERIA en LOS RIOS 4 u. ECO 150 (comprobante 347), PEREZ GUTIERREZ
+// EDINSON ANTONIO en GUAYAS 4 u. (1 XOOM 110 + 2 XOOM 125R + 1 HUNK 125R, comprobante 346); en total por modelo:
+// ECO 150 x11, XOOM 110 x2, XOOM 125R x2, HUNK 125R x1 — y 5 AAP por $7.240: ECO DELUXE en BABAHOYO y 9 DE
+// OCTUBRE, HUNK 125R en PARQUE CALIFORNIA, XOOM 110 en GUASMO y 9 DE OCTUBRE. Anomalía encontrada: las 16
+// filas nuevas de Mayoristas llegaron con Canal="MAYORISTA" (singular) en vez de "MAYORISTAS" — un typo de
+// captura que, sin corregir, las habría dejado fuera de todos los totales por canal (Mayoristas hubiera
+// seguido en 115 u. de agosto en vez de 131). Se normalizó para que cuenten correctamente; vale la pena que
+// Santiago lo revise en el sistema de origen. Las 5 filas de AAP llegaron bien etiquetadas, sin anomalías.
 const TIENDAS_TOTAL    = [12,28,24,39];
-const AAP_DATA          = [16,30,84,61];
-const RETAIL_TOTAL     = [18,58,107,77];   // AAP + OTOM + MASTER MOTO + CRESA (ESPAÑA/MARCIMEX/ARTEFACTA sin ventas)
+const AAP_DATA          = [16,30,84,66];
+const RETAIL_TOTAL     = [18,58,107,82];   // AAP + OTOM + MASTER MOTO + CRESA (ESPAÑA/MARCIMEX/ARTEFACTA sin ventas)
 const RETAIL_SIN_AAP   = [2,28,23,16];     // RETAIL_TOTAL minus AAP_DATA — used only in the Resumen channel chart below
-const MAYORISTAS_TOTAL = [273,152,84,115];
+const MAYORISTAS_TOTAL = [273,152,84,131];
 
 // Ventas $ por mes (columna "Ventas" del CONSOLIDADO_HERO, filtrado Estado en {Facturadas, NC}), por cuenta retail
-const RETAIL_VENTAS_TOTAL    = [26275, 88631, 161861, 121353];
+const RETAIL_VENTAS_TOTAL    = [26275, 88631, 161861, 128593];
 const RETAIL_VENTAS_SIN_AAP  = [2880, 43795, 34070, 29178];
 
 // Modelos vendidos, canal Retail únicamente (con AAP). data = unidades [Mayo,Junio,Julio,Agosto]; ventas = $ [Mayo,Junio,Julio,Agosto].
 // Orden por unidades totales desc. Los totales por mes coinciden con RETAIL_TOTAL / RETAIL_VENTAS_TOTAL.
 const RETAIL_MODELOS = [
-  {name:'ECO DELUXE',   data:[11,23,42,27], ventas:[12650,26480,48420,31050]},
-  {name:'HUNK 125R',    data:[4,14,31,26],  ventas:[6920,24250,53690,44980]},
-  {name:'XOOM 110',     data:[1,13,7,7],   ventas:[1605,20865,11235,11235]},
+  {name:'ECO DELUXE',   data:[11,23,42,29], ventas:[12650,26480,48420,33350]},
+  {name:'HUNK 125R',    data:[4,14,31,27],  ventas:[6920,24250,53690,46710]},
+  {name:'XOOM 110',     data:[1,13,7,9],   ventas:[1605,20865,11235,14445]},
   {name:'ECO 150',      data:[0,2,15,7],   ventas:[0,2960,22200,10360]},
   {name:'HUNK 160 4V',  data:[2,4,5,2],    ventas:[5100,10200,12750,5100]},
   {name:'XOOM 125R',    data:[0,2,7,6],    ventas:[0,3876,13566,11628]},
@@ -3395,8 +3406,8 @@ const TIENDAS_MODELOS = [
 
 // Ventas $ por mes — canales (Resumen). AAP repite el mismo dato que su fila en retailAccounts.ventas.
 const TIENDAS_VENTAS     = [22731, 60053, 70415, 118695];    // HERO GYE + HERO QUITO + CANAL DIGITAL
-const AAP_VENTAS         = [23395, 44836, 127791, 92175];
-const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 206973]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
+const AAP_VENTAS         = [23395, 44836, 127791, 99415];
+const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 232069]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
 
 // Ventas $ por mes, por zona Mayoristas (columna Ventas, agrupado por Vendedor — mismo mapeo validado con el usuario).
 // Agosto 2026: aparece un vendedor nuevo, "PLUAS NAVARRO GABRIEL ALEJANDRO" (7 u., $11.116) — confirmado con
@@ -3406,19 +3417,19 @@ const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 206973]; // suma de las 5 zo
 const MAYORISTAS_VENTAS_ZONA = {
   'ORIENTE':              [303707, 93692, 82092, 127651],
   'ST DOMINGO / MANABI':  [40595,  37109, 30913, 23818],
-  'LOS RIOS':             [40634,  64229, 23510,  26650],
-  'GUAYAS':               [73688,  31489, 4440,   11116],
+  'LOS RIOS':             [40634,  64229, 23510,  32570],
+  'GUAYAS':               [73688,  31489, 4440,   30292],
   'SIERRA':               [13930,  8252, 5030,  17738],
 };
 
 // Modelos vendidos, canal Mayoristas únicamente. data = unidades [Mayo,Junio,Julio,Agosto]; ventas = $ [Mayo,Junio,Julio,Agosto].
 // Orden por unidades totales desc. Los totales por mes coinciden con MAYORISTAS_TOTAL / MAYORISTAS_VENTAS.
 const MAYORISTAS_MODELOS = [
+  {name:'ECO 150',           data:[0,90,23,40],  ventas:[0,133722,34040,59200]},
   {name:'ECO DELUXE',        data:[85,24,16,18], ventas:[98028,27600,18400,20700]},
-  {name:'ECO 150',           data:[0,90,23,29],  ventas:[0,133722,34040,42920]},
-  {name:'XOOM 125R',         data:[46,13,20,16], ventas:[89148,25331,38760,31008]},
-  {name:'HUNK 125R',         data:[53,4,7,25],   ventas:[91336,7396,12110,43250]},
-  {name:'XOOM 110',          data:[44,16,5,9],   ventas:[70677,25680,8025,14445]},
+  {name:'XOOM 125R',         data:[46,13,20,18], ventas:[89148,25331,38760,34884]},
+  {name:'HUNK 125R',         data:[53,4,7,26],   ventas:[91336,7396,12110,44980]},
+  {name:'XOOM 110',          data:[44,16,5,11],  ventas:[70677,25680,8025,17655]},
   {name:'HUNK 160 4V',       data:[34,3,11,9],  ventas:[86799,7560,28050,22950]},
   {name:'XPULSE 200 4V FI',  data:[11,2,2,4],   ventas:[36567,7483,6600,13200]},
   {name:'XPULSE 200 RALLY',  data:[0,0,0,5],    ventas:[0,0,0,18500]},
@@ -3443,12 +3454,12 @@ const TIENDAS_VENTAS_STORE = {
 // dato anterior venía de la columna "Utilidad" de un archivo previo y no coincidía con Ventas−Costo del
 // archivo actual (encontrado al auditar CONSOLIDADO_HERO_3_2.xlsx del 26-ago-2026; Ventas de julio no cambia).
 const MAYORISTAS_MARGEN_VENTAS   = MAYORISTAS_VENTAS;
-const MAYORISTAS_MARGEN_UTILIDAD = [121998.51, 69563.71, 38941.68, 52932.59];
+const MAYORISTAS_MARGEN_UTILIDAD = [121998.51, 69563.71, 38941.68, 59930.23];
 const RETAIL_MARGEN_VENTAS       = RETAIL_VENTAS_TOTAL;
 // Corregido 28-ago-2026: Agosto quedó mal calculado en una actualización anterior (23129.10) — no coincidía
 // con Ventas−Costo del archivo fuente (23978.91), aunque Ventas/Unidades de Retail no cambiaron. Encontrado
 // al auditar el archivo CONSOLIDADO_HERO_3_2.xlsx del 28-ago-2026.
-const RETAIL_MARGEN_UTILIDAD     = [6345.33, 22101.19, 40251.64, 28441.12];
+const RETAIL_MARGEN_UTILIDAD     = [6345.33, 22101.19, 40251.64, 30094.23];
 const TIENDAS_MARGEN_VENTAS      = TIENDAS_VENTAS;
 const TIENDAS_MARGEN_UTILIDAD    = [8217.44, 25145.27, 36351.70, 60760.94];
 
@@ -3601,8 +3612,8 @@ const ZONE_COLORS = ['--zone-1','--zone-2','--zone-3','--zone-4','--zone-5'].map
 const mayoristasAccounts = [
   {name:'ORIENTE',              data:[181,60,43,70]},
   {name:'ST DOMINGO / MANABI',  data:[28,24,19,15]},
-  {name:'LOS RIOS',             data:[24,45,17,17]},
-  {name:'GUAYAS',               data:[36,19,3,7]},
+  {name:'LOS RIOS',             data:[24,45,17,21]},
+  {name:'GUAYAS',               data:[36,19,3,19]},
   {name:'SIERRA',               data:[4,4,2,6]},
 ].map(a=>({...a, ventas: MAYORISTAS_VENTAS_ZONA[a.name], total:a.data.reduce((x,y)=>x+y,0)})).sort((a,b)=>b.total-a.total)
  .map((a,i)=>({...a, color: ZONE_COLORS[i]}));
@@ -3639,7 +3650,7 @@ function computeRepuestosCanalModel(metric){
 const RETAIL_COLORS = ['--retail-1','--retail-2','--retail-3','--retail-4'].map(getVar);
 
 const retailAccounts = [
-  {name:'AAP',          data:[16,30,84,61], ventas:[23395,44836,127791,92175]},
+  {name:'AAP',          data:[16,30,84,66], ventas:[23395,44836,127791,99415]},
   {name:'OTOM',         data:[0,28,12,12],  ventas:[0,43735,17760,20688]},
   {name:'CRESA',        data:[2,0,7,0],     ventas:[2880,60,9390,0]},
   {name:'MASTER MOTO',  data:[0,0,4,4],     ventas:[0,0,6920,8490]},
@@ -3654,21 +3665,21 @@ const retailAccounts = [
 // origen "CANAL DIGITAL" en agosto — es una cuenta AAP, no tiene sentido como canal digital de Tiendas Hero,
 // así que se sumó a EMPRESARIAL (confirmado con Santiago).
 const AAP_ORIGEN = [
-  {name:'BABAHOYO',           u:25, v:39499},
+  {name:'BABAHOYO',           u:26, v:40649},
+  {name:'9 DE OCTUBRE',       u:22, v:33752},
   {name:'MILAGRO',            u:20, v:31635},
-  {name:'9 DE OCTUBRE',       u:20, v:30997},
   {name:'DURÁN',              u:19, v:25868},
   {name:'ESMERALDAS',         u:14, v:19570},
+  {name:'PARQUE CALIFORNIA',  u:12, v:19020},
   {name:'PORTOVIEJO',         u:11, v:17449},
-  {name:'PARQUE CALIFORNIA',  u:11, v:17290},
   {name:'LIBERTAD',           u:11, v:16370},
   {name:'EMPRESARIAL',        u:10, v:14970},
   {name:'BUENA FE',           u:8,  v:13708},
+  {name:'GUASMO',             u:8,  v:12555},
   {name:'SANTO DOMINGO',      u:8,  v:11270},
   {name:'VINCES',             u:8,  v:10360},
   {name:'ORO VERDE',          u:7,  v:11853},
   {name:'MANTA',              u:6,  v:8265},
-  {name:'GUASMO',             u:7,  v:10950},
   {name:'QUITO LA PRENSA',    u:3,  v:3450},
   {name:'PEDERNALES',         u:2,  v:3543},
   {name:'CDC',                u:1,  v:1150},
@@ -3684,27 +3695,27 @@ const NONAAP_ORIGEN = [
 // Detalle mensual por origen (Retail) — data = unidades [Mayo,Junio,Julio,Agosto], ventas = $ [Mayo,Junio,Julio,Agosto].
 // AAP: los 18 orígenes completos, sin agrupar en "Otros" — mismo criterio y orden que AAP_ORIGEN.
 const AAP_ORIGEN_MENSUAL = [
-  {name:'BABAHOYO',           data:[2,8,8,7],  ventas:[3700,13118,12843,9838]},
+  {name:'BABAHOYO',           data:[2,8,8,8],  ventas:[3700,13118,12843,10988]},
+  {name:'9 DE OCTUBRE',       data:[1,5,10,6], ventas:[1150,8028,15271,9303]},
   {name:'MILAGRO',            data:[3,2,8,7],  ventas:[3905,2755,14400,10575]},
-  {name:'9 DE OCTUBRE',       data:[1,5,10,4], ventas:[1150,8028,15271,6548]},
   {name:'DURÁN',              data:[3,4,6,6],  ventas:[3450,5510,8848,8060]},
   {name:'ESMERALDAS',         data:[0,5,3,6],  ventas:[0,6330,3450,9790]},
+  {name:'PARQUE CALIFORNIA',  data:[0,0,8,4],  ventas:[0,0,12680,6340]},
   {name:'PORTOVIEJO',         data:[1,2,5,3],  ventas:[2550,3335,7326,4238]},
-  {name:'PARQUE CALIFORNIA',  data:[0,0,8,3],  ventas:[0,0,12680,4610]},
   {name:'LIBERTAD',           data:[1,0,6,4],  ventas:[1150,0,9460,5760]},
   {name:'EMPRESARIAL',        data:[0,0,6,4],  ventas:[0,0,9335,5635]},
   {name:'BUENA FE',           data:[0,3,3,2],  ventas:[0,4610,5430,3668]},
+  {name:'GUASMO',             data:[1,0,4,3],  ventas:[1730,0,6340,4485]},
   {name:'SANTO DOMINGO',      data:[2,1,4,1],  ventas:[2880,1150,5760,1480]},
   {name:'VINCES',             data:[1,0,6,1],  ventas:[1730,0,7480,1150]},
   {name:'ORO VERDE',          data:[0,0,2,5],  ventas:[0,0,2300,9553]},
   {name:'MANTA',              data:[0,0,1,5],  ventas:[0,0,1480,6785]},
-  {name:'GUASMO',             data:[1,0,4,2],  ventas:[1730,0,6340,2880]},
   {name:'QUITO LA PRENSA',    data:[0,0,3,0],  ventas:[0,0,3450,0]},
   {name:'PEDERNALES',         data:[0,0,1,1],  ventas:[0,0,1938,1605]},
   {name:'CDC',                data:[1,0,0,0],  ventas:[1150,0,0,0]},
 ];
-const AAP_ORIGEN_MONTH_TOTAL = [16,30,84,61];
-const AAP_ORIGEN_MONTH_TOTAL_VENTAS = [23395,44836,127791,92175];
+const AAP_ORIGEN_MONTH_TOTAL = [16,30,84,66];
+const AAP_ORIGEN_MONTH_TOTAL_VENTAS = [23395,44836,127791,99415];
 
 // Sin AAP: los orígenes con ventas registradas (OTOM, CRESA, Master Moto). Agosto 2026: 1 u. nueva
 // ($3.700, XPULSE 200 RALLY, cuenta OTOM/MMOTASA) en origen DAULE.
@@ -3721,17 +3732,17 @@ const NONAAP_ORIGEN_MONTH_TOTAL_VENTAS = [2880,43795,34070,29178];
 // CONSOLIDADO_HERO_4.xlsx — los 1 u. "PENDIENTE" del corte anterior ya quedaron asignados a un perfil real).
 const PERFIL_AAP = [
   {name:'AAA',        v:57901, u:36},
-  {name:'AA',         v:66505, u:39},
-  {name:'A',          v:34466, u:25},
+  {name:'AA',         v:68110, u:40},
+  {name:'A',          v:36766, u:27},
   {name:'BBB',        v:16335, u:11},
   {name:'BB',         v:17818, u:12},
   {name:'B',          v:21835, u:16},
   {name:'B+',         v:16876, u:11},
-  {name:'B-',         v:20275, u:14},
+  {name:'B-',         v:22005, u:15},
   {name:'C+',         v:9655,  u:8},
   {name:'NSSA',       v:2880,  u:2},
   {name:'CONTADO',    v:19746, u:14},
-  {name:'EXCEPCION',  v:2755,  u:2},
+  {name:'EXCEPCION',  v:4360,  u:3},
   {name:'NSSB',       v:1150,  u:1},
 ];
 
@@ -3739,21 +3750,21 @@ const PERFIL_AAP = [
 // Mismo orden fijo de escala que PERFIL_AAP.
 const PERFIL_AAP_MENSUAL = [
   {name:'AAA',        data:[1,3,28,4], ventas:[2550,4818,44110,6423]},
-  {name:'AA',         data:[2,9,16,12], ventas:[4280,15675,29190,17360]},
-  {name:'A',          data:[1,5,7,12], ventas:[1730,6785,8838,17113]},
+  {name:'AA',         data:[2,9,16,13], ventas:[4280,15675,29190,18965]},
+  {name:'A',          data:[1,5,7,14], ventas:[1730,6785,8838,19413]},
   {name:'BBB',        data:[1,1,5,4],  ventas:[1150,1480,7490,6215]},
   {name:'BB',         data:[1,1,4,6],  ventas:[1150,1150,5760,9758]},
   {name:'B',          data:[1,1,5,9],  ventas:[1150,1480,6330,12875]},
   {name:'B+',         data:[0,1,6,4],  ventas:[0,1730,8598,6548]},
-  {name:'B-',         data:[5,3,2,4],  ventas:[6785,3450,2880,7160]},
+  {name:'B-',         data:[5,3,2,5],  ventas:[6785,3450,2880,8890]},
   {name:'C+',         data:[2,3,2,1],  ventas:[2300,3450,2300,1605]},
   {name:'NSSA',       data:[0,0,2,0],  ventas:[0,0,2880,0]},
   {name:'CONTADO',    data:[1,3,6,4],  ventas:[1150,4818,7810,5968]},
-  {name:'EXCEPCION',  data:[1,0,1,0],  ventas:[1150,0,1605,0]},
+  {name:'EXCEPCION',  data:[1,0,1,1],  ventas:[1150,0,1605,1605]},
   {name:'NSSB',       data:[0,0,0,1],  ventas:[0,0,0,1150]},
 ];
-const PERFIL_AAP_MONTH_TOTAL = [16,30,84,61]; // unidades con perfil asignado, AAP, por mes
-const PERFIL_AAP_MONTH_TOTAL_VENTAS = [23395,44836,127791,92175]; // $ con perfil asignado, AAP, por mes
+const PERFIL_AAP_MONTH_TOTAL = [16,30,84,66]; // unidades con perfil asignado, AAP, por mes
+const PERFIL_AAP_MONTH_TOTAL_VENTAS = [23395,44836,127791,99415]; // $ con perfil asignado, AAP, por mes
 
 // Perfil de cliente por tienda propia Hero (columna Origen_Ventas = TIENDA AMERICAS / TIENDA NACIONES UNIDAS,
 // esta última incluyendo Canal Digital). Orden fijo por tienda — acumulado Mayo-Agosto 2026, actualizado con
@@ -3829,17 +3840,17 @@ const PERFIL_CANAL_DIGITAL_MONTH_TOTAL_VENTAS = [0,0,0,21670.46];
 // dos únicos canales con el campo "Perfil" registrado. Orden fijo por escala de perfil. Acumulado Mayo-Agosto 2026.
 const PERFIL_RESUMEN = [
   {name:'AAA',        v:110421, u:57},
-  {name:'AA',         v:97108, u:50},
-  {name:'A',          v:59365, u:33},
+  {name:'AA',         v:98713, u:51},
+  {name:'A',          v:61665, u:35},
   {name:'BBB',        v:31479, u:16},
   {name:'BB',         v:43869, u:18},
   {name:'B',          v:29481, u:18},
   {name:'B+',         v:34144, u:16},
-  {name:'B-',         v:39482, u:21},
+  {name:'B-',         v:41212, u:22},
   {name:'C+',         v:9655,  u:8},
   {name:'NSSA',       v:2880,  u:2},
   {name:'CONTADO',    v:72076, u:36},
-  {name:'EXCEPCION',  v:2755,  u:2},
+  {name:'EXCEPCION',  v:4360,  u:3},
   {name:'COLABORADOR',v:26226, u:16},
   {name:'NSSB',       v:1150,  u:1},
 ];
@@ -3848,22 +3859,22 @@ const PERFIL_RESUMEN = [
 // ventas = $ [Mayo,Junio,Julio,Agosto]. Mismo orden fijo de escala que PERFIL_RESUMEN.
 const PERFIL_RESUMEN_MENSUAL = [
   {name:'AAA',        data:[3,9,35,10], ventas:[6798,13966,65537,24120]},
-  {name:'AA',         data:[2,10,19,19],ventas:[4280,18775,36477,37576]},
-  {name:'A',          data:[1,6,8,18],  ventas:[1730,10131,12174,35330]},
+  {name:'AA',         data:[2,10,19,20],ventas:[4280,18775,36477,39181]},
+  {name:'A',          data:[1,6,8,20],  ventas:[1730,10131,12174,37630]},
   {name:'BBB',        data:[1,2,6,7],   ventas:[1150,5073,9787,15469]},
   {name:'BB',         data:[1,3,7,7],   ventas:[1150,6961,19322,16436]},
   {name:'B',          data:[1,1,5,11],  ventas:[1150,1480,6330,20521]},
   {name:'B+',         data:[0,1,7,8],   ventas:[0,1730,12485,19928]},
-  {name:'B-',         data:[5,4,3,9],   ventas:[6785,6872,5113,20713]},
+  {name:'B-',         data:[5,4,3,10],  ventas:[6785,6872,5113,22443]},
   {name:'C+',         data:[2,3,2,1],   ventas:[2300,3450,2300,1605]},
   {name:'NSSA',       data:[0,0,2,0],   ventas:[0,0,2880,0]},
   {name:'CONTADO',    data:[6,13,10,7], ventas:[13391,26757,18835,13093]},
-  {name:'EXCEPCION',  data:[1,0,1,0],   ventas:[1150,0,1605,0]},
+  {name:'EXCEPCION',  data:[1,0,1,1],   ventas:[1150,0,1605,1605]},
   {name:'COLABORADOR',data:[5,6,3,2],   ventas:[6242,9694,5362,4929]},
   {name:'NSSB',       data:[0,0,0,1],   ventas:[0,0,0,1150]},
 ];
-const PERFIL_MONTH_TOTAL = [28,58,108,100]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
-const PERFIL_MONTH_TOTAL_VENTAS = [46126,104889,198207,210870]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL = [28,58,108,105]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL_VENTAS = [46126,104889,198207,218110]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
 
 // Vista "SIN AAP" (Resumen): PERFIL_RESUMEN menos AAP = solo Tiendas Hero (Av. Américas + Naciones Unidas + Canal Digital).
 const PERFIL_RESUMEN_SIN_AAP = [
@@ -3939,33 +3950,33 @@ function computePerfilGeneralRowsTiendas(){
 // Modelos vendidos, los 3 canales combinados (Mayoristas + Retail + Tiendas), con AAP.
 // data = unidades [Mayo,Junio,Julio]; ventas = $ [Mayo,Junio,Julio]. Orden por unidades totales desc.
 const MODELOS = [
-  {name:'ECO DELUXE',        data:[102,56,60,48], ventas:[119504,67346,71330,58387]},
-  {name:'HUNK 125R',         data:[59,28,48,65], ventas:[102394,54940,94666,128431]},
-  {name:'ECO 150',           data:[0,93,39,40],  ventas:[0,138482,58040,64504]},
-  {name:'XOOM 125R',         data:[46,19,34,29], ventas:[89148,38179,70668,59708]},
-  {name:'XOOM 110',          data:[47,30,12,17], ventas:[75304,49967,19260,29133]},
+  {name:'ECO DELUXE',        data:[102,56,60,50], ventas:[119503,67346,71330,60687]},
+  {name:'HUNK 125R',         data:[59,28,48,67], ventas:[102395,54940,94666,131891]},
+  {name:'ECO 150',           data:[0,93,39,51],  ventas:[0,138482,58040,80784]},
+  {name:'XOOM 125R',         data:[46,19,34,31], ventas:[89148,38179,70668,63584]},
+  {name:'XOOM 110',          data:[47,30,12,21], ventas:[75304,49967,19260,35553]},
   {name:'HUNK 160 4V',       data:[37,10,19,18], ventas:[94844,27060,54108,52618]},
   {name:'XPULSE 200 4V FI',  data:[12,2,3,7],    ventas:[40367,7483,10190,25363]},
   {name:'XPULSE 200 RALLY',  data:[0,0,0,7],     ventas:[0,0,0,28878]},
 ];
-const MODELOS_MONTH_TOTAL = [303,238,215,231]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
-const MODELOS_MONTH_TOTAL_VENTAS = [521560,383455,378261,447021]; // coincide con "Ventas totales" de Resumen (CON AAP)
+const MODELOS_MONTH_TOTAL = [303,238,215,252]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
+const MODELOS_MONTH_TOTAL_VENTAS = [521560,383455,378261,479357]; // coincide con "Ventas totales" de Resumen (CON AAP)
 
 // Vista "SIN AAP" (Resumen): MODELOS menos la contribución de AAP por modelo (3 canales, Retail sin AAP).
 // Resincronizado 28-ago-2026 junto con MODELOS arriba, a partir de los 3 canales (Mayoristas + Retail sin
 // AAP + Tiendas), para que ambas tablas cuadren siempre con cada actualización de datos.
 const MODELOS_SIN_AAP = [
-  {name:'ECO DELUXE',        data:[92,42,23,25], ventas:[108004,51246,28780,31937]},
-  {name:'ECO 150',           data:[0,91,36,36],   ventas:[0,135522,53600,58584]},
-  {name:'HUNK 125R',         data:[56,22,23,44], ventas:[97204,44560,51416,92101]},
-  {name:'XOOM 125R',         data:[46,17,27,24],  ventas:[89148,34303,57102,50018]},
-  {name:'XOOM 110',          data:[46,26,5,10],   ventas:[73699,43547,8025,17898]},
+  {name:'ECO DELUXE',        data:[92,42,23,25], ventas:[108003,51246,28780,31937]},
+  {name:'ECO 150',           data:[0,91,36,47],   ventas:[0,135522,53600,74864]},
+  {name:'HUNK 125R',         data:[56,22,23,45], ventas:[97205,44560,51416,93831]},
+  {name:'XOOM 125R',         data:[46,17,27,26],  ventas:[89148,34303,57102,53894]},
+  {name:'XOOM 110',          data:[46,26,5,12],   ventas:[73699,43547,8025,21108]},
   {name:'HUNK 160 4V',       data:[35,8,14,17],  ventas:[89744,21960,41358,50068]},
   {name:'XPULSE 200 4V FI',  data:[12,2,3,7],    ventas:[40367,7483,10190,25363]},
   {name:'XPULSE 200 RALLY',  data:[0,0,0,7],     ventas:[0,0,0,28878]},
 ];
-const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,131,170]; // MODELOS_MONTH_TOTAL menos AAP_DATA
-const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [498165,338619,250470,354846]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
+const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,131,186]; // MODELOS_MONTH_TOTAL menos AAP_DATA
+const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [498165,338619,250470,379942]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
 
 /* ================= GARANTIAS (venta de Garantía Extendida de motos) ================= */
 // Hoja nueva "GARANTIAS" en CONSOLIDADO_HERO_3_2.xlsx, recibida el 31-ago-2026 — mismo esquema de 42 columnas
@@ -4148,192 +4159,193 @@ const SELLIN_TOTAL = sumArr(SELLIN_TOTAL_CONSIGNACION, SELLIN_TOTAL_FACTURACION)
 // acumulado"), que es una pregunta de rotación a la fecha, no del flujo de un solo mes.
 const SIO_CUM_SELLIN    = (()=>{ let c=0; return SELLIN_TOTAL.map(v=> c+=v); })();
 const SIO_CUM_SELLOUT   = (()=>{ let c=0; return SELLOUT_TOTAL.map(v=> c+=v); })();
-/* ================= REPUESTOS — datos fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026_2, hoja BASE_DATOS (768 líneas, corte 19/08/2026) ================= */
+/* ================= REPUESTOS — datos fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS (966 líneas, Agosto ya cerrado al 31/08/2026) ================= */
 // Totales generales por mes. Mayo = solo 10 transacciones (21-26 mayo, no es el mes completo);
-// Agosto = corte parcial al día 19. Ninguno de los dos es comparable 1:1 contra un mes cerrado.
-const REPUESTOS_TOTAL_UNIDADES = [10, 278, 596, 306];
-const REPUESTOS_TOTAL_VENTA = [110.36, 1999.63, 4952.97, 2466.45];
-const REPUESTOS_TOTAL_COSTO = [152.92, 1050.63, 2599.07, 1250.45];
-const REPUESTOS_TOTAL_UTILIDAD = [-42.56, 948.99, 2353.89, 1216.0];
-const REPUESTOS_TOTAL_MARGEN = [-0.3856, 0.4746, 0.4752, 0.493];
-const REPUESTOS_TOTAL_UNIDADES_BY_COMBO = { mostrador:{amer:[6, 276, 312, 145], naciones:[0, 0, 55, 76]}, taller:{amer:[4, 2, 229, 59], naciones:[0, 0, 0, 26]} };
-const REPUESTOS_TOTAL_VENTA_BY_COMBO = { mostrador:{amer:[78.93, 1975.48, 2896.75, 956.82], naciones:[0.0, 0.0, 651.98, 1016.31]}, taller:{amer:[31.42, 24.15, 1404.24, 351.19], naciones:[0.0, 0.0, 0.0, 142.13]} };
-const REPUESTOS_TOTAL_COSTO_BY_COMBO = { mostrador:{amer:[125.84, 1040.06, 1476.6, 467.62], naciones:[0.0, 0.0, 337.08, 513.33]}, taller:{amer:[27.08, 10.57, 785.4, 191.36], naciones:[0.0, 0.0, 0.0, 78.14]} };
-const REPUESTOS_TOTAL_UTILIDAD_BY_COMBO = { mostrador:{amer:[-46.9, 935.42, 1420.15, 489.2], naciones:[0.0, 0.0, 314.9, 502.98]}, taller:{amer:[4.35, 13.57, 618.84, 159.83], naciones:[0.0, 0.0, 0.0, 63.99]} };
+// Agosto ahora es un mes completo y cerrado (antes: corte parcial al día 19, 306 unidades / $2.466,45 — ver informe de actualización).
+const REPUESTOS_TOTAL_UNIDADES = [10, 278, 596, 558];
+const REPUESTOS_TOTAL_VENTA = [110.36, 1999.63, 4952.97, 5287.16];
+const REPUESTOS_TOTAL_COSTO = [152.92, 1050.63, 2599.07, 2665.65];
+const REPUESTOS_TOTAL_UTILIDAD = [-42.56, 948.99, 2353.89, 2621.51];
+const REPUESTOS_TOTAL_MARGEN = [-0.3856, 0.4746, 0.4752, 0.4958];
+const REPUESTOS_TOTAL_UNIDADES_BY_COMBO = { mostrador:{amer:[6, 276, 312, 312], naciones:[0, 0, 55, 115]}, taller:{amer:[4, 2, 229, 100], naciones:[0, 0, 0, 31]} };
+const REPUESTOS_TOTAL_VENTA_BY_COMBO = { mostrador:{amer:[78.93, 1975.48, 2896.75, 2670.55], naciones:[0.0, 0.0, 651.98, 1719.73]}, taller:{amer:[31.42, 24.15, 1404.24, 704.51], naciones:[0.0, 0.0, 0.0, 192.37]} };
+const REPUESTOS_TOTAL_COSTO_BY_COMBO = { mostrador:{amer:[125.84, 1040.06, 1476.6, 1339.99], naciones:[0.0, 0.0, 337.08, 853.95]}, taller:{amer:[27.08, 10.57, 785.4, 366.62], naciones:[0.0, 0.0, 0.0, 105.09]} };
+const REPUESTOS_TOTAL_UTILIDAD_BY_COMBO = { mostrador:{amer:[-46.9, 935.42, 1420.15, 1330.56], naciones:[0.0, 0.0, 314.9, 865.77]}, taller:{amer:[4.35, 13.57, 618.84, 337.89], naciones:[0.0, 0.0, 0.0, 87.28]} };
 
 // N° de líneas de venta (filas de BASE_DATOS, no unidades físicas) — el archivo fuente (hoja CALCULOS,
 // "Ticket Promedio" = Venta Neta ÷ N° de líneas) usa esto, no Unidades, para el Ticket Promedio de Repuestos:
 // una línea puede tener varias unidades del mismo repuesto, y "ticket" busca aproximar el gasto por compra/línea,
 // no por pieza. Por eso el Ticket Promedio de Repuestos (aquí, en Resumen de Postventa y en GENERAL) se calcula
 // con estos arreglos en vez de REPUESTOS_TOTAL_UNIDADES.
-const REPUESTOS_TOTAL_LINEAS = [10, 163, 366, 229];
-const REPUESTOS_TOTAL_LINEAS_BY_COMBO = { mostrador:{amer:[6, 161, 238, 110], naciones:[0, 0, 47, 50]}, taller:{amer:[4, 2, 81, 58], naciones:[0, 0, 0, 11]} };
+const REPUESTOS_TOTAL_LINEAS = [10, 163, 366, 427];
+const REPUESTOS_TOTAL_LINEAS_BY_COMBO = { mostrador:{amer:[6, 161, 238, 233], naciones:[0, 0, 47, 81]}, taller:{amer:[4, 2, 81, 97], naciones:[0, 0, 0, 16]} };
 
 // Categorías (hoja SKU_CATEGORIAS del archivo de ventas, mapeo directo por SKU — reemplaza la reclasificación
 // por reglas de texto usada antes), ordenadas de mayor a menor venta neta. 16 categorías en total (antes 17:
 // MANTENIMIENTO + ACCESORIOS Y OTROS se consolidaron en OTROS bajo el nuevo mapeo).
 const CATEGORIA_COLORS = ['--categoria-1','--categoria-2','--categoria-3','--categoria-4','--categoria-5'].map(getVar);
 const repuestosCategoriasRaw = [
-  {name:'MOTOR', data:[3, 99, 160, 64], ventas:[16.99, 1297.46, 2073.2, 463.07], byCanal:{mostrador:{data:[2, 98, 131, 43], ventas:[8.31, 1284.54, 1702.74, 425.7]}, taller:{data:[1, 1, 29, 21], ventas:[8.68, 12.92, 370.46, 37.37]}}, byCombo:{mostrador:{amer:{data:[2, 98, 106, 29], ventas:[8.31, 1284.54, 1284.72, 165.85]}, naciones:{data:[0, 0, 25, 14], ventas:[0.0, 0.0, 418.01, 259.85]}}, taller:{amer:{data:[1, 1, 29, 19], ventas:[8.68, 12.92, 370.46, 35.37]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 2.0]}}}},
-  {name:'ELECTRICO', data:[1, 5, 41, 15], ventas:[59.35, 8.37, 861.23, 363.82], byCanal:{mostrador:{data:[1, 5, 34, 12], ventas:[59.35, 8.37, 503.12, 292.89]}, taller:{data:[0, 0, 7, 3], ventas:[0.0, 0.0, 358.11, 70.93]}}, byCombo:{mostrador:{amer:{data:[1, 5, 32, 7], ventas:[59.35, 8.37, 443.8, 123.41]}, naciones:{data:[0, 0, 2, 5], ventas:[0.0, 0.0, 59.32, 169.48]}}, taller:{amer:{data:[0, 0, 7, 3], ventas:[0.0, 0.0, 358.11, 70.93]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'LUBRICANTES', data:[0, 17, 35, 27], ventas:[0.0, 148.04, 363.01, 295.35], byCanal:{mostrador:{data:[0, 17, 22, 11], ventas:[0.0, 148.04, 221.03, 111.02]}, taller:{data:[0, 0, 13, 16], ventas:[0.0, 0.0, 141.98, 184.33]}}, byCombo:{mostrador:{amer:{data:[0, 17, 16, 10], ventas:[0.0, 148.04, 194.08, 102.76]}, naciones:{data:[0, 0, 6, 1], ventas:[0.0, 0.0, 26.94, 8.26]}}, taller:{amer:{data:[0, 0, 13, 15], ventas:[0.0, 0.0, 141.98, 171.72]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 12.61]}}}},
-  {name:'EMBRAGUE', data:[2, 39, 38, 53], ventas:[20.86, 166.05, 236.97, 344.77], byCanal:{mostrador:{data:[1, 39, 26, 48], ventas:[2.94, 166.05, 120.69, 333.55]}, taller:{data:[1, 0, 12, 5], ventas:[17.92, 0.0, 116.29, 11.23]}}, byCombo:{mostrador:{amer:{data:[1, 39, 24, 24], ventas:[2.94, 166.05, 114.05, 86.14]}, naciones:{data:[0, 0, 2, 24], ventas:[0.0, 0.0, 6.64, 247.41]}}, taller:{amer:{data:[1, 0, 12, 0], ventas:[17.92, 0.0, 116.29, 0.0]}, naciones:{data:[0, 0, 0, 5], ventas:[0.0, 0.0, 0.0, 11.23]}}}},
-  {name:'RUEDAS Y TRANSMISION', data:[0, 1, 163, 37], ventas:[0.0, 4.55, 225.22, 388.58], byCanal:{mostrador:{data:[0, 1, 15, 23], ventas:[0.0, 4.55, 131.98, 271.77]}, taller:{data:[0, 0, 148, 14], ventas:[0.0, 0.0, 93.23, 116.8]}}, byCombo:{mostrador:{amer:{data:[0, 1, 14, 13], ventas:[0.0, 4.55, 104.49, 151.76]}, naciones:{data:[0, 0, 1, 10], ventas:[0.0, 0.0, 27.49, 120.01]}}, taller:{amer:{data:[0, 0, 148, 1], ventas:[0.0, 0.0, 93.23, 18.46]}, naciones:{data:[0, 0, 0, 13], ventas:[0.0, 0.0, 0.0, 98.34]}}}},
-  {name:'CARROCERIA', data:[2, 31, 37, 17], ventas:[4.82, 102.88, 259.66, 61.38], byCanal:{mostrador:{data:[0, 30, 31, 15], ventas:[0.0, 91.65, 222.2, 54.43]}, taller:{data:[2, 1, 6, 2], ventas:[4.82, 11.23, 37.46, 6.96]}}, byCombo:{mostrador:{amer:{data:[0, 30, 26, 9], ventas:[0.0, 91.65, 204.56, 29.53]}, naciones:{data:[0, 0, 5, 6], ventas:[0.0, 0.0, 17.65, 24.89]}}, taller:{amer:{data:[2, 1, 6, 1], ventas:[4.82, 11.23, 37.46, 3.48]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 3.48]}}}},
-  {name:'FRENOS', data:[0, 11, 15, 22], ventas:[0.0, 123.45, 63.41, 225.05], byCanal:{mostrador:{data:[0, 11, 15, 21], ventas:[0.0, 123.45, 63.41, 197.87]}, taller:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 27.18]}}, byCombo:{mostrador:{amer:{data:[0, 11, 13, 16], ventas:[0.0, 123.45, 57.03, 130.27]}, naciones:{data:[0, 0, 2, 5], ventas:[0.0, 0.0, 6.38, 67.6]}}, taller:{amer:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 27.18]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'MOTOR', data:[3, 99, 160, 145], ventas:[16.99, 1297.46, 2073.2, 1864.28], byCanal:{mostrador:{data:[2, 98, 131, 109], ventas:[8.31, 1284.54, 1702.74, 1657.67]}, taller:{data:[1, 1, 29, 36], ventas:[8.68, 12.92, 370.46, 206.61]}}, byCombo:{mostrador:{amer:{data:[2, 98, 106, 78], ventas:[8.31, 1284.54, 1284.72, 884.63]}, naciones:{data:[0, 0, 25, 31], ventas:[0.0, 0.0, 418.01, 773.03]}}, taller:{amer:{data:[1, 1, 29, 32], ventas:[8.68, 12.92, 370.46, 197.89]}, naciones:{data:[0, 0, 0, 4], ventas:[0.0, 0.0, 0.0, 8.72]}}}},
+  {name:'ELECTRICO', data:[1, 5, 41, 25], ventas:[59.35, 8.37, 861.23, 580.34], byCanal:{mostrador:{data:[1, 5, 34, 18], ventas:[59.35, 8.37, 503.12, 450.71]}, taller:{data:[0, 0, 7, 7], ventas:[0.0, 0.0, 358.11, 129.63]}}, byCombo:{mostrador:{amer:{data:[1, 5, 32, 10], ventas:[59.35, 8.37, 443.8, 167.56]}, naciones:{data:[0, 0, 2, 8], ventas:[0.0, 0.0, 59.32, 283.15]}}, taller:{amer:{data:[0, 0, 7, 7], ventas:[0.0, 0.0, 358.11, 129.63]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'LUBRICANTES', data:[0, 17, 35, 55], ventas:[0.0, 148.04, 363.01, 602.81], byCanal:{mostrador:{data:[0, 17, 22, 30], ventas:[0.0, 148.04, 221.03, 302.74]}, taller:{data:[0, 0, 13, 25], ventas:[0.0, 0.0, 141.98, 300.07]}}, byCombo:{mostrador:{amer:{data:[0, 17, 16, 27], ventas:[0.0, 148.04, 194.08, 270.96]}, naciones:{data:[0, 0, 6, 3], ventas:[0.0, 0.0, 26.94, 31.78]}}, taller:{amer:{data:[0, 0, 13, 21], ventas:[0.0, 0.0, 141.98, 243.94]}, naciones:{data:[0, 0, 0, 4], ventas:[0.0, 0.0, 0.0, 56.14]}}}},
+  {name:'RUEDAS Y TRANSMISION', data:[0, 1, 163, 54], ventas:[0.0, 4.55, 225.22, 722.02], byCanal:{mostrador:{data:[0, 1, 15, 40], ventas:[0.0, 4.55, 131.98, 605.21]}, taller:{data:[0, 0, 148, 14], ventas:[0.0, 0.0, 93.23, 116.8]}}, byCombo:{mostrador:{amer:{data:[0, 1, 14, 26], ventas:[0.0, 4.55, 104.49, 479.68]}, naciones:{data:[0, 0, 1, 14], ventas:[0.0, 0.0, 27.49, 125.53]}}, taller:{amer:{data:[0, 0, 148, 1], ventas:[0.0, 0.0, 93.23, 18.46]}, naciones:{data:[0, 0, 0, 13], ventas:[0.0, 0.0, 0.0, 98.34]}}}},
+  {name:'EMBRAGUE', data:[2, 39, 38, 65], ventas:[20.86, 166.05, 236.97, 444.66], byCanal:{mostrador:{data:[1, 39, 26, 59], ventas:[2.94, 166.05, 120.69, 426.76]}, taller:{data:[1, 0, 12, 6], ventas:[17.92, 0.0, 116.29, 17.9]}}, byCombo:{mostrador:{amer:{data:[1, 39, 24, 35], ventas:[2.94, 166.05, 114.05, 179.35]}, naciones:{data:[0, 0, 2, 24], ventas:[0.0, 0.0, 6.64, 247.41]}}, taller:{amer:{data:[1, 0, 12, 1], ventas:[17.92, 0.0, 116.29, 6.67]}, naciones:{data:[0, 0, 0, 5], ventas:[0.0, 0.0, 0.0, 11.23]}}}},
+  {name:'CARROCERIA', data:[2, 31, 37, 46], ventas:[4.82, 102.88, 259.66, 195.67], byCanal:{mostrador:{data:[0, 30, 31, 43], ventas:[0.0, 91.65, 222.2, 183.34]}, taller:{data:[2, 1, 6, 3], ventas:[4.82, 11.23, 37.46, 12.33]}}, byCombo:{mostrador:{amer:{data:[0, 30, 26, 31], ventas:[0.0, 91.65, 204.56, 129.33]}, naciones:{data:[0, 0, 5, 12], ventas:[0.0, 0.0, 17.65, 54.01]}}, taller:{amer:{data:[2, 1, 6, 2], ventas:[4.82, 11.23, 37.46, 8.85]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 3.48]}}}},
+  {name:'FRENOS', data:[0, 11, 15, 30], ventas:[0.0, 123.45, 63.41, 256.08], byCanal:{mostrador:{data:[0, 11, 15, 27], ventas:[0.0, 123.45, 63.41, 217.68]}, taller:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 38.41]}}, byCombo:{mostrador:{amer:{data:[0, 11, 13, 22], ventas:[0.0, 123.45, 57.03, 150.07]}, naciones:{data:[0, 0, 2, 5], ventas:[0.0, 0.0, 6.38, 67.6]}}, taller:{amer:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 38.41]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'SUSPENSION', data:[0, 0, 8, 0], ventas:[0.0, 0.0, 367.96, 0.0], byCanal:{mostrador:{data:[0, 0, 7, 0], ventas:[0.0, 0.0, 135.84, 0.0]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 7, 0], ventas:[0.0, 0.0, 135.84, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'TORNILLERIA', data:[0, 49, 19, 27], ventas:[0.0, 58.72, 90.08, 67.67], byCanal:{mostrador:{data:[0, 49, 16, 11], ventas:[0.0, 58.72, 79.62, 49.98]}, taller:{data:[0, 0, 3, 16], ventas:[0.0, 0.0, 10.46, 17.7]}}, byCombo:{mostrador:{amer:{data:[0, 49, 13, 7], ventas:[0.0, 58.72, 49.02, 3.5]}, naciones:{data:[0, 0, 3, 4], ventas:[0.0, 0.0, 30.6, 46.48]}}, taller:{amer:{data:[0, 0, 3, 14], ventas:[0.0, 0.0, 10.46, 7.0]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 10.7]}}}},
-  {name:'KITS', data:[0, 2, 3, 2], ventas:[0.0, 57.2, 101.91, 56.09], byCanal:{mostrador:{data:[0, 2, 3, 2], ventas:[0.0, 57.2, 101.91, 56.09]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 2, 3, 1], ventas:[0.0, 57.2, 101.91, 27.49]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 28.6]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'MANILLAR Y CONTROLES', data:[0, 3, 18, 16], ventas:[0.0, 7.33, 115.62, 79.45], byCanal:{mostrador:{data:[0, 3, 17, 11], ventas:[0.0, 7.33, 106.57, 66.84]}, taller:{data:[0, 0, 1, 5], ventas:[0.0, 0.0, 9.05, 12.6]}}, byCombo:{mostrador:{amer:{data:[0, 3, 15, 9], ventas:[0.0, 7.33, 95.04, 49.12]}, naciones:{data:[0, 0, 2, 2], ventas:[0.0, 0.0, 11.52, 17.72]}}, taller:{amer:{data:[0, 0, 1, 3], ventas:[0.0, 0.0, 9.05, 8.83]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 3.77]}}}},
-  {name:'RODAMIENTOS', data:[0, 0, 14, 6], ventas:[0.0, 0.0, 71.04, 24.67], byCanal:{mostrador:{data:[0, 0, 10, 4], ventas:[0.0, 0.0, 41.19, 16.44]}, taller:{data:[0, 0, 4, 2], ventas:[0.0, 0.0, 29.85, 8.22]}}, byCombo:{mostrador:{amer:{data:[0, 0, 10, 4], ventas:[0.0, 0.0, 41.19, 16.44]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 4, 2], ventas:[0.0, 0.0, 29.85, 8.22]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'CABLES Y MANGUERAS', data:[1, 1, 13, 9], ventas:[7.2, 3.12, 49.92, 35.1], byCanal:{mostrador:{data:[1, 1, 13, 9], ventas:[7.2, 3.12, 49.92, 35.1]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[1, 1, 12, 8], ventas:[7.2, 3.12, 42.77, 27.79]}, naciones:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 7.16, 7.31]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'DIRECCION', data:[0, 6, 17, 8], ventas:[0.0, 9.92, 31.98, 41.05], byCanal:{mostrador:{data:[0, 6, 15, 8], ventas:[0.0, 9.92, 28.79, 41.05]}, taller:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 3.19, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 6, 12, 5], ventas:[0.0, 9.92, 10.09, 22.35]}, naciones:{data:[0, 0, 3, 3], ventas:[0.0, 0.0, 18.7, 18.7]}}, taller:{amer:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 3.19, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'SELLOS Y EMPAQUES', data:[1, 14, 15, 2], ventas:[1.13, 12.55, 41.74, 2.0], byCanal:{mostrador:{data:[1, 14, 12, 2], ventas:[1.13, 12.55, 39.71, 2.0]}, taller:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 2.03, 0.0]}}, byCombo:{mostrador:{amer:{data:[1, 14, 9, 2], ventas:[1.13, 12.55, 18.14, 2.0]}, naciones:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 21.57, 0.0]}}, taller:{amer:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 2.03, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'KITS', data:[0, 2, 3, 7], ventas:[0.0, 57.2, 101.91, 161.36], byCanal:{mostrador:{data:[0, 2, 3, 7], ventas:[0.0, 57.2, 101.91, 161.36]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 2, 3, 6], ventas:[0.0, 57.2, 101.91, 132.77]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 28.6]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'MANILLAR Y CONTROLES', data:[0, 3, 18, 23], ventas:[0.0, 7.33, 115.62, 121.57], byCanal:{mostrador:{data:[0, 3, 17, 13], ventas:[0.0, 7.33, 106.57, 83.9]}, taller:{data:[0, 0, 1, 10], ventas:[0.0, 0.0, 9.05, 37.67]}}, byCombo:{mostrador:{amer:{data:[0, 3, 15, 11], ventas:[0.0, 7.33, 95.04, 66.18]}, naciones:{data:[0, 0, 2, 2], ventas:[0.0, 0.0, 11.52, 17.72]}}, taller:{amer:{data:[0, 0, 1, 8], ventas:[0.0, 0.0, 9.05, 33.9]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 3.77]}}}},
+  {name:'TORNILLERIA', data:[0, 49, 19, 40], ventas:[0.0, 58.72, 90.08, 84.23], byCanal:{mostrador:{data:[0, 49, 16, 18], ventas:[0.0, 58.72, 79.62, 62.53]}, taller:{data:[0, 0, 3, 22], ventas:[0.0, 0.0, 10.46, 21.7]}}, byCombo:{mostrador:{amer:{data:[0, 49, 13, 14], ventas:[0.0, 58.72, 49.02, 16.06]}, naciones:{data:[0, 0, 3, 4], ventas:[0.0, 0.0, 30.6, 46.48]}}, taller:{amer:{data:[0, 0, 3, 20], ventas:[0.0, 0.0, 10.46, 11.0]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 10.7]}}}},
+  {name:'RODAMIENTOS', data:[0, 0, 14, 19], ventas:[0.0, 0.0, 71.04, 91.87], byCanal:{mostrador:{data:[0, 0, 10, 17], ventas:[0.0, 0.0, 41.19, 83.65]}, taller:{data:[0, 0, 4, 2], ventas:[0.0, 0.0, 29.85, 8.22]}}, byCombo:{mostrador:{amer:{data:[0, 0, 10, 16], ventas:[0.0, 0.0, 41.19, 76.96]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 6.68]}}, taller:{amer:{data:[0, 0, 4, 2], ventas:[0.0, 0.0, 29.85, 8.22]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'SELLOS Y EMPAQUES', data:[1, 14, 15, 20], ventas:[1.13, 12.55, 41.74, 47.69], byCanal:{mostrador:{data:[1, 14, 12, 20], ventas:[1.13, 12.55, 39.71, 47.69]}, taller:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 2.03, 0.0]}}, byCombo:{mostrador:{amer:{data:[1, 14, 9, 16], ventas:[1.13, 12.55, 18.14, 39.15]}, naciones:{data:[0, 0, 3, 4], ventas:[0.0, 0.0, 21.57, 8.54]}}, taller:{amer:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 2.03, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CABLES Y MANGUERAS', data:[1, 1, 13, 10], ventas:[7.2, 3.12, 49.92, 40.64], byCanal:{mostrador:{data:[1, 1, 13, 9], ventas:[7.2, 3.12, 49.92, 35.1]}, taller:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 5.53]}}, byCombo:{mostrador:{amer:{data:[1, 1, 12, 8], ventas:[7.2, 3.12, 42.77, 27.79]}, naciones:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 7.16, 7.31]}}, taller:{amer:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 5.53]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'DIRECCION', data:[0, 6, 17, 18], ventas:[0.0, 9.92, 31.98, 55.54], byCanal:{mostrador:{data:[0, 6, 15, 16], ventas:[0.0, 9.92, 28.79, 53.54]}, taller:{data:[0, 0, 2, 2], ventas:[0.0, 0.0, 3.19, 2.0]}}, byCombo:{mostrador:{amer:{data:[0, 6, 12, 11], ventas:[0.0, 9.92, 10.09, 31.65]}, naciones:{data:[0, 0, 3, 5], ventas:[0.0, 0.0, 18.7, 21.89]}}, taller:{amer:{data:[0, 0, 2, 2], ventas:[0.0, 0.0, 3.19, 2.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'OTROS', data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 18.4], byCanal:{mostrador:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 18.4]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 18.4]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
 ].map((c,i)=>({...c, color: CATEGORIA_COLORS[i % CATEGORIA_COLORS.length], total: sum(c.data)}));
 // Margen % total por categoría (agregado del periodo completo, no varía por mes) — para referencia en tooltips/tabla.
-const CATEGORIA_MARGEN = { 'MOTOR':0.4961, 'ELECTRICO':0.3691, 'LUBRICANTES':0.36, 'EMBRAGUE':0.5035, 'RUEDAS Y TRANSMISION':0.524, 'CARROCERIA':0.4752, 'FRENOS':0.4912, 'SUSPENSION':0.4655, 'TORNILLERIA':0.5413, 'KITS':0.5014, 'MANILLAR Y CONTROLES':0.4505, 'RODAMIENTOS':0.6871, 'CABLES Y MANGUERAS':0.5689, 'DIRECCION':0.4712, 'SELLOS Y EMPAQUES':0.5251, 'OTROS':0.25 };
+const CATEGORIA_MARGEN = { 'MOTOR':0.4819, 'ELECTRICO':0.4049, 'LUBRICANTES':0.3755, 'RUEDAS Y TRANSMISION':0.5334, 'EMBRAGUE':0.506, 'CARROCERIA':0.5166, 'FRENOS':0.4976, 'SUSPENSION':0.4655, 'KITS':0.4979, 'MANILLAR Y CONTROLES':0.5018, 'TORNILLERIA':0.5503, 'RODAMIENTOS':0.6866, 'SELLOS Y EMPAQUES':0.5608, 'CABLES Y MANGUERAS':0.5685, 'DIRECCION':0.5077, 'OTROS':0.25 };
 
-// Universo de 45 repuestos (top 25 por venta neta ∪ top 25 por unidades) con desglose mensual,
+// Universo de 46 repuestos (top 25 por venta neta ∪ top 25 por unidades) con desglose mensual,
 // para que el ranking Top Repuestos respete el filtro de mes y el toggle UNIDADES/$ sin perder el top-10 real en ningún cruce.
-// Cubren el 54.8% de la venta neta total; los nombres repetidos (mismo repuesto, distinto código SKU) llevan el código entre paréntesis.
+// Cubren el 50.4% de la venta neta total; los nombres repetidos (mismo repuesto, distinto código SKU) llevan el código entre paréntesis.
 const REPUESTOS_ITEMS = [
-  {name:'ACEITE POWER PRO 10W30 SL MA2 T (1200 ML) SP', data:[0, 7, 21, 16], ventas:[0.0, 86.08, 252.43, 201.32], byCanal:{mostrador:{data:[0, 7, 14, 7], ventas:[0.0, 86.08, 166.79, 87.83]}, taller:{data:[0, 0, 7, 9], ventas:[0.0, 0.0, 85.64, 113.49]}}, byCombo:{mostrador:{amer:{data:[0, 7, 13, 7], ventas:[0.0, 86.08, 157.79, 87.83]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 9.0, 0.0]}}, taller:{amer:{data:[0, 0, 7, 8], ventas:[0.0, 0.0, 85.64, 100.88]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 12.61]}}}},
+  {name:'ACEITE POWER PRO 10W30 SL MA2 T (1200 ML) SP', data:[0, 7, 21, 26], ventas:[0.0, 86.08, 252.43, 323.46], byCanal:{mostrador:{data:[0, 7, 14, 13], ventas:[0.0, 86.08, 166.79, 159.53]}, taller:{data:[0, 0, 7, 13], ventas:[0.0, 0.0, 85.64, 163.93]}}, byCombo:{mostrador:{amer:{data:[0, 7, 13, 13], ventas:[0.0, 86.08, 157.79, 159.53]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 9.0, 0.0]}}, taller:{amer:{data:[0, 0, 7, 12], ventas:[0.0, 0.0, 85.64, 151.32]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 12.61]}}}},
+  {name:'CIGÜEÑAL COMPLETO (13000ABF000S)', data:[0, 1, 1, 1], ventas:[0.0, 177.06, 177.06, 177.06], byCanal:{mostrador:{data:[0, 1, 0, 1], ventas:[0.0, 177.06, 0.0, 177.06]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 177.06, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 1, 0, 0], ventas:[0.0, 177.06, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 177.06]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 177.06, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'CULATA COMPLETA', data:[0, 1, 1, 1], ventas:[0.0, 141.34, 141.34, 141.34], byCanal:{mostrador:{data:[0, 1, 1, 1], ventas:[0.0, 141.34, 141.34, 141.34]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 1, 1, 0], ventas:[0.0, 141.34, 141.34, 0.0]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 141.34]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'COMPONENTE DEL CIGÜEÑAL', data:[0, 2, 1, 0], ventas:[0.0, 242.15, 121.08, 0.0], byCanal:{mostrador:{data:[0, 2, 1, 0], ventas:[0.0, 242.15, 121.08, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 2, 0, 0], ventas:[0.0, 242.15, 0.0, 0.0]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 121.08, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'CIGÜEÑAL COMPLETO (13000ABF000S)', data:[0, 1, 1, 0], ventas:[0.0, 177.06, 177.06, 0.0], byCanal:{mostrador:{data:[0, 1, 0, 0], ventas:[0.0, 177.06, 0.0, 0.0]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 177.06, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 1, 0, 0], ventas:[0.0, 177.06, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 177.06, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'COMPONENTE DEL CIGÜEÑAL (13000AAF000S)', data:[0, 2, 1, 0], ventas:[0.0, 242.15, 121.08, 0.0], byCanal:{mostrador:{data:[0, 2, 1, 0], ventas:[0.0, 242.15, 121.08, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 2, 0, 0], ventas:[0.0, 242.15, 0.0, 0.0]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 121.08, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'CILINDRO COMPLETO (12100ABF000S)', data:[0, 2, 1, 0], ventas:[0.0, 221.55, 110.77, 0.0], byCanal:{mostrador:{data:[0, 2, 1, 0], ventas:[0.0, 221.55, 110.77, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 2, 1, 0], ventas:[0.0, 221.55, 110.77, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'ACEITE POWER PRO 10W30 SL MA I (900ML)', data:[0, 5, 5, 13], ventas:[0.0, 52.15, 52.15, 140.17], byCanal:{mostrador:{data:[0, 5, 1, 4], ventas:[0.0, 52.15, 10.43, 44.47]}, taller:{data:[0, 0, 4, 9], ventas:[0.0, 0.0, 41.72, 95.7]}}, byCombo:{mostrador:{amer:{data:[0, 5, 1, 4], ventas:[0.0, 52.15, 10.43, 44.47]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 4, 8], ventas:[0.0, 0.0, 41.72, 84.36]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 11.35]}}}},
   {name:'CONJUNTO DE AMORTIGUADOR TRASERO (52400ABW101S)', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CONJUNTO DE LA BOMBA DE COMBUSTIBLE', data:[0, 0, 1, 1], ventas:[0.0, 0.0, 82.4, 119.19], byCanal:{mostrador:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 82.4, 119.19]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 82.4, 119.19]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CILINDRO (12100AAM300S)', data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 193.23], byCanal:{mostrador:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 193.23]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 118.91]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 74.32]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'ALTERNADOR COMPLETO (31100ABG201S)', data:[0, 0, 1, 1], ventas:[0.0, 0.0, 91.58, 91.58], byCanal:{mostrador:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 91.58]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 91.58, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 91.58]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 91.58, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'ACEITE POWER PRO 10W30 SL MA I (900ML)', data:[0, 5, 5, 7], ventas:[0.0, 52.15, 52.15, 73.01], byCanal:{mostrador:{data:[0, 5, 1, 1], ventas:[0.0, 52.15, 10.43, 10.43]}, taller:{data:[0, 0, 4, 6], ventas:[0.0, 0.0, 41.72, 62.58]}}, byCombo:{mostrador:{amer:{data:[0, 5, 1, 1], ventas:[0.0, 52.15, 10.43, 10.43]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 4, 6], ventas:[0.0, 0.0, 41.72, 62.58]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'CIGÜEÑAL COMPLETO (13000AAN410S)', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 177.23, 0.0], byCanal:{mostrador:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 177.23, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 177.23, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'FILTRO DE AIRE (17208ABW000S)', data:[0, 4, 8, 4], ventas:[0.0, 40.8, 81.59, 40.8], byCanal:{mostrador:{data:[0, 4, 7, 3], ventas:[0.0, 40.8, 71.39, 30.6]}, taller:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 10.2, 10.2]}}, byCombo:{mostrador:{amer:{data:[0, 4, 4, 0], ventas:[0.0, 40.8, 40.8, 0.0]}, naciones:{data:[0, 0, 3, 3], ventas:[0.0, 0.0, 30.6, 30.6]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 10.2, 0.0]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 10.2]}}}},
+  {name:'DISCO DE EMBRAGUE DE FRICCIÓN (22201KPM850EES)', data:[0, 13, 3, 8], ventas:[0.0, 88.39, 20.4, 47.59], byCanal:{mostrador:{data:[0, 13, 0, 8], ventas:[0.0, 88.39, 0.0, 47.59]}, taller:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 20.4, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 13, 0, 5], ventas:[0.0, 88.39, 0.0, 27.2]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 20.4]}}, taller:{amer:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 20.4, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'COMPONENTE DE RUEDA TRASERA', data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 144.81], byCanal:{mostrador:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 144.81]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 144.81]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'KIT DE CILINDRO (K12121ABFA000S)', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 141.61, 0.0], byCanal:{mostrador:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 141.61, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 141.61, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CONJUNTO BOMBA DE COMBUSTIBLE', data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 139.09], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 139.09]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 139.09]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'PASTILLAS DE FRENO DELANTERO', data:[0, 2, 0, 3], ventas:[0.0, 51.16, 0.0, 81.54], byCanal:{mostrador:{data:[0, 2, 0, 2], ventas:[0.0, 51.16, 0.0, 54.36]}, taller:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 27.18]}}, byCombo:{mostrador:{amer:{data:[0, 2, 0, 0], ventas:[0.0, 51.16, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 54.36]}}, taller:{amer:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 27.18]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'DISCO DE EMBRAGUE DE FRICCIÓN (22201KPM850EES)', data:[0, 13, 3, 3], ventas:[0.0, 88.39, 20.4, 20.4], byCanal:{mostrador:{data:[0, 13, 0, 3], ventas:[0.0, 88.39, 0.0, 20.4]}, taller:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 20.4, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 13, 0, 0], ventas:[0.0, 88.39, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 20.4]}}, taller:{amer:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 20.4, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'CONJUNTO DE MEDIDOR COMBINADO', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 126.68, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 126.68, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 126.68, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'CONJUNTO DE MEDIDOR. PEINE', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 125.32, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 125.32, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 125.32, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'ENGRANAJE, C3, (30 T)', data:[0, 0, 3, 4], ventas:[0.0, 0.0, 51.68, 71.81], byCanal:{mostrador:{data:[0, 0, 3, 4], ventas:[0.0, 0.0, 51.68, 71.81]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 2, 3], ventas:[0.0, 0.0, 34.45, 54.58]}, naciones:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 17.23, 17.23]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'CADENA DE DISTRIBUCIÓN (14401AABA00S)', data:[0, 1, 4, 1], ventas:[0.0, 20.19, 80.74, 22.36], byCanal:{mostrador:{data:[0, 1, 3, 1], ventas:[0.0, 20.19, 60.56, 22.36]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 20.19, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 1, 2, 1], ventas:[0.0, 20.19, 40.37, 22.36]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 20.19, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 20.19, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'COMPONENTE DE RUEDA DELANTERO', data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 122.53], byCanal:{mostrador:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 122.53]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 122.53]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'CILINDRO COMPLETO (12101KST940S)', data:[0, 1, 1, 0], ventas:[0.0, 56.75, 56.75, 0.0], byCanal:{mostrador:{data:[0, 1, 1, 0], ventas:[0.0, 56.75, 56.75, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 1, 0, 0], ventas:[0.0, 56.75, 0.0, 0.0]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 56.75, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'ALTERNADOR COMPLETO (31100AAN411S)', data:[0, 0, 2, 0], ventas:[0.0, 0.0, 112.36, 0.0], byCanal:{mostrador:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 112.36, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 112.36, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'KIT DE PIÑÓN Y CADENA (HF DWN / HF DLX)', data:[0, 0, 1, 3], ventas:[0.0, 0.0, 27.49, 82.46], byCanal:{mostrador:{data:[0, 0, 1, 3], ventas:[0.0, 0.0, 27.49, 82.46]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 82.46]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 27.49, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'CADENA DE DISTRIBUCIÓN (14401AABA00S)', data:[0, 1, 4, 0], ventas:[0.0, 20.19, 80.74, 0.0], byCanal:{mostrador:{data:[0, 1, 3, 0], ventas:[0.0, 20.19, 60.56, 0.0]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 20.19, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 1, 2, 0], ventas:[0.0, 20.19, 40.37, 0.0]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 20.19, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 20.19, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'COMPONENTE DEL ESTATOR', data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 92.84], byCanal:{mostrador:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 92.84]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 92.84]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'KIT DE PIÑÓN DE CADENA (ACHIEVER)', data:[0, 0, 1, 1], ventas:[0.0, 0.0, 56.52, 36.17], byCanal:{mostrador:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 56.52, 36.17]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 56.52, 0.0]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 36.17]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'KIT DE CILINDRO (K12121AAHAH00S)', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 90.98, 0.0], byCanal:{mostrador:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 90.98, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 90.98, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'FRENO COMPLETO DE ZAPATA', data:[0, 4, 6, 8], ventas:[0.0, 19.45, 29.17, 38.9], byCanal:{mostrador:{data:[0, 4, 6, 8], ventas:[0.0, 19.45, 29.17, 38.9]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 4, 6, 6], ventas:[0.0, 19.45, 29.17, 29.17]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 9.72]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'JUEGO DE PASTILLAS RR', data:[0, 2, 0, 1], ventas:[0.0, 57.2, 0.0, 28.6], byCanal:{mostrador:{data:[0, 2, 0, 1], ventas:[0.0, 57.2, 0.0, 28.6]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 2, 0, 0], ventas:[0.0, 57.2, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 28.6]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'CONJUNTO DE LA BOMBA DE COMBUSTIBLE', data:[0, 0, 1, 0], ventas:[0.0, 0.0, 82.4, 0.0], byCanal:{mostrador:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 82.4, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 82.4, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'FILTRO DE ACEITE DE ELEMENTO', data:[0, 3, 11, 13], ventas:[0.0, 9.13, 33.48, 39.57], byCanal:{mostrador:{data:[0, 3, 5, 6], ventas:[0.0, 9.13, 15.22, 18.26]}, taller:{data:[0, 0, 6, 7], ventas:[0.0, 0.0, 18.26, 21.31]}}, byCombo:{mostrador:{amer:{data:[0, 3, 5, 6], ventas:[0.0, 9.13, 15.22, 18.26]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 6, 7], ventas:[0.0, 0.0, 18.26, 21.31]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'EMPAQUE DE CULATA (12251ABF000S)', data:[1, 6, 6, 1], ventas:[4.91, 31.55, 31.55, 5.26], byCanal:{mostrador:{data:[1, 6, 5, 1], ventas:[4.91, 31.55, 26.29, 5.26]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 5.26, 0.0]}}, byCombo:{mostrador:{amer:{data:[1, 6, 4, 0], ventas:[4.91, 31.55, 21.03, 0.0]}, naciones:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 5.26, 5.26]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 5.26, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'JUNTA, TAPA DERECHA', data:[1, 6, 7, 6], ventas:[3.25, 20.87, 24.35, 20.87], byCanal:{mostrador:{data:[0, 6, 6, 4], ventas:[0.0, 20.87, 20.87, 13.91]}, taller:{data:[1, 0, 1, 2], ventas:[3.25, 0.0, 3.48, 6.96]}}, byCombo:{mostrador:{amer:{data:[0, 6, 5, 1], ventas:[0.0, 20.87, 17.39, 3.48]}, naciones:{data:[0, 0, 1, 3], ventas:[0.0, 0.0, 3.48, 10.44]}}, taller:{amer:{data:[1, 0, 1, 1], ventas:[3.25, 0.0, 3.48, 3.48]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 3.48]}}}},
-  {name:'DISCO DE EMBRAGUE A', data:[0, 6, 2, 2], ventas:[0.0, 39.61, 13.2, 13.2], byCanal:{mostrador:{data:[0, 6, 0, 2], ventas:[0.0, 39.61, 0.0, 13.2]}, taller:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 13.2, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 6, 0, 0], ventas:[0.0, 39.61, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 13.2]}}, taller:{amer:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 13.2, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'FILTRO DE ACEITE DE ELEMENTO', data:[0, 3, 11, 21], ventas:[0.0, 9.13, 33.48, 64.44], byCanal:{mostrador:{data:[0, 3, 5, 10], ventas:[0.0, 9.13, 15.22, 30.96]}, taller:{data:[0, 0, 6, 11], ventas:[0.0, 0.0, 18.26, 33.48]}}, byCombo:{mostrador:{amer:{data:[0, 3, 5, 10], ventas:[0.0, 9.13, 15.22, 30.96]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 6, 10], ventas:[0.0, 0.0, 18.26, 30.44]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 3.04]}}}},
+  {name:'FRENO COMPLETO DE ZAPATA', data:[0, 4, 6, 10], ventas:[0.0, 19.45, 29.17, 46.68], byCanal:{mostrador:{data:[0, 4, 6, 10], ventas:[0.0, 19.45, 29.17, 46.68]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 4, 6, 8], ventas:[0.0, 19.45, 29.17, 36.95]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 9.72]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'JUNTA, TAPA DERECHA', data:[1, 6, 7, 11], ventas:[3.25, 20.87, 24.35, 37.68], byCanal:{mostrador:{data:[0, 6, 6, 9], ventas:[0.0, 20.87, 20.87, 30.72]}, taller:{data:[1, 0, 1, 2], ventas:[3.25, 0.0, 3.48, 6.96]}}, byCombo:{mostrador:{amer:{data:[0, 6, 5, 5], ventas:[0.0, 20.87, 17.39, 16.81]}, naciones:{data:[0, 0, 1, 4], ventas:[0.0, 0.0, 3.48, 13.91]}}, taller:{amer:{data:[1, 0, 1, 1], ventas:[3.25, 0.0, 3.48, 3.48]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 3.48]}}}},
+  {name:'EMPAQUE DE CULATA (12251ABF000S)', data:[1, 6, 6, 3], ventas:[4.91, 31.55, 31.55, 16.39], byCanal:{mostrador:{data:[1, 6, 5, 3], ventas:[4.91, 31.55, 26.29, 16.39]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 5.26, 0.0]}}, byCombo:{mostrador:{amer:{data:[1, 6, 4, 2], ventas:[4.91, 31.55, 21.03, 11.13]}, naciones:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 5.26, 5.26]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 5.26, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'JUNTA DE LA TAPA DE LA CULATA (12391AAK900S)', data:[0, 7, 8, 14], ventas:[0.0, 18.11, 20.7, 36.29], byCanal:{mostrador:{data:[0, 7, 7, 14], ventas:[0.0, 18.11, 18.11, 36.29]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 2.59, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 7, 7, 13], ventas:[0.0, 18.11, 18.11, 33.71]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 2.59]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 2.59, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'AMORTIGUADOR, RUEDA TRASERA (41241KSP900S)', data:[0, 0, 12, 36], ventas:[0.0, 0.0, 16.56, 49.18], byCanal:{mostrador:{data:[0, 0, 8, 24], ventas:[0.0, 0.0, 11.04, 32.62]}, taller:{data:[0, 0, 4, 12], ventas:[0.0, 0.0, 5.52, 16.56]}}, byCombo:{mostrador:{amer:{data:[0, 0, 8, 12], ventas:[0.0, 0.0, 11.04, 16.06]}, naciones:{data:[0, 0, 0, 12], ventas:[0.0, 0.0, 0.0, 16.56]}}, taller:{amer:{data:[0, 0, 4, 0], ventas:[0.0, 0.0, 5.52, 0.0]}, naciones:{data:[0, 0, 0, 12], ventas:[0.0, 0.0, 0.0, 16.56]}}}},
   {name:'DISCO DE EMBRAGUE DE FRICCIÓN (22201GF6000EES)', data:[0, 4, 4, 8], ventas:[0.0, 14.07, 14.07, 24.63], byCanal:{mostrador:{data:[0, 4, 4, 8], ventas:[0.0, 14.07, 14.07, 24.63]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 4, 4, 8], ventas:[0.0, 14.07, 14.07, 24.63]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'JUNTA DE LA TAPA DE LA CULATA (12391AAK900S)', data:[0, 7, 8, 5], ventas:[0.0, 18.11, 20.7, 12.94], byCanal:{mostrador:{data:[0, 7, 7, 5], ventas:[0.0, 18.11, 18.11, 12.94]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 2.59, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 7, 7, 5], ventas:[0.0, 18.11, 18.11, 12.94]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 2.59, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'AMORTIGUADOR, RUEDA TRASERA (41241KSP900S)', data:[0, 0, 12, 24], ventas:[0.0, 0.0, 16.56, 33.12], byCanal:{mostrador:{data:[0, 0, 8, 12], ventas:[0.0, 0.0, 11.04, 16.56]}, taller:{data:[0, 0, 4, 12], ventas:[0.0, 0.0, 5.52, 16.56]}}, byCombo:{mostrador:{amer:{data:[0, 0, 8, 4], ventas:[0.0, 0.0, 11.04, 5.52]}, naciones:{data:[0, 0, 0, 8], ventas:[0.0, 0.0, 0.0, 11.04]}}, taller:{amer:{data:[0, 0, 4, 0], ventas:[0.0, 0.0, 5.52, 0.0]}, naciones:{data:[0, 0, 0, 12], ventas:[0.0, 0.0, 0.0, 16.56]}}}},
-  {name:'PLATO DE EMBRAGUE (22321KPS900S)', data:[0, 0, 8, 12], ventas:[0.0, 0.0, 12.42, 18.63], byCanal:{mostrador:{data:[0, 0, 4, 8], ventas:[0.0, 0.0, 6.21, 12.42]}, taller:{data:[0, 0, 4, 4], ventas:[0.0, 0.0, 6.21, 6.21]}}, byCombo:{mostrador:{amer:{data:[0, 0, 4, 0], ventas:[0.0, 0.0, 6.21, 0.0]}, naciones:{data:[0, 0, 0, 8], ventas:[0.0, 0.0, 0.0, 12.42]}}, taller:{amer:{data:[0, 0, 4, 0], ventas:[0.0, 0.0, 6.21, 0.0]}, naciones:{data:[0, 0, 0, 4], ventas:[0.0, 0.0, 0.0, 6.21]}}}},
+  {name:'PLATO DE EMBRAGUE (22321KPS900S)', data:[0, 0, 8, 16], ventas:[0.0, 0.0, 12.42, 23.6], byCanal:{mostrador:{data:[0, 0, 4, 12], ventas:[0.0, 0.0, 6.21, 17.39]}, taller:{data:[0, 0, 4, 4], ventas:[0.0, 0.0, 6.21, 6.21]}}, byCombo:{mostrador:{amer:{data:[0, 0, 4, 4], ventas:[0.0, 0.0, 6.21, 4.97]}, naciones:{data:[0, 0, 0, 8], ventas:[0.0, 0.0, 0.0, 12.42]}}, taller:{amer:{data:[0, 0, 4, 0], ventas:[0.0, 0.0, 6.21, 0.0]}, naciones:{data:[0, 0, 0, 4], ventas:[0.0, 0.0, 0.0, 6.21]}}}},
+  {name:'BRG, AGUJA 20X26X20', data:[0, 0, 4, 8], ventas:[0.0, 0.0, 11.38, 21.63], byCanal:{mostrador:{data:[0, 0, 4, 8], ventas:[0.0, 0.0, 11.38, 21.63]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 4, 8], ventas:[0.0, 0.0, 11.38, 21.63]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'SELLO, VÁSTAGO DE VÁLVULA', data:[0, 4, 6, 10], ventas:[0.0, 6.38, 9.57, 15.68], byCanal:{mostrador:{data:[0, 4, 4, 10], ventas:[0.0, 6.38, 6.38, 15.68]}, taller:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 3.19, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 4, 2, 6], ventas:[0.0, 6.38, 3.19, 9.3]}, naciones:{data:[0, 0, 2, 4], ventas:[0.0, 0.0, 3.19, 6.38]}}, taller:{amer:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 3.19, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'JUNTA, TAPA L', data:[1, 2, 4, 7], ventas:[1.57, 3.36, 6.73, 16.19], byCanal:{mostrador:{data:[0, 2, 3, 7], ventas:[0.0, 3.36, 5.05, 16.19]}, taller:{data:[1, 0, 1, 0], ventas:[1.57, 0.0, 1.68, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 2, 2, 5], ventas:[0.0, 3.36, 3.36, 11.47]}, naciones:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 1.68, 4.73]}}, taller:{amer:{data:[1, 0, 1, 0], ventas:[1.57, 0.0, 1.68, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'ARANDELA, TAPÓN, DESAGÜE', data:[0, 39, 8, 31], ventas:[0.0, 4.88, 2.15, 17.0], byCanal:{mostrador:{data:[0, 39, 6, 10], ventas:[0.0, 4.88, 1.89, 5.5]}, taller:{data:[0, 0, 2, 21], ventas:[0.0, 0.0, 0.26, 11.5]}}, byCombo:{mostrador:{amer:{data:[0, 39, 6, 10], ventas:[0.0, 4.88, 1.89, 5.5]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 2, 20], ventas:[0.0, 0.0, 0.26, 11.0]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 0.5]}}}},
   {name:'TUERCA DE RADIO DELANTERA', data:[0, 0, 36, 0], ventas:[0.0, 0.0, 20.18, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 36, 0], ventas:[0.0, 0.0, 20.18, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 36, 0], ventas:[0.0, 0.0, 20.18, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'SELLO, VÁSTAGO DE VÁLVULA', data:[0, 4, 6, 2], ventas:[0.0, 6.38, 9.57, 3.19], byCanal:{mostrador:{data:[0, 4, 4, 2], ventas:[0.0, 6.38, 6.38, 3.19]}, taller:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 3.19, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 4, 2, 0], ventas:[0.0, 6.38, 3.19, 0.0]}, naciones:{data:[0, 0, 2, 2], ventas:[0.0, 0.0, 3.19, 3.19]}}, taller:{amer:{data:[0, 0, 2, 0], ventas:[0.0, 0.0, 3.19, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'ARANDELA, TAPÓN, DESAGÜE', data:[0, 39, 8, 22], ventas:[0.0, 4.88, 2.15, 11.0], byCanal:{mostrador:{data:[0, 39, 6, 7], ventas:[0.0, 4.88, 1.89, 3.5]}, taller:{data:[0, 0, 2, 15], ventas:[0.0, 0.0, 0.26, 7.5]}}, byCombo:{mostrador:{amer:{data:[0, 39, 6, 7], ventas:[0.0, 4.88, 1.89, 3.5]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 2, 14], ventas:[0.0, 0.0, 0.26, 7.0]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 0.5]}}}},
-  {name:'RESORTE, EMBRAGUE', data:[0, 12, 0, 0], ventas:[0.0, 17.08, 0.0, 0.0], byCanal:{mostrador:{data:[0, 12, 0, 0], ventas:[0.0, 17.08, 0.0, 0.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 12, 0, 0], ventas:[0.0, 17.08, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'SELLO, CUBIERTA DEL FILTRO DE ACEITE', data:[0, 0, 5, 11], ventas:[0.0, 0.0, 4.03, 11.0], byCanal:{mostrador:{data:[0, 0, 4, 4], ventas:[0.0, 0.0, 3.52, 4.0]}, taller:{data:[0, 0, 1, 7], ventas:[0.0, 0.0, 0.52, 7.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 4, 4], ventas:[0.0, 0.0, 3.52, 4.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 7], ventas:[0.0, 0.0, 0.52, 7.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'RADIO DE RUEDA DELANTERA (97278ABW100S)', data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'SELLO, CUBIERTA DEL FILTRO DE ACEITE', data:[0, 0, 5, 13], ventas:[0.0, 0.0, 4.03, 13.0], byCanal:{mostrador:{data:[0, 0, 4, 5], ventas:[0.0, 0.0, 3.52, 5.0]}, taller:{data:[0, 0, 1, 8], ventas:[0.0, 0.0, 0.52, 8.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 4, 5], ventas:[0.0, 0.0, 3.52, 5.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 8], ventas:[0.0, 0.0, 0.52, 8.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'TUERCA DE RADIO TRASERA', data:[0, 0, 36, 0], ventas:[0.0, 0.0, 13.97, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 36, 0], ventas:[0.0, 0.0, 13.97, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 36, 0], ventas:[0.0, 0.0, 13.97, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'RADIO DE RUEDA TRASERA (97660ABW100S)', data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'RADIO DE RUEDA DELANTERA (97278ABW100S)', data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.97, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'JUNTA DE ROTOR FILTRO DE ACEITE', data:[0, 7, 1, 6], ventas:[0.0, 6.64, 0.95, 6.36], byCanal:{mostrador:{data:[0, 7, 0, 2], ventas:[0.0, 6.64, 0.0, 2.18]}, taller:{data:[0, 0, 1, 4], ventas:[0.0, 0.0, 0.95, 4.18]}}, byCombo:{mostrador:{amer:{data:[0, 7, 0, 2], ventas:[0.0, 6.64, 0.0, 2.18]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 4], ventas:[0.0, 0.0, 0.95, 4.18]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'RADIO DE RUEDA TRASERA (97252ABW100S)', data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.2, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.2, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 13.2, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'RADIO DE RUEDA DELANTERA (97550ABW100S)', data:[0, 0, 18, 0], ventas:[0.0, 0.0, 12.42, 0.0], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 12.42, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 18, 0], ventas:[0.0, 0.0, 12.42, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'JUNTA DE ROTOR FILTRO DE ACEITE', data:[0, 7, 1, 3], ventas:[0.0, 6.64, 0.95, 3.0], byCanal:{mostrador:{data:[0, 7, 0, 1], ventas:[0.0, 6.64, 0.0, 1.0]}, taller:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 0.95, 2.0]}}, byCombo:{mostrador:{amer:{data:[0, 7, 0, 1], ventas:[0.0, 6.64, 0.0, 1.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 0.95, 2.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'FIN DEL MANGO DE CUERDA', data:[0, 0, 10, 2], ventas:[0.0, 0.0, 6.9, 2.0], byCanal:{mostrador:{data:[0, 0, 10, 2], ventas:[0.0, 0.0, 6.9, 2.0]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 10, 2], ventas:[0.0, 0.0, 6.9, 2.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'FIN DEL MANGO DE CUERDA', data:[0, 0, 10, 4], ventas:[0.0, 0.0, 6.9, 4.0], byCanal:{mostrador:{data:[0, 0, 10, 2], ventas:[0.0, 0.0, 6.9, 2.0]}, taller:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 2.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 10, 2], ventas:[0.0, 0.0, 6.9, 2.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 2.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
 ].map(it=>({...it, total: sum(it.data), totalVenta: sum(it.ventas)}));
 
-// Top 10 provincias por venta neta (de 17 con ventas en el periodo).
+// Top 10 provincias por venta neta (de 19 con ventas en el periodo).
 const repuestosProvinciasRaw = [
-  {name:'GUAYAS', data:[10, 179, 442, 170], ventas:[110.36, 903.1, 2788.16, 1298.67], byCanal:{mostrador:{data:[6, 177, 214, 111], ventas:[78.93, 878.95, 1616.04, 947.48]}, taller:{data:[4, 2, 228, 59], ventas:[31.42, 24.15, 1172.11, 351.19]}}, byCombo:{mostrador:{amer:{data:[6, 177, 212, 96], ventas:[78.93, 878.95, 1602.37, 708.78]}, naciones:{data:[0, 0, 2, 15], ventas:[0.0, 0.0, 13.68, 238.7]}}, taller:{amer:{data:[4, 2, 228, 59], ventas:[31.42, 24.15, 1172.11, 351.19]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'PICHINCHA', data:[0, 43, 38, 54], ventas:[0.0, 164.26, 376.02, 486.0], byCanal:{mostrador:{data:[0, 43, 38, 28], ventas:[0.0, 164.26, 376.02, 343.87]}, taller:{data:[0, 0, 0, 26], ventas:[0.0, 0.0, 0.0, 142.13]}}, byCombo:{mostrador:{amer:{data:[0, 43, 9, 0], ventas:[0.0, 164.26, 167.28, 0.0]}, naciones:{data:[0, 0, 29, 28], ventas:[0.0, 0.0, 208.74, 343.87]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 26], ventas:[0.0, 0.0, 0.0, 142.13]}}}},
-  {name:'LOS RIOS', data:[0, 26, 19, 16], ventas:[0.0, 436.86, 304.93, 71.84], byCanal:{mostrador:{data:[0, 26, 19, 16], ventas:[0.0, 436.86, 304.93, 71.84]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 26, 19, 15], ventas:[0.0, 436.86, 304.93, 68.9]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 2.94]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'SUCUMBIOS', data:[0, 0, 30, 4], ventas:[0.0, 0.0, 653.97, 60.24], byCanal:{mostrador:{data:[0, 0, 29, 4], ventas:[0.0, 0.0, 421.85, 60.24]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 25, 0], ventas:[0.0, 0.0, 338.48, 0.0]}, naciones:{data:[0, 0, 4, 4], ventas:[0.0, 0.0, 83.37, 60.24]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'EL ORO', data:[0, 19, 0, 8], ventas:[0.0, 434.14, 0.0, 25.28], byCanal:{mostrador:{data:[0, 19, 0, 8], ventas:[0.0, 434.14, 0.0, 25.28]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 19, 0, 8], ventas:[0.0, 434.14, 0.0, 25.28]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'SANTO DOMINGO', data:[0, 0, 20, 8], ventas:[0.0, 0.0, 288.4, 65.47], byCanal:{mostrador:{data:[0, 0, 20, 8], ventas:[0.0, 0.0, 288.4, 65.47]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 11, 3], ventas:[0.0, 0.0, 96.86, 10.55]}, naciones:{data:[0, 0, 9, 5], ventas:[0.0, 0.0, 191.53, 54.92]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'MORONA SANTIAGO', data:[0, 0, 1, 21], ventas:[0.0, 0.0, 38.36, 244.82], byCanal:{mostrador:{data:[0, 0, 1, 21], ventas:[0.0, 0.0, 38.36, 244.82]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 38.36, 0.0]}, naciones:{data:[0, 0, 0, 21], ventas:[0.0, 0.0, 0.0, 244.82]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'GUAYAS', data:[10, 179, 442, 354], ventas:[110.36, 903.1, 2788.16, 3139.33], byCanal:{mostrador:{data:[6, 177, 214, 254], ventas:[78.93, 878.95, 1616.04, 2434.82]}, taller:{data:[4, 2, 228, 100], ventas:[31.42, 24.15, 1172.11, 704.51]}}, byCombo:{mostrador:{amer:{data:[6, 177, 212, 239], ventas:[78.93, 878.95, 1602.37, 2196.12]}, naciones:{data:[0, 0, 2, 15], ventas:[0.0, 0.0, 13.68, 238.7]}}, taller:{amer:{data:[4, 2, 228, 100], ventas:[31.42, 24.15, 1172.11, 704.51]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'PICHINCHA', data:[0, 43, 38, 71], ventas:[0.0, 164.26, 376.02, 717.25], byCanal:{mostrador:{data:[0, 43, 38, 40], ventas:[0.0, 164.26, 376.02, 524.87]}, taller:{data:[0, 0, 0, 31], ventas:[0.0, 0.0, 0.0, 192.37]}}, byCombo:{mostrador:{amer:{data:[0, 43, 9, 0], ventas:[0.0, 164.26, 167.28, 0.0]}, naciones:{data:[0, 0, 29, 40], ventas:[0.0, 0.0, 208.74, 524.87]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 31], ventas:[0.0, 0.0, 0.0, 192.37]}}}},
+  {name:'LOS RIOS', data:[0, 26, 19, 40], ventas:[0.0, 436.86, 304.93, 327.72], byCanal:{mostrador:{data:[0, 26, 19, 40], ventas:[0.0, 436.86, 304.93, 327.72]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 26, 19, 35], ventas:[0.0, 436.86, 304.93, 274.58]}, naciones:{data:[0, 0, 0, 5], ventas:[0.0, 0.0, 0.0, 53.14]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'SUCUMBIOS', data:[0, 0, 30, 5], ventas:[0.0, 0.0, 653.97, 144.9], byCanal:{mostrador:{data:[0, 0, 29, 5], ventas:[0.0, 0.0, 421.85, 144.9]}, taller:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 25, 0], ventas:[0.0, 0.0, 338.48, 0.0]}, naciones:{data:[0, 0, 4, 5], ventas:[0.0, 0.0, 83.37, 144.9]}}, taller:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 232.13, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'MORONA SANTIAGO', data:[0, 0, 1, 30], ventas:[0.0, 0.0, 38.36, 451.07], byCanal:{mostrador:{data:[0, 0, 1, 30], ventas:[0.0, 0.0, 38.36, 451.07]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 38.36, 0.0]}, naciones:{data:[0, 0, 0, 30], ventas:[0.0, 0.0, 0.0, 451.07]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'EL ORO', data:[0, 19, 0, 11], ventas:[0.0, 434.14, 0.0, 42.97], byCanal:{mostrador:{data:[0, 19, 0, 11], ventas:[0.0, 434.14, 0.0, 42.97]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 19, 0, 11], ventas:[0.0, 434.14, 0.0, 42.97]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'SANTO DOMINGO', data:[0, 0, 20, 11], ventas:[0.0, 0.0, 288.4, 106.24], byCanal:{mostrador:{data:[0, 0, 20, 11], ventas:[0.0, 0.0, 288.4, 106.24]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 11, 3], ventas:[0.0, 0.0, 96.86, 10.55]}, naciones:{data:[0, 0, 9, 8], ventas:[0.0, 0.0, 191.53, 95.69]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'MANABÍ', data:[0, 0, 6, 2], ventas:[0.0, 0.0, 140.89, 30.61], byCanal:{mostrador:{data:[0, 0, 6, 2], ventas:[0.0, 0.0, 140.89, 30.61]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 3, 2], ventas:[0.0, 0.0, 110.06, 30.61]}, naciones:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 30.84, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'AZUAY', data:[0, 8, 11, 4], ventas:[0.0, 46.69, 99.96, 16.12], byCanal:{mostrador:{data:[0, 8, 11, 4], ventas:[0.0, 46.69, 99.96, 16.12]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 8, 4, 4], ventas:[0.0, 46.69, 58.54, 16.12]}, naciones:{data:[0, 0, 7, 0], ventas:[0.0, 0.0, 41.42, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'AZUAY', data:[0, 8, 11, 5], ventas:[0.0, 46.69, 99.96, 19.13], byCanal:{mostrador:{data:[0, 8, 11, 5], ventas:[0.0, 46.69, 99.96, 19.13]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 8, 4, 5], ventas:[0.0, 46.69, 58.54, 19.13]}, naciones:{data:[0, 0, 7, 0], ventas:[0.0, 0.0, 41.42, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'LOJA', data:[0, 0, 4, 2], ventas:[0.0, 0.0, 48.4, 70.82], byCanal:{mostrador:{data:[0, 0, 4, 2], ventas:[0.0, 0.0, 48.4, 70.82]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 4, 0], ventas:[0.0, 0.0, 48.4, 0.0]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 70.82]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
 ].map(p=>({...p, total: sum(p.data)}));
 
 const CANAL_COLORS = ['--canal-1','--canal-2'].map(getVar);
 const ZERO4 = [0,0,0,0];
 const repuestosCanalesRaw = [
-  {name:'MOSTRADOR', data:[6, 276, 367, 221], ventas:[78.93, 1975.48, 3548.73, 1973.13], byCanal:{mostrador:{data:[6, 276, 367, 221], ventas:[78.93, 1975.48, 3548.73, 1973.13]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[6, 276, 312, 145], ventas:[78.93, 1975.48, 2896.75, 956.82]}, naciones:{data:[0, 0, 55, 76], ventas:[0.0, 0.0, 651.98, 1016.31]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'TALLER', data:[4, 2, 229, 85], ventas:[31.42, 24.15, 1404.24, 493.32], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[4, 2, 229, 85], ventas:[31.42, 24.15, 1404.24, 493.32]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[4, 2, 229, 59], ventas:[31.42, 24.15, 1404.24, 351.19]}, naciones:{data:[0, 0, 0, 26], ventas:[0.0, 0.0, 0.0, 142.13]}}}},
+  {name:'MOSTRADOR', data:[6, 276, 367, 427], ventas:[78.93, 1975.48, 3548.73, 4390.28], byCanal:{mostrador:{data:[6, 276, 367, 427], ventas:[78.93, 1975.48, 3548.73, 4390.28]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, byCombo:{mostrador:{amer:{data:[6, 276, 312, 312], ventas:[78.93, 1975.48, 2896.75, 2670.55]}, naciones:{data:[0, 0, 55, 115], ventas:[0.0, 0.0, 651.98, 1719.73]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'TALLER', data:[4, 2, 229, 131], ventas:[31.42, 24.15, 1404.24, 896.88], byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, taller:{data:[4, 2, 229, 131], ventas:[31.42, 24.15, 1404.24, 896.88]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[4, 2, 229, 100], ventas:[31.42, 24.15, 1404.24, 704.51]}, naciones:{data:[0, 0, 0, 31], ventas:[0.0, 0.0, 0.0, 192.37]}}}},
 ].map((c,i)=>({...c, color: CANAL_COLORS[i], total: sum(c.data)}));
 
 // Ventas de repuestos por sucursal (columna "Sucursal" de BASE_DATOS). Se muestran con los mismos
 // nombres que usa la página Tiendas: HERO GUAYAQUIL = AV. AMÉRICAS, HERO QUITO = NACIONES UNIDAS.
 const REPUESTOS_SUCURSALES = [
-  {name:'AV. AMÉRICAS', data:[10, 278, 541, 204], ventas:[110.36, 1999.63, 4300.99, 1308.01], byCanal:{mostrador:{data:[6, 276, 312, 145], ventas:[78.93, 1975.48, 2896.75, 956.82]}, taller:{data:[4, 2, 229, 59], ventas:[31.42, 24.15, 1404.24, 351.19]}}, byCombo:{mostrador:{amer:{data:[6, 276, 312, 145], ventas:[78.93, 1975.48, 2896.75, 956.82]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[4, 2, 229, 59], ventas:[31.42, 24.15, 1404.24, 351.19]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'NACIONES UNIDAS', data:[0, 0, 55, 102], ventas:[0.0, 0.0, 651.98, 1158.44], byCanal:{mostrador:{data:[0, 0, 55, 76], ventas:[0.0, 0.0, 651.98, 1016.31]}, taller:{data:[0, 0, 0, 26], ventas:[0.0, 0.0, 0.0, 142.13]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 55, 76], ventas:[0.0, 0.0, 651.98, 1016.31]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 26], ventas:[0.0, 0.0, 0.0, 142.13]}}}},
+  {name:'AV. AMÉRICAS', data:[10, 278, 541, 412], ventas:[110.36, 1999.63, 4300.99, 3375.06], byCanal:{mostrador:{data:[6, 276, 312, 312], ventas:[78.93, 1975.48, 2896.75, 2670.55]}, taller:{data:[4, 2, 229, 100], ventas:[31.42, 24.15, 1404.24, 704.51]}}, byCombo:{mostrador:{amer:{data:[6, 276, 312, 312], ventas:[78.93, 1975.48, 2896.75, 2670.55]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[4, 2, 229, 100], ventas:[31.42, 24.15, 1404.24, 704.51]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'NACIONES UNIDAS', data:[0, 0, 55, 146], ventas:[0.0, 0.0, 651.98, 1912.1], byCanal:{mostrador:{data:[0, 0, 55, 115], ventas:[0.0, 0.0, 651.98, 1719.73]}, taller:{data:[0, 0, 0, 31], ventas:[0.0, 0.0, 0.0, 192.37]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 55, 115], ventas:[0.0, 0.0, 651.98, 1719.73]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 31], ventas:[0.0, 0.0, 0.0, 192.37]}}}},
 ].map(s=>({...s, total: sum(s.data)}));
 
 // Modelo HERO compatible por repuesto (hoja MODELOS del archivo de ventas de repuestos).
 // Cuando un repuesto aplica a varios modelos, su venta/unidades se reparten en partes iguales entre ellos.
-// Cubre el 100% de la venta neta de repuestos del periodo ($9.529). Ordenado por venta total descendente.
+// Cubre el 100% de la venta neta de repuestos del periodo ($12.350). Ordenado por venta total descendente.
 const REPUESTOS_MODELOS = [
-  {name:'XPULSE 200 4V', data:[4, 38, 199, 34], ventas:[44.22, 489.4, 1052.02, 504.51],
-    byCanal:{mostrador:{data:[3, 38, 41, 25], ventas:[40.62, 489.4, 537.15, 389.4]}, taller:{data:[1, 0, 158, 9], ventas:[3.6, 0.0, 514.87, 115.11]}},
-    byCombo:{mostrador:{amer:{data:[3, 38, 33, 6], ventas:[40.62, 489.4, 457.95, 34.46]}, naciones:{data:[0, 0, 8, 19], ventas:[0.0, 0.0, 79.2, 354.94]}}, taller:{amer:{data:[1, 0, 158, 3], ventas:[3.6, 0.0, 514.87, 16.53]}, naciones:{data:[0, 0, 0, 6], ventas:[0.0, 0.0, 0.0, 98.58]}}}},
-  {name:'HUNK 200R', data:[2, 32, 39, 22], ventas:[7.34, 431.81, 561.94, 216.37],
-    byCanal:{mostrador:{data:[1, 32, 29, 15], ventas:[3.74, 431.81, 396.35, 193.24]}, taller:{data:[1, 0, 10, 7], ventas:[3.6, 0.0, 165.6, 23.13]}},
-    byCombo:{mostrador:{amer:{data:[1, 32, 25, 5], ventas:[3.74, 431.81, 367.42, 26.17]}, naciones:{data:[0, 0, 4, 10], ventas:[0.0, 0.0, 28.93, 167.06]}}, taller:{amer:{data:[1, 0, 10, 3], ventas:[3.6, 0.0, 165.6, 16.53]}, naciones:{data:[0, 0, 0, 4], ventas:[0.0, 0.0, 0.0, 6.6]}}}},
-  {name:'HUNK 160 4V', data:[1, 20, 56, 34], ventas:[34.3, 108.84, 711.47, 303.15],
-    byCanal:{mostrador:{data:[1, 20, 44, 25], ventas:[30.96, 108.84, 518.6, 258.84]}, taller:{data:[0, 0, 12, 9], ventas:[3.34, 0.0, 192.87, 44.31]}},
-    byCombo:{mostrador:{amer:{data:[1, 20, 42, 17], ventas:[30.96, 108.84, 413.74, 107.43]}, naciones:{data:[0, 0, 2, 8], ventas:[0.0, 0.0, 104.86, 151.41]}}, taller:{amer:{data:[0, 0, 12, 7], ventas:[3.34, 0.0, 192.87, 38.31]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 6.0]}}}},
-  {name:'ECO DELUXE', data:[0, 39, 33, 31], ventas:[0.0, 257.68, 358.51, 259.35],
-    byCanal:{mostrador:{data:[0, 39, 30, 27], ventas:[0.0, 257.68, 333.81, 227.42]}, taller:{data:[0, 0, 3, 4], ventas:[0.0, 0.0, 24.7, 31.93]}},
-    byCombo:{mostrador:{amer:{data:[0, 39, 21, 23], ventas:[0.0, 257.68, 226.18, 142.81]}, naciones:{data:[0, 0, 9, 4], ventas:[0.0, 0.0, 107.63, 84.61]}}, taller:{amer:{data:[0, 0, 3, 4], ventas:[0.0, 0.0, 24.7, 28.78]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 3.15]}}}},
-  {name:'ECO 150', data:[1, 14, 40, 28], ventas:[4.51, 58.9, 344.16, 219.16],
-    byCanal:{mostrador:{data:[0, 14, 34, 21], ventas:[0.91, 58.9, 298.49, 183.18]}, taller:{data:[1, 0, 6, 7], ventas:[3.6, 0.0, 45.68, 35.97]}},
-    byCombo:{mostrador:{amer:{data:[0, 14, 31, 12], ventas:[0.91, 58.9, 267.95, 86.23]}, naciones:{data:[0, 0, 3, 9], ventas:[0.0, 0.0, 30.54, 96.95]}}, taller:{amer:{data:[1, 0, 6, 4], ventas:[3.6, 0.0, 45.68, 27.91]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 8.06]}}}},
-  {name:'DASH', data:[0, 9, 17, 8], ventas:[0.0, 54.1, 198.7, 242.59],
-    byCanal:{mostrador:{data:[0, 7, 11, 5], ventas:[0.0, 29.95, 55.21, 177.52]}, taller:{data:[0, 2, 6, 3], ventas:[0.0, 24.15, 143.49, 65.06]}},
-    byCombo:{mostrador:{amer:{data:[0, 7, 10, 5], ventas:[0.0, 29.95, 48.09, 176.54]}, naciones:{data:[0, 0, 1, 0], ventas:[0.0, 0.0, 7.12, 0.98]}}, taller:{amer:{data:[0, 2, 6, 3], ventas:[0.0, 24.15, 143.49, 65.01]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.05]}}}},
-  {name:'ECO 100', data:[0, 30, 17, 15], ventas:[0.0, 179.23, 187.18, 90.88],
-    byCanal:{mostrador:{data:[0, 30, 16, 13], ventas:[0.0, 179.23, 183.88, 87.32]}, taller:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 3.29, 3.56]}},
-    byCombo:{mostrador:{amer:{data:[0, 30, 10, 12], ventas:[0.0, 179.23, 77.13, 78.7]}, naciones:{data:[0, 0, 6, 1], ventas:[0.0, 0.0, 106.75, 8.62]}}, taller:{amer:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 3.29, 3.56]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'HUNK 125', data:[0, 5, 30, 26], ventas:[2.88, 28.39, 273.7, 94.85],
-    byCanal:{mostrador:{data:[0, 5, 21, 12], ventas:[0.0, 28.39, 96.04, 47.5]}, taller:{data:[0, 0, 9, 14], ventas:[2.88, 0.0, 177.66, 47.35]}},
-    byCombo:{mostrador:{amer:{data:[0, 5, 21, 12], ventas:[0.0, 28.39, 92.63, 46.41]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 3.41, 1.08]}}, taller:{amer:{data:[0, 0, 9, 13], ventas:[2.88, 0.0, 177.66, 43.51]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 3.85]}}}},
-  {name:'IGNITOR 125', data:[0, 1, 18, 2], ventas:[1.79, 2.3, 378.78, 11.43],
-    byCanal:{mostrador:{data:[0, 1, 18, 1], ventas:[0.0, 2.3, 377.94, 4.18]}, taller:{data:[0, 0, 0, 1], ventas:[1.79, 0.0, 0.84, 7.25]}},
-    byCombo:{mostrador:{amer:{data:[0, 1, 18, 1], ventas:[0.0, 2.3, 377.64, 3.49]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.31, 0.69]}}, taller:{amer:{data:[0, 0, 0, 1], ventas:[1.79, 0.0, 0.84, 7.25]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'HF DELUXE', data:[0, 32, 19, 10], ventas:[0.0, 179.11, 154.1, 29.75],
-    byCanal:{mostrador:{data:[0, 32, 18, 8], ventas:[0.0, 179.11, 150.81, 26.19]}, taller:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 3.29, 3.56]}},
-    byCombo:{mostrador:{amer:{data:[0, 32, 11, 8], ventas:[0.0, 179.11, 54.4, 25.21]}, naciones:{data:[0, 0, 7, 0], ventas:[0.0, 0.0, 96.42, 0.98]}}, taller:{amer:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 3.29, 3.56]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'DAWN 125', data:[1, 14, 35, 23], ventas:[4.51, 40.99, 207.61, 98.38],
-    byCanal:{mostrador:{data:[0, 14, 30, 17], ventas:[0.91, 40.99, 182.99, 84.17]}, taller:{data:[1, 0, 5, 6], ventas:[3.6, 0.0, 24.62, 14.21]}},
-    byCombo:{mostrador:{amer:{data:[0, 14, 27, 10], ventas:[0.91, 40.99, 154.4, 39.17]}, naciones:{data:[0, 0, 3, 7], ventas:[0.0, 0.0, 28.59, 45.0]}}, taller:{amer:{data:[1, 0, 5, 3], ventas:[3.6, 0.0, 24.62, 9.3]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 4.91]}}}},
-  {name:'VARIOS / UNIVERSAL', data:[0, 5, 13, 19], ventas:[0.0, 52.15, 81.41, 192.83],
-    byCanal:{mostrador:{data:[0, 5, 9, 11], ventas:[0.0, 52.15, 39.69, 124.18]}, taller:{data:[0, 0, 4, 8], ventas:[0.0, 0.0, 41.72, 68.65]}},
-    byCombo:{mostrador:{amer:{data:[0, 5, 6, 11], ventas:[0.0, 52.15, 38.27, 124.18]}, naciones:{data:[0, 0, 3, 0], ventas:[0.0, 0.0, 1.42, 0.0]}}, taller:{amer:{data:[0, 0, 4, 8], ventas:[0.0, 0.0, 41.72, 68.65]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'DAWN 150', data:[1, 12, 33, 21], ventas:[4.51, 37.38, 194.25, 78.62],
-    byCanal:{mostrador:{data:[0, 12, 28, 16], ventas:[0.91, 37.38, 169.98, 71.02]}, taller:{data:[1, 0, 5, 5], ventas:[3.6, 0.0, 24.27, 7.6]}},
-    byCombo:{mostrador:{amer:{data:[0, 12, 25, 9], ventas:[0.91, 37.38, 146.87, 31.19]}, naciones:{data:[0, 0, 3, 7], ventas:[0.0, 0.0, 23.12, 39.83]}}, taller:{amer:{data:[1, 0, 5, 2], ventas:[3.6, 0.0, 24.27, 2.69]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 4.91]}}}},
-  {name:'THRILLER', data:[1, 11, 21, 17], ventas:[4.51, 30.63, 94.2, 49.9],
-    byCanal:{mostrador:{data:[0, 11, 16, 12], ventas:[0.91, 30.63, 68.84, 41.61]}, taller:{data:[1, 0, 5, 5], ventas:[3.6, 0.0, 25.36, 8.29]}},
-    byCombo:{mostrador:{amer:{data:[0, 11, 15, 6], ventas:[0.91, 30.63, 60.04, 19.14]}, naciones:{data:[0, 0, 1, 6], ventas:[0.0, 0.0, 8.81, 22.47]}}, taller:{amer:{data:[1, 0, 5, 2], ventas:[3.6, 0.0, 25.36, 2.69]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 5.6]}}}},
-  {name:'XOOM 110', data:[0, 8, 9, 5], ventas:[0.0, 35.13, 68.26, 13.29],
-    byCanal:{mostrador:{data:[0, 8, 8, 3], ventas:[0.0, 35.13, 60.8, 8.41]}, taller:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 7.46, 4.88]}},
-    byCombo:{mostrador:{amer:{data:[0, 8, 6, 2], ventas:[0.0, 35.13, 45.08, 3.59]}, naciones:{data:[0, 0, 2, 1], ventas:[0.0, 0.0, 15.72, 4.82]}}, taller:{amer:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 7.46, 4.83]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.05]}}}},
-  {name:'GLAMOUR', data:[0, 2, 6, 3], ventas:[1.79, 4.94, 50.97, 12.36],
-    byCanal:{mostrador:{data:[0, 2, 5, 2], ventas:[0.0, 4.94, 49.84, 5.11]}, taller:{data:[0, 0, 1, 1], ventas:[1.79, 0.0, 1.13, 7.25]}},
-    byCombo:{mostrador:{amer:{data:[0, 2, 5, 2], ventas:[0.0, 4.94, 49.24, 4.13]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.6, 0.98]}}, taller:{amer:{data:[0, 0, 1, 1], ventas:[1.79, 0.0, 1.13, 7.25]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'XOOM 125', data:[0, 6, 6, 6], ventas:[0.0, 7.63, 31.79, 30.14],
-    byCanal:{mostrador:{data:[0, 6, 5, 4], ventas:[0.0, 7.63, 24.4, 25.26]}, taller:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 7.4, 4.88]}},
-    byCombo:{mostrador:{amer:{data:[0, 6, 4, 2], ventas:[0.0, 7.63, 15.83, 4.56]}, naciones:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 8.57, 20.7]}}, taller:{amer:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 7.4, 4.83]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.05]}}}},
+  {name:'XPULSE 200 4V', data:[4, 38, 199, 51], ventas:[44.22, 489.4, 1052.02, 688.78],
+    byCanal:{mostrador:{data:[3, 38, 41, 40], ventas:[40.62, 489.4, 537.15, 553.09]}, taller:{data:[1, 0, 158, 11], ventas:[3.6, 0.0, 514.87, 135.69]}},
+    byCombo:{mostrador:{amer:{data:[3, 38, 33, 19], ventas:[40.62, 489.4, 457.95, 98.84]}, naciones:{data:[0, 0, 8, 21], ventas:[0.0, 0.0, 79.2, 454.25]}}, taller:{amer:{data:[1, 0, 158, 5], ventas:[3.6, 0.0, 514.87, 37.1]}, naciones:{data:[0, 0, 0, 6], ventas:[0.0, 0.0, 0.0, 98.58]}}}},
+  {name:'VARIOS / UNIVERSAL', data:[0, 5, 13, 94], ventas:[0.0, 52.15, 81.41, 1734.11],
+    byCanal:{mostrador:{data:[0, 5, 9, 76], ventas:[0.0, 52.15, 39.69, 1430.95]}, taller:{data:[0, 0, 4, 18], ventas:[0.0, 0.0, 41.72, 303.16]}},
+    byCombo:{mostrador:{amer:{data:[0, 5, 6, 57], ventas:[0.0, 52.15, 38.27, 1130.41]}, naciones:{data:[0, 0, 3, 19], ventas:[0.0, 0.0, 1.42, 300.55]}}, taller:{amer:{data:[0, 0, 4, 15], ventas:[0.0, 0.0, 41.72, 259.63]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 43.53]}}}},
+  {name:'HUNK 200R', data:[2, 32, 39, 41], ventas:[7.34, 431.81, 561.94, 396.09],
+    byCanal:{mostrador:{data:[1, 32, 29, 32], ventas:[3.74, 431.81, 396.35, 368.02]}, taller:{data:[1, 0, 10, 9], ventas:[3.6, 0.0, 165.6, 28.07]}},
+    byCombo:{mostrador:{amer:{data:[1, 32, 25, 19], ventas:[3.74, 431.81, 367.42, 103.27]}, naciones:{data:[0, 0, 4, 13], ventas:[0.0, 0.0, 28.93, 264.75]}}, taller:{amer:{data:[1, 0, 10, 5], ventas:[3.6, 0.0, 165.6, 21.46]}, naciones:{data:[0, 0, 0, 4], ventas:[0.0, 0.0, 0.0, 6.6]}}}},
+  {name:'HUNK 160 4V', data:[1, 20, 56, 57], ventas:[34.3, 108.84, 711.47, 542.04],
+    byCanal:{mostrador:{data:[1, 20, 44, 39], ventas:[30.96, 108.84, 518.6, 436.36]}, taller:{data:[0, 0, 12, 18], ventas:[3.34, 0.0, 192.87, 105.68]}},
+    byCombo:{mostrador:{amer:{data:[1, 20, 42, 29], ventas:[30.96, 108.84, 413.74, 156.06]}, naciones:{data:[0, 0, 2, 10], ventas:[0.0, 0.0, 104.86, 280.3]}}, taller:{amer:{data:[0, 0, 12, 16], ventas:[3.34, 0.0, 192.87, 98.17]}, naciones:{data:[0, 0, 0, 2], ventas:[0.0, 0.0, 0.0, 7.52]}}}},
+  {name:'ECO DELUXE', data:[0, 39, 33, 41], ventas:[0.0, 257.68, 358.51, 343.64],
+    byCanal:{mostrador:{data:[0, 39, 30, 34], ventas:[0.0, 257.68, 333.81, 294.26]}, taller:{data:[0, 0, 3, 7], ventas:[0.0, 0.0, 24.7, 49.39]}},
+    byCombo:{mostrador:{amer:{data:[0, 39, 21, 29], ventas:[0.0, 257.68, 226.18, 201.58]}, naciones:{data:[0, 0, 9, 5], ventas:[0.0, 0.0, 107.63, 92.67]}}, taller:{amer:{data:[0, 0, 3, 6], ventas:[0.0, 0.0, 24.7, 45.01]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 4.38]}}}},
+  {name:'ECO 150', data:[1, 14, 40, 50], ventas:[4.51, 58.9, 344.16, 410.59],
+    byCanal:{mostrador:{data:[0, 14, 34, 40], ventas:[0.91, 58.9, 298.49, 357.9]}, taller:{data:[1, 0, 6, 10], ventas:[3.6, 0.0, 45.68, 52.7]}},
+    byCombo:{mostrador:{amer:{data:[0, 14, 31, 29], ventas:[0.91, 58.9, 267.95, 247.71]}, naciones:{data:[0, 0, 3, 11], ventas:[0.0, 0.0, 30.54, 110.18]}}, taller:{amer:{data:[1, 0, 6, 7], ventas:[3.6, 0.0, 45.68, 44.63]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 8.06]}}}},
+  {name:'DASH', data:[0, 9, 17, 12], ventas:[0.0, 54.1, 198.7, 256.1],
+    byCanal:{mostrador:{data:[0, 7, 11, 9], ventas:[0.0, 29.95, 55.21, 190.64]}, taller:{data:[0, 2, 6, 3], ventas:[0.0, 24.15, 143.49, 65.46]}},
+    byCombo:{mostrador:{amer:{data:[0, 7, 10, 8], ventas:[0.0, 29.95, 48.09, 188.5]}, naciones:{data:[0, 0, 1, 1], ventas:[0.0, 0.0, 7.12, 2.13]}}, taller:{amer:{data:[0, 2, 6, 3], ventas:[0.0, 24.15, 143.49, 65.41]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.05]}}}},
+  {name:'ECO 100', data:[0, 30, 17, 20], ventas:[0.0, 179.23, 187.18, 122.47],
+    byCanal:{mostrador:{data:[0, 30, 16, 17], ventas:[0.0, 179.23, 183.88, 115.94]}, taller:{data:[0, 0, 1, 3], ventas:[0.0, 0.0, 3.29, 6.53]}},
+    byCombo:{mostrador:{amer:{data:[0, 30, 10, 15], ventas:[0.0, 179.23, 77.13, 99.25]}, naciones:{data:[0, 0, 6, 2], ventas:[0.0, 0.0, 106.75, 16.69]}}, taller:{amer:{data:[0, 0, 1, 3], ventas:[0.0, 0.0, 3.29, 5.31]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 1.22]}}}},
+  {name:'HUNK 125', data:[0, 5, 30, 37], ventas:[2.88, 28.39, 273.7, 154.94],
+    byCanal:{mostrador:{data:[0, 5, 21, 19], ventas:[0.0, 28.39, 96.04, 83.03]}, taller:{data:[0, 0, 9, 18], ventas:[2.88, 0.0, 177.66, 71.91]}},
+    byCombo:{mostrador:{amer:{data:[0, 5, 21, 19], ventas:[0.0, 28.39, 92.63, 81.87]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 3.41, 1.16]}}, taller:{amer:{data:[0, 0, 9, 17], ventas:[2.88, 0.0, 177.66, 66.54]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.0, 5.37]}}}},
+  {name:'DAWN 125', data:[1, 14, 35, 40], ventas:[4.51, 40.99, 207.61, 182.81],
+    byCanal:{mostrador:{data:[0, 14, 30, 33], ventas:[0.91, 40.99, 182.99, 163.98]}, taller:{data:[1, 0, 5, 7], ventas:[3.6, 0.0, 24.62, 18.83]}},
+    byCombo:{mostrador:{amer:{data:[0, 14, 27, 23], ventas:[0.91, 40.99, 154.4, 104.97]}, naciones:{data:[0, 0, 3, 10], ventas:[0.0, 0.0, 28.59, 59.01]}}, taller:{amer:{data:[1, 0, 5, 4], ventas:[3.6, 0.0, 24.62, 13.92]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 4.91]}}}},
+  {name:'IGNITOR 125', data:[0, 1, 18, 3], ventas:[1.79, 2.3, 378.78, 16.4],
+    byCanal:{mostrador:{data:[0, 1, 18, 2], ventas:[0.0, 2.3, 377.94, 8.43]}, taller:{data:[0, 0, 0, 1], ventas:[1.79, 0.0, 0.84, 7.97]}},
+    byCombo:{mostrador:{amer:{data:[0, 1, 18, 2], ventas:[0.0, 2.3, 377.64, 6.87]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.31, 1.55]}}, taller:{amer:{data:[0, 0, 0, 1], ventas:[1.79, 0.0, 0.84, 7.97]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
+  {name:'DAWN 150', data:[1, 12, 33, 37], ventas:[4.51, 37.38, 194.25, 156.05],
+    byCanal:{mostrador:{data:[0, 12, 28, 30], ventas:[0.91, 37.38, 169.98, 145.7]}, taller:{data:[1, 0, 5, 7], ventas:[3.6, 0.0, 24.27, 10.35]}},
+    byCombo:{mostrador:{amer:{data:[0, 12, 25, 21], ventas:[0.91, 37.38, 146.87, 92.64]}, naciones:{data:[0, 0, 3, 9], ventas:[0.0, 0.0, 23.12, 53.06]}}, taller:{amer:{data:[1, 0, 5, 4], ventas:[3.6, 0.0, 24.27, 5.43]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 4.91]}}}},
+  {name:'HF DELUXE', data:[0, 32, 19, 15], ventas:[0.0, 179.11, 154.1, 55.46],
+    byCanal:{mostrador:{data:[0, 32, 18, 12], ventas:[0.0, 179.11, 150.81, 48.92]}, taller:{data:[0, 0, 1, 3], ventas:[0.0, 0.0, 3.29, 6.53]}},
+    byCombo:{mostrador:{amer:{data:[0, 32, 11, 11], ventas:[0.0, 179.11, 54.4, 45.75]}, naciones:{data:[0, 0, 7, 1], ventas:[0.0, 0.0, 96.42, 3.17]}}, taller:{amer:{data:[0, 0, 1, 3], ventas:[0.0, 0.0, 3.29, 5.31]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 1.22]}}}},
+  {name:'THRILLER', data:[1, 11, 21, 35], ventas:[4.51, 30.63, 94.2, 117.1],
+    byCanal:{mostrador:{data:[0, 11, 16, 28], ventas:[0.91, 30.63, 68.84, 105.37]}, taller:{data:[1, 0, 5, 7], ventas:[3.6, 0.0, 25.36, 11.73]}},
+    byCombo:{mostrador:{amer:{data:[0, 11, 15, 19], ventas:[0.91, 30.63, 60.04, 69.67]}, naciones:{data:[0, 0, 1, 9], ventas:[0.0, 0.0, 8.81, 35.7]}}, taller:{amer:{data:[1, 0, 5, 4], ventas:[3.6, 0.0, 25.36, 6.13]}, naciones:{data:[0, 0, 0, 3], ventas:[0.0, 0.0, 0.0, 5.6]}}}},
+  {name:'XOOM 110', data:[0, 8, 9, 8], ventas:[0.0, 35.13, 68.26, 25.12],
+    byCanal:{mostrador:{data:[0, 8, 8, 5], ventas:[0.0, 35.13, 60.8, 17.97]}, taller:{data:[0, 0, 1, 3], ventas:[0.0, 0.0, 7.46, 7.15]}},
+    byCombo:{mostrador:{amer:{data:[0, 8, 6, 4], ventas:[0.0, 35.13, 45.08, 12.29]}, naciones:{data:[0, 0, 2, 1], ventas:[0.0, 0.0, 15.72, 5.68]}}, taller:{amer:{data:[0, 0, 1, 3], ventas:[0.0, 0.0, 7.46, 7.1]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.05]}}}},
+  {name:'XOOM 125', data:[0, 6, 6, 9], ventas:[0.0, 7.63, 31.79, 41.97],
+    byCanal:{mostrador:{data:[0, 6, 5, 6], ventas:[0.0, 7.63, 24.4, 34.82]}, taller:{data:[0, 0, 1, 3], ventas:[0.0, 0.0, 7.4, 7.15]}},
+    byCombo:{mostrador:{amer:{data:[0, 6, 4, 4], ventas:[0.0, 7.63, 15.83, 13.26]}, naciones:{data:[0, 0, 1, 2], ventas:[0.0, 0.0, 8.57, 21.56]}}, taller:{amer:{data:[0, 0, 1, 3], ventas:[0.0, 0.0, 7.4, 7.1]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.05]}}}},
+  {name:'GLAMOUR', data:[0, 2, 6, 5], ventas:[1.79, 4.94, 50.97, 19.23],
+    byCanal:{mostrador:{data:[0, 2, 5, 4], ventas:[0.0, 4.94, 49.84, 11.26]}, taller:{data:[0, 0, 1, 1], ventas:[1.79, 0.0, 1.13, 7.97]}},
+    byCombo:{mostrador:{amer:{data:[0, 2, 5, 3], ventas:[0.0, 4.94, 49.24, 9.12]}, naciones:{data:[0, 0, 0, 1], ventas:[0.0, 0.0, 0.6, 2.13]}}, taller:{amer:{data:[0, 0, 1, 1], ventas:[1.79, 0.0, 1.13, 7.97]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
   {name:'HUNK150', data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 15.16],
     byCanal:{mostrador:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 15.16]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}},
     byCombo:{mostrador:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 15.16]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}}},
-  {name:'HUNK 250', data:[0, 1, 1, 1], ventas:[0.0, 1.01, 3.9, 3.72],
-    byCanal:{mostrador:{data:[0, 1, 1, 1], ventas:[0.0, 1.01, 3.9, 3.42]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.31]}},
-    byCombo:{mostrador:{amer:{data:[0, 1, 1, 1], ventas:[0.0, 1.01, 3.9, 3.42]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.31]}}}},
+  {name:'HUNK 250', data:[0, 1, 1, 2], ventas:[0.0, 1.01, 3.9, 9.09],
+    byCanal:{mostrador:{data:[0, 1, 1, 2], ventas:[0.0, 1.01, 3.9, 8.48]}, taller:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.61]}},
+    byCombo:{mostrador:{amer:{data:[0, 1, 1, 2], ventas:[0.0, 1.01, 3.9, 8.48]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0]}}, taller:{amer:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.31]}, naciones:{data:[0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.31]}}}},
 ];
 
 /* ---------- 5. Servicios (taller de servicio técnico) ---------- */
@@ -8731,7 +8743,7 @@ function renderRepuestosTopChart(){
   const periodoLower = monthFilter==='todos' ? 'acumulado mayo-junio-julio-agosto 2026' : `vista de ${MONTH_LABEL[monthFilter]}`;
 
   document.getElementById('repuestosTopSub').textContent = 'Unidades vendidas · ' + periodo;
-  document.getElementById('repuestosTopFootnote').textContent = `Top 10 dentro de un universo de 45 repuestos con seguimiento mensual (cubre el 55% de la venta neta total de 291 SKUs), ${periodoLower}, por unidades vendidas. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026_2, hoja BASE_DATOS.`;
+  document.getElementById('repuestosTopFootnote').textContent = `Top 10 dentro de un universo de 46 repuestos con seguimiento mensual (cubre el 50% de la venta neta total de 334 SKUs), ${periodoLower}, por unidades vendidas. Fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026, hoja BASE_DATOS.`;
 
   if(chartRepuestosTopInst) chartRepuestosTopInst.destroy();
   const maxVal = Math.max(...values) || 1;
@@ -8848,7 +8860,7 @@ function renderRepuestosModelosRankingChart(){
   const periodoLower = monthFilter==='todos' ? 'Acumulado mayo-junio-julio-agosto 2026' : `Vista de ${MONTH_LABEL[monthFilter]}`;
 
   document.getElementById('repuestosModelosRankingSub').textContent = (metric==='ventas' ? 'Ventas en $' : 'Unidades vendidas') + ' · ' + periodo;
-  document.getElementById('repuestosModelosRankingFootnote').textContent = `Top 10 de 18 modelos HERO, ${periodoLower[0].toLowerCase()+periodoLower.slice(1)}. Reparte la venta entre modelos cuando aplica a varios. Fuente: hoja MODELOS.`;
+  document.getElementById('repuestosModelosRankingFootnote').textContent = `Top 10 de 19 modelos HERO, ${periodoLower[0].toLowerCase()+periodoLower.slice(1)}. Reparte la venta entre modelos cuando aplica a varios. Fuente: hoja MODELOS.`;
 
   if(chartRepuestosModelosRankingInst) chartRepuestosModelosRankingInst.destroy();
   chartRepuestosModelosRankingInst = new Chart(document.getElementById('chartRepuestosModelosRanking'), {
