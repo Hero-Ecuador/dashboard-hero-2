@@ -4436,16 +4436,24 @@ const MANOOBRA_MARGEN_PCT = 0.60;
 // MANTENIMIENTO se abrió en sus 5 subtipos reales del reporte (agosto.xlsx, hoja "Hoja1"): 500/3000/9000 son
 // mantenimientos programados por kilometraje, Correctivo y Preventivo son las otras dos etiquetas que usa el
 // reporte. Los 5 suman exactamente los $517.71/36 uds. que antes vivían en una sola fila "MANTENIMIENTO".
+// Actualización 1-sep-2026 (agosto.xlsx re-subido, reporte más completo): cantidad total sube de 73 a 106
+// servicios, valor de $816.71 a $1.186,15. 3 cosas a revisar con el taller: (1) el reporte nuevo ya no trae
+// ninguna fila de "Talleres Autorizados" (antes 16 servicios/$113) — ver nota junto a MANOOBRA_PUNTO_AGOSTO.
+// (2) Quito trae una fila "Mantenimiento preventivo 500 km" con 3 servicios pero la columna "m/o" vacía
+// (el valor $57,77 quedó en "repuesto" en vez de "m/o") — se contabilizó como $0 de mano de obra por ahora,
+// posible error de captura. (3) aparece por primera vez "Mantenimiento preventivo 15000 km" (Quito, 1
+// servicio, $40,25) — no encaja en las categorías fijas 500/3000/9000, así que se agrupó dentro de
+// MANTENIMIENTO PREVENTIVO (junto con la fila "Mantenimiento Preventivo" de Quito, que llegó vacía/$0).
 const MANOOBRA_TIPOS_AGOSTO = [
-  {name:'MANTENIMIENTO 500',        color: getVar('--manttipo-1'), cantidad: 16, valor: 112.00},
-  {name:'MANTENIMIENTO 3000',       color: getVar('--manttipo-2'), cantidad: 4,  valor: 28.00},
-  {name:'MANTENIMIENTO 9000',       color: getVar('--manttipo-3'), cantidad: 1,  valor: 16.76},
-  {name:'MANTENIMIENTO CORRECTIVO', color: getVar('--manttipo-4'), cantidad: 6,  valor: 264.70},
-  {name:'MANTENIMIENTO PREVENTIVO', color: getVar('--manttipo-5'), cantidad: 9,  valor: 96.25},
-  {name:'ALISTAMIENTO',  color: getVar('--servicio-2'), cantidad: 25, valor: 250.00},
-  {name:'GARANTÍA',      color: getVar('--servicio-4'), cantidad: 12, valor: 49.00},
+  {name:'MANTENIMIENTO 500',        color: getVar('--manttipo-1'), cantidad: 29, valor: 182.00},
+  {name:'MANTENIMIENTO 3000',       color: getVar('--manttipo-2'), cantidad: 6,  valor: 28.00},
+  {name:'MANTENIMIENTO 9000',       color: getVar('--manttipo-3'), cantidad: 1,  valor: 7.00},
+  {name:'MANTENIMIENTO CORRECTIVO', color: getVar('--manttipo-4'), cantidad: 9,  valor: 422.90},
+  {name:'MANTENIMIENTO PREVENTIVO', color: getVar('--manttipo-5'), cantidad: 1,  valor: 40.25},
+  {name:'ALISTAMIENTO',  color: getVar('--servicio-2'), cantidad: 47, valor: 470.00},
+  {name:'GARANTÍA',      color: getVar('--servicio-4'), cantidad: 13, valor: 36.00},
 ];
-const MANOOBRA_AGOSTO_REAL = sum(MANOOBRA_TIPOS_AGOSTO.map(t=>t.valor)); // 816.71
+const MANOOBRA_AGOSTO_REAL = sum(MANOOBRA_TIPOS_AGOSTO.map(t=>t.valor)); // 1186.15
 
 // Mismo reporte real de mano de obra de Agosto (archivo agosto.xlsx, hoja "Hoja1"), pero desglosado por
 // "Punto" (taller) en vez de por tipo de servicio. El reporte original usa "Quito" como nombre del punto,
@@ -4453,12 +4461,15 @@ const MANOOBRA_AGOSTO_REAL = sum(MANOOBRA_TIPOS_AGOSTO.map(t=>t.valor)); // 816.
 // como "HERO QUITO") — no es una tienda/punto distinto, por eso se etiqueta aquí como "Naciones Unidas
 // (Quito)" para que quede claro. "Talleres Autorizados" son talleres externos autorizados por HERO, no un
 // local propio. Solo existe este desglose real para Agosto — igual que el desglose por tipo, Mayo/Junio/
-// Julio no tienen este dato. cantidad+valor de los 3 puntos suman exactamente MANOOBRA_TIPOS_AGOSTO (73
-// unidades, $816.71).
+// Julio no tienen este dato. cantidad+valor de los 3 puntos suman exactamente MANOOBRA_TIPOS_AGOSTO.
+// Actualización 1-sep-2026: el reporte re-subido ya no trae ninguna fila de Talleres Autorizados, así que
+// queda en 0 — se deja la fila (en vez de quitarla) para no perder el desglose de 3 puntos; vale la pena
+// confirmar con el taller si de verdad no hubo actividad ahí en agosto o si esa parte del reporte quedó
+// afuera por error.
 const MANOOBRA_PUNTO_AGOSTO = [
-  {name:'Av. Américas',            color: getVar('--servicio-3'), cantidad: 54, valor: 562.46},
-  {name:'Talleres Autorizados',    color: getVar('--servicio-2'), cantidad: 16, valor: 113.00},
-  {name:'Naciones Unidas (Quito)', color: getVar('--servicio-4'), cantidad: 3,  valor: 141.25},
+  {name:'Av. Américas',            color: getVar('--servicio-3'), cantidad: 100, valor: 1044.70},
+  {name:'Talleres Autorizados',    color: getVar('--servicio-2'), cantidad: 0,   valor: 0.00},
+  {name:'Naciones Unidas (Quito)', color: getVar('--servicio-4'), cantidad: 6,   valor: 141.45},
 ];
 
 const fmt = n => n.toLocaleString('es-EC');
@@ -5665,13 +5676,13 @@ function initRepuestosServicio(){
    ("agosto.xlsx", 3 puntos: AV. Américas, Talleres Autorizados, Quito) con m/o + terceros y "cantidad"
    (servicios atendidos) por fila (se excluyen las columnas "repuesto" y "total" porque mezclan venta de
    repuestos). Ese dato real reemplaza al estimado solo para Agosto, en $ Y en unidades; Mayo/Junio/Julio
-   siguen calculándose con la fórmula/conteo derivado de Servicios. Nota: el conteo real de Agosto (73,
+   siguen calculándose con la fórmula/conteo derivado de Servicios. Nota: el conteo real de Agosto (106,
    MANOOBRA_TIPOS_AGOSTO) no coincide con SERVICIOS_TOTAL_CANTIDAD[3] (43, distinto desglose por tipo de
-   ORDENES_DE_TRABAJO_DIARIAS) — aquí se usa el real (73) porque esta página tiene el reporte dedicado;
+   ORDENES_DE_TRABAJO_DIARIAS) — aquí se usa el real (106) porque esta página tiene el reporte dedicado;
    otras vistas (Vista general, Resumen de Postventa) siguen usando SERVICIOS_TOTAL_CANTIDAD sin blend. */
 // MANOOBRA_TIPOS_AGOSTO / MANOOBRA_AGOSTO_REAL viven más arriba en el archivo (junto a SERVICIOS_TOTAL_*),
 // porque Vista general (computeGeneralModel) también las necesita y se inicializa antes de llegar aquí.
-const MANOOBRA_AGOSTO_REAL_CANTIDAD = sum(MANOOBRA_TIPOS_AGOSTO.map(t=>t.cantidad)); // 73
+const MANOOBRA_AGOSTO_REAL_CANTIDAD = sum(MANOOBRA_TIPOS_AGOSTO.map(t=>t.cantidad)); // 106
 
 let manoObra; // se calcula dentro de renderManoObra(), nunca de forma eager (evita TDZ)
 
