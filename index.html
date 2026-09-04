@@ -3406,13 +3406,24 @@ Chart.defaults.set('plugins.datalabels', { display:false }); // opt-in per chart
 // masivo de tipeo que vale la pena que confirmen en el sistema de origen. (2) Se recalculó el costo de varias
 // ventas de junio (principalmente ECO 150, de ~$1.013 a ~$1.007 costo unitario) — no cambia Ventas/Unidades,
 // solo la Utilidad de junio baja un poco en los 3 canales (Mayoristas -$17, Retail -$445, Tiendas -$20).
-// Además, el archivo ya trae 23 filas de Septiembre (mes 9) — fuera del rango Mayo-Agosto de este dashboard,
-// así que se excluyen de todos los totales, tal como corresponde.
-const TIENDAS_TOTAL    = [12,28,24,39,1];
+// (Septiembre ya es un mes activo del dashboard desde la ronda anterior — el archivo de esa fecha traía 23
+// filas de setiembre, todas ya incorporadas a los totales de ese mes, no excluidas.)
+// Actualización 4-sep-2026 (CONSOLIDADO_HERO_3_2_1.xlsx re-subido): BASE 1141→1146 filas — Septiembre pasa de
+// 23 a 27 filas (+4, sin filas eliminadas ni cambios en Mayo-Agosto). Las 4 filas nuevas: 1 Mayorista más
+// (XOOM 125R, $1.938, zona ORIENTE, 3-sep) y 3 de Tienda Av. Américas (XOOM 125R $3.498,25 y $2.462,80, HUNK
+// 125R $2.200,80 — todas 3-sep/4-sep). Septiembre Mayoristas pasa de 22 a 23 u. ($40.697), Tiendas de 1 a 4 u.
+// ($10.625,33). ANOMALÍA nueva a revisar con el sistema de origen: la fila Mayorista nueva llegó con
+// Canal="MAYORISTA" (singular, sin ninguna S) — un tercer tipeo distinto del ya conocido "MAYORISTASS" (doble
+// S) que arrastran Mayo-Agosto; se sigue normalizando automáticamente (se cuenta igual en todos los totales),
+// pero es la primera vez que aparece esta variante exacta y vale la pena que lo confirmen en origen. Además,
+// la hoja GARANTIAS pasa de 4 a 5 filas: primera fila de Septiembre (XOOM 125R, $349,83, Origen_Ventas=TIENDA
+// AMERICAS) — antes las 4 filas de Garantías eran solo de Canal Digital; esta es la primera venta de garantía
+// extendida registrada en Tienda Av. Américas.
+const TIENDAS_TOTAL    = [12,28,24,39,4];
 const AAP_DATA          = [16,30,84,69,0];
 const RETAIL_TOTAL     = [18,58,107,85,0];   // AAP + OTOM + MASTER MOTO + CRESA (ESPAÑA/MARCIMEX/ARTEFACTA sin ventas)
 const RETAIL_SIN_AAP   = [2,28,23,16,0];     // RETAIL_TOTAL minus AAP_DATA — used only in the Resumen channel chart below
-const MAYORISTAS_TOTAL = [273,152,84,136,22];
+const MAYORISTAS_TOTAL = [273,152,84,136,23];
 
 // Ventas $ por mes (columna "Ventas" del CONSOLIDADO_HERO, filtrado Estado en {Facturadas, NC}), por cuenta retail
 const RETAIL_VENTAS_TOTAL    = [26275, 88631, 161861, 134603, 0];
@@ -3448,9 +3459,9 @@ const RETAIL_MODELOS_SIN_AAP = [
 // Modelos vendidos, canal Tiendas propias Hero únicamente. data = unidades [Mayo,Junio,Julio,Agosto]; ventas = $ [Mayo,Junio,Julio,Agosto].
 // Orden por unidades totales desc. Los totales por mes coinciden con TIENDAS_TOTAL / TIENDAS_VENTAS.
 const TIENDAS_MODELOS = [
-  {name:'HUNK 125R',         data:[2,10,10,14,0], ventas:[4138,23294,28866,40201,0]},
+  {name:'HUNK 125R',         data:[2,10,10,14,1], ventas:[4138,23294,28866,40201,2200.8]},
   {name:'ECO DELUXE',        data:[6,9,2,3,0],   ventas:[8826,13266,4510,6637,0]},
-  {name:'XOOM 125R',         data:[0,4,7,7,1],   ventas:[0,8972,18342,17072,2463.48]},
+  {name:'XOOM 125R',         data:[0,4,7,7,3],   ventas:[0,8972,18342,17072,8424.53]},
   {name:'HUNK 160 4V',       data:[1,3,3,7,0],   ventas:[2945,9300,13308,24283,0]},
   {name:'ECO 150',           data:[0,1,1,4,0],   ventas:[0,1800,1800,11224,0]},
   {name:'XOOM 110',          data:[2,1,0,1,0],   ventas:[3022,3422,0,3453,0]},
@@ -3459,9 +3470,9 @@ const TIENDAS_MODELOS = [
 ];
 
 // Ventas $ por mes — canales (Resumen). AAP repite el mismo dato que su fila en retailAccounts.ventas.
-const TIENDAS_VENTAS     = [22731, 60053, 70415, 118410, 2463.48];    // HERO GYE + HERO QUITO + CANAL DIGITAL
+const TIENDAS_VENTAS     = [22731, 60053, 70415, 118410, 10625.33];    // HERO GYE + HERO QUITO + CANAL DIGITAL
 const AAP_VENTAS         = [23395, 44836, 127791, 105425, 0];
-const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 238274, 38759]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
+const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 238274, 40697]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
 
 // Ventas $ por mes, por zona Mayoristas (columna Ventas, agrupado por Vendedor — mismo mapeo validado con el usuario).
 // Agosto 2026: aparece un vendedor nuevo, "PLUAS NAVARRO GABRIEL ALEJANDRO" (7 u., $11.116) — confirmado con
@@ -3469,7 +3480,7 @@ const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 238274, 38759]; // suma de l
 // Julio 2026: corregido — 1 u. ($1.480) estaba mal asignada a GUAYAS y en realidad es de LOS RIOS (encontrado
 // al auditar el archivo CONSOLIDADO_HERO_3_2.xlsx del 26-ago-2026; el total de Mayoristas de julio no cambia).
 const MAYORISTAS_VENTAS_ZONA = {
-  'ORIENTE':              [303707, 93692, 82092, 127651, 38759],
+  'ORIENTE':              [303707, 93692, 82092, 127651, 40697],
   'ST DOMINGO / MANABI':  [40595,  37109, 30913, 30023, 0],
   'LOS RIOS':             [40634,  64229, 23510,  44535, 0],
   'GUAYAS':               [73688,  31489, 4440,   18327, 0],
@@ -3481,7 +3492,7 @@ const MAYORISTAS_VENTAS_ZONA = {
 const MAYORISTAS_MODELOS = [
   {name:'ECO 150',           data:[0,90,23,40,5],  ventas:[0,133722,34040,59200,7400]},
   {name:'ECO DELUXE',        data:[85,24,16,22,2], ventas:[98028,27600,18400,25300,2300]},
-  {name:'XOOM 125R',         data:[46,13,20,18,8], ventas:[89148,25331,38760,34884,15504]},
+  {name:'XOOM 125R',         data:[46,13,20,18,9], ventas:[89148,25331,38760,34884,17442]},
   {name:'HUNK 125R',         data:[53,4,7,26,5],   ventas:[91336,7396,12110,44980,8650]},
   {name:'XOOM 110',          data:[44,16,5,12,1],  ventas:[70677,25680,8025,19260,1605]},
   {name:'HUNK 160 4V',       data:[34,3,11,9,0],  ventas:[86799,7560,28050,22950,0]},
@@ -3491,7 +3502,7 @@ const MAYORISTAS_MODELOS = [
 
 // Ventas $ por mes, por tienda propia Hero (columna Origen_Ventas: TIENDA AMERICAS / TIENDA NACIONES UNIDAS / CANAL DIGITAL)
 const TIENDAS_VENTAS_STORE = {
-  'HERO GYE':        [22731.02, 60053.12, 66515.12, 68287.79, 2463.48],
+  'HERO GYE':        [22731.02, 60053.12, 66515.12, 68287.79, 10625.33],
   'HERO QUITO':      [0,        0,        3900,     28452.11, 0],
   'CANAL DIGITAL':   [0,        0,        0,        21670.46, 0],
   'HERO PORTOVIEJO': [0,        0,        0,        0,        0],
@@ -3508,14 +3519,14 @@ const TIENDAS_VENTAS_STORE = {
 // dato anterior venía de la columna "Utilidad" de un archivo previo y no coincidía con Ventas−Costo del
 // archivo actual (encontrado al auditar CONSOLIDADO_HERO_3_2.xlsx del 26-ago-2026; Ventas de julio no cambia).
 const MAYORISTAS_MARGEN_VENTAS   = MAYORISTAS_VENTAS;
-const MAYORISTAS_MARGEN_UTILIDAD = [121998.51, 69546.60, 38941.68, 61256.39, 9750.30];
+const MAYORISTAS_MARGEN_UTILIDAD = [121998.51, 69546.60, 38941.68, 61256.39, 10220.73];
 const RETAIL_MARGEN_VENTAS       = RETAIL_VENTAS_TOTAL;
 // Corregido 28-ago-2026: Agosto quedó mal calculado en una actualización anterior (23129.10) — no coincidía
 // con Ventas−Costo del archivo fuente (23978.91), aunque Ventas/Unidades de Retail no cambiaron. Encontrado
 // al auditar el archivo CONSOLIDADO_HERO_3_2.xlsx del 28-ago-2026.
 const RETAIL_MARGEN_UTILIDAD     = [6345.33, 21655.79, 40251.64, 31477.70, 0];
 const TIENDAS_MARGEN_VENTAS      = TIENDAS_VENTAS;
-const TIENDAS_MARGEN_UTILIDAD    = [8217.44, 25125.21, 36351.70, 60476.06, 995.91];
+const TIENDAS_MARGEN_UTILIDAD    = [8217.44, 25125.21, 36351.70, 60476.06, 4885.06];
 
 // Margen bruto combinado (general de Resumen): Mayoristas + Retail (con AAP) + Tiendas — mismo universo de
 // canales que suma el total general de la página Resumen.
@@ -3647,7 +3658,7 @@ const TIENDA_COLORS = ['--tienda-1','--tienda-2','--tienda-3','--tienda-4','--ti
 
 const tiendas = {
   stores:[
-    {name:'HERO GYE',      data:[12,28,22,24,1], ventas: TIENDAS_VENTAS_STORE['HERO GYE']},
+    {name:'HERO GYE',      data:[12,28,22,24,4], ventas: TIENDAS_VENTAS_STORE['HERO GYE']},
     {name:'HERO QUITO',    data:[0,0,2,9,0],    ventas: TIENDAS_VENTAS_STORE['HERO QUITO']},
     {name:'CANAL DIGITAL', data:[0,0,0,6,0],    ventas: TIENDAS_VENTAS_STORE['CANAL DIGITAL']},
     {name:'HERO ST DO',  data:[0,0,0,0,0],   ventas:[0,0,0,0,0]},
@@ -3669,7 +3680,7 @@ function computeTiendasModel(metric){
 const ZONE_COLORS = ['--zone-1','--zone-2','--zone-3','--zone-4','--zone-5'].map(getVar);
 
 const mayoristasAccounts = [
-  {name:'ORIENTE',              data:[181,60,43,70,22]},
+  {name:'ORIENTE',              data:[181,60,43,70,23]},
   {name:'ST DOMINGO / MANABI',  data:[28,24,19,20,0]},
   {name:'LOS RIOS',             data:[24,45,17,29,0]},
   {name:'GUAYAS',               data:[36,19,3,11,0]},
@@ -3867,10 +3878,10 @@ const PERFIL_TIENDA_AMERICAS_MENSUAL = [
   {name:'B-',          data:[0,1,1,4,0],   ventas:[0,3422,2233,10453,0]},
   {name:'CONTADO',     data:[5,10,3,2,0],  ventas:[12241,21939,8925,5025,0]},
   {name:'COLABORADOR', data:[5,6,3,2,0],   ventas:[6242,9694,5362,4929,0]},
-  {name:'PENDIENTE',   data:[0,0,0,1,1],   ventas:[0,0,0,4261,2463.48]},
+  {name:'PENDIENTE',   data:[0,0,0,1,4],   ventas:[0,0,0,4261,10625.33]},
 ];
-const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL = [12,28,22,24,1];
-const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS = [22731,60053,66516,68287.79,2463.48];
+const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL = [12,28,22,24,4];
+const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS = [22731,60053,66516,68287.79,10625.33];
 
 // Anomalía 28-ago-2026: 1 u. de agosto (HUNK 125R, $3.043, perfil AAA) que en el corte anterior estaba
 // Facturada pasó a Estado "Anuladas" en este archivo — venta anulada, se resta de Naciones Unidas.
@@ -3934,10 +3945,10 @@ const PERFIL_RESUMEN_MENSUAL = [
   {name:'EXCEPCION',  data:[1,0,1,1,0],   ventas:[1150,0,1605,1605,0]},
   {name:'COLABORADOR',data:[5,6,3,2,0],   ventas:[6242,9694,5362,4929,0]},
   {name:'NSSB',       data:[0,0,0,1,0],   ventas:[0,0,0,1150,0]},
-  {name:'PENDIENTE',  data:[0,0,0,1,1],   ventas:[0,0,0,4261,2463.48]},
+  {name:'PENDIENTE',  data:[0,0,0,1,4],   ventas:[0,0,0,4261,10625.33]},
 ];
-const PERFIL_MONTH_TOTAL = [28,58,108,108,1]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
-const PERFIL_MONTH_TOTAL_VENTAS = [46126,104889,198207,223835,2463.48]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL = [28,58,108,108,4]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL_VENTAS = [46126,104889,198207,223835,10625.33]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
 
 // Vista "SIN AAP" (Resumen): PERFIL_RESUMEN menos AAP = solo Tiendas Hero (Av. Américas + Naciones Unidas + Canal Digital).
 const PERFIL_RESUMEN_SIN_AAP = [
@@ -3967,7 +3978,7 @@ const PERFIL_RESUMEN_MENSUAL_SIN_AAP = [
   {name:'B-',         data:[0,1,1,5,0],  ventas:[0,3422,2233,13553,0]},
   {name:'CONTADO',    data:[5,10,4,3,0], ventas:[12241,21939,11025,7125,0]},
   {name:'COLABORADOR',data:[5,6,3,2,0],  ventas:[6242,9694,5362,4929,0]},
-  {name:'PENDIENTE',  data:[0,0,0,1,1],  ventas:[0,0,0,4261,2463.48]},
+  {name:'PENDIENTE',  data:[0,0,0,1,4],  ventas:[0,0,0,4261,10625.33]},
 ];
 
 // Vista "Resumen general" (Perfiles): agrupa los 15 perfiles crudos de PERFIL_RESUMEN_MENSUAL /
@@ -4016,16 +4027,16 @@ function computePerfilGeneralRowsTiendas(){
 // data = unidades [Mayo,Junio,Julio]; ventas = $ [Mayo,Junio,Julio]. Orden por unidades totales desc.
 const MODELOS = [
   {name:'ECO DELUXE',        data:[102,56,60,54,2], ventas:[119503,67346,71330,65287,2300]},
-  {name:'HUNK 125R',         data:[59,28,48,69,5], ventas:[102395,54940,94666,135351,8650]},
+  {name:'HUNK 125R',         data:[59,28,48,69,6], ventas:[102395,54940,94666,135351,10850.8]},
   {name:'ECO 150',           data:[0,93,39,51,5],  ventas:[0,138482,58040,80784,7400]},
-  {name:'XOOM 125R',         data:[46,19,34,31,9], ventas:[89148,38179,70668,63584,17967.48]},
+  {name:'XOOM 125R',         data:[46,19,34,31,12], ventas:[89148,38179,70668,63584,25866.53]},
   {name:'XOOM 110',          data:[47,30,12,22,1], ventas:[75304,49967,19260,37158,1605]},
   {name:'HUNK 160 4V',       data:[37,10,19,19,0], ventas:[94844,27060,54108,54883,0]},
   {name:'XPULSE 200 4V FI',  data:[12,2,3,7,1],    ventas:[40367,7483,10190,25363,3300]},
   {name:'XPULSE 200 RALLY',  data:[0,0,0,7,0],     ventas:[0,0,0,28878,0]},
 ];
-const MODELOS_MONTH_TOTAL = [303,238,215,260,23]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
-const MODELOS_MONTH_TOTAL_VENTAS = [521560,383455,378261,491287,41222.48]; // coincide con "Ventas totales" de Resumen (CON AAP)
+const MODELOS_MONTH_TOTAL = [303,238,215,260,27]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
+const MODELOS_MONTH_TOTAL_VENTAS = [521560,383455,378261,491287,51322.33]; // coincide con "Ventas totales" de Resumen (CON AAP)
 
 // Vista "SIN AAP" (Resumen): MODELOS menos la contribución de AAP por modelo (3 canales, Retail sin AAP).
 // Resincronizado 28-ago-2026 junto con MODELOS arriba, a partir de los 3 canales (Mayoristas + Retail sin
@@ -4033,15 +4044,15 @@ const MODELOS_MONTH_TOTAL_VENTAS = [521560,383455,378261,491287,41222.48]; // co
 const MODELOS_SIN_AAP = [
   {name:'ECO DELUXE',        data:[92,42,23,29,2], ventas:[108003,51246,28780,36537,2300]},
   {name:'ECO 150',           data:[0,91,36,47,5],   ventas:[0,135522,53600,74864,7400]},
-  {name:'HUNK 125R',         data:[56,22,23,45,5], ventas:[97205,44560,51416,93831,8650]},
-  {name:'XOOM 125R',         data:[46,17,27,26,9],  ventas:[89148,34303,57102,53894,17967.48]},
+  {name:'HUNK 125R',         data:[56,22,23,45,6], ventas:[97205,44560,51416,93831,10850.8]},
+  {name:'XOOM 125R',         data:[46,17,27,26,12],  ventas:[89148,34303,57102,53894,25866.53]},
   {name:'XOOM 110',          data:[46,26,5,13,1],   ventas:[73699,43547,8025,22713,1605]},
   {name:'HUNK 160 4V',       data:[35,8,14,17,0],  ventas:[89744,21960,41358,49783,0]},
   {name:'XPULSE 200 4V FI',  data:[12,2,3,7,1],    ventas:[40367,7483,10190,25363,3300]},
   {name:'XPULSE 200 RALLY',  data:[0,0,0,7,0],     ventas:[0,0,0,28878,0]},
 ];
-const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,131,191,23]; // MODELOS_MONTH_TOTAL menos AAP_DATA
-const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [498165,338619,250470,385862,41222.48]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
+const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,131,191,27]; // MODELOS_MONTH_TOTAL menos AAP_DATA
+const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [498165,338619,250470,385862,51322.33]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
 
 /* ================= GARANTIAS (venta de Garantía Extendida de motos) ================= */
 // Hoja nueva "GARANTIAS" en CONSOLIDADO_HERO_3_2.xlsx, recibida el 31-ago-2026 — mismo esquema de 42 columnas
@@ -4052,19 +4063,19 @@ const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [498165,338619,250470,385862,41222.48
 // actuales cumplen ese criterio. Tampoco trae columna "Costo", así que no hay Margen bruto todavía (tarjeta
 // "Margen bruto" queda en "—" a propósito). Sin presupuesto asignado (Cumplimiento en SIN DATO, como las demás
 // líneas sin meta definida). Modelo = moto a la que aplica la garantía extendida vendida.
-const GARANTIAS_MONTH_TOTAL = [0, 0, 0, 4, 0];
-const GARANTIAS_MONTH_TOTAL_VENTAS = [0, 0, 0, 1172, 0]; // 270.52 (XOOM 125R) + 375.76 (ECO 150) + 304.35 (HUNK 125R) + 221.22 (ECO DELUXE)
+const GARANTIAS_MONTH_TOTAL = [0, 0, 0, 4, 1];
+const GARANTIAS_MONTH_TOTAL_VENTAS = [0, 0, 0, 1172, 350]; // Agosto: 270.52 (XOOM 125R) + 375.76 (ECO 150) + 304.35 (HUNK 125R) + 221.22 (ECO DELUXE). Septiembre: 349.83 (XOOM 125R)
 const GARANTIAS_MODELOS_MENSUAL = [
   {name:'ECO 150',    data:[0, 0, 0, 1, 0], ventas:[0, 0, 0, 376, 0]},
   {name:'HUNK 125R',  data:[0, 0, 0, 1, 0], ventas:[0, 0, 0, 304, 0]},
-  {name:'XOOM 125R',  data:[0, 0, 0, 1, 0], ventas:[0, 0, 0, 271, 0]},
+  {name:'XOOM 125R',  data:[0, 0, 0, 1, 1], ventas:[0, 0, 0, 271, 350]},
   {name:'ECO DELUXE', data:[0, 0, 0, 1, 0], ventas:[0, 0, 0, 221, 0]},
 ];
 // Desglose por Canal (columna "Canal" del CONSOLIDADO_HERO) — hoy solo existe TIENDAS (las 4 filas son
 // Canal Digital), pero se deja como lista para que, si en el futuro aparecen garantías vendidas por
 // Mayoristas o Retail, se agreguen acá como una fila más sin tener que rehacer el gráfico/tabla.
 const GARANTIAS_CANAL_MENSUAL = [
-  {name:'TIENDAS', data:[0, 0, 0, 4, 0], ventas:[0, 0, 0, 1172, 0]},
+  {name:'TIENDAS', data:[0, 0, 0, 4, 1], ventas:[0, 0, 0, 1172, 350]},
 ];
 const GARANTIAS_BUDGET_UNITS  = [0, 0, 0, 0, 0]; // sin presupuesto asignado todavía
 const GARANTIAS_BUDGET_VENTAS = [0, 0, 0, 0, 0];
@@ -4644,10 +4655,11 @@ function buildResumenTable(){
       <td class="num">${pctCellPill(c.data[1], c.data[0], T[1], formatter)}</td>
       <td class="num">${pctCellPill(c.data[2], c.data[1], T[2], formatter)}</td>
       <td class="num">${pctCellPill(c.data[3], c.data[2], T[3], formatter)}</td>
+      <td class="num">${pctCellPill(c.data[4], c.data[3], T[4], formatter)}</td>
       <td class="num">${formatter(sum(c.data))}</td>
     </tr>`).join('') +
     `<tr style="font-weight:800;background:var(--page-plane);">
-      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${pctCellPill(T[4], T[3], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
     </tr>`;
 }
 
@@ -5156,10 +5168,11 @@ function buildGeneralTable(){
       <td class="num">${pctCellPill(c.data[1], c.data[0], T[1], formatter)}</td>
       <td class="num">${pctCellPill(c.data[2], c.data[1], T[2], formatter)}</td>
       <td class="num">${pctCellPill(c.data[3], c.data[2], T[3], formatter)}</td>
+      <td class="num">${pctCellPill(c.data[4], c.data[3], T[4], formatter)}</td>
       <td class="num">${formatter(sum(c.data))}</td>
     </tr>`).join('') +
     `<tr class="total-row">
-      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${pctCellPill(T[4], T[3], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
     </tr>`;
 }
 
@@ -5385,10 +5398,11 @@ function buildRepuestosResumenTable(){
       <td class="num">${pctCellPill(c.data[1], c.data[0], T[1], formatter)}</td>
       <td class="num">${pctCellPill(c.data[2], c.data[1], T[2], formatter)}</td>
       <td class="num">${pctCellPill(c.data[3], c.data[2], T[3], formatter)}</td>
+      <td class="num">${pctCellPill(c.data[4], c.data[3], T[4], formatter)}</td>
       <td class="num">${formatter(sum(c.data))}</td>
     </tr>`).join('') +
     `<tr style="font-weight:800;background:var(--page-plane);">
-      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${pctCellPill(T[4], T[3], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
     </tr>`;
 }
 
@@ -5648,10 +5662,11 @@ function buildRepuestosServicioTable(){
       <td class="num">${pctCellPill(s.data[1], s.data[0], T[1], formatter)}</td>
       <td class="num">${pctCellPill(s.data[2], s.data[1], T[2], formatter)}</td>
       <td class="num">${pctCellPill(s.data[3], s.data[2], T[3], formatter)}</td>
+      <td class="num">${pctCellPill(s.data[4], s.data[3], T[4], formatter)}</td>
       <td class="num">${formatter(s.total)}</td>
     </tr>`).join('') +
     `<tr style="font-weight:800;background:var(--page-plane);">
-      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${pctCellPill(T[4], T[3], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
     </tr>`;
 }
 
@@ -5872,6 +5887,7 @@ function buildManoObraTable(){
       <td class="num">${dash}</td>
       <td class="num">${dash}</td>
       <td class="num">${formatter(v)}</td>
+      <td class="num">${dash}</td>
       <td class="num">${formatter(v)}</td>
     </tr>`;}).join('');
 
@@ -5882,6 +5898,7 @@ function buildManoObraTable(){
       <td class="num">${pctCellPill(M[1], M[0], undefined, formatter)}</td>
       <td class="num">${pctCellPill(M[2], M[1], undefined, formatter)}</td>
       <td class="num">${pctCellPill(M[3], M[2], undefined, formatter)}</td>
+      <td class="num">${pctCellPill(M[4], M[3], undefined, formatter)}</td>
       <td class="num">${formatter(sum(M))}</td>
     </tr>`;
 
@@ -6064,6 +6081,7 @@ function renderManoObraPuntoCharts(){
       <td class="num">${dash}</td>
       <td class="num">${dash}</td>
       <td class="num">${formatter(v)}</td>
+      <td class="num">${dash}</td>
       <td class="num">${formatter(v)}</td>
     </tr>`;}).join('');
   const puntoTotalRow = `
@@ -6073,6 +6091,7 @@ function renderManoObraPuntoCharts(){
       <td class="num">${pctCellPill(M[1], M[0], undefined, formatter)}</td>
       <td class="num">${pctCellPill(M[2], M[1], undefined, formatter)}</td>
       <td class="num">${pctCellPill(M[3], M[2], undefined, formatter)}</td>
+      <td class="num">${pctCellPill(M[4], M[3], undefined, formatter)}</td>
       <td class="num">${formatter(sum(M))}</td>
     </tr>`;
   document.getElementById('tblManoObraPunto').innerHTML = puntoRows + puntoTotalRow;
@@ -6329,6 +6348,7 @@ function buildGarantiasModelosTable(){
     <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[4], monthTotal[3], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -6355,10 +6375,11 @@ function buildMayoristasTable(){
       <td class="num">${pctCellPill(a.data[1], a.data[0], T[1], formatter)}</td>
       <td class="num">${pctCellPill(a.data[2], a.data[1], T[2], formatter)}</td>
       <td class="num">${pctCellPill(a.data[3], a.data[2], T[3], formatter)}</td>
+      <td class="num">${pctCellPill(a.data[4], a.data[3], T[4], formatter)}</td>
       <td class="num">${formatter(a.total)}</td>
     </tr>`).join('') +
     `<tr style="font-weight:800;background:var(--page-plane);">
-      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${pctCellPill(T[4], T[3], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
     </tr>`;
 }
 
@@ -6587,10 +6608,11 @@ function buildRetailTable(){
       <td class="num">${pctCellPill(a.data[1], a.data[0], T[1], formatter)}</td>
       <td class="num">${pctCellPill(a.data[2], a.data[1], T[2], formatter)}</td>
       <td class="num">${pctCellPill(a.data[3], a.data[2], T[3], formatter)}</td>
+      <td class="num">${pctCellPill(a.data[4], a.data[3], T[4], formatter)}</td>
       <td class="num">${formatter(a.total)}</td>
     </tr>`).join('') +
     `<tr style="font-weight:800;background:var(--page-plane);">
-      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${pctCellPill(T[4], T[3], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
     </tr>`;
 }
 
@@ -6906,6 +6928,7 @@ function buildOrigenTable(rows, monthTotalUnidades, monthTotalVentas, tbodyId, s
     <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[4], monthTotal[3], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -7041,6 +7064,7 @@ function buildRetailPerfilGeneralTable(){
     <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[4], monthTotal[3], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -7081,6 +7105,7 @@ function buildRetailPerfilesTable(){
     <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[4], monthTotal[3], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -7231,6 +7256,7 @@ function buildTiendasPerfilGeneralTable(){
     <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[4], monthTotal[3], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -7271,6 +7297,7 @@ function buildTiendaPerfilMensualTable(rows, monthTotalUnidades, monthTotalVenta
     <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[4], monthTotal[3], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -7339,6 +7366,7 @@ function buildPerfilGeneralTable(){
     <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[4], monthTotal[3], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -7402,6 +7430,7 @@ function buildPerfilesTable(){
     <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[4], monthTotal[3], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -7448,6 +7477,7 @@ function buildModelosTable(){
     <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[4], monthTotal[3], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -7589,6 +7619,7 @@ function buildTicketMensualTable(){
     <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
     <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
     <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[4]!==null ? pctCellPill(monthBlended[4], monthBlended[3], undefined, fmtMoney) : '—'}</td>
     <td class="num">${fmtMoney(totalBlended)}</td>
   </tr>`;
 }
@@ -7637,6 +7668,7 @@ function buildMayoristasModelosTable(){
     <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[4], monthTotal[3], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -7758,6 +7790,7 @@ function buildMayoristasTicketMensualTable(){
     <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
     <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
     <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[4]!==null ? pctCellPill(monthBlended[4], monthBlended[3], undefined, fmtMoney) : '—'}</td>
     <td class="num">${fmtMoney(totalBlended)}</td>
   </tr>`;
 }
@@ -7811,6 +7844,7 @@ function buildRetailModelosTable(){
     <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[4], monthTotal[3], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -7948,6 +7982,7 @@ function buildRetailTicketMensualTable(){
     <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
     <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
     <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[4]!==null ? pctCellPill(monthBlended[4], monthBlended[3], undefined, fmtMoney) : '—'}</td>
     <td class="num">${fmtMoney(totalBlended)}</td>
   </tr>`;
 }
@@ -7996,6 +8031,7 @@ function buildTiendasModelosTable(){
     <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[4], monthTotal[3], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
 }
@@ -8117,6 +8153,7 @@ function buildTiendasTicketMensualTable(){
     <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
     <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
     <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[4]!==null ? pctCellPill(monthBlended[4], monthBlended[3], undefined, fmtMoney) : '—'}</td>
     <td class="num">${fmtMoney(totalBlended)}</td>
   </tr>`;
 }
@@ -8141,10 +8178,11 @@ function buildTiendasTable(){
       <td class="num">${pctCellPill(s.data[1], s.data[0], T[1], formatter)}</td>
       <td class="num">${pctCellPill(s.data[2], s.data[1], T[2], formatter)}</td>
       <td class="num">${pctCellPill(s.data[3], s.data[2], T[3], formatter)}</td>
+      <td class="num">${pctCellPill(s.data[4], s.data[3], T[4], formatter)}</td>
       <td class="num">${formatter(s.total)}</td>
     </tr>`).join('') +
     `<tr style="font-weight:800;background:var(--page-plane);">
-      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
+      <td>Total</td><td class="num">${formatter(T[0])}</td><td class="num">${pctCellPill(T[1], T[0], undefined, formatter)}</td><td class="num">${pctCellPill(T[2], T[1], undefined, formatter)}</td><td class="num">${pctCellPill(T[3], T[2], undefined, formatter)}</td><td class="num">${pctCellPill(T[4], T[3], undefined, formatter)}</td><td class="num">${formatter(sum(T))}</td>
     </tr>`;
 }
 
@@ -8434,6 +8472,7 @@ function buildRepuestosGenericTable(rows, tbodyId, opts){
     <td class="num">${pctCellPill(monthTotal[1], monthTotal[0], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[2], monthTotal[1], undefined, formatter)}</td>
     <td class="num">${pctCellPill(monthTotal[3], monthTotal[2], undefined, formatter)}</td>
+    <td class="num">${pctCellPill(monthTotal[4], monthTotal[3], undefined, formatter)}</td>
     <td class="num">${formatter(sum(monthTotal))}</td>
   </tr>`;
   if(opts.subtitleId) document.getElementById(opts.subtitleId).textContent = metric==='ventas' ? 'Ventas en $' : 'Unidades vendidas';
@@ -9142,6 +9181,7 @@ function buildRepuestosTicketMensualTable(){
     <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
     <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
     <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[4]!==null ? pctCellPill(monthBlended[4], monthBlended[3], undefined, fmtMoney) : '—'}</td>
     <td class="num">${fmtMoney(totalBlended)}</td>
   </tr>`;
 }
