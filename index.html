@@ -3555,7 +3555,14 @@ const RETAIL_MARGEN_VENTAS       = RETAIL_VENTAS_TOTAL;
 // al auditar el archivo CONSOLIDADO_HERO_3_2.xlsx del 28-ago-2026.
 const RETAIL_MARGEN_UTILIDAD     = [6345.33, 21655.79, 40251.64, 31477.70, 3852.24];
 const TIENDAS_MARGEN_VENTAS      = TIENDAS_VENTAS;
-const TIENDAS_MARGEN_UTILIDAD    = [8217.44, 25125.21, 36351.70, 60476.06, 4885.06];
+// Corregido 8-sep-2026: Agosto quedó mal calculado en una actualización anterior (60476.06) — Santiago
+// notó que las ventas Contado de Tiendas traen un costo +$107 ($17+$90) sobre el costo base del modelo
+// (columna "Costo" del archivo fuente, forma de pago "CONTADO TIENDAS": confirmado en las 34 filas de
+// agosto, siempre +107 exacto vs. la hoja COSTOS). Mayo/Junio/Julio ya usaban ese costo real por fila
+// (incluye el +107 donde aplica) — se verificó recalculando Ventas−Costo de esos 3 meses desde el archivo
+// y cuadra exacto con los valores ya existentes. Agosto no lo estaba usando bien; recalculado igual que los
+// demás meses: Ventas−Costo real ($118.410,36 − $61.572,30) = $56.838,06.
+const TIENDAS_MARGEN_UTILIDAD    = [8217.44, 25125.21, 36351.70, 56838.06, 4885.06];
 
 // Margen bruto combinado (general de Resumen): Mayoristas + Retail (con AAP) + Tiendas — mismo universo de
 // canales que suma el total general de la página Resumen.
@@ -4321,19 +4328,21 @@ const SELLIN_MODELO_MENSUAL = [
 // Julio (175→162 u.): esos números eran un estimado previo a tener el desglose real por canal/modelo; Mayo
 // no cambia (37 u. en ambas fuentes) y Agosto tampoco (181 u.). Después llegó también el reporte de
 // Septiembre (13 u.: TIENDAS AAP 4, TIENDAS HERO 4, RETAIL 5; MAYORISTA y DIGITAL en 0 este mes).
+// Corrección 8-sep-2026: Septiembre venía incompleto — MAYORISTA sube de 0 a 4 u. (XOOM 125 +2, XOOM 110
+// +1, ECO 150 +1 en el desglose por modelo), total de Septiembre sube de 13 a 17 u.
 const SELLOUT_CANAL_MENSUAL = [
   {name:'TIENDAS AAP',  data:[16, 30, 84, 69, 4]},
   {name:'TIENDAS HERO', data:[12, 28, 24, 33, 4]},
-  {name:'MAYORISTA',    data:[7, 32, 43, 52, 0]},
+  {name:'MAYORISTA',    data:[7, 32, 43, 52, 4]},
   {name:'RETAIL',       data:[2, 0, 11, 21, 5]},
   {name:'DIGITAL',      data:[0, 0, 0, 6, 0]},
 ];
 const SELLOUT_MODELO_MENSUAL = [
   {name:'HUNK 125',      data:[6, 19, 49, 52, 5]},
   {name:'ECO DELUXE',    data:[20, 33, 46, 44, 2]},
-  {name:'ECO 150',       data:[0, 3, 14, 26, 0]},
-  {name:'XOOM 125',      data:[0, 17, 24, 23, 3]},
-  {name:'XOOM 110',      data:[5, 11, 10, 14, 0]},
+  {name:'ECO 150',       data:[0, 3, 14, 26, 1]},
+  {name:'XOOM 125',      data:[0, 17, 24, 23, 5]},
+  {name:'XOOM 110',      data:[5, 11, 10, 14, 1]},
   {name:'HUNK 160',      data:[5, 7, 16, 16, 3]},
   {name:'XPULSE 200',    data:[1, 0, 3, 4, 0]},
   {name:'XPULSE RALLY',  data:[0, 0, 0, 2, 0]},
