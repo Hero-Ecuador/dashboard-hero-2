@@ -3012,7 +3012,7 @@
         </div>
       </div>
 
-      <div class="kpi-row kpi-row-6">
+      <div class="kpi-row kpi-row-5">
         <div class="kpi-card">
           <div class="kpi-top"><span class="kpi-label">Presupuesto total</span>
             <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"></path><path d="M4 10h16"></path><path d="M9 4v6"></path></svg></div>
@@ -3032,11 +3032,6 @@
           <div class="kpi-top"><span class="kpi-label">Margen bruto</span></div>
           <div class="kpi-value" id="kpiManoObraMargenValue">—</div>
           <div class="kpi-delta muted" id="kpiManoObraMargenSub">Margen fijo (definido por gerencia) · Agosto 2026</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-top"><span class="kpi-label">Ticket promedio</span></div>
-          <div class="kpi-value" id="kpiManoObraTicketValue">—</div>
-          <div class="kpi-delta muted" id="kpiManoObraTicketSub">Ventas ÷ servicios atendidos · Agosto 2026</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-top"><span class="kpi-label">Cumplimiento</span><span class="kpi-state-tag behind" id="kpiManoObraStateTag">POR DEBAJO</span></div>
@@ -4601,28 +4596,32 @@ const MANOOBRA_MARGEN_PCT = 0.60;
 // reporte real (no derivado) — vive aquí, junto a SERVICIOS_TOTAL_*, porque Vista general
 // (computeGeneralModel, más abajo) también necesita MANOOBRA_AGOSTO_REAL y se inicializa antes de llegar
 // a la sección de Mano de Obra de Servicios.
-// cantidad = suma de la columna "cantidad" (servicios atendidos); valor = suma de "m/o" + "terceros" por fila.
+// cantidad = suma de la columna "cantidad" (servicios atendidos) de TODAS las filas, incluidas las que no
+// tienen "Valor Facturado". valor = SOLO la columna "Total" (Valor Facturado) del reporte, cuando está
+// llena — NO es "m/o" + "terceros" de cada fila: la mayoría de filas del reporte tienen "m/o" con un monto
+// pero "Total" vacío (esa mano de obra no está facturada todavía), así que no suman al valor de esta
+// página. Solo Mantenimiento Correctivo (ambos puntos) y Mantenimiento Preventivo 15000km (Quito) tienen
+// "Total" lleno en el reporte de agosto.
 // MANTENIMIENTO se abrió en sus 5 subtipos reales del reporte (agosto.xlsx, hoja "Hoja1"): 500/3000/9000 son
 // mantenimientos programados por kilometraje, Correctivo y Preventivo son las otras dos etiquetas que usa el
-// reporte. Los 5 suman exactamente los $517.71/36 uds. que antes vivían en una sola fila "MANTENIMIENTO".
-// Actualización 1-sep-2026 (agosto.xlsx re-subido, reporte más completo): cantidad total sube de 73 a 106
-// servicios, valor de $816.71 a $1.186,15. 3 cosas a revisar con el taller: (1) el reporte nuevo ya no trae
-// ninguna fila de "Talleres Autorizados" (antes 16 servicios/$113) — ver nota junto a MANOOBRA_PUNTO_AGOSTO.
-// (2) Quito trae una fila "Mantenimiento preventivo 500 km" con 3 servicios pero la columna "m/o" vacía
-// (el valor $57,77 quedó en "repuesto" en vez de "m/o") — se contabilizó como $0 de mano de obra por ahora,
-// posible error de captura. (3) aparece por primera vez "Mantenimiento preventivo 15000 km" (Quito, 1
-// servicio, $40,25) — no encaja en las categorías fijas 500/3000/9000, así que se agrupó dentro de
-// MANTENIMIENTO PREVENTIVO (junto con la fila "Mantenimiento Preventivo" de Quito, que llegó vacía/$0).
+// reporte.
+// Actualización 7-sep-2026 (cuadro "Servicio Técnico / Valor Facturado" enviado por Santiago, con columna
+// "TOTAL" explícita por fila): corregido el valor de mano de obra — antes se sumaba "m/o" de todas las
+// filas ($1.186,15 total), pero el valor real facturado de agosto es solo $563,19 (cantidad de servicios
+// atendidos, 106, no cambia). Quedan en $0 de valor (con su cantidad intacta): MANTENIMIENTO 500 (antes
+// $182), MANTENIMIENTO 3000 (antes $28), MANTENIMIENTO 9000 (antes $7), ALISTAMIENTO (antes $470) y
+// GARANTÍA (antes $36) — ninguna de estas filas trae "Total" en el reporte. MANTENIMIENTO CORRECTIVO sube
+// de $422,90 a $522,94 ($421,74 de Av. Américas — su M/O $301 + Terceros $121 — más $101,20 de Quito).
 const MANOOBRA_TIPOS_AGOSTO = [
-  {name:'MANTENIMIENTO 500',        color: getVar('--manttipo-1'), cantidad: 29, valor: 182.00},
-  {name:'MANTENIMIENTO 3000',       color: getVar('--manttipo-2'), cantidad: 6,  valor: 28.00},
-  {name:'MANTENIMIENTO 9000',       color: getVar('--manttipo-3'), cantidad: 1,  valor: 7.00},
-  {name:'MANTENIMIENTO CORRECTIVO', color: getVar('--manttipo-4'), cantidad: 9,  valor: 422.90},
+  {name:'MANTENIMIENTO 500',        color: getVar('--manttipo-1'), cantidad: 29, valor: 0.00},
+  {name:'MANTENIMIENTO 3000',       color: getVar('--manttipo-2'), cantidad: 6,  valor: 0.00},
+  {name:'MANTENIMIENTO 9000',       color: getVar('--manttipo-3'), cantidad: 1,  valor: 0.00},
+  {name:'MANTENIMIENTO CORRECTIVO', color: getVar('--manttipo-4'), cantidad: 9,  valor: 522.94},
   {name:'MANTENIMIENTO PREVENTIVO', color: getVar('--manttipo-5'), cantidad: 1,  valor: 40.25},
-  {name:'ALISTAMIENTO',  color: getVar('--servicio-2'), cantidad: 47, valor: 470.00},
-  {name:'GARANTÍA',      color: getVar('--servicio-4'), cantidad: 13, valor: 36.00},
+  {name:'ALISTAMIENTO',  color: getVar('--servicio-2'), cantidad: 47, valor: 0.00},
+  {name:'GARANTÍA',      color: getVar('--servicio-4'), cantidad: 13, valor: 0.00},
 ];
-const MANOOBRA_AGOSTO_REAL = sum(MANOOBRA_TIPOS_AGOSTO.map(t=>t.valor)); // 1186.15
+const MANOOBRA_AGOSTO_REAL = sum(MANOOBRA_TIPOS_AGOSTO.map(t=>t.valor)); // 563.19
 // cantidad real de Agosto (servicios atendidos) — vive aquí junto a MANOOBRA_AGOSTO_REAL (y no más abajo,
 // junto al resto de MANO DE OBRA DE SERVICIOS) porque Vista general y Resumen de Postventa también la usan
 // para Unidades de Agosto, y ambas se inicializan (computeGeneralModel/computeRepuestosResumenModel) antes
@@ -4640,8 +4639,13 @@ const MANOOBRA_AGOSTO_REAL_CANTIDAD = sum(MANOOBRA_TIPOS_AGOSTO.map(t=>t.cantida
 // queda en 0 — se deja la fila (en vez de quitarla) para no perder el desglose de 3 puntos; vale la pena
 // confirmar con el taller si de verdad no hubo actividad ahí en agosto o si esa parte del reporte quedó
 // afuera por error.
+// Actualización 7-sep-2026: valor de Av. Américas corregido de $1.044,70 a $421,74 — mismo criterio que
+// MANOOBRA_TIPOS_AGOSTO más arriba (solo cuenta la fila con "Total" facturado real: Mantenimiento
+// Correctivo, $301 de M/O + $121 de Terceros). Naciones Unidas (Quito) no cambia: sus $141,45 ya eran la
+// suma de sus dos filas con "Total" (Mantenimiento Preventivo 15000km $40,25 + Correctivo $101,20). La
+// cantidad de ambos puntos no cambia (100 y 6).
 const MANOOBRA_PUNTO_AGOSTO = [
-  {name:'Av. Américas',            color: getVar('--servicio-3'), cantidad: 100, valor: 1044.70},
+  {name:'Av. Américas',            color: getVar('--servicio-3'), cantidad: 100, valor: 421.74},
   {name:'Talleres Autorizados',    color: getVar('--servicio-2'), cantidad: 0,   valor: 0.00},
   {name:'Naciones Unidas (Quito)', color: getVar('--servicio-4'), cantidad: 6,   valor: 141.45},
 ];
@@ -5917,9 +5921,8 @@ function renderManoObraKpis(){
   renderBudgetCards('kpiManoObra', grandManoObra, budgetArr, metric, formatter);
   renderCompareCard('kpiManoObra', manoObra.manoObra, metric, formatter);
 
-  // Margen fijo de gerencia (60%, sin costo real por servicio) y Ticket promedio = Ventas ÷ Servicios atendidos.
+  // Margen fijo de gerencia (60%, sin costo real por servicio).
   renderMargenCard('kpiManoObra', manoObra.ventas, manoObra.ventas.map(v=>v*MANOOBRA_MARGEN_PCT));
-  renderTicketCard('kpiManoObra', manoObra.ventas, manoObra.unidades, 'servicios atendidos');
 }
 
 // Detalle mensual por tipo: solo Agosto tiene desglose real, así que las filas de tipo muestran — en
