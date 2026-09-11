@@ -94,6 +94,10 @@
     --manttipo-5:#d9d9d9; /* gris claro  - Mantenimiento preventivo */
     --garantia-1:#4d4d4d; /* gris oscuro - Garantías (ranking por modelo y slice en Vista General; distinto
                               del negro de Motos, el rojo de Repuestos y el gris medio de Mano de Obra) */
+    --touchpoint-retail:#595959; /* gris oscuro - Touch Point (Retail), más oscuro que --series-3 para que
+                                     la línea se lea bien sobre fondo blanco */
+    --touchpoint-mayoristas:#a83f2e; /* rojo ladrillo oscuro - Touch Point (Mayoristas), más oscuro que
+                                         --series-4 por el mismo motivo */
     --good:#0ca30c;
     --warn:#c98a12;
   }
@@ -358,6 +362,24 @@
   .legend-item{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--text-secondary);font-weight:600;}
   .legend-swatch{width:9px;height:9px;border-radius:1px;display:inline-block;}
 
+  .insight-box{
+    background: var(--card);
+    border-radius:12px;
+    border:1px solid var(--border);
+    box-shadow:0 1px 3px rgba(16,31,56,0.06);
+    padding:14px 18px;
+    display:flex; align-items:center; gap:14px;
+    margin-bottom:12px;
+  }
+  .insight-icon{
+    flex:0 0 auto; width:34px; height:34px; border-radius:50%;
+    background: var(--orange);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .insight-icon svg{width:18px;height:18px;color:#fff;}
+  .insight-text{font-size:12px;color:var(--text-secondary);line-height:1.55;}
+  .insight-text b{color:var(--text-primary);}
+
   .chart-box{position:relative;width:100%;flex:1 1 auto;min-height:0;}
   .chart-box.h280{height:190px;}
   .chart-box.h220{height:150px;}
@@ -488,6 +510,10 @@
       <div class="nav-item sub" data-page="sellinout">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13"></path><path d="M13 3l4 4-4 4"></path><path d="M20 17H7"></path><path d="M11 21l-4-4 4-4"></path></svg>
         SELL IN/OUT
+      </div>
+      <div class="nav-item sub" data-page="touchpoint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-7.6 8-13.2A8 8 0 1 0 4 8.8C4 14.4 12 22 12 22Z"></path><circle cx="12" cy="8.6" r="2.6"></circle></svg>
+        TOUCH POINT
       </div>
       <div class="nav-label grp">Postventa</div>
       <div class="nav-item sub" data-page="repuestosresumen">
@@ -2338,6 +2364,56 @@
           </div>
           <div class="chart-box" style="height:150px;"><canvas id="chartSioThroughCuentas"></canvas></div>
         </div>
+      </div>
+    </section>
+
+    <!-- ================= PAGE: TOUCH POINT ================= -->
+    <section class="page" id="page-touchpoint">
+      <div class="topbar">
+        <div>
+          <h1>Touch Point</h1>
+          <div class="subtitle">Evolución de puntos de venta — Mayo a Septiembre 2026</div>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <div class="insight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg></div>
+        <div class="insight-text" id="touchPointInsight"></div>
+      </div>
+
+      <div class="grid-2b">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Evolución puntos de venta</div>
+              <div class="panel-sub">Por canal · Mayo a Septiembre 2026</div>
+            </div>
+          </div>
+          <div class="chart-box h220" style="height:225px;"><canvas id="chartTouchPointCanal"></canvas></div>
+          <div class="legend-row" id="legendTouchPointCanal"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Evolución puntos de venta</div>
+              <div class="panel-sub">Total · Mayo a Septiembre 2026</div>
+            </div>
+          </div>
+          <div class="chart-box h220" style="height:190px;"><canvas id="chartTouchPointTotal"></canvas></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Evolución en puntos de venta</div>
+            <div class="panel-sub">Cantidad de puntos de venta activos por canal, fin de cada mes</div>
+          </div>
+        </div>
+        <table class="data-table compact">
+          <thead><tr><th>Puntos de venta</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Septiembre</th></tr></thead>
+          <tbody id="tblTouchPoint"></tbody>
+        </table>
       </div>
     </section>
 
@@ -4667,14 +4743,18 @@ const SELLIN_CANAL_MENSUAL = [
   {name:'MAYORISTA',      data:[273, 152, 84, 136, 26]},
   {name:'RETAIL (OTOM)',  data:[0, 28, 12, 12, 0]},
 ];
+// Actualización 11-sep-2026: Santiago mandó el cuadro de Sell In por modelo ya sin Tiendas AAP (mismo
+// criterio que SELLIN_CANAL_MENSUAL) — los valores anteriores traían mezclado el Sell In de AAP y por
+// eso no cuadraban con el total por canal. Verificado: la suma de estos 8 modelos por mes (273, 180, 96,
+// 148, 26) coincide exacto con MAYORISTA + RETAIL (OTOM) de SELLIN_CANAL_MENSUAL en los 5 meses.
 const SELLIN_MODELO_MENSUAL = [
-  {name:'HUNK 125',      data:[69, 12, 28, 28, 5]},
-  {name:'ECO DELUXE',    data:[106, 102, 16, 38, 3]},
-  {name:'ECO 150',       data:[0, 103, 39, 43, 6]},
-  {name:'XOOM 125',      data:[52, 13, 27, 19, 10]},
-  {name:'XOOM 110',      data:[56, 25, 35, 12, 1]},
-  {name:'HUNK 160',      data:[54, 5, 11, 10, 0]},
-  {name:'XPULSE 200',    data:[19, 2, 2, 4, 1]},
+  {name:'HUNK 125',      data:[53, 12, 7, 28, 5]},
+  {name:'ECO DELUXE',    data:[85, 33, 16, 26, 3]},
+  {name:'ECO 150',       data:[0, 90, 35, 43, 6]},
+  {name:'XOOM 125',      data:[46, 13, 20, 19, 10]},
+  {name:'XOOM 110',      data:[44, 25, 5, 12, 1]},
+  {name:'HUNK 160',      data:[34, 5, 11, 10, 0]},
+  {name:'XPULSE 200',    data:[11, 2, 2, 4, 1]},
   {name:'XPULSE RALLY',  data:[0, 0, 0, 6, 0]},
 ];
 
@@ -4734,6 +4814,15 @@ const SELLINOUT_GROUPS = [
   { name:'RETAILERS',    ownAccount:null,           subAccounts:['AAP','RETAIL'] },
   { name:'TIENDAS HERO', ownAccount:'TIENDAS HERO', subAccounts:['CANAL DIGITAL'] },
 ];
+
+/* ================= TOUCH POINT — cobertura: cantidad de puntos de venta activos por canal, fin de cada
+   mes (no es un flujo acumulable como unidades vendidas, es una foto del mes — por eso no lleva columna
+   Total). Añadido 11-sep-2026, dato entregado por Santiago. data = [Mayo,Junio,Julio,Agosto,Septiembre]. */
+const TOUCHPOINT_RETAIL = [15, 15, 39, 49, 100];
+const TOUCHPOINT_TIENDAS_HERO = [1, 1, 2, 3, 3];
+const TOUCHPOINT_MAYORISTAS = [75, 119, 127, 132, 137];
+const TOUCHPOINT_TOTAL = MONTHS.map((_, i) => TOUCHPOINT_RETAIL[i] + TOUCHPOINT_TIENDAS_HERO[i] + TOUCHPOINT_MAYORISTAS[i]);
+
 /* ================= REPUESTOS — datos fuente: DASHBOARD_VENTAS_REPUESTOS_AGOSTO_2026 (archivo actualizado 09/09/2026), hoja BASE_DATOS (1074 líneas, Mayo-Septiembre) ================= */
 // Totales generales por mes. Mayo = solo 10 transacciones (21-26 mayo, no es el mes completo);
 // Agosto es un mes completo y cerrado. Septiembre = 108 transacciones reales (corte al 08/09/2026, mes en curso, no cerrado).
@@ -9825,12 +9914,111 @@ function initTopModelos(){
   renderTopModelosList(TOP_MODELOS_HERO, 'topModelosHeroList');
 }
 
+/* ================= TOUCH POINT ================= */
+function renderTouchPointInsight(){
+  const first = TOUCHPOINT_TOTAL[0], last = TOUCHPOINT_TOTAL[TOUCHPOINT_TOTAL.length-1];
+  const added = last - first;
+  document.getElementById('touchPointInsight').innerHTML =
+    `En términos de cobertura, la evolución ha sido positiva. En ${MONTHS[0]} teníamos <b>${fmt(first)}</b> puntos de venta y para ${MONTHS[MONTHS.length-1]} alcanzamos <b>${fmt(last)}</b>, es decir, hemos incorporado <b>${fmt(added)}</b> puntos adicionales en cinco meses.`;
+}
+
+let chartTouchPointCanalInst=null, chartTouchPointTotalInst=null;
+function renderTouchPointCharts(){
+  const tpRetailColor = getVar('--touchpoint-retail'), tpMayoristasColor = getVar('--touchpoint-mayoristas');
+  document.getElementById('legendTouchPointCanal').innerHTML = `
+    <span class="legend-item"><span class="legend-swatch" style="background:${PALETTE.s1}"></span>Tiendas Hero</span>
+    <span class="legend-item"><span class="legend-swatch" style="background:${tpRetailColor}"></span>Retail</span>
+    <span class="legend-item"><span class="legend-swatch" style="background:${tpMayoristasColor}"></span>Mayoristas</span>`;
+
+  chartTouchPointCanalInst = new Chart(document.getElementById('chartTouchPointCanal'), {
+    type:'line',
+    data:{
+      labels: MONTHS,
+      datasets:[
+        {label:'Tiendas Hero', data: TOUCHPOINT_TIENDAS_HERO, borderColor:PALETTE.s1, backgroundColor:'transparent', fill:false, tension:0.3,
+          pointRadius:5, pointBackgroundColor:PALETTE.s1, pointBorderColor:PALETTE.s1, pointBorderWidth:2, borderWidth:2.5,
+          datalabels:{anchor:'end', align:'bottom', offset:7}},
+        {label:'Retail', data: TOUCHPOINT_RETAIL, borderColor:tpRetailColor, backgroundColor:'transparent', fill:false, tension:0.3,
+          pointRadius:5, pointBackgroundColor:tpRetailColor, pointBorderColor:tpRetailColor, pointBorderWidth:2, borderWidth:2.5,
+          datalabels:{anchor:'end', align:'top', offset:7}},
+        {label:'Mayoristas', data: TOUCHPOINT_MAYORISTAS, borderColor:tpMayoristasColor, backgroundColor:'transparent', fill:false, tension:0.3,
+          pointRadius:5, pointBackgroundColor:tpMayoristasColor, pointBorderColor:tpMayoristasColor, pointBorderWidth:2, borderWidth:2.5,
+          datalabels:{anchor:'end', align:'top', offset:7}},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      layout:{ padding:{top:26, right:14, left:8, bottom:2} },
+      scales:{
+        x:{ grid:{display:false}, border:{display:false}, ticks:{color: PALETTE.ink, font:{size:11, weight:600}, padding:20} },
+        y:{ display:false, beginAtZero:true, grace:'30%' }
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8, callbacks:{label:(ctx)=> `${ctx.dataset.label}: ${fmt(ctx.parsed.y)}`}},
+        datalabels:{
+          display:true, font:{weight:700, size:10},
+          color:(ctx)=> ctx.dataset.borderColor,
+          formatter:(v)=> fmt(v)
+        }
+      }
+    }
+  });
+
+  chartTouchPointTotalInst = new Chart(document.getElementById('chartTouchPointTotal'), {
+    type:'line',
+    data:{
+      labels: MONTHS,
+      datasets:[{
+        label:'Total', data: TOUCHPOINT_TOTAL,
+        borderColor: PALETTE.s2, backgroundColor:'transparent', fill:false, tension:0.3,
+        pointRadius:6, pointBackgroundColor:PALETTE.s2, pointBorderColor:PALETTE.s2, pointBorderWidth:2, borderWidth:2.75
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      layout:{ padding:{top:30, right:14, left:8, bottom:4} },
+      scales:{
+        x:{ grid:{display:false}, border:{display:false}, ticks:{color: PALETTE.ink, font:{size:11, weight:600}} },
+        y:{ display:false, beginAtZero:true, grace:'20%' }
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8, callbacks:{label:(ctx)=> `Total: ${fmt(ctx.parsed.y)}`}},
+        datalabels:{
+          display:true, font:{weight:800, size:11.5}, color:PALETTE.s2,
+          anchor:'end', align:'top', offset:6,
+          formatter:(v)=> fmt(v)
+        }
+      }
+    }
+  });
+}
+
+function buildTouchPointTable(){
+  const rows = [
+    {name:'Retail', data:TOUCHPOINT_RETAIL},
+    {name:'Tiendas Hero', data:TOUCHPOINT_TIENDAS_HERO},
+    {name:'Mayoristas', data:TOUCHPOINT_MAYORISTAS},
+  ];
+  document.getElementById('tblTouchPoint').innerHTML = rows.map(r=>
+    `<tr><td>${r.name}</td>${r.data.map(v=>`<td class="num">${fmt(v)}</td>`).join('')}</tr>`
+  ).join('') + `<tr style="font-weight:800;background:var(--page-plane);"><td>Total</td>${TOUCHPOINT_TOTAL.map(v=>`<td class="num">${fmt(v)}</td>`).join('')}</tr>`;
+}
+
+function initTouchPoint(){
+  if(chartsInit.touchpoint) return; chartsInit.touchpoint = true;
+  renderTouchPointInsight();
+  renderTouchPointCharts();
+  buildTouchPointTable();
+}
+
 
 /* ================= NAV / TABS ================= */
 const navItems = document.querySelectorAll('.nav-item');
 const pages = document.querySelectorAll('.page');
 function initMarcas(){} // página estática (snapshot de mercado), no depende de filtros de mes/métrica
-const initFns = { general:initGeneral, resumen:initResumen, mayoristas:initMayoristas, retail:initRetail, tiendas:initTiendas, sellinout:initSellInOut, repuestosresumen:initRepuestosResumen, repuestos:initRepuestos, repuestosservicio:initRepuestosServicio, manoobra:initManoObra, garantiasresumen:initGarantiasResumen, garantiasmodelos:initGarantiasModelos, marcas:initMarcas, topmodelos:initTopModelos };
+const initFns = { general:initGeneral, resumen:initResumen, mayoristas:initMayoristas, retail:initRetail, tiendas:initTiendas, sellinout:initSellInOut, touchpoint:initTouchPoint, repuestosresumen:initRepuestosResumen, repuestos:initRepuestos, repuestosservicio:initRepuestosServicio, manoobra:initManoObra, garantiasresumen:initGarantiasResumen, garantiasmodelos:initGarantiasModelos, marcas:initMarcas, topmodelos:initTopModelos };
 
 navItems.forEach(item=>{
   item.addEventListener('click', ()=>{
