@@ -103,6 +103,12 @@
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
+  /* Antes había un zoom:0.85 acá para que el menú entrara completo sin que el usuario tuviera que
+     hacer zoom-out manual. Se quitó: el sidebar ya quedó lo bastante compacto como para no necesitarlo
+     (ver .sidebar/.nav-item más abajo), y ese zoom de página causaba que 100vh del sidebar quedara mal
+     calculado si el usuario ADEMÁS aplicaba su propio zoom del navegador, dejando una franja blanca
+     debajo del negro. Sin zoom en la página, 100vh siempre corresponde 1:1 al viewport real, sea cual
+     sea el zoom nativo del navegador. */
   body{
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
     background: var(--page-plane);
@@ -119,24 +125,25 @@
     color:#fff;
     display:flex;
     flex-direction:column;
-    padding:16px 0 12px;
+    padding:8px 0 6px;
     position:sticky;
     top:0;
     height:100vh;
+    overflow:hidden; /* red de seguridad: nunca debe desbordar sobre el fondo blanco de la página */
   }
   .brand{
     display:flex;
     align-items:center;
     gap:10px;
-    padding:0 18px 14px;
+    padding:0 18px 7px;
     border-bottom:1px solid rgba(255,255,255,0.10);
-    margin-bottom:10px;
+    margin-bottom:4px;
   }
   .brand-mark{
-    width:46px;height:46px;border-radius:11px;
+    width:40px;height:40px;border-radius:10px;
     background: #fff;
     display:flex;align-items:center;justify-content:center;
-    flex:0 0 46px;
+    flex:0 0 40px;
     padding:5px;
     box-sizing:border-box;
   }
@@ -145,17 +152,23 @@
   .brand-name{font-size:14.5px;font-weight:700;letter-spacing:.3px;line-height:1.15;}
   .brand-sub{font-size:10px;color:rgba(255,255,255,0.55);letter-spacing:.5px;text-transform:uppercase;margin-top:2px;}
 
-  nav.menu{display:flex;flex-direction:column;gap:1px;padding:0 10px;}
+  /* El menú se hizo más compacto (paddings/márgenes reducidos abajo) para que los 15 ítems + 5 labels
+     quepan de largo, sin scroll, dentro de los 100vh del sidebar. flex:1 1 auto + min-height:0 +
+     overflow-y:auto se dejan solo como red de seguridad silenciosa (no se ve ninguna barra de scroll
+     si el contenido entra, que es el caso normal) para una ventana excepcionalmente baja — el logo de
+     arriba y el pie de abajo siempre quedan visibles. */
+  nav.menu{display:flex;flex-direction:column;gap:0px;padding:0 10px;flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-width:none;}
+  nav.menu::-webkit-scrollbar{ display:none; }
   .nav-label{
     font-size:11px;font-weight:700;letter-spacing:1px;color:#e8a49f;
-    text-transform:uppercase;padding:6px 12px 5px;
+    text-transform:uppercase;padding:3px 12px 2px;
   }
-  .nav-label.grp{ margin-top:4px; padding-top:9px; border-top:1px solid rgba(255,255,255,0.08); }
+  .nav-label.grp{ margin-top:1px; padding-top:4px; border-top:1px solid rgba(255,255,255,0.08); }
   .nav-item.sub{ padding-left:30px; }
   .nav-item.sub svg{width:13px;height:13px;flex:0 0 13px;}
   .nav-item{
     display:flex;align-items:center;gap:10px;
-    padding:8px 12px;
+    padding:4px 12px;
     border-radius:9px;
     color:rgba(255,255,255,0.72);
     cursor:pointer;
@@ -181,18 +194,22 @@
   .nav-item.sub.active::before{ left:10px; }
   .sidebar-footer{
     margin-top:auto;
-    padding:10px 18px 0;
+    padding:4px 18px 0;
     font-size:10px;
     color:rgba(255,255,255,0.35);
     border-top:1px solid rgba(255,255,255,0.08);
-    line-height:1.4;
+    line-height:1.35;
+    flex:0 0 auto;
   }
 
   /* ===== MAIN ===== */
   main{flex:1; min-width:0; padding:14px 22px 16px;}
+  /* Estructura de topbar en dos niveles: Nivel 1 = Título + Subtítulo (fila de arriba),
+     Nivel 2 = Botones/controles (fila de abajo, ancho completo). Aplica a TODAS las páginas
+     por igual — ya no van uno al lado del otro. */
   .topbar{
-    display:flex; align-items:center; justify-content:space-between;
-    margin-bottom:10px; flex-wrap:wrap; gap:10px; flex:0 0 auto;
+    display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start;
+    margin-bottom:10px; gap:8px; flex:0 0 auto;
   }
   .topbar h1{font-size:17px; margin:0 0 2px;}
   .topbar .subtitle{font-size:11.5px;color:var(--text-secondary);}
@@ -206,7 +223,7 @@
   .range-chip svg{width:13px;height:13px;color:var(--navy-700);}
   .dot{width:6px;height:6px;border-radius:50%;background:var(--good);display:inline-block;margin-right:4px;}
 
-  .topbar-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .topbar-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap; width:100%;}
   .aap-toggle{
     display:flex;align-items:center;gap:2px;
     background:var(--card); border:1px solid var(--border);
@@ -220,12 +237,6 @@
     transition:background .15s ease, color .15s ease;
   }
   .aap-toggle button.active{ background:var(--orange); color:#fff; }
-  /* Repuestos tiene 3 grupos de toggle (métrica/canal/mes) + range-chip en el topbar — se compactan
-     ligeramente para que todo entre en una sola línea sin que el topbar crezca y desborde el layout. */
-  #page-repuestos .topbar-controls{ gap:7px; }
-  #page-repuestos .topbar-controls .aap-toggle{ gap:2px; padding:2px; }
-  #page-repuestos .topbar-controls .aap-toggle button{ padding:5px 9px; font-size:10px; }
-  #page-repuestos .topbar-controls .range-chip{ padding:5px 9px; gap:5px; font-size:10px; }
 
   .retail-subnav{ display:flex; gap:8px; margin-bottom:10px; flex:0 0 auto; }
   .retail-subnav button{
@@ -299,10 +310,15 @@
   .kpi-channel-val{font-weight:800;color:var(--text-primary);}
   .kpi-channel-pct{font-weight:600;color:var(--text-muted);margin-left:3px;}
 
-  /* Grid layout for charts */
-  .grid-2{ display:grid; grid-template-columns: 1.7fr 1fr; gap:12px; margin-bottom:10px; align-items:stretch; }
-  .grid-2b{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:10px; align-items:stretch; }
-  .grid-2r{ display:grid; grid-template-columns: 1fr 1.7fr; gap:12px; margin-bottom:10px; align-items:stretch; }
+  /* Grid layout for charts. minmax(0,Xfr) en vez de Xfr a secas: sin esto, una tabla ancha (muchas
+     columnas numéricas) puede forzar su columna del grid a crecer más de lo debido y "robarle" espacio
+     a la columna vecina (por ejemplo, un gráfico de Tendencia al lado que terminaba aplastado/angosto).
+     Con minmax(0,Xfr) cada columna respeta su proporción real sin importar el contenido; si una tabla
+     no entra, hace scroll horizontal dentro de su propia tarjeta (ver overflow-x en .panel) en vez de
+     empujar a su vecino. */
+  .grid-2{ display:grid; grid-template-columns: minmax(0,1.7fr) minmax(0,1fr); gap:12px; margin-bottom:10px; align-items:stretch; }
+  .grid-2b{ display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap:12px; margin-bottom:10px; align-items:stretch; }
+  .grid-2r{ display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1.7fr); gap:12px; margin-bottom:10px; align-items:stretch; }
 
   /* Mercado > Marcas: grilla de 3 columnas con una tarjeta por marca (ranking de modelos, snapshot estático). */
   .mercado-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-bottom:10px; align-items:stretch; }
@@ -345,6 +361,8 @@
     padding:12px 14px 8px;
     display:flex; flex-direction:column;
     min-height:0;
+    overflow-x:auto; /* si una tabla ancha no entra en su columna, hace scroll horizontal en su propia
+                         tarjeta en vez de desbordarse o achicar al vecino */
   }
   .panel-head{
     display:flex; align-items:flex-start; justify-content:space-between;
@@ -358,6 +376,30 @@
     font-size:10.5px; font-weight:700; padding:5px 10px;
     cursor:default; white-space:nowrap;
   }
+  /* Donas de MANO DE OBRA: su vecino en el grid (Detalle mensual) suele ser más alto, y
+     align-items:stretch (default de .grid-2b) las estiraba a esa misma altura, dejando espacio en
+     blanco debajo del donut/leyenda. align-self:start las deja con su propia altura natural. */
+  #manoObraTipoDonutPanel, #manoObraPuntoDonutPanel{ align-self:start; }
+
+  /* MANO DE OBRA: los 5 paneles (dona/tabla por tipo, dona/tabla por punto, tendencia) comparten un
+     solo grid de 2 columnas; su ubicación y visibilidad se reordenan por mes vía la clase
+     .mo-agosto-layout (ver renderManoObra() en JS), sin duplicar ningún canvas/tabla.
+     Por defecto (Mayo/Junio/Julio/Septiembre/Todos — el donut "por tipo" no tiene desglose real):
+     dona+tendencia apiladas a la izquierda, Detalle mensual a la derecha ocupando la altura combinada
+     de ambas; los paneles "por punto" (solo tienen datos reales en Agosto) quedan ocultos.
+     Agosto: dona por tipo + dona por punto lado a lado arriba, cada una con su Detalle mensual debajo
+     (4 paneles), y Tendencia a todo lo ancho debajo de los 4. */
+  #manoObraLayoutGrid #manoObraTipoDonutPanel{ grid-column:1; grid-row:1; }
+  #manoObraLayoutGrid #manoObraTrendPanel{ grid-column:1; grid-row:2; }
+  #manoObraLayoutGrid #manoObraDetalleMensualPanel{ grid-column:2; grid-row:1 / span 2; }
+  #manoObraLayoutGrid #manoObraPuntoDonutPanel,
+  #manoObraLayoutGrid #manoObraPuntoTablePanel{ display:none; }
+
+  #manoObraLayoutGrid.mo-agosto-layout #manoObraTipoDonutPanel{ grid-column:1; grid-row:1; }
+  #manoObraLayoutGrid.mo-agosto-layout #manoObraPuntoDonutPanel{ grid-column:2; grid-row:1; display:flex; }
+  #manoObraLayoutGrid.mo-agosto-layout #manoObraDetalleMensualPanel{ grid-column:1; grid-row:2; }
+  #manoObraLayoutGrid.mo-agosto-layout #manoObraPuntoTablePanel{ grid-column:2; grid-row:2; display:flex; }
+  #manoObraLayoutGrid.mo-agosto-layout #manoObraTrendPanel{ grid-column:1 / -1; grid-row:3; }
   .legend-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:5px;flex:0 0 auto;}
   .legend-item{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--text-secondary);font-weight:600;}
   .legend-swatch{width:9px;height:9px;border-radius:1px;display:inline-block;}
@@ -384,6 +426,11 @@
   .chart-box.h280{height:190px;}
   .chart-box.h220{height:150px;}
   .chart-box.h180{height:120px;}
+  /* Las donas deben tener siempre el mismo tamaño estándar (150px de alto), sin importar si su panel
+     queda más alto que el de al lado (ej. una tabla larga en el panel vecino de un grid-2/2b con
+     align-items:stretch). flex:1 1 auto (heredado de .chart-box) las estiraba para llenar ese espacio
+     sobrante; flex:0 0 auto fija su alto real al de la clase h220, igual en todas las páginas. */
+  .chart-box.donut-wrap{ flex:0 0 auto; }
 
   .donut-wrap{position:relative;}
   .donut-center{
@@ -435,6 +482,11 @@
   .linea-name{display:flex;align-items:center;gap:7px;font-weight:700;}
   .linea-dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px;}
   .cell-pct{display:inline-block;font-size:9px;font-weight:600;color:var(--text-muted);margin-left:4px;}
+  /* Tablas "Detalle mensual": número + píldora de variación centrados (antes a la derecha, con el % de
+     participación gris al lado — ya quitado en pctCellPill()). Excluye .mercado-tbl (rankings de Mercado >
+     Marcas/Top Modelos), que no son tablas de detalle mensual y siguen alineadas a la derecha. */
+  table.data-table.compact:not(.mercado-tbl) td.num{text-align:center;white-space:nowrap;}
+  table.data-table.compact:not(.mercado-tbl) thead th[style*="right"]{text-align:center !important;}
   .pill{
     display:inline-block; font-size:9px; font-weight:700; padding:1px 5px; border-radius:20px;
     margin-left:4px; vertical-align:1px;
@@ -778,7 +830,7 @@
               <div class="panel-sub" id="generalDonutSub">Acumulado Mayo–Septiembre</div>
             </div>
           </div>
-          <div class="chart-box donut-wrap" style="height:138px;">
+          <div class="chart-box h220 donut-wrap">
             <canvas id="chartGeneralDonut"></canvas>
             <div class="donut-center"><div class="pct" id="donutGeneralTotal">1.884</div><div class="lbl" id="donutGeneralLabel">unidades</div></div>
           </div>
@@ -794,7 +846,7 @@
               <div class="panel-sub">Motos + Repuestos + Mano de Obra de Servicios por mes</div>
             </div>
           </div>
-          <div class="chart-box" style="height:108px;"><canvas id="chartGeneralTrend"></canvas></div>
+          <div class="chart-box h180"><canvas id="chartGeneralTrend"></canvas></div>
         </div>
         <div class="panel">
           <div class="panel-head">
@@ -1030,7 +1082,6 @@
                 <div class="panel-title">Unidades vendidas por canal</div>
                 <div class="panel-sub" id="resumenBarsSub">Comparativo mensual · Mayo, Junio, Julio, Agosto, Septiembre 2026</div>
               </div>
-              <button class="cta">Ver detalle</button>
             </div>
             <div class="legend-row" id="legendResumenBars" style="margin-top:0; margin-bottom:8px;"></div>
             <div class="chart-box h280" style="height:170px;"><canvas id="chartResumenBars"></canvas></div>
@@ -1127,7 +1178,7 @@
             <div class="panel-head">
               <div>
                 <div class="panel-title" id="perfilChartTitle">Perfiles de cliente · Tiendas Hero + Almacenes AP</div>
-                <div class="panel-sub">$ y unidades por perfil, canales combinados · Mayo-Septiembre 2026</div>
+                <div class="panel-sub" id="resumenPerfilSub">Unidades por perfil, canales combinados · Mayo-Septiembre 2026</div>
               </div>
             </div>
             <div class="chart-box" style="height:424px;"><canvas id="chartResumenPerfil"></canvas></div>
@@ -1276,7 +1327,6 @@
                 <div class="panel-title">Unidades vendidas por zonas</div>
                 <div class="panel-sub" id="mayoristasBarsSub">Comparativo mensual · Mayo, Junio, Julio, Agosto, Septiembre 2026</div>
               </div>
-              <button class="cta">Ver detalle</button>
             </div>
             <div class="legend-row" id="legendMayoristasZonas" style="margin-top:0; margin-bottom:8px;"></div>
             <div class="chart-box h280" style="height:150px;"><canvas id="chartMayoristasBars"></canvas></div>
@@ -1288,7 +1338,7 @@
                 <div class="panel-sub" id="mayoristasDonutSub">Acumulado Mayo–Septiembre</div>
               </div>
             </div>
-            <div class="chart-box h220 donut-wrap" style="height:138px;">
+            <div class="chart-box h220 donut-wrap">
               <canvas id="chartMayoristasDonut"></canvas>
               <div class="donut-center"><div class="pct" id="donutMayoristasTotal">537</div><div class="lbl" id="donutMayoristasLabel">unidades</div></div>
             </div>
@@ -1304,7 +1354,7 @@
                 <div class="panel-sub">Total general por mes</div>
               </div>
             </div>
-            <div class="chart-box h180" style="height:108px;"><canvas id="chartMayoristasTrend"></canvas></div>
+            <div class="chart-box h180"><canvas id="chartMayoristasTrend"></canvas></div>
           </div>
           <div class="panel">
             <div class="panel-head">
@@ -1328,7 +1378,7 @@
                 <div class="panel-sub">% sobre ventas · Mayoristas por mes</div>
               </div>
             </div>
-            <div class="chart-box h180" style="height:108px;"><canvas id="chartMayoristasMargenTrend"></canvas></div>
+            <div class="chart-box h180"><canvas id="chartMayoristasMargenTrend"></canvas></div>
           </div>
           <div class="panel">
             <div class="panel-head">
@@ -1337,7 +1387,7 @@
                 <div class="panel-sub">Ventas ÷ unidades · Mayoristas por mes</div>
               </div>
             </div>
-            <div class="chart-box h180" style="height:108px;"><canvas id="chartMayoristasTicketTrend"></canvas></div>
+            <div class="chart-box h180"><canvas id="chartMayoristasTicketTrend"></canvas></div>
           </div>
         </div>
       </div>
@@ -1479,7 +1529,6 @@
                 <div class="panel-title">Unidades vendidas por Retailers</div>
                 <div class="panel-sub" id="retailBarsSub">Comparativo mensual · Mayo, Junio, Julio, Agosto, Septiembre 2026</div>
               </div>
-              <button class="cta">Ver detalle</button>
             </div>
             <div class="legend-row" id="legendRetailZonas" style="margin-top:0; margin-bottom:8px;"></div>
             <div class="chart-box h280"><canvas id="chartRetailBars"></canvas></div>
@@ -1551,7 +1600,7 @@
             <div class="panel-head">
               <div>
                 <div class="panel-title">Tiendas Almacenes AP</div>
-                <div class="panel-sub" id="retailOrigenAAPSub">Unidades y $ por origen de venta · AAP, Mayo–Septiembre 2026</div>
+                <div class="panel-sub" id="retailOrigenAAPSub">Unidades por origen de venta · AAP, Mayo–Septiembre 2026</div>
               </div>
             </div>
             <div class="chart-box" style="height:440px;"><canvas id="chartRetailOrigenAAP"></canvas></div>
@@ -1574,7 +1623,7 @@
             <div class="panel-head">
               <div>
                 <div class="panel-title">Ubicaciones Retailer Hero</div>
-                <div class="panel-sub" id="retailOrigenNonAAPSub">Unidades y $ por origen de venta · Retail sin AAP, Mayo–Septiembre 2026</div>
+                <div class="panel-sub" id="retailOrigenNonAAPSub">Unidades por origen de venta · Retail sin AAP, Mayo–Septiembre 2026</div>
               </div>
             </div>
             <div class="chart-box" style="height:108px;"><canvas id="chartRetailOrigenNonAAP"></canvas></div>
@@ -1624,7 +1673,7 @@
             <div class="panel-head">
               <div>
                 <div class="panel-title">Perfiles de tiendas Almacenes AP</div>
-                <div class="panel-sub" id="retailPerfilAAPSub">$ y unidades por perfil de cliente · AAP, Mayo-Septiembre 2026</div>
+                <div class="panel-sub" id="retailPerfilAAPSub">Unidades por perfil de cliente · AAP, Mayo-Septiembre 2026</div>
               </div>
             </div>
             <div class="chart-box" style="height:400px;"><canvas id="chartRetailPerfilAAP"></canvas></div>
@@ -1946,7 +1995,6 @@
                 <div class="panel-title">Unidades vendidas por Tiendas</div>
                 <div class="panel-sub" id="tiendasBarsSub">Comparativo mensual · Mayo, Junio, Julio, Agosto, Septiembre 2026</div>
               </div>
-              <button class="cta">Ver detalle</button>
             </div>
             <div class="legend-row" id="legendTiendasZonas"></div>
             <div class="chart-box h280"><canvas id="chartTiendasBars"></canvas></div>
@@ -2042,7 +2090,7 @@
             <div class="panel-head">
               <div>
                 <div class="panel-title">Tienda Av. Américas</div>
-                <div class="panel-sub" id="tiendaAmericasPerfilSub">$ y unidades por perfil de cliente · Mayo-Septiembre 2026</div>
+                <div class="panel-sub" id="tiendaAmericasPerfilSub">Unidades por perfil de cliente · Mayo-Septiembre 2026</div>
               </div>
             </div>
             <div class="panel-sub" id="tiendaAmericasBudgetLine" style="margin:-2px 0 4px;color:var(--good);"></div>
@@ -2066,7 +2114,7 @@
             <div class="panel-head">
               <div>
                 <div class="panel-title">Tienda Naciones Unidas</div>
-                <div class="panel-sub" id="tiendaNacionesPerfilSub">$ y unidades por perfil de cliente · Mayo-Septiembre 2026</div>
+                <div class="panel-sub" id="tiendaNacionesPerfilSub">Unidades por perfil de cliente · Mayo-Septiembre 2026</div>
               </div>
             </div>
             <div class="panel-sub" id="tiendaNacionesBudgetLine" style="margin:-2px 0 4px;color:var(--good);"></div>
@@ -2090,7 +2138,7 @@
             <div class="panel-head">
               <div>
                 <div class="panel-title">Canal Digital</div>
-                <div class="panel-sub" id="tiendaDigitalPerfilSub">$ y unidades por perfil de cliente · Mayo-Septiembre 2026</div>
+                <div class="panel-sub" id="tiendaDigitalPerfilSub">Unidades por perfil de cliente · Mayo-Septiembre 2026</div>
               </div>
             </div>
             <div class="panel-sub" id="tiendaDigitalBudgetLine" style="margin:-2px 0 4px;color:var(--good);"></div>
@@ -2622,7 +2670,7 @@
       <div class="topbar">
         <div>
           <h1>Repuestos</h1>
-          <div class="subtitle">Ventas de repuestos — Mayo a Septiembre 2026 (Mayo es un dato parcial; Agosto ya es un mes cerrado; Septiembre en curso, corte al 08/09/2026)</div>
+          <div class="subtitle">Ventas de repuestos — Mayo a Septiembre 2026</div>
         </div>
         <div class="topbar-controls">
           <div class="aap-toggle" data-metric-toggle="repuestos">
@@ -2800,7 +2848,6 @@
                 <div class="panel-title">Ventas por Canal</div>
                 <div class="panel-sub" id="repuestosBarsSub">Comparativo mensual · Mayo, Junio, Julio, Agosto, Septiembre 2026</div>
               </div>
-              <button class="cta">Ver detalle</button>
             </div>
             <div class="legend-row" id="legendRepuestosCategorias" style="margin-top:0; margin-bottom:8px;"></div>
             <div class="chart-box h280" style="height:150px;"><canvas id="chartRepuestosBars"></canvas></div>
@@ -2812,7 +2859,7 @@
                 <div class="panel-sub" id="repuestosDonutSub">Acumulado Mayo–Septiembre</div>
               </div>
             </div>
-            <div class="chart-box h220 donut-wrap" style="height:138px;">
+            <div class="chart-box h220 donut-wrap">
               <canvas id="chartRepuestosDonut"></canvas>
               <div class="donut-center"><div class="pct" id="donutRepuestosTotal">1.089</div><div class="lbl" id="donutRepuestosLabel">unidades</div></div>
             </div>
@@ -2828,7 +2875,7 @@
                 <div class="panel-sub">Total general por mes</div>
               </div>
             </div>
-            <div class="chart-box h180" style="height:108px;"><canvas id="chartRepuestosTrend"></canvas></div>
+            <div class="chart-box h180"><canvas id="chartRepuestosTrend"></canvas></div>
           </div>
           <div class="panel">
             <div class="panel-head">
@@ -2876,7 +2923,7 @@
             <div class="panel-head">
               <div>
                 <div class="panel-title">Ventas por Sucursal</div>
-                <div class="panel-sub" id="repuestosSucursalSub">Unidades y $ por sucursal · Mayo–Septiembre 2026</div>
+                <div class="panel-sub" id="repuestosSucursalSub">Unidades por sucursal · Mayo–Septiembre 2026</div>
               </div>
             </div>
             <div class="chart-box" style="height:112px;"><canvas id="chartRepuestosSucursal"></canvas></div>
@@ -2904,7 +2951,7 @@
             <div class="panel-head">
               <div>
                 <div class="panel-title">Ventas por Provincia</div>
-                <div class="panel-sub" id="repuestosProvinciaSub">Unidades y $ por provincia · Mayo–Septiembre 2026</div>
+                <div class="panel-sub" id="repuestosProvinciaSub">Unidades por provincia · Mayo–Septiembre 2026</div>
               </div>
             </div>
             <div class="chart-box" style="height:198px;"><canvas id="chartRepuestosProvincia"></canvas></div>
@@ -2929,7 +2976,7 @@
             <div class="panel-head">
               <div>
                 <div class="panel-title">Ventas por Categoría</div>
-                <div class="panel-sub" id="repuestosCanalSub">Unidades y $ por categoría · 16 categorías · Mayo–Septiembre 2026</div>
+                <div class="panel-sub" id="repuestosCanalSub">$ por categoría · 16 categorías · Mayo–Septiembre 2026</div>
               </div>
             </div>
             <div class="chart-box" style="height:120px; overflow-y:auto;">
@@ -3013,6 +3060,7 @@
       <div class="topbar">
         <div>
           <h1>Repuestos de Servicio</h1>
+          <div class="subtitle">Ventas de repuestos por canal Taller — Mayo a Septiembre 2026</div>
         </div>
         <div class="topbar-controls">
           <div class="aap-toggle" data-metric-toggle="repuestosservicio">
@@ -3121,6 +3169,7 @@
       <div class="topbar">
         <div>
           <h1>Mano de Obra de Servicios</h1>
+          <div class="subtitle">Ventas de mano de obra de servicios — Mayo a Septiembre 2026</div>
         </div>
         <div class="topbar-controls">
           <div class="aap-toggle" data-metric-toggle="manoobra">
@@ -3178,7 +3227,16 @@
         </div>
       </div>
 
-      <div class="grid-2b">
+      <!-- Los 5 paneles (dona/tabla por tipo, dona/tabla por punto, tendencia) viven en UN solo grid;
+           su ubicación (fila/columna) y visibilidad se reordenan por CSS según el mes (ver
+           #manoObraLayoutGrid / .mo-agosto-layout más abajo y el JS en renderManoObra()), sin duplicar
+           ningún canvas ni tabla. Mayo/Junio/Julio/Septiembre/Todos (el donut "por tipo" no tiene
+           desglose real): dona+tendencia apiladas a la izquierda, Detalle mensual a la derecha ocupando
+           la altura combinada de ambas; los paneles "por punto" quedan ocultos (solo tienen datos reales
+           en Agosto). Agosto: dona por tipo + dona por punto lado a lado arriba, cada una con su propio
+           Detalle mensual debajo (4 paneles), y Tendencia de la mano de obra abajo de los 4 a todo lo
+           ancho. -->
+      <div class="grid-2b" id="manoObraLayoutGrid">
         <div class="panel" id="manoObraTipoDonutPanel">
           <div class="panel-head">
             <div>
@@ -3193,8 +3251,9 @@
             </div>
           </div>
           <div class="legend-row" id="legendManoObraDonut" style="justify-content:center;row-gap:3px;"></div>
-
-          <div class="panel-head" style="margin-top:14px;">
+        </div>
+        <div class="panel" id="manoObraDetalleMensualPanel">
+          <div class="panel-head">
             <div>
               <div class="panel-title">Detalle mensual</div>
               <div class="panel-sub" id="manoObraTableSub">Ventas ($)</div>
@@ -3205,7 +3264,7 @@
             <tbody id="tblManoObra"></tbody>
           </table>
         </div>
-        <div class="panel" id="manoObraPuntoDonutPanel" style="display:none;">
+        <div class="panel" id="manoObraPuntoDonutPanel">
           <div class="panel-head">
             <div>
               <div class="panel-title">Participación por punto</div>
@@ -3219,8 +3278,9 @@
             </div>
           </div>
           <div class="legend-row" id="legendManoObraPuntoDonut" style="justify-content:center;"></div>
-
-          <div class="panel-head" style="margin-top:14px;">
+        </div>
+        <div class="panel" id="manoObraPuntoTablePanel">
+          <div class="panel-head">
             <div>
               <div class="panel-title">Detalle mensual por punto</div>
               <div class="panel-sub" id="manoObraPuntoTableSub">Ventas ($)</div>
@@ -3231,16 +3291,15 @@
             <tbody id="tblManoObraPunto"></tbody>
           </table>
         </div>
-      </div>
-
-      <div class="panel" id="manoObraTrendPanel">
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">Tendencia de la mano de obra</div>
-            <div class="panel-sub">Solo mano de obra, por mes</div>
+        <div class="panel" id="manoObraTrendPanel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Tendencia de la mano de obra</div>
+              <div class="panel-sub">Solo mano de obra, por mes</div>
+            </div>
           </div>
+          <div class="chart-box h180"><canvas id="chartManoObraTrend"></canvas></div>
         </div>
-        <div class="chart-box h180"><canvas id="chartManoObraTrend"></canvas></div>
       </div>
     </section>
 
@@ -3250,7 +3309,6 @@
         <div>
           <h1>Garantías — Resumen</h1>
           <div class="subtitle">Venta de garantías extendidas de motos — Mayo a Septiembre 2026</div>
-          <div class="subtitle" style="margin-top:2px;">Canal: TIENDAS · Origen de venta: Canal Digital</div>
         </div>
         <div class="topbar-controls">
           <div class="aap-toggle" data-metric-toggle="garantiasresumen">
@@ -3340,7 +3398,7 @@
               <div class="panel-sub">Total por mes</div>
             </div>
           </div>
-          <div class="chart-box h180" style="height:108px;"><canvas id="chartGarantiasTrend"></canvas></div>
+          <div class="chart-box h180"><canvas id="chartGarantiasTrend"></canvas></div>
         </div>
         <div class="panel">
           <div class="panel-head">
@@ -3350,7 +3408,7 @@
             </div>
           </div>
           <table class="data-table compact">
-            <thead><tr><th>Mes</th><th style="text-align:right">Unidades</th><th style="text-align:right">Ventas</th></tr></thead>
+            <thead><tr><th>Mes</th><th style="text-align:right" id="garantiasMensualValueHeader">Unidades</th></tr></thead>
             <tbody id="tblGarantiasMensual"></tbody>
           </table>
         </div>
@@ -3389,7 +3447,7 @@
           <div class="panel-head">
             <div>
               <div class="panel-title">Ranking por modelo</div>
-              <div class="panel-sub" id="garantiasModelosSub">Unidades y $ por modelo · Agosto 2026</div>
+              <div class="panel-sub" id="garantiasModelosSub">Unidades por modelo · Agosto 2026</div>
             </div>
           </div>
           <div class="chart-box" style="height:112px;"><canvas id="chartGarantiasModelos"></canvas></div>
@@ -3804,23 +3862,35 @@ Chart.defaults.set('plugins.datalabels', { display:false }); // opt-in per chart
 // Nota aparte (sin efecto en ninguna cifra): los comprobantes VE-FV 01-01-000000349 (venta del 31-ago, zona
 // MANABÍ) y VE-NC 01-01-000000013 (su reversa del 9-sep) cambiaron de Estado "NC" a "Facturadas" — ambos
 // estados se cuentan igual en este dashboard, así que no cambia ningún total.
-const TIENDAS_TOTAL    = [12,28,24,39,10];
-const AAP_DATA          = [16,30,84,69,10];
-const RETAIL_TOTAL     = [18,58,107,85,15];   // AAP + OTOM + MASTER MOTO + CRESA (ESPAÑA/MARCIMEX/ARTEFACTA sin ventas)
+// Actualización 12-sep-2026 (CONSOLIDADO_HERO_3_2_1_1_1_1.xlsx): BASE 1207→1219 filas — Septiembre pasa de 89
+// a 101 filas (+12, sin cambios en Mayo-Agosto; hoja GARANTIAS idéntica a la ronda anterior, sin cambios).
+// De esas 12: 1 es un duplicado exacto (mismo VIN MBLKCU120THA00581 — HUNK 160 4V, AAP, BABAHOYO, $2.550 —
+// que ya venía contado desde la ronda del 10-sep; el archivo lo trae repetido byte a byte, se descarta la
+// copia de más, vale la pena confirmar con el sistema de origen). 1 par se anula entre sí (XOOM 125R,
+// Mayoristas, zona SIERRA: nota de crédito de −$1.938 seguida de una factura nueva de +$1.938 el mismo día,
+// mismo vendedor — neto $0, no cambia ninguna cifra). Quedan 9 unidades reales nuevas: Tiendas +2 (ambas
+// Tienda Av. Américas — ECO DELUXE $1.252,54 con Perfil vacío → PENDIENTE, ver Perfiles; XOOM 125R $3.167,78
+// con perfil AA), Retail AAP +3 (ECO 150 ×2 en PEDERNALES — perfiles A y B+, $1.480 c/u — y XOOM 110 en
+// BABAHOYO — perfil B-, $1.605), Mayoristas +4 (HUNK 125R ×4 en zona GUAYAS, $1.730 c/u, 4 VIN distintos).
+const TIENDAS_TOTAL    = [12,28,24,39,12];
+const AAP_DATA          = [16,30,84,69,13];
+const RETAIL_TOTAL     = [18,58,107,85,18];   // AAP + OTOM + MASTER MOTO + CRESA (ESPAÑA/MARCIMEX/ARTEFACTA sin ventas)
 const RETAIL_SIN_AAP   = [2,28,23,16,5];     // RETAIL_TOTAL minus AAP_DATA — used only in the Resumen channel chart below
-const MAYORISTAS_TOTAL = [273,152,84,136,46];
+const MAYORISTAS_TOTAL = [273,152,84,136,50];
 
 // Ventas $ por mes (columna "Ventas" del CONSOLIDADO_HERO, filtrado Estado en {Facturadas, NC}), por cuenta retail
-const RETAIL_VENTAS_TOTAL    = [26275, 88631, 161861, 134603, 27115];
+const RETAIL_VENTAS_TOTAL    = [26275, 88631, 161861, 134603, 31680];
 const RETAIL_VENTAS_SIN_AAP  = [2880, 43795, 34070, 29178, 10290];
 
 // Modelos vendidos, canal Retail únicamente (con AAP). data = unidades [Mayo,Junio,Julio,Agosto]; ventas = $ [Mayo,Junio,Julio,Agosto].
 // Orden por unidades totales desc. Los totales por mes coinciden con RETAIL_TOTAL / RETAIL_VENTAS_TOTAL.
+// Actualización 12-sep-2026: Retail AAP +3 u. en septiembre (ver nota arriba de TIENDAS_TOTAL) — ECO 150 ×2
+// en PEDERNALES ($1.480 c/u) y XOOM 110 en BABAHOYO ($1.605).
 const RETAIL_MODELOS = [
   {name:'ECO DELUXE',   data:[11, 23, 42, 29, 3], ventas:[12650, 26480, 48420, 33350, 3450]},
   {name:'HUNK 125R',    data:[4, 14, 31, 29, 6],  ventas:[6920, 24250, 53690, 50170, 10380]},
-  {name:'XOOM 110',     data:[1, 13, 7, 9, 1],   ventas:[1605, 20865, 11235, 14445, 1605]},
-  {name:'ECO 150',      data:[0, 2, 15, 7, 1],   ventas:[0, 2960, 22200, 10360, 1480]},
+  {name:'XOOM 110',     data:[1, 13, 7, 9, 2],   ventas:[1605, 20865, 11235, 14445, 3210]},
+  {name:'ECO 150',      data:[0, 2, 15, 7, 3],   ventas:[0, 2960, 22200, 10360, 4440]},
   {name:'HUNK 160 4V',  data:[2, 4, 5, 3, 4],    ventas:[5100, 10200, 12750, 7650, 10200]},
   {name:'XOOM 125R',    data:[0, 2, 7, 6, 0],    ventas:[0, 3876, 13566, 11628, 0]},
   {name:'XPULSE 200 RALLY', data:[0, 0, 0, 1, 0], ventas:[0, 0, 0, 3700, 0]},
@@ -3846,10 +3916,12 @@ const RETAIL_MODELOS_SIN_AAP = [
 // Orden por unidades totales desc. Los totales por mes coinciden con TIENDAS_TOTAL / TIENDAS_VENTAS.
 // Corregido 11-sep-2026: Santiago confirmó que Tiendas también debe sumar la columna "Ventas" (igual que
 // Mayoristas y Retail), no "Venta Neta" — se recalcularon los 5 meses completos con la columna correcta.
+// Actualización 12-sep-2026: Tiendas +2 u. en septiembre (ver nota arriba de TIENDAS_TOTAL) — ECO DELUXE
+// $1.252,54 y XOOM 125R $3.167,78, ambas Tienda Av. Américas.
 const TIENDAS_MODELOS = [
   {name:'HUNK 125R',         data:[2,10,10,14,4], ventas:[4138.26,22544.77,27913.63,39023.59,10162.54]},
-  {name:'ECO DELUXE',        data:[6,9,2,3,2],   ventas:[8290.72,12452.65,4295.53,6315.51,2612.08]},
-  {name:'XOOM 125R',         data:[0,4,7,7,3],   ventas:[0,8864.96,17700.27,16637.78,8091.90]},
+  {name:'ECO DELUXE',        data:[6,9,2,3,3],   ventas:[8290.72,12452.65,4295.53,6315.51,3864.62]},
+  {name:'XOOM 125R',         data:[0,4,7,7,4],   ventas:[0,8864.96,17700.27,16637.78,11259.68]},
   {name:'HUNK 160 4V',       data:[1,3,3,7,0],   ventas:[2945.00,9193.00,12945.15,23961.68,0]},
   {name:'ECO 150',           data:[0,1,1,4,0],   ventas:[0,1800.00,1693.00,10903.41,0]},
   {name:'XOOM 110',          data:[2,1,0,1,1],   ventas:[2808.04,3314.62,0,3346.37,1950.00]},
@@ -3862,12 +3934,14 @@ const TIENDAS_MODELOS = [
 // [Mayo,Junio,Julio,Agosto,Septiembre]; ventas = $ (columna "Ventas", NO "Venta Neta" — corregido 11-sep-2026,
 // ver nota en TIENDAS_MODELOS) [Mayo,Junio,Julio,Agosto,Septiembre].
 // Orden por unidades totales desc. Los totales por mes coinciden con TIENDAS_TOTAL / TIENDAS_VENTAS.
+// Actualización 12-sep-2026: +1 u. PINARGOTE (ECO DELUXE $1.252,54) y +1 u. FREIRE VERGARA (XOOM 125R
+// $3.167,78) en septiembre — ver nota arriba de TIENDAS_TOTAL.
 const TIENDAS_VENDEDORES = [
   {name:'LARA VELIZ JOEL STEVEN',                data:[4,10,10,10,1], ventas:[6965.05,23703.20,28667.13,26346.52,2350.65]},
-  {name:'PINARGOTE TOASA ALEX ROLANDO',          data:[4,11,7,6,2],   ventas:[10249.20,21013.20,24289.83,16866.19,2612.08]},
+  {name:'PINARGOTE TOASA ALEX ROLANDO',          data:[4,11,7,6,3],   ventas:[10249.20,21013.20,24289.83,16866.19,3864.62]},
   {name:'QUIMIS ORTEGA KARLA YAMILE',             data:[1,5,2,4,1],    ventas:[1358.00,10792.72,6335.56,11580.66,2200.80]},
   {name:'GONZALEZ MOSERRATE GENESIS STEFANIA',   data:[3,2,3,4,0],    ventas:[3409.77,2660.88,5040.80,11776.63,0]},
-  {name:'FREIRE VERGARA GEORGY LUIS',             data:[0,0,0,6,3],    ventas:[0,0,0,21028.46,8677.73]},
+  {name:'FREIRE VERGARA GEORGY LUIS',             data:[0,0,0,6,4],    ventas:[0,0,0,21028.46,11845.51]},
   {name:'ZAMBRANO ALCIVAR EMILIO JOSE',           data:[0,0,2,3,1],    ventas:[0,0,3696.82,11857.26,2936.48]},
   {name:'LOOR MACAY ODALIS SILVANA',              data:[0,0,0,4,1],    ventas:[0,0,0,10815.57,1950.00]},
   {name:'GUARNIZO LUCIO PAOLA MERCY',             data:[0,0,0,2,0],    ventas:[0,0,0,5137.28,0]},
@@ -3875,30 +3949,35 @@ const TIENDAS_VENDEDORES = [
 ];
 
 // Ventas $ por mes — canales (Resumen). AAP repite el mismo dato que su fila en retailAccounts.ventas.
-const TIENDAS_VENTAS     = [21982.02, 58170.00, 68030.14, 115408.57, 22816.52];    // HERO GYE + HERO QUITO + CANAL DIGITAL — corregido 11-sep-2026: Santiago confirmó que Tiendas debe sumar la columna "Ventas" (no "Venta Neta", que se usaba antes por error); ver nota en TIENDAS_MODELOS
-const AAP_VENTAS         = [23395, 44836, 127791, 105425, 16825];
-const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 238274, 83004]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
+const TIENDAS_VENTAS     = [21982.02, 58170.00, 68030.14, 115408.57, 27236.84];    // HERO GYE + HERO QUITO + CANAL DIGITAL — corregido 11-sep-2026: Santiago confirmó que Tiendas debe sumar la columna "Ventas" (no "Venta Neta", que se usaba antes por error); ver nota en TIENDAS_MODELOS. Septiembre actualizado 12-sep-2026 (+$4.420,32, ver nota arriba de TIENDAS_TOTAL).
+const AAP_VENTAS         = [23395, 44836, 127791, 105425, 21390];
+const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 238274, 89924]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA)
 
 // Ventas $ por mes, por zona Mayoristas (columna Ventas, agrupado por Vendedor — mismo mapeo validado con el usuario).
 // Agosto 2026: aparece un vendedor nuevo, "PLUAS NAVARRO GABRIEL ALEJANDRO" (7 u., $11.116) — confirmado con
 // Santiago que es de zona GUAYAS, así que sus ventas ya están sumadas dentro de GUAYAS más abajo.
 // Julio 2026: corregido — 1 u. ($1.480) estaba mal asignada a GUAYAS y en realidad es de LOS RIOS (encontrado
 // al auditar el archivo CONSOLIDADO_HERO_3_2.xlsx del 26-ago-2026; el total de Mayoristas de julio no cambia).
+// Septiembre GUAYAS actualizado 12-sep-2026 (+$6.920, 4× HUNK 125R nuevas — ver nota arriba de TIENDAS_TOTAL).
+// SIERRA sin cambio neto: la NC/FV nueva de XOOM 125R se anula a sí misma ($0).
+// Nombre de fila acortado a "MANABI" (antes "ST DOMINGO / MANABI") a pedido de Santiago, 12-sep-2026.
 const MAYORISTAS_VENTAS_ZONA = {
   'ORIENTE':              [303707, 93692, 82092, 127651, 55026],
-  'ST DOMINGO / MANABI':  [40595,  37109, 30913, 30023, 4030],
+  'MANABI':               [40595,  37109, 30913, 30023, 4030],
   'LOS RIOS':             [40634,  64229, 23510,  44535, 4568],
-  'GUAYAS':               [73688,  31489, 4440,   18327, 19380],
+  'GUAYAS':               [73688,  31489, 4440,   18327, 26300],
   'SIERRA':               [13930,  8252, 5030,  17738, 0],
 };
 
 // Modelos vendidos, canal Mayoristas únicamente. data = unidades [Mayo,Junio,Julio,Agosto]; ventas = $ [Mayo,Junio,Julio,Agosto].
 // Orden por unidades totales desc. Los totales por mes coinciden con MAYORISTAS_TOTAL / MAYORISTAS_VENTAS.
+// Actualización 12-sep-2026: HUNK 125R +4 u. en septiembre, zona GUAYAS ($1.730 c/u — ver nota arriba de
+// TIENDAS_TOTAL). XOOM 125R sin cambio neto (NC + FV nuevas de $1.938 se anulan entre sí).
 const MAYORISTAS_MODELOS = [
   {name:'ECO 150',           data:[0,90,23,40,7],  ventas:[0,133722,34040,59200,10360]},
   {name:'ECO DELUXE',        data:[85,24,16,22,4], ventas:[98028,27600,18400,25300,4600]},
   {name:'XOOM 125R',         data:[46,13,20,18,23], ventas:[89148,25331,38760,34884,44574]},
-  {name:'HUNK 125R',         data:[53,4,7,26,5],   ventas:[91336,7396,12110,44980,8650]},
+  {name:'HUNK 125R',         data:[53,4,7,26,9],   ventas:[91336,7396,12110,44980,15570]},
   {name:'XOOM 110',          data:[44,16,5,12,4],  ventas:[70677,25680,8025,19260,6420]},
   {name:'HUNK 160 4V',       data:[34,3,11,9,2],  ventas:[86799,7560,28050,22950,5100]},
   {name:'XPULSE 200 4V FI',  data:[11,2,2,4,1],   ventas:[36567,7483,6600,13200,3300]},
@@ -3907,8 +3986,9 @@ const MAYORISTAS_MODELOS = [
 
 // Ventas $ por mes, por tienda propia Hero (columna Origen_Ventas: TIENDA AMERICAS / TIENDA NACIONES UNIDAS / CANAL DIGITAL).
 // Columna "Ventas" (NO "Venta Neta" — corregido 11-sep-2026, ver nota en TIENDAS_MODELOS).
+// HERO GYE (Tienda Av. Américas) Septiembre actualizado 12-sep-2026 (+$4.420,32 — ver nota arriba de TIENDAS_TOTAL).
 const TIENDAS_VENTAS_STORE = {
-  'HERO GYE':        [21982.02, 58170.00, 64333.32, 66570.00, 17930.04],
+  'HERO GYE':        [21982.02, 58170.00, 64333.32, 66570.00, 22350.36],
   'HERO QUITO':      [0,        0,        3696.82,  27810.11, 4886.48],
   'CANAL DIGITAL':   [0,        0,        0,        21028.46, 0],
   'HERO PORTOVIEJO': [0,        0,        0,        0,        0],
@@ -3929,7 +4009,9 @@ const MAYORISTAS_MARGEN_VENTAS   = MAYORISTAS_VENTAS;
 // Actualizado 11-sep-2026 (CONSOLIDADO_HERO_3_2_1_1_1.xlsx): Septiembre recalculado Ventas−Costo de las
 // filas de septiembre del archivo fuente ($83.004,00 − $62.407,72) = $20.596,28. Ventas/Unidades ya
 // actualizadas arriba (más facturas de septiembre desde la última carga).
-const MAYORISTAS_MARGEN_UTILIDAD = [121998.51, 69546.60, 38941.68, 61256.39, 20596.28];
+// Actualizado 12-sep-2026 (CONSOLIDADO_HERO_3_2_1_1_1_1.xlsx): +4 HUNK 125R en GUAYAS — Ventas−Costo
+// ($89.924,00 − $67.757,95) = $22.166,05.
+const MAYORISTAS_MARGEN_UTILIDAD = [121998.51, 69546.60, 38941.68, 61256.39, 22166.05];
 const RETAIL_MARGEN_VENTAS       = RETAIL_VENTAS_TOTAL;
 // Corregido 28-ago-2026: Agosto quedó mal calculado en una actualización anterior (23129.10) — no coincidía
 // con Ventas−Costo del archivo fuente (23978.91), aunque Ventas/Unidades de Retail no cambiaron. Encontrado
@@ -3939,7 +4021,9 @@ const RETAIL_MARGEN_VENTAS       = RETAIL_VENTAS_TOTAL;
 // $16.492,62) dio $4.862,38, no $4.872,57 (diferencia de $10,19). Ventas/Unidades de Retail no cambian.
 // Actualizado 11-sep-2026 (CONSOLIDADO_HERO_3_2_1_1_1.xlsx): más facturas de septiembre desde la última
 // carga — Ventas−Costo de las filas de septiembre ($27.115,00 − $20.799,72) = $6.315,28.
-const RETAIL_MARGEN_UTILIDAD     = [6345.33, 21655.79, 40251.64, 31477.70, 6315.28];
+// Actualizado 12-sep-2026 (CONSOLIDADO_HERO_3_2_1_1_1_1.xlsx): +3 u. AAP (ECO 150 ×2, XOOM 110) — Ventas−Costo
+// ($31.680,00 − $24.052,59) = $7.627,41.
+const RETAIL_MARGEN_UTILIDAD     = [6345.33, 21655.79, 40251.64, 31477.70, 7627.41];
 const TIENDAS_MARGEN_VENTAS      = TIENDAS_VENTAS;
 // Historial (Ventas=Venta Neta, método anterior): Corregido 8-sep-2026 (Agosto), 10-sep-2026 (Septiembre) —
 // ver detalle de esas correcciones en versiones previas de este archivo. El +107 de sobrecosto de accesorio
@@ -3954,7 +4038,9 @@ const TIENDAS_MARGEN_VENTAS      = TIENDAS_VENTAS;
 //   Julio:      $68.030,14 − $34.491,42 = $33.538,72  (49.3%)
 //   Agosto:     $115.408,57 − $59.218,30 = $56.190,27 (48.7%)
 //   Septiembre: $22.816,52 − $13.340,24 = $9.476,28   (41.5%)
-const TIENDAS_MARGEN_UTILIDAD    = [6933.44, 22065.09, 33538.72, 56190.27, 9476.28];
+// Actualizado 12-sep-2026 (CONSOLIDADO_HERO_3_2_1_1_1_1.xlsx): +2 u. (ECO DELUXE + XOOM 125R, Av. Américas) —
+// Ventas−Costo ($27.236,84 − $15.735,44) = $11.501,40 (42.2%).
+const TIENDAS_MARGEN_UTILIDAD    = [6933.44, 22065.09, 33538.72, 56190.27, 11501.40];
 
 // Margen bruto combinado (general de Resumen): Mayoristas + Retail (con AAP) + Tiendas — mismo universo de
 // canales que suma el total general de la página Resumen.
@@ -4084,9 +4170,10 @@ function computeRetailModel(mode, metric){
 
 const TIENDA_COLORS = ['--tienda-1','--tienda-2','--tienda-3','--tienda-4','--tienda-5'].map(getVar);
 
+// HERO GYE (Av. Américas) actualizado 12-sep-2026: +2 u. (ECO DELUXE + XOOM 125R — ver nota arriba de TIENDAS_TOTAL).
 const tiendas = {
   stores:[
-    {name:'HERO GYE',      data:[12,28,22,24,8], ventas: TIENDAS_VENTAS_STORE['HERO GYE']},
+    {name:'HERO GYE',      data:[12,28,22,24,10], ventas: TIENDAS_VENTAS_STORE['HERO GYE']},
     {name:'HERO QUITO',    data:[0,0,2,9,2],    ventas: TIENDAS_VENTAS_STORE['HERO QUITO']},
     {name:'CANAL DIGITAL', data:[0,0,0,6,0],    ventas: TIENDAS_VENTAS_STORE['CANAL DIGITAL']},
     {name:'HERO PORTOVIEJO', data:[0,0,0,0,0], ventas: TIENDAS_VENTAS_STORE['HERO PORTOVIEJO']},
@@ -4112,11 +4199,12 @@ function computeTiendasModel(metric){
 
 const ZONE_COLORS = ['--zone-1','--zone-2','--zone-3','--zone-4','--zone-5'].map(getVar);
 
+// GUAYAS actualizado 12-sep-2026: +4 u. (HUNK 125R ×4 — ver nota arriba de TIENDAS_TOTAL).
 const mayoristasAccounts = [
   {name:'ORIENTE',              data:[181,60,43,70,31]},
-  {name:'ST DOMINGO / MANABI',  data:[28,24,19,20,2]},
+  {name:'MANABI',               data:[28,24,19,20,2]},
   {name:'LOS RIOS',             data:[24,45,17,29,3]},
-  {name:'GUAYAS',               data:[36,19,3,11,10]},
+  {name:'GUAYAS',               data:[36,19,3,11,14]},
   {name:'SIERRA',               data:[4,4,2,6,0]},
 ].map(a=>({...a, ventas: MAYORISTAS_VENTAS_ZONA[a.name], total:a.data.reduce((x,y)=>x+y,0)})).sort((a,b)=>b.total-a.total)
  .map((a,i)=>({...a, color: ZONE_COLORS[i]}));
@@ -4153,7 +4241,7 @@ function computeRepuestosCanalModel(metric){
 const RETAIL_COLORS = ['--retail-1','--retail-2','--retail-3','--retail-4'].map(getVar);
 
 const retailAccounts = [
-  {name:'AAP',          data:[16, 30, 84, 69, 10], ventas:[23395, 44836, 127791, 105425, 16825]},
+  {name:'AAP',          data:[16, 30, 84, 69, 13], ventas:[23395, 44836, 127791, 105425, 21390]},
   {name:'OTOM',         data:[0, 28, 12, 12, 0],  ventas:[0, 43735, 17760, 20688, 0]},
   {name:'CRESA',        data:[2, 0, 7, 0, 0],     ventas:[2880, 60, 9390, 0, 0]},
   {name:'MASTER MOTO',  data:[0, 0, 4, 4, 5],     ventas:[0, 0, 6920, 8490, 10290]},
@@ -4197,8 +4285,11 @@ const NONAAP_ORIGEN = [
 
 // Detalle mensual por origen (Retail) — data = unidades [Mayo,Junio,Julio,Agosto], ventas = $ [Mayo,Junio,Julio,Agosto].
 // AAP: los 18 orígenes completos, sin agrupar en "Otros" — mismo criterio y orden que AAP_ORIGEN.
+// Actualización 12-sep-2026: BABAHOYO +1 u. (XOOM 110, $1.605) y PEDERNALES +2 u. (ECO 150 ×2, $1.480 c/u) —
+// ver nota arriba de TIENDAS_TOTAL. El HUNK 160 4V "nuevo" de BABAHOYO en el archivo era un duplicado exacto
+// de una fila ya contada, no se suma de nuevo.
 const AAP_ORIGEN_MENSUAL = [
-  {name:'BABAHOYO',           data:[2, 8, 8, 8, 2],  ventas:[3700, 13118, 12843, 10988, 4030]},
+  {name:'BABAHOYO',           data:[2, 8, 8, 8, 3],  ventas:[3700, 13118, 12843, 10988, 5635]},
   {name:'9 DE OCTUBRE',       data:[1, 5, 10, 6, 1], ventas:[1150, 8028, 15271, 9303, 1150]},
   {name:'MILAGRO',            data:[3, 2, 8, 7, 0],  ventas:[3905, 2755, 14400, 10575, 0]},
   {name:'DURÁN',              data:[3, 4, 6, 6, 0],  ventas:[3450, 5510, 8848, 8060, 0]},
@@ -4214,11 +4305,11 @@ const AAP_ORIGEN_MENSUAL = [
   {name:'VINCES',             data:[1, 0, 6, 1, 0],  ventas:[1730, 0, 7480, 1150, 0]},
   {name:'MANTA',              data:[0, 0, 1, 5, 0],  ventas:[0, 0, 1480, 6785, 0]},
   {name:'QUITO LA PRENSA',    data:[0, 0, 3, 0, 0],  ventas:[0, 0, 3450, 0, 0]},
-  {name:'PEDERNALES',         data:[0, 0, 1, 1, 0],  ventas:[0, 0, 1938, 1605, 0]},
+  {name:'PEDERNALES',         data:[0, 0, 1, 1, 2],  ventas:[0, 0, 1938, 1605, 2960]},
   {name:'CDC',                data:[1, 0, 0, 0, 0],  ventas:[1150, 0, 0, 0, 0]},
 ];
-const AAP_ORIGEN_MONTH_TOTAL = [16, 30, 84, 69, 10];
-const AAP_ORIGEN_MONTH_TOTAL_VENTAS = [23395, 44836, 127791, 105425, 16825];
+const AAP_ORIGEN_MONTH_TOTAL = [16, 30, 84, 69, 13];
+const AAP_ORIGEN_MONTH_TOTAL_VENTAS = [23395, 44836, 127791, 105425, 21390];
 
 // Sin AAP: los orígenes con ventas registradas (OTOM, CRESA, Master Moto). Agosto 2026: 1 u. nueva
 // ($3.700, XPULSE 200 RALLY, cuenta OTOM/MMOTASA) en origen DAULE.
@@ -4254,20 +4345,22 @@ const PERFIL_AAP = [
 const PERFIL_AAP_MENSUAL = [
   {name:'AAA',        data:[1, 3, 28, 4, 0], ventas:[2550, 4818, 44110, 6423, 0]},
   {name:'AA',         data:[2, 9, 16, 14, 2], ventas:[4280, 15675, 29190, 20695, 4280]},
-  {name:'A',          data:[1, 5, 7, 15, 2], ventas:[1730, 6785, 8838, 21143, 3210]},
+  {name:'A',          data:[1, 5, 7, 15, 3], ventas:[1730, 6785, 8838, 21143, 4690]},
   {name:'BBB',        data:[1, 1, 5, 4, 2],  ventas:[1150, 1480, 7490, 6215, 2880]},
   {name:'BB',         data:[1, 1, 4, 6, 1],  ventas:[1150, 1150, 5760, 9758, 2550]},
   {name:'B',          data:[1, 1, 5, 9, 0],  ventas:[1150, 1480, 6330, 12875, 0]},
-  {name:'B+',         data:[0, 1, 6, 5, 0],  ventas:[0, 1730, 8598, 9098, 0]},
-  {name:'B-',         data:[5, 3, 2, 5, 0],  ventas:[6785, 3450, 2880, 8890, 0]},
+  {name:'B+',         data:[0, 1, 6, 5, 1],  ventas:[0, 1730, 8598, 9098, 1480]},
+  {name:'B-',         data:[5, 3, 2, 5, 1],  ventas:[6785, 3450, 2880, 8890, 1605]},
   {name:'C+',         data:[2, 3, 2, 1, 0],  ventas:[2300, 3450, 2300, 1605, 0]},
   {name:'NSSA',       data:[0, 0, 2, 0, 0],  ventas:[0, 0, 2880, 0, 0]},
   {name:'CONTADO',    data:[1, 3, 6, 4, 3],  ventas:[1150, 4818, 7810, 5968, 3905]},
   {name:'EXCEPCION',  data:[1, 0, 1, 1, 0],  ventas:[1150, 0, 1605, 1605, 0]},
   {name:'NSSB',       data:[0, 0, 0, 1, 0],  ventas:[0, 0, 0, 1150, 0]},
 ];
-const PERFIL_AAP_MONTH_TOTAL = [16, 30, 84, 69, 10]; // unidades con perfil asignado, AAP, por mes
-const PERFIL_AAP_MONTH_TOTAL_VENTAS = [23395, 44836, 127791, 105425, 16825]; // $ con perfil asignado, AAP, por mes
+// Actualización 12-sep-2026: +3 u. AAP en septiembre — ECO 150 ×2 en PEDERNALES (perfiles A y B+, $1.480
+// c/u) y XOOM 110 en BABAHOYO (perfil B-, $1.605).
+const PERFIL_AAP_MONTH_TOTAL = [16, 30, 84, 69, 13]; // unidades con perfil asignado, AAP, por mes
+const PERFIL_AAP_MONTH_TOTAL_VENTAS = [23395, 44836, 127791, 105425, 21390]; // $ con perfil asignado, AAP, por mes
 
 // Perfil de cliente por tienda propia Hero (columna Origen_Ventas = TIENDA AMERICAS / TIENDA NACIONES UNIDAS,
 // esta última incluyendo Canal Digital). Orden fijo por tienda — acumulado Mayo-Septiembre 2026, actualizado con
@@ -4301,7 +4394,7 @@ const PERFIL_TIENDA_NACIONES = [
 // unidades ($5.466 en total, ver también Canal Digital, mismo caso).
 const PERFIL_TIENDA_AMERICAS_MENSUAL = [
   {name:'AAA',         data:[2,6,7,2,0],   ventas:[4034.26,8612.70,20677.52,5041.65,0]},
-  {name:'AA',          data:[0,1,2,5,0],   ventas:[0,2993,5272.95,15068.48,0]},
+  {name:'AA',          data:[0,1,2,5,1],   ventas:[0,2993,5272.95,15068.48,3167.78]},
   {name:'A',           data:[0,1,1,3,1],   ventas:[0,3239.21,3228.65,6924.56,2936.48]},
   {name:'BBB',         data:[0,1,1,3,0],   ventas:[0,3486.41,2190.36,9039.58,0]},
   {name:'BB',          data:[0,2,3,0,1],   ventas:[0,5597.23,13240.54,0,3391.25]},
@@ -4311,8 +4404,13 @@ const PERFIL_TIENDA_AMERICAS_MENSUAL = [
   {name:'CONTADO',     data:[5,10,3,2,0],  ventas:[12241.26,21874.79,8669.52,5024.71,0]},
   {name:'COLABORADOR', data:[5,6,3,2,0],   ventas:[5706.50,9052.04,5040.80,4715.25,0]},
 ];
-const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL = [12,28,22,24,8];
-const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS = [21982.02,58170,64333.32,66570,17930.04];
+// Actualización 12-sep-2026: +1 u. AA en septiembre (XOOM 125R, $3.167,78, Av. Américas — ver nota arriba de
+// TIENDAS_TOTAL). La otra unidad nueva de Av. Américas (ECO DELUXE, $1.252,54) llegó con Perfil vacío en el
+// archivo fuente, así que no entra en ningún perfil todavía — Av. Américas vendió 10 u. reales en septiembre
+// pero este total de perfiles queda en 9 (1 u. pendiente de clasificar); se actualizará cuando el archivo
+// traiga el perfil de esa unidad asignado (mismo patrón ya visto varias veces este mes).
+const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL = [12,28,22,24,9];
+const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS = [21982.02,58170,64333.32,66570,21097.82];
 
 // Anomalía 28-ago-2026: 1 u. de agosto (HUNK 125R, $3.043, perfil AAA) que en el corte anterior estaba
 // Facturada pasó a Estado "Anuladas" en este archivo — venta anulada, se resta de Naciones Unidas.
@@ -4367,13 +4465,13 @@ const PERFIL_RESUMEN = [
 // "Ventas" que llevaba arrastrándose en Av. Américas/Naciones/Canal Digital desde Mayo (no solo Septiembre).
 const PERFIL_RESUMEN_MENSUAL = [
   {name:'AAA',        data:[3,9,35,10,0], ventas:[6584.26,13430.70,64787.52,23585.32,0]},
-  {name:'AA',         data:[2,10,19,22,3],ventas:[4280,18668,36155.95,44315.53,7216.48]},
-  {name:'A',          data:[1,6,8,21,3],  ventas:[1730,10024.21,12066.65,38819.60,6146.48]},
+  {name:'AA',         data:[2,10,19,22,4],ventas:[4280,18668,36155.95,44315.53,10384.26]},
+  {name:'A',          data:[1,6,8,21,4],  ventas:[1730,10024.21,12066.65,38819.60,7626.48]},
   {name:'BBB',        data:[1,2,6,7,2],   ventas:[1150,4966.41,9680.36,15254.58,2880]},
   {name:'BB',         data:[1,3,7,7,2],   ventas:[1150,6747.23,19000.54,16329.23,5941.25]},
   {name:'B',          data:[1,1,5,10,0],  ventas:[1150,1480,6330,15975,0]},
-  {name:'B+',         data:[0,1,7,9,0],   ventas:[0,1730,12378.07,22050.46,0]},
-  {name:'B-',         data:[5,4,3,10,7],  ventas:[6785,6764.62,5112.91,22335.89,13552.31]},
+  {name:'B+',         data:[0,1,7,9,1],   ventas:[0,1730,12378.07,22050.46,1480]},
+  {name:'B-',         data:[5,4,3,10,8],  ventas:[6785,6764.62,5112.91,22335.89,15157.31]},
   {name:'C+',         data:[2,3,2,1,0],   ventas:[2300,3450,2300,1605,0]},
   {name:'NSSA',       data:[0,0,2,0,0],   ventas:[0,0,2880,0,0]},
   {name:'CONTADO',    data:[6,13,10,7,3], ventas:[13391.26,26692.79,18483.34,13092.71,3905]},
@@ -4381,8 +4479,11 @@ const PERFIL_RESUMEN_MENSUAL = [
   {name:'COLABORADOR',data:[5,6,3,2,0],   ventas:[5706.50,9052.04,5040.80,4715.25,0]},
   {name:'NSSB',       data:[0,0,0,1,0],   ventas:[0,0,0,1150,0]},
 ];
-const PERFIL_MONTH_TOTAL = [28,58,108,108,20]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
-const PERFIL_MONTH_TOTAL_VENTAS = [45377.02,103006.00,195821.14,220833.57,39641.52]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
+// Actualización 12-sep-2026: +4 u. clasificadas en septiembre — AA (XOOM 125R Tiendas, $3.167,78), A (ECO 150
+// AAP, $1.480), B+ (ECO 150 AAP, $1.480), B- (XOOM 110 AAP, $1.605). La ECO DELUXE nueva de Av. Américas
+// queda sin perfil todavía (ver nota en PERFIL_TIENDA_AMERICAS_MONTH_TOTAL), no está incluida aquí.
+const PERFIL_MONTH_TOTAL = [28,58,108,108,24]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL_VENTAS = [45377.02,103006.00,195821.14,220833.57,47374.30]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
 
 // Vista "SIN AAP" (Resumen): PERFIL_RESUMEN menos AAP = solo Tiendas Hero (Av. Américas + Naciones Unidas + Canal Digital).
 const PERFIL_RESUMEN_SIN_AAP = [
@@ -4401,9 +4502,11 @@ const PERFIL_RESUMEN_SIN_AAP = [
 // Detalle mensual por Perfil, vista "SIN AAP" (solo Tiendas Hero). Mismo orden que PERFIL_RESUMEN_SIN_AAP.
 // Los totales por mes coinciden exactamente con TIENDAS_TOTAL / TIENDAS_VENTAS. Recalculado 11-sep-2026 (ver nota
 // arriba de PERFIL_RESUMEN_MENSUAL): usa "Ventas" en vez de "Venta Neta" en las 3 tiendas propias, los 5 meses.
+// Actualización 12-sep-2026: AA +1 u. en septiembre (XOOM 125R, $3.167,78, Av. Américas — ver nota arriba de
+// TIENDAS_TOTAL).
 const PERFIL_RESUMEN_MENSUAL_SIN_AAP = [
   {name:'AAA',        data:[2,6,7,6,0],  ventas:[4034.26,8612.70,20677.52,17162.32,0]},
-  {name:'AA',         data:[0,1,3,8,1],  ventas:[0,2993,6965.95,23620.53,2936.48]},
+  {name:'AA',         data:[0,1,3,8,2],  ventas:[0,2993,6965.95,23620.53,6104.26]},
   {name:'A',          data:[0,1,1,6,1],  ventas:[0,3239.21,3228.65,17676.60,2936.48]},
   {name:'BBB',        data:[0,1,1,3,0],  ventas:[0,3486.41,2190.36,9039.58,0]},
   {name:'BB',         data:[0,2,3,1,1],  ventas:[0,5597.23,13240.54,6571.23,3391.25]},
@@ -4468,8 +4571,9 @@ const MODELOS = [
   {name:'XPULSE 200 4V FI',  data:[12,2,3,7,1],    ventas:[40367,7483,10190,25363,3300]},
   {name:'XPULSE 200 RALLY',  data:[0,0,0,7,0],     ventas:[0,0,0,28878,0]},
 ];
-const MODELOS_MONTH_TOTAL = [303,238,215,260,71]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
-const MODELOS_MONTH_TOTAL_VENTAS = [520811.02,381572.00,375876.14,488285.57,132935.52]; // coincide con "Ventas totales" de Resumen (CON AAP) — recalculado 11-sep-2026 con TIENDAS_VENTAS corregido (columna "Ventas", no "Venta Neta")
+// Septiembre actualizado 12-sep-2026 (+9 u. / +$15.905,32 — ver nota arriba de TIENDAS_TOTAL).
+const MODELOS_MONTH_TOTAL = [303,238,215,260,80]; // coincide con el total "Unidades totales" de Resumen (CON AAP)
+const MODELOS_MONTH_TOTAL_VENTAS = [520811.02,381572.00,375876.14,488285.57,148840.84]; // coincide con "Ventas totales" de Resumen (CON AAP) — recalculado 11-sep-2026 con TIENDAS_VENTAS corregido (columna "Ventas", no "Venta Neta")
 
 // Vista "SIN AAP" (Resumen): MODELOS menos la contribución de AAP por modelo (3 canales, Retail sin AAP).
 // Resincronizado 28-ago-2026 junto con MODELOS arriba, a partir de los 3 canales (Mayoristas + Retail sin
@@ -4484,8 +4588,8 @@ const MODELOS_SIN_AAP = [
   {name:'XPULSE 200 4V FI',  data:[12,2,3,7,1],    ventas:[40367,7483,10190,25363,3300]},
   {name:'XPULSE 200 RALLY',  data:[0,0,0,7,0],     ventas:[0,0,0,28878,0]},
 ];
-const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,131,191,61]; // MODELOS_MONTH_TOTAL menos AAP_DATA
-const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [497416.02,336736.00,248085.14,382860.57,116110.52]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
+const MODELOS_MONTH_TOTAL_SIN_AAP = [287,208,131,191,67]; // MODELOS_MONTH_TOTAL menos AAP_DATA
+const MODELOS_MONTH_TOTAL_VENTAS_SIN_AAP = [497416.02,336736.00,248085.14,382860.57,127450.84]; // MODELOS_MONTH_TOTAL_VENTAS menos AAP_VENTAS
 
 /* ================= GARANTIAS (venta de Garantía Extendida de motos) ================= */
 // Hoja nueva "GARANTIAS" en CONSOLIDADO_HERO_3_2.xlsx, recibida el 31-ago-2026 — mismo esquema de 42 columnas
@@ -4619,7 +4723,7 @@ const PRESUPUESTO_SEPTIEMBRE_UNIDADES = {
     general: 160, // corregido 8-sep-2026 (era 165)
     cuentas: {
       'ORIENTE':             60,
-      'ST DOMINGO / MANABI': 30,
+      'MANABI':              30,
       'LOS RIOS':            60,
       'GUAYAS':              10,
       'SIERRA':              5,
@@ -5283,7 +5387,7 @@ function renderBudgetCards(prefix, grand, budgetArr, metric, formatter){
     tagEl.className = 'kpi-state-tag ' + tagClass;
     const faltante = budget - grand;
     textEl.innerHTML = faltante>0
-      ? `Faltan <b>${formatter(faltante)}</b> ${metric==='ventas' ? '' : 'u. '}(${formatter(grand)} / ${formatter(budget)})`
+      ? `Faltan <b>${formatter(faltante)}</b> (${formatter(grand)} / ${formatter(budget)})`
       : `Superado por <b>${formatter(-faltante)}</b> (${formatter(grand)} / ${formatter(budget)})`;
   } else {
     fillEl.style.width = '0%';
@@ -5317,7 +5421,7 @@ function renderResumenKpis(){
   renderTicketCard('kpiResumen', computeResumenModel(aapMode,'ventas').total, computeResumenModel(aapMode,'unidades').total);
 
   { const _fn = document.getElementById('footnoteResumen'); if(_fn) _fn.textContent =aapMode==='con'
-    ? 'AAP se muestra por separado por su peso en el canal; en el menú "RETAIL" está incluido junto con OTOM, ESPAÑA, MASTER MOTO, MARCIMEX, ARTEFACTA y CRESA (227 u. en total). Fuente: REPORTE_FACTURACION — hoja "RESUMEN" 2026.'
+    ? 'AAP se muestra por separado por su peso en el canal; en el menú "RETAIL" está incluido junto con OTOM, ESPAÑA, MASTER MOTO, MARCIMEX, ARTEFACTA y CRESA (227 en total). Fuente: REPORTE_FACTURACION — hoja "RESUMEN" 2026.'
     : 'Vista "SIN AAP": excluye las unidades de AAP de los tres canales y del total general para comparar el desempeño sin esa cuenta. Fuente: REPORTE_FACTURACION — hoja "RESUMEN" 2026.'; }
 }
 
@@ -5491,11 +5595,11 @@ function renderResumenCharts(){
         labels: MONTHS,
         datasets:[{
           label:'Total', data: resumen.total,
-          borderColor: PALETTE.s1, backgroundColor:'transparent',
+          borderColor: PALETTE.s3, backgroundColor:'transparent',
           fill:false, tension:0,
-          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
           pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : PALETTE.s4,
-          pointBorderColor:PALETTE.s1, pointBorderWidth:2, borderWidth:2.5
+          pointBorderColor:PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
         }]
       },
       options:{
@@ -5532,7 +5636,7 @@ function renderResumenCharts(){
           label:'Margen bruto', data: margenPcts,
           borderColor: PALETTE.s3, backgroundColor:'transparent',
           fill:false, tension:0,
-          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
           pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : PALETTE.s4,
           pointBorderColor:PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
         }]
@@ -5568,11 +5672,11 @@ function renderResumenCharts(){
         labels: MONTHS,
         datasets:[{
           label:'Ticket promedio', data: ticketProm,
-          borderColor: PALETTE.s1, backgroundColor:'transparent',
+          borderColor: PALETTE.s3, backgroundColor:'transparent',
           fill:false, tension:0,
-          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
           pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : PALETTE.s4,
-          pointBorderColor:PALETTE.s1, pointBorderWidth:2, borderWidth:2.5
+          pointBorderColor:PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
         }]
       },
       options:{
@@ -5598,22 +5702,31 @@ function renderResumenCharts(){
 // Variación (%) como píldora de color en vez de texto "(±%)" en línea, y "% del mes" en gris muted junto
 // al valor. Usada ahora por TODAS las tablas del dashboard (pedido del cliente); pctCell() (arriba) queda
 // sin uso, se conserva solo como referencia del formato anterior.
+// Actualización: se quita el % de participación gris (cell-pct) de todas las tablas "Detalle mensual" del
+// dashboard — antes iba inline junto al valor y la píldora de variación (monthTotal ya no se usa acá, se deja
+// el parámetro para no tener que tocar cada llamada de pctCellPill()). El centrado de columna se maneja por
+// CSS (ver table.data-table.compact:not(.mercado-tbl) td.num en el <style>), no hace falta cambiar este HTML.
+// Actualización: se agrega un "espejo" invisible de la píldora ANTES del valor (misma clase/texto que la
+// píldora real, pero con visibility:hidden) cuando hay píldora. Como el <td> centra el contenido como un solo
+// grupo en línea, antes el valor quedaba corrido a la izquierda del centro (por el ancho de la píldora a su
+// derecha), y en las filas sin píldora el valor sí caía justo al centro — eso producía la columna "desubicada"
+// que reportó el cliente en Detalle mensual por Perfiles. Con el espejo, el grupo queda simétrico
+// (espejo + valor + píldora) y el valor cae siempre en el centro exacto de la celda, tenga o no píldora, y sin
+// importar el ancho de la píldora (p.ej. "+5%" vs "+123%").
 function pctCellPill(curr, prev, monthTotal, formatter){
   formatter = formatter || fmt;
   const val = `<span class="cell-main">${formatter(curr)}</span>`;
   let pillHtml = '';
+  let mirrorHtml = '';
   if(prev !== undefined && prev !== null && prev !== 0){
     const pct = Math.round((curr-prev)/prev*100);
     const sign = pct>0 ? '+' : '';
     const cls = pct>0 ? 'up' : (pct<0 ? 'down' : 'flat');
-    pillHtml = `<span class="pill ${cls}">${sign}${pct}%</span>`;
+    const pillText = `${sign}${pct}%`;
+    pillHtml = `<span class="pill ${cls}">${pillText}</span>`;
+    mirrorHtml = `<span class="pill ${cls}" style="visibility:hidden;" aria-hidden="true">${pillText}</span>`;
   }
-  let pctHtml = '';
-  if(monthTotal){
-    const share = Math.round(curr/monthTotal*100);
-    pctHtml = `<span class="cell-pct">${share}%</span>`;
-  }
-  return `${val}${pillHtml}${pctHtml}`;
+  return `${mirrorHtml}${val}${pillHtml}`;
 }
 
 // Datalabels de los gráficos de "Tendencia... mes a mes": separa lo que antes era un solo string de un
@@ -5848,11 +5961,11 @@ function renderGeneralCharts(){
         labels: MONTHS,
         datasets:[{
           label:'Total', data: general.total,
-          borderColor: PALETTE.s1, backgroundColor:'transparent',
+          borderColor: PALETTE.s3, backgroundColor:'transparent',
           fill:false, tension:0,
-          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
           pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : PALETTE.s4,
-          pointBorderColor:PALETTE.s1, pointBorderWidth:2, borderWidth:2.5
+          pointBorderColor:PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
         }]
       },
       options:{
@@ -6073,11 +6186,11 @@ function renderRepuestosResumenCharts(){
         labels: MONTHS,
         datasets:[{
           label:'Total', data: repuestosResumen.total,
-          borderColor: PALETTE.s1, backgroundColor:'transparent',
+          borderColor: PALETTE.s3, backgroundColor:'transparent',
           fill:false, tension:0,
-          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
           pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : PALETTE.s4,
-          pointBorderColor:PALETTE.s1, pointBorderWidth:2, borderWidth:2.5
+          pointBorderColor:PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
         }]
       },
       options:{
@@ -6269,11 +6382,11 @@ function renderRepuestosServicioCharts(){
         labels: MONTHS,
         datasets:[{
           label:'Total Taller', data: repuestosServicio.total,
-          borderColor: getVar('--repservicio-2'), backgroundColor:'transparent',
+          borderColor: PALETTE.s3, backgroundColor:'transparent',
           fill:false, tension:0,
-          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
           pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--repservicio-1'),
-          pointBorderColor: getVar('--repservicio-2'), pointBorderWidth:2, borderWidth:2.5
+          pointBorderColor: PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
         }]
       },
       options:{
@@ -6501,11 +6614,11 @@ function renderManoObraCharts(){
         labels: MONTHS,
         datasets:[{
           label:'Mano de obra', data: manoObra.manoObra,
-          borderColor: getVar('--manoobra-1'), backgroundColor:'transparent',
+          borderColor: PALETTE.s3, backgroundColor:'transparent',
           fill:false, tension:0,
-          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
           pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--manoobra-2'),
-          pointBorderColor: getVar('--manoobra-1'), pointBorderWidth:2, borderWidth:2.5
+          pointBorderColor: PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
         }]
       },
       options:{
@@ -6555,18 +6668,12 @@ function renderManoObraCharts(){
 }
 
 // Bloque "por punto" (Av. Américas / Talleres Autorizados / Naciones Unidas-Quito) — solo tiene datos
-// reales para Agosto (mismo reporte agosto.xlsx que alimenta MANOOBRA_TIPOS_AGOSTO), así que el panel
-// completo se oculta para Mayo/Junio/Julio/Todos en vez de mostrar un desglose vacío o estimado.
+// reales para Agosto (mismo reporte agosto.xlsx que alimenta MANOOBRA_TIPOS_AGOSTO), así que sus 2
+// paneles (dona + Detalle mensual por punto) se ocultan para Mayo/Junio/Julio/Septiembre/Todos en vez de
+// mostrar un desglose vacío o estimado — la visibilidad la maneja el CSS de #manoObraLayoutGrid según la
+// clase .mo-agosto-layout (ver renderManoObra()); acá solo se salta el trabajo de poblarlos si no aplica.
 function renderManoObraPuntoCharts(){
-  const donutPanel = document.getElementById('manoObraPuntoDonutPanel');
-  const tipoPanel = document.getElementById('manoObraTipoDonutPanel');
-  if(monthFilter !== 'agosto'){
-    donutPanel.style.display = 'none';
-    tipoPanel.style.gridColumn = '1 / -1'; // sin el panel "por punto" al lado, que ocupe todo el ancho
-    return;
-  }
-  donutPanel.style.display = '';
-  tipoPanel.style.gridColumn = '';
+  if(monthFilter !== 'agosto') return;
 
   if(chartManoObraPuntoDonutInst) chartManoObraPuntoDonutInst.destroy();
 
@@ -6647,6 +6754,11 @@ function renderManoObra(){
   renderManoObraKpis();
   renderManoObraCharts();
   renderManoObraPuntoCharts();
+  // Agosto es el único mes con desglose real "por punto", así que ahí se usan los 4 paneles (2 donas
+  // arriba + su Detalle mensual cada una debajo) con Tendencia a todo lo ancho al final. El resto de
+  // los meses (donde "por tipo" tampoco tiene desglose real) usa dona+tendencia apiladas a la
+  // izquierda con Detalle mensual solo a la derecha (ver CSS de #manoObraLayoutGrid).
+  document.getElementById('manoObraLayoutGrid').classList.toggle('mo-agosto-layout', monthFilter === 'agosto');
 }
 
 function initManoObra(){
@@ -6691,11 +6803,11 @@ function renderGarantiasTrendChart(){
       labels: MONTHS,
       datasets:[{
         label:'Garantías', data: T,
-        borderColor: getVar('--garantia-1'), backgroundColor:'transparent',
+        borderColor: PALETTE.s3, backgroundColor:'transparent',
         fill:false, tension:0,
-        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
         pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--zone-3'),
-        pointBorderColor: getVar('--garantia-1'), pointBorderWidth:2, borderWidth:2.5
+        pointBorderColor: PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
       }]
     },
     options:{
@@ -6714,11 +6826,18 @@ function renderGarantiasTrendChart(){
   });
 }
 
+// Actualización: antes esta tabla mostraba SIEMPRE las dos columnas (Unidades y Ventas) juntas, sin importar
+// el toggle UNIDADES/$ de Garantías > Resumen (data-metric-toggle="garantiasresumen") — ahora una sola
+// columna con la métrica activa, igual que el resto de tablas "Detalle mensual" del dashboard.
 function buildGarantiasMensualTable(){
+  const metric = metricState.garantiasresumen;
+  const monthTotal = metric==='ventas' ? GARANTIAS_MONTH_TOTAL_VENTAS : GARANTIAS_MONTH_TOTAL;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
   const tbody = document.getElementById('tblGarantiasMensual');
-  document.getElementById('garantiasTableSub').textContent = 'Unidades y ventas por mes';
-  tbody.innerHTML = MONTHS.map((m,i)=> `<tr><td>${m}</td><td class="num">${fmt(GARANTIAS_MONTH_TOTAL[i])}</td><td class="num">${fmtMoney(GARANTIAS_MONTH_TOTAL_VENTAS[i])}</td></tr>`).join('')
-    + `<tr style="font-weight:800;background:var(--page-plane);"><td>Total</td><td class="num">${fmt(sum(GARANTIAS_MONTH_TOTAL))}</td><td class="num">${fmtMoney(sum(GARANTIAS_MONTH_TOTAL_VENTAS))}</td></tr>`;
+  document.getElementById('garantiasTableSub').textContent = metric==='ventas' ? 'Ventas por mes' : 'Unidades por mes';
+  document.getElementById('garantiasMensualValueHeader').textContent = metric==='ventas' ? 'Ventas' : 'Unidades';
+  tbody.innerHTML = MONTHS.map((m,i)=> `<tr><td>${m}</td><td class="num">${formatter(monthTotal[i])}</td></tr>`).join('')
+    + `<tr style="font-weight:800;background:var(--page-plane);"><td>Total</td><td class="num">${formatter(sum(monthTotal))}</td></tr>`;
 }
 
 function garantiasCanalCategories(){
@@ -6826,11 +6945,12 @@ function initGarantiasResumen(){
 /* ================= GARANTIAS · MODELOS ================= */
 let chartGarantiasModelosInst = null;
 function renderGarantiasModelosChart(){
-  const rows = GARANTIAS_MODELOS_MENSUAL.map(o=>({ name:o.name, u: mval(o.data), v: mval(o.ventas) })).sort((a,b)=> b.u-a.u);
+  const metric = metricState.garantiasmodelos;
+  const rows = GARANTIAS_MODELOS_MENSUAL.map(o=>({ name:o.name, u: mval(o.data), v: mval(o.ventas) })).sort((a,b)=> metric==='ventas' ? b.v-a.v : b.u-a.u);
   const periodo = monthFilter==='todos' ? 'Mayo–Septiembre 2026' : MONTH_LABEL[monthFilter];
-  document.getElementById('garantiasModelosSub').textContent = `Unidades y $ por modelo · ${periodo}`;
+  document.getElementById('garantiasModelosSub').textContent = (metric==='ventas' ? '$' : 'Unidades') + ` por modelo · ${periodo}`;
   if(chartGarantiasModelosInst) chartGarantiasModelosInst.destroy();
-  chartGarantiasModelosInst = makeOrigenRankingChart('chartGarantiasModelos', rows, getVar('--garantia-1'));
+  chartGarantiasModelosInst = makeOrigenRankingChart('chartGarantiasModelos', rows, getVar('--garantia-1'), { metric });
 }
 
 function buildGarantiasModelosTable(){
@@ -7013,11 +7133,11 @@ function renderMayoristasCharts(){
         labels: MONTHS,
         datasets:[{
           label:'Total mayoristas', data: T,
-          borderColor: getVar('--zone-1'), backgroundColor:'transparent',
+          borderColor: PALETTE.s3, backgroundColor:'transparent',
           fill:false, tension:0,
-          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
           pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--zone-3'),
-          pointBorderColor: getVar('--zone-1'), pointBorderWidth:2, borderWidth:2.5
+          pointBorderColor: PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
         }]
       },
       options:{
@@ -7048,10 +7168,10 @@ function renderMayoristasCharts(){
       type:'line',
       data:{ labels: MONTHS, datasets:[{
         label:'Margen bruto', data: mayMargenPcts,
-        borderColor: getVar('--zone-1'), backgroundColor:'transparent', fill:false, tension:0,
-        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+        borderColor: PALETTE.s3, backgroundColor:'transparent', fill:false, tension:0,
+        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
         pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--zone-3'),
-        pointBorderColor: getVar('--zone-1'), pointBorderWidth:2, borderWidth:2.5
+        pointBorderColor: PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
       }]},
       options:{
         responsive:true, maintainAspectRatio:false,
@@ -7078,10 +7198,10 @@ function renderMayoristasCharts(){
       type:'line',
       data:{ labels: MONTHS, datasets:[{
         label:'Ticket promedio', data: mayTicketProm,
-        borderColor: getVar('--zone-1'), backgroundColor:'transparent', fill:false, tension:0,
-        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+        borderColor: PALETTE.s3, backgroundColor:'transparent', fill:false, tension:0,
+        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
         pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--zone-3'),
-        pointBorderColor: getVar('--zone-1'), pointBorderWidth:2, borderWidth:2.5
+        pointBorderColor: PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
       }]},
       options:{
         responsive:true, maintainAspectRatio:false,
@@ -7253,11 +7373,11 @@ function renderRetailCharts(){
         labels: MONTHS,
         datasets:[{
           label:'Total retail', data: retailModel.total,
-          borderColor: getVar('--retail-1'), backgroundColor:'transparent',
+          borderColor: PALETTE.s3, backgroundColor:'transparent',
           fill:false, tension:0,
-          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
           pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--retail-2'),
-          pointBorderColor: getVar('--retail-1'), pointBorderWidth:2, borderWidth:2.5
+          pointBorderColor: PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
         }]
       },
       options:{
@@ -7290,10 +7410,10 @@ function renderRetailCharts(){
       type:'line',
       data:{ labels: MONTHS, datasets:[{
         label:'Margen bruto', data: retMargenPcts,
-        borderColor: getVar('--retail-1'), backgroundColor:'transparent', fill:false, tension:0,
-        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+        borderColor: PALETTE.s3, backgroundColor:'transparent', fill:false, tension:0,
+        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
         pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--retail-2'),
-        pointBorderColor: getVar('--retail-1'), pointBorderWidth:2, borderWidth:2.5
+        pointBorderColor: PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
       }]},
       options:{
         responsive:true, maintainAspectRatio:false,
@@ -7322,10 +7442,10 @@ function renderRetailCharts(){
       type:'line',
       data:{ labels: MONTHS, datasets:[{
         label:'Ticket promedio', data: retTicketProm,
-        borderColor: getVar('--retail-1'), backgroundColor:'transparent', fill:false, tension:0,
-        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+        borderColor: PALETTE.s3, backgroundColor:'transparent', fill:false, tension:0,
+        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
         pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--retail-2'),
-        pointBorderColor: getVar('--retail-1'), pointBorderWidth:2, borderWidth:2.5
+        pointBorderColor: PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
       }]},
       options:{
         responsive:true, maintainAspectRatio:false,
@@ -7365,14 +7485,20 @@ function makeOrigenRankingChart(canvasId, rows, barColor, opts){
   opts = opts || {};
   // rankBy determina qué magnitud dimensiona las barras y el %: 'u' (unidades, comportamiento histórico/default)
   // o 'v' (ventas $) — usado por el ranking de Categoría, que ordena y participa en dólares.
-  const rankBy = opts.rankBy === 'ventas' ? 'v' : 'u';
+  // Actualización (pedido del cliente): opts.metric, cuando viene definido, manda sobre opts.rankBy — lo usan
+  // las páginas con toggle UNIDADES/$ que ahora sí controla este chart (Retail > Origen de Ventas, Garantías >
+  // Modelos). Si opts.metric no viene (Repuestos > Sucursal/Provincia/Categoría — diseño fijo documentado en cada
+  // llamador, no reacciona al toggle de la página), se respeta opts.rankBy tal cual estaba.
+  const rankBy = opts.metric ? (opts.metric==='ventas' ? 'v' : 'u') : (opts.rankBy === 'ventas' ? 'v' : 'u');
   const maxVal = Math.max(...rows.map(r=>r[rankBy])) || 1;
   const showPct = !!opts.showPct;
   // Por defecto el % es sobre la suma de las filas mostradas. Si el set está curado a un top-N (p. ej. Provincia,
   // top 10 de 16), opts.totalOverride permite pasar el total real (todas las filas) para que el % represente
   // la participación de verdad y no un 100% artificial calculado solo entre las filas visibles.
   const totalMetric = opts.totalOverride != null ? opts.totalOverride : sum(rows.map(r=>r[rankBy]));
-  const valueLabel = (ctx)=> `${fmt(rows[ctx.dataIndex].u)} u. · ${fmtMoney(rows[ctx.dataIndex].v)}`;
+  // Actualización: antes esta etiqueta combinaba SIEMPRE unidades ("u.") y $ juntos, sin importar qué dimensiona
+  // la barra — ahora muestra solo la magnitud activa (rankBy), sin "u.".
+  const valueLabel = (ctx)=> rankBy==='v' ? fmtMoney(rows[ctx.dataIndex].v) : fmt(rows[ctx.dataIndex].u);
   const datalabelsCfg = !showPct ? {
     display:true, color: PALETTE.ink, font:{weight:700, size:10.5}, anchor:'end', align:'right', offset:4,
     formatter:(v,ctx)=> valueLabel(ctx)
@@ -7462,18 +7588,20 @@ function buildNonAapOrigenTable(){
 
 let chartRetailOrigenAAPInst = null, chartRetailOrigenNonAAPInst = null;
 function renderRetailOrigenAAPChart(){
-  const rows = AAP_ORIGEN_MENSUAL.map(o=>({ name:o.name, u: mval(o.data), v: mval(o.ventas) })).sort((a,b)=> b.u-a.u);
+  const metric = metricState.retail;
+  const rows = AAP_ORIGEN_MENSUAL.map(o=>({ name:o.name, u: mval(o.data), v: mval(o.ventas) })).sort((a,b)=> metric==='ventas' ? b.v-a.v : b.u-a.u);
   const periodo = monthFilter==='todos' ? 'Mayo–Septiembre 2026' : MONTH_LABEL[monthFilter];
-  document.getElementById('retailOrigenAAPSub').textContent = `Unidades y $ por origen de venta · AAP, ${periodo}`;
+  document.getElementById('retailOrigenAAPSub').textContent = (metric==='ventas' ? '$' : 'Unidades') + ` por origen de venta · AAP, ${periodo}`;
   if(chartRetailOrigenAAPInst) chartRetailOrigenAAPInst.destroy();
-  chartRetailOrigenAAPInst = makeOrigenRankingChart('chartRetailOrigenAAP', rows, PALETTE.s2);
+  chartRetailOrigenAAPInst = makeOrigenRankingChart('chartRetailOrigenAAP', rows, PALETTE.s2, { metric });
 }
 function renderRetailOrigenNonAAPChart(){
-  const rows = NONAAP_ORIGEN_MENSUAL.map(o=>({ name:o.name, u: mval(o.data), v: mval(o.ventas) })).sort((a,b)=> b.u-a.u);
+  const metric = metricState.retail;
+  const rows = NONAAP_ORIGEN_MENSUAL.map(o=>({ name:o.name, u: mval(o.data), v: mval(o.ventas) })).sort((a,b)=> metric==='ventas' ? b.v-a.v : b.u-a.u);
   const periodo = monthFilter==='todos' ? 'Mayo–Septiembre 2026' : MONTH_LABEL[monthFilter];
-  document.getElementById('retailOrigenNonAAPSub').textContent = `Unidades y $ por origen de venta · Retail sin AAP, ${periodo}`;
+  document.getElementById('retailOrigenNonAAPSub').textContent = (metric==='ventas' ? '$' : 'Unidades') + ` por origen de venta · Retail sin AAP, ${periodo}`;
   if(chartRetailOrigenNonAAPInst) chartRetailOrigenNonAAPInst.destroy();
-  chartRetailOrigenNonAAPInst = makeOrigenRankingChart('chartRetailOrigenNonAAP', rows, PALETTE.s3);
+  chartRetailOrigenNonAAPInst = makeOrigenRankingChart('chartRetailOrigenNonAAP', rows, PALETTE.s3, { metric });
 }
 function initRetailOrigen(){
   if(chartsInit.retailOrigen) return; chartsInit.retailOrigen = true;
@@ -7483,15 +7611,23 @@ function initRetailOrigen(){
   buildNonAapOrigenTable();
 }
 
+// Actualización: antes esta barra combinaba SIEMPRE $, % y unidades en una sola etiqueta (ignorando el
+// toggle UNIDADES/$ de la página) y además mostraba el sufijo "u." — a pedido del cliente ahora respeta
+// opts.metric ('ventas' o 'unidades', pasado por cada llamador según su propio metricState de página):
+// el largo de la barra y la etiqueta muestran SOLO la métrica activa (con su % de participación sobre
+// esa misma métrica), y ya no se muestra "u.". opts.metric por defecto 'ventas' (comportamiento previo)
+// por si algún llamador no lo pasa.
 function makePerfilRankingChart(canvasId, rows, barColor, opts){
   opts = opts || {};
-  const totalV = sum(rows.map(p=>p.v));
-  const maxVal = Math.max(...rows.map(p=>p.v)) || 1;
+  const metric = opts.metric || 'ventas';
+  const values = rows.map(p=> metric==='ventas' ? p.v : p.u);
+  const total = sum(values);
+  const maxVal = Math.max(...values) || 1;
   return new Chart(document.getElementById(canvasId), {
     type:'bar',
     data:{
       labels: rows.map(p=>p.name),
-      datasets:[{ data: rows.map(p=>p.v), backgroundColor: barColor, borderRadius:0, barPercentage: opts.barPercentage || 0.75, maxBarThickness: opts.maxBarThickness || 22 }]
+      datasets:[{ data: values, backgroundColor: barColor, borderRadius:0, barPercentage: opts.barPercentage || 0.75, maxBarThickness: opts.maxBarThickness || 22 }]
     },
     options:{
       indexAxis:'y',
@@ -7507,9 +7643,8 @@ function makePerfilRankingChart(canvasId, rows, barColor, opts){
         datalabels:{
           display:true, color: PALETTE.ink, font:{weight:700, size:10.5}, anchor:'end', align:'right', offset:4,
           formatter:(v,ctx)=>{
-            const p = rows[ctx.dataIndex];
-            const pct = totalV>0 ? (v/totalV*100).toFixed(1) : '0.0';
-            return `${fmtMoney(v)} (${pct}%) · ${fmt(p.u)} u.`;
+            const pct = total>0 ? (v/total*100).toFixed(1) : '0.0';
+            return metric==='ventas' ? `${fmtMoney(v)} (${pct}%)` : `${fmt(v)} (${pct}%)`;
           }
         }
       }
@@ -7519,14 +7654,16 @@ function makePerfilRankingChart(canvasId, rows, barColor, opts){
 
 let chartRetailPerfilAAPInst = null;
 function renderRetailPerfilAAPChart(){
+  const metric = metricState.retail;
   const rows = PERFIL_AAP_MENSUAL.map(p=>({ name:p.name, v: mval(p.ventas), u: mval(p.data) }));
   const periodo = monthFilter==='todos' ? 'Mayo-Septiembre 2026' : MONTH_LABEL[monthFilter];
   const periodoLower = monthFilter==='todos' ? 'Acumulado mayo-junio-julio-agosto-septiembre 2026' : `Vista de ${MONTH_LABEL[monthFilter]}`;
   const totalV = sum(rows.map(r=>r.v)), totalU = sum(rows.map(r=>r.u));
-  document.getElementById('retailPerfilAAPSub').textContent = `$ y unidades por perfil de cliente · AAP, ${periodo}`;
-  { const _fn = document.getElementById('retailPerfilAAPFootnote'); if(_fn) _fn.textContent =`${periodoLower}, con perfil asignado al 100% de las facturas AAP. % calculado sobre el total visible (${fmtMoney(totalV)}, ${fmt(totalU)} u.). Fuente: CONSOLIDADO_HERO 2026, columna "Perfil Tiendas Hero/AAP".`; }
+  document.getElementById('retailPerfilAAPSub').textContent = (metric==='ventas' ? '$' : 'Unidades') + ` por perfil de cliente · AAP, ${periodo}`;
+  // Actualización: el footnote antes mostraba $ y unidades juntos siempre — ahora solo la métrica activa (toggle UNIDADES/$ de Retail), sin "u.".
+  { const _fn = document.getElementById('retailPerfilAAPFootnote'); if(_fn) _fn.textContent =`${periodoLower}, con perfil asignado al 100% de las facturas AAP. % calculado sobre el total visible (${metric==='ventas' ? fmtMoney(totalV) : fmt(totalU)}). Fuente: CONSOLIDADO_HERO 2026, columna "Perfil Tiendas Hero/AAP".`; }
   if(chartRetailPerfilAAPInst) chartRetailPerfilAAPInst.destroy();
-  chartRetailPerfilAAPInst = makePerfilRankingChart('chartRetailPerfilAAP', rows, PALETTE.s2);
+  chartRetailPerfilAAPInst = makePerfilRankingChart('chartRetailPerfilAAP', rows, PALETTE.s2, { metric });
 }
 function initRetailPerfiles(){
   if(chartsInit.retailPerfiles) return; chartsInit.retailPerfiles = true;
@@ -7539,11 +7676,12 @@ function initRetailPerfiles(){
 /* ---------- Retail / Perfiles (vista "Resumen general", AAP) — mismo modelo que Resumen > Perfiles ---------- */
 let chartRetailPerfilGeneralInst = null;
 function renderRetailPerfilGeneralChart(){
+  const metric = metricState.retail;
   const rows = computePerfilGeneralRowsRetail().map(g=>({ name:g.name, color:g.color, v: mval(g.ventas), u: mval(g.data) }));
   const periodo = monthFilter==='todos' ? 'Acumulado mayo-junio-julio-agosto-septiembre 2026' : `Vista de ${MONTH_LABEL[monthFilter]}`;
   document.getElementById('retailPerfilGeneralSub').textContent = `Vista simplificada · ${periodo}`;
   if(chartRetailPerfilGeneralInst) chartRetailPerfilGeneralInst.destroy();
-  chartRetailPerfilGeneralInst = makePerfilRankingChart('chartRetailPerfilGeneral', rows, rows.map(r=>r.color), { paddingRight:130, tickSize:11, maxBarThickness:24 });
+  chartRetailPerfilGeneralInst = makePerfilRankingChart('chartRetailPerfilGeneral', rows, rows.map(r=>r.color), { paddingRight:130, tickSize:11, maxBarThickness:24, metric });
   document.getElementById('retailPerfilGeneralLegend').innerHTML = rows.map(r=>
     `<span class="legend-item"><span class="legend-swatch" style="background:${r.color}"></span>${r.name}</span>`).join('');
 }
@@ -7633,86 +7771,99 @@ function buildRetailPerfilesTable(){
 let chartTiendaAmericasPerfilInst = null, chartTiendaNacionesPerfilInst = null;
 const TIENDA_PERFIL_PALABRA = ['CONTADO', 'COLABORADOR']; // perfiles identificados por palabra, no por letra/escala
 const TIENDA_PERFIL_PENDIENTE = ['PENDIENTE']; // perfil aún sin asignar — categoría aparte, no es letra ni Contado/Colaborador
+// Actualización: antes esta tarjeta mostraba SIEMPRE $ y unidades juntos (y "u."), sin importar el toggle
+// UNIDADES/$ de Tiendas — ahora solo la métrica activa. Excepción explícita del cliente: el "ticket promedio"
+// (letraTicket/palabraTicket/pendienteTicket) se mantiene siempre en $, no sigue el toggle.
 function renderTiendaAmericasPerfilChart(){
+  const metric = metricState.tiendas;
+  const activeFmt = metric==='ventas' ? fmtMoney : fmt;
   const rows = PERFIL_TIENDA_AMERICAS_MENSUAL.map(p=>({ name:p.name, v: mval(p.ventas), u: mval(p.data) }));
   const periodo = monthFilter==='todos' ? 'Mayo-Septiembre 2026' : MONTH_LABEL[monthFilter];
-  document.getElementById('tiendaAmericasPerfilSub').textContent = `$ y unidades por perfil de cliente · ${periodo}`;
+  document.getElementById('tiendaAmericasPerfilSub').textContent = (metric==='ventas' ? '$' : 'Unidades') + ` por perfil de cliente · ${periodo}`;
 
   const palabraRows = rows.filter(r=> TIENDA_PERFIL_PALABRA.includes(r.name));
   const pendienteRows = rows.filter(r=> TIENDA_PERFIL_PENDIENTE.includes(r.name));
   const letraRows = rows.filter(r=> !TIENDA_PERFIL_PALABRA.includes(r.name) && !TIENDA_PERFIL_PENDIENTE.includes(r.name));
-  const totalU = sum(rows.map(r=>r.u));
+  const totalU = sum(rows.map(r=>r.u)), totalV = sum(rows.map(r=>r.v));
+  const totalActive = metric==='ventas' ? totalV : totalU;
   const letraV = sum(letraRows.map(r=>r.v)), letraU = sum(letraRows.map(r=>r.u));
   const palabraV = sum(palabraRows.map(r=>r.v)), palabraU = sum(palabraRows.map(r=>r.u));
   const pendienteV = sum(pendienteRows.map(r=>r.v)), pendienteU = sum(pendienteRows.map(r=>r.u));
-  const letraPct = totalU>0 ? Math.round(letraU/totalU*100) : 0;
-  const palabraPct = totalU>0 ? Math.round(palabraU/totalU*100) : 0;
-  const pendientePct = totalU>0 ? Math.round(pendienteU/totalU*100) : 0;
+  const letraActive = metric==='ventas' ? letraV : letraU;
+  const palabraActive = metric==='ventas' ? palabraV : palabraU;
+  const pendienteActive = metric==='ventas' ? pendienteV : pendienteU;
+  const letraPct = totalActive>0 ? Math.round(letraActive/totalActive*100) : 0;
+  const palabraPct = totalActive>0 ? Math.round(palabraActive/totalActive*100) : 0;
+  const pendientePct = totalActive>0 ? Math.round(pendienteActive/totalActive*100) : 0;
   const letraTicket = letraU>0 ? fmtMoney(letraV/letraU) : '—';
   const palabraTicket = palabraU>0 ? fmtMoney(palabraV/palabraU) : '—';
   const pendienteTicket = pendienteU>0 ? fmtMoney(pendienteV/pendienteU) : '—';
   const pendienteHtml = pendienteU>0
-    ? ` · <span style="color:#b8720a;">Pendiente: <b>${fmtMoney(pendienteV)}</b> · ${fmt(pendienteU)} u. (${pendientePct}%)</span>`
+    ? ` · <span style="color:#b8720a;">Pendiente: <b>${activeFmt(pendienteActive)}</b> (${pendientePct}%)</span>`
     : '';
   { const _fn = document.getElementById('tiendaAmericasPerfilResumen'); if(_fn) _fn.innerHTML = totalU>0
-    ? `Con letra: <b>${fmtMoney(letraV)}</b> · ${fmt(letraU)} u. (${letraPct}%) · ${letraTicket} prom. · <span style="color:#a81c14;">Contado/Colab.: <b>${fmtMoney(palabraV)}</b> · ${fmt(palabraU)} u. (${palabraPct}%) · ${palabraTicket} prom.</span>${pendienteHtml}` : ''; }
+    ? `Con letra: <b>${activeFmt(letraActive)}</b> (${letraPct}%) · ${letraTicket} prom. · <span style="color:#a81c14;">Contado/Colab.: <b>${activeFmt(palabraActive)}</b> (${palabraPct}%) · ${palabraTicket} prom.</span>${pendienteHtml}` : ''; }
 
   const americasBudgetEl = document.getElementById('tiendaAmericasBudgetLine');
   if(TIENDA_AMERICAS_BUDGET[monthFilter]){
     const budgetObj = TIENDA_AMERICAS_BUDGET[monthFilter];
-    const totalV = sum(rows.map(r=>r.v));
-    const pctV = Math.round(totalV/budgetObj.ventas*100);
-    const pctU = Math.round(totalU/budgetObj.unidades*100);
-    americasBudgetEl.innerHTML = `Cumplimiento presupuesto ${MONTH_LABEL_SHORT[monthFilter]}: <b>${pctV}%</b> en $ (${fmtMoney(totalV)}/${fmtMoney(budgetObj.ventas)}) · <b>${pctU}%</b> en u. (${fmt(totalU)}/${fmt(budgetObj.unidades)})`;
+    const pctActive = metric==='ventas' ? Math.round(totalV/budgetObj.ventas*100) : Math.round(totalU/budgetObj.unidades*100);
+    americasBudgetEl.innerHTML = metric==='ventas'
+      ? `Cumplimiento presupuesto ${MONTH_LABEL_SHORT[monthFilter]}: <b>${pctActive}%</b> (${fmtMoney(totalV)}/${fmtMoney(budgetObj.ventas)})`
+      : `Cumplimiento presupuesto ${MONTH_LABEL_SHORT[monthFilter]}: <b>${pctActive}%</b> (${fmt(totalU)}/${fmt(budgetObj.unidades)})`;
   } else {
     americasBudgetEl.innerHTML = '';
   }
 
   if(chartTiendaAmericasPerfilInst) chartTiendaAmericasPerfilInst.destroy();
-  chartTiendaAmericasPerfilInst = makePerfilRankingChart('chartTiendaAmericasPerfil', rows, getVar('--tienda-1'));
+  chartTiendaAmericasPerfilInst = makePerfilRankingChart('chartTiendaAmericasPerfil', rows, getVar('--tienda-1'), { metric });
 }
 function renderTiendaNacionesPerfilChart(){
+  const metric = metricState.tiendas;
   const rows = PERFIL_TIENDA_NACIONES_MENSUAL.map(p=>({ name:p.name, v: mval(p.ventas), u: mval(p.data) }));
   const periodo = monthFilter==='todos' ? 'Mayo-Septiembre 2026' : MONTH_LABEL[monthFilter];
   const periodoLower = monthFilter==='todos' ? 'Acumulado mayo-junio-julio-agosto-septiembre 2026' : `Vista de ${MONTH_LABEL[monthFilter]}`;
-  document.getElementById('tiendaNacionesPerfilSub').textContent = `$ y unidades por perfil de cliente · ${periodo}`;
+  document.getElementById('tiendaNacionesPerfilSub').textContent = (metric==='ventas' ? '$' : 'Unidades') + ` por perfil de cliente · ${periodo}`;
   { const _fn = document.getElementById('tiendaNacionesPerfilFootnote'); if(_fn) _fn.textContent =`${periodoLower}. % calculado sobre el total visible en cada tienda. Fuente: CONSOLIDADO_HERO 2026, columna "Perfil Tiendas Hero/AAP".`; }
 
   const nacionesBudgetEl = document.getElementById('tiendaNacionesBudgetLine');
   if(TIENDA_NACIONES_BUDGET[monthFilter]){
     const budgetObj = TIENDA_NACIONES_BUDGET[monthFilter];
     const totalVN = sum(rows.map(r=>r.v)), totalUN = sum(rows.map(r=>r.u));
-    const pctV = Math.round(totalVN/budgetObj.ventas*100);
-    const pctU = Math.round(totalUN/budgetObj.unidades*100);
-    nacionesBudgetEl.innerHTML = `Cumplimiento presupuesto ${MONTH_LABEL_SHORT[monthFilter]}: <b>${pctV}%</b> en $ (${fmtMoney(totalVN)}/${fmtMoney(budgetObj.ventas)}) · <b>${pctU}%</b> en u. (${fmt(totalUN)}/${fmt(budgetObj.unidades)})`;
+    const pctActive = metric==='ventas' ? Math.round(totalVN/budgetObj.ventas*100) : Math.round(totalUN/budgetObj.unidades*100);
+    nacionesBudgetEl.innerHTML = metric==='ventas'
+      ? `Cumplimiento presupuesto ${MONTH_LABEL_SHORT[monthFilter]}: <b>${pctActive}%</b> (${fmtMoney(totalVN)}/${fmtMoney(budgetObj.ventas)})`
+      : `Cumplimiento presupuesto ${MONTH_LABEL_SHORT[monthFilter]}: <b>${pctActive}%</b> (${fmt(totalUN)}/${fmt(budgetObj.unidades)})`;
   } else {
     nacionesBudgetEl.innerHTML = '';
   }
 
   if(chartTiendaNacionesPerfilInst) chartTiendaNacionesPerfilInst.destroy();
-  chartTiendaNacionesPerfilInst = makePerfilRankingChart('chartTiendaNacionesPerfil', rows, getVar('--tienda-2'), { barPercentage:0.6, maxBarThickness:24, tickSize:11 });
+  chartTiendaNacionesPerfilInst = makePerfilRankingChart('chartTiendaNacionesPerfil', rows, getVar('--tienda-2'), { barPercentage:0.6, maxBarThickness:24, tickSize:11, metric });
 }
 let chartTiendaDigitalPerfilInst = null;
 function renderTiendaDigitalPerfilChart(){
+  const metric = metricState.tiendas;
   const rows = PERFIL_CANAL_DIGITAL_MENSUAL.map(p=>({ name:p.name, v: mval(p.ventas), u: mval(p.data) }));
   const periodo = monthFilter==='todos' ? 'Mayo-Septiembre 2026' : MONTH_LABEL[monthFilter];
   const periodoLower = monthFilter==='todos' ? 'Acumulado mayo-junio-julio-agosto-septiembre 2026' : `Vista de ${MONTH_LABEL[monthFilter]}`;
-  document.getElementById('tiendaDigitalPerfilSub').textContent = `$ y unidades por perfil de cliente · ${periodo}`;
+  document.getElementById('tiendaDigitalPerfilSub').textContent = (metric==='ventas' ? '$' : 'Unidades') + ` por perfil de cliente · ${periodo}`;
   { const _fn = document.getElementById('tiendaDigitalPerfilFootnote'); if(_fn) _fn.textContent =`${periodoLower}. % calculado sobre el total visible en cada tienda. Fuente: CONSOLIDADO_HERO 2026, columna "Perfil Tiendas Hero/AAP".`; }
 
   const digitalBudgetEl = document.getElementById('tiendaDigitalBudgetLine');
   if(TIENDA_DIGITAL_BUDGET[monthFilter]){
     const budgetObj = TIENDA_DIGITAL_BUDGET[monthFilter];
     const totalVD = sum(rows.map(r=>r.v)), totalUD = sum(rows.map(r=>r.u));
-    const pctV = Math.round(totalVD/budgetObj.ventas*100);
-    const pctU = Math.round(totalUD/budgetObj.unidades*100);
-    digitalBudgetEl.innerHTML = `Cumplimiento presupuesto ${MONTH_LABEL_SHORT[monthFilter]}: <b>${pctV}%</b> en $ (${fmtMoney(totalVD)}/${fmtMoney(budgetObj.ventas)}) · <b>${pctU}%</b> en u. (${fmt(totalUD)}/${fmt(budgetObj.unidades)})`;
+    const pctActive = metric==='ventas' ? Math.round(totalVD/budgetObj.ventas*100) : Math.round(totalUD/budgetObj.unidades*100);
+    digitalBudgetEl.innerHTML = metric==='ventas'
+      ? `Cumplimiento presupuesto ${MONTH_LABEL_SHORT[monthFilter]}: <b>${pctActive}%</b> (${fmtMoney(totalVD)}/${fmtMoney(budgetObj.ventas)})`
+      : `Cumplimiento presupuesto ${MONTH_LABEL_SHORT[monthFilter]}: <b>${pctActive}%</b> (${fmt(totalUD)}/${fmt(budgetObj.unidades)})`;
   } else {
     digitalBudgetEl.innerHTML = '';
   }
 
   if(chartTiendaDigitalPerfilInst) chartTiendaDigitalPerfilInst.destroy();
-  chartTiendaDigitalPerfilInst = makePerfilRankingChart('chartTiendaDigitalPerfil', rows, getVar('--tienda-3'), { barPercentage:0.6, maxBarThickness:24, tickSize:11 });
+  chartTiendaDigitalPerfilInst = makePerfilRankingChart('chartTiendaDigitalPerfil', rows, getVar('--tienda-3'), { barPercentage:0.6, maxBarThickness:24, tickSize:11, metric });
 }
 function initTiendasPerfiles(){
   if(chartsInit.tiendasPerfiles) return; chartsInit.tiendasPerfiles = true;
@@ -7730,11 +7881,12 @@ function initTiendasPerfiles(){
    mismo modelo que Resumen > Perfiles / Retail > Perfiles ---------- */
 let chartTiendasPerfilGeneralInst = null;
 function renderTiendasPerfilGeneralChart(){
+  const metric = metricState.tiendas;
   const rows = computePerfilGeneralRowsTiendas().map(g=>({ name:g.name, color:g.color, v: mval(g.ventas), u: mval(g.data) }));
   const periodo = monthFilter==='todos' ? 'Acumulado mayo-junio-julio-agosto-septiembre 2026' : `Vista de ${MONTH_LABEL[monthFilter]}`;
   document.getElementById('tiendasPerfilGeneralSub').textContent = `Vista simplificada · ${periodo}`;
   if(chartTiendasPerfilGeneralInst) chartTiendasPerfilGeneralInst.destroy();
-  chartTiendasPerfilGeneralInst = makePerfilRankingChart('chartTiendasPerfilGeneral', rows, rows.map(r=>r.color), { paddingRight:130, tickSize:11, maxBarThickness:24 });
+  chartTiendasPerfilGeneralInst = makePerfilRankingChart('chartTiendasPerfilGeneral', rows, rows.map(r=>r.color), { paddingRight:130, tickSize:11, maxBarThickness:24, metric });
   document.getElementById('tiendasPerfilGeneralLegend').innerHTML = rows.map(r=>
     `<span class="legend-item"><span class="legend-swatch" style="background:${r.color}"></span>${r.name}</span>`).join('');
 }
@@ -7835,6 +7987,7 @@ function initResumenPerfiles(){
    agrupando los 15 perfiles en 6 grupos generales. Reacciona a mes y CON/SIN AAP. ---------- */
 let chartPerfilGeneralInst = null;
 function renderPerfilGeneralChart(){
+  const metric = metricState.resumen;
   const rows = computePerfilGeneralRows().map(g=>({ name:g.name, color:g.color, v: mval(g.ventas), u: mval(g.data) }));
   const periodo = monthFilter==='todos' ? 'Acumulado mayo-junio-julio-agosto-septiembre 2026' : `Vista de ${MONTH_LABEL[monthFilter]}`;
   document.getElementById('perfilGeneralTitle').textContent = aapMode==='con'
@@ -7842,7 +7995,7 @@ function renderPerfilGeneralChart(){
     : 'Perfiles de cliente · Resumen general (Tiendas Hero)';
   document.getElementById('perfilGeneralSub').textContent = `Vista simplificada · ${periodo}`;
   if(chartPerfilGeneralInst) chartPerfilGeneralInst.destroy();
-  chartPerfilGeneralInst = makePerfilRankingChart('chartPerfilGeneral', rows, rows.map(r=>r.color), { paddingRight:130, tickSize:11, maxBarThickness:24 });
+  chartPerfilGeneralInst = makePerfilRankingChart('chartPerfilGeneral', rows, rows.map(r=>r.color), { paddingRight:130, tickSize:11, maxBarThickness:24, metric });
   document.getElementById('perfilGeneralLegend').innerHTML = rows.map(r=>
     `<span class="legend-item"><span class="legend-swatch" style="background:${r.color}"></span>${r.name}</span>`).join('');
 }
@@ -7894,18 +8047,21 @@ function buildPerfilGeneralTable(){
 /* ---------- Resumen / Perfiles (gráfico de ranking) — reacciona al toggle CON AAP / SIN AAP ---------- */
 let chartResumenPerfilInst = null;
 function renderResumenPerfilChart(){
+  const metric = metricState.resumen;
   const rowsSource = aapMode==='con' ? PERFIL_RESUMEN_MENSUAL : PERFIL_RESUMEN_MENSUAL_SIN_AAP;
   const rows = rowsSource.map(p=>({ name:p.name, v: mval(p.ventas), u: mval(p.data) }));
-  const totalV = sum(rows.map(r=>r.v)), totalU = sum(rows.map(r=>r.u));
+  const totalActive = metric==='ventas' ? sum(rows.map(r=>r.v)) : sum(rows.map(r=>r.u));
+  const totalFmt = metric==='ventas' ? fmtMoney(totalActive) : fmt(totalActive);
   const periodo = monthFilter==='todos' ? 'Acumulado mayo-junio-julio-agosto-septiembre 2026' : `Vista de ${MONTH_LABEL[monthFilter]}`;
   document.getElementById('perfilChartTitle').textContent = aapMode==='con'
     ? 'Perfiles de cliente · Tiendas Hero + Almacenes AP'
     : 'Perfiles de cliente · Tiendas Hero';
+  { const _sub = document.getElementById('resumenPerfilSub'); if(_sub) _sub.textContent = (metric==='ventas' ? '$' : 'Unidades') + ` por perfil, canales combinados · ${periodo}`; }
   { const _fn = document.getElementById('perfilChartFootnote'); if(_fn) _fn.textContent =aapMode==='con'
-    ? `Combina AAP (Retail) y Tiendas Hero (Av. Américas + Naciones Unidas), los dos únicos canales con el campo "Perfil" registrado — no aplica a Mayoristas ni al resto de cuentas Retail (OTOM, CRESA, Master Moto). ${periodo}. % calculado sobre el total visible (${fmtMoney(totalV)}, ${fmt(totalU)} u.). Fuente: CONSOLIDADO_HERO 2026, columna "Perfil Tiendas Hero/AAP".`
-    : `Vista "SIN AAP": solo Tiendas Hero (Av. Américas + Naciones Unidas), excluye AAP (Retail). ${periodo}. % calculado sobre el total visible (${fmtMoney(totalV)}, ${fmt(totalU)} u.). Fuente: CONSOLIDADO_HERO 2026, columna "Perfil Tiendas Hero/AAP".`; }
+    ? `Combina AAP (Retail) y Tiendas Hero (Av. Américas + Naciones Unidas), los dos únicos canales con el campo "Perfil" registrado — no aplica a Mayoristas ni al resto de cuentas Retail (OTOM, CRESA, Master Moto). ${periodo}. % calculado sobre el total visible (${totalFmt}). Fuente: CONSOLIDADO_HERO 2026, columna "Perfil Tiendas Hero/AAP".`
+    : `Vista "SIN AAP": solo Tiendas Hero (Av. Américas + Naciones Unidas), excluye AAP (Retail). ${periodo}. % calculado sobre el total visible (${totalFmt}). Fuente: CONSOLIDADO_HERO 2026, columna "Perfil Tiendas Hero/AAP".`; }
   if(chartResumenPerfilInst) chartResumenPerfilInst.destroy();
-  chartResumenPerfilInst = makePerfilRankingChart('chartResumenPerfil', rows, PALETTE.s2, { paddingRight:130, tickSize:11 });
+  chartResumenPerfilInst = makePerfilRankingChart('chartResumenPerfil', rows, PALETTE.s2, { paddingRight:130, tickSize:11, metric });
 }
 
 /* ---------- Resumen / Perfiles (tabla mensual) — misma estructura que buildModelosTable(), conectada a los toggles UNIDADES/$ y CON AAP / SIN AAP ---------- */
@@ -8051,7 +8207,7 @@ function renderModelosRankingChart(){
   const modelosActive = aapMode==='con' ? MODELOS : MODELOS_SIN_AAP;
   const rows = modelosActive.map(m=>({ name:m.name, value: metric==='ventas' ? mval(m.ventas) : mval(m.data) }))
                        .sort((a,b)=> b.value - a.value);
-  const formatter = metric==='ventas' ? fmtMoney : (v)=> `${fmt(v)} u.`;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
   const maxVal = Math.max(...rows.map(r=>r.value));
   const barColor = metric==='ventas' ? PALETTE.s1 : PALETTE.s2;
   const periodo = monthFilter==='todos' ? 'Mayo-Septiembre 2026' : MONTH_LABEL[monthFilter];
@@ -8235,7 +8391,7 @@ function renderMayoristasModelosRankingChart(){
   const metric = metricState.mayoristas;
   const rows = MAYORISTAS_MODELOS.map(m=>({ name:m.name, value: metric==='ventas' ? mval(m.ventas) : mval(m.data) }))
                        .sort((a,b)=> b.value - a.value);
-  const formatter = metric==='ventas' ? fmtMoney : (v)=> `${fmt(v)} u.`;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
   const maxVal = Math.max(...rows.map(r=>r.value));
   const barColor = metric==='ventas' ? PALETTE.s1 : PALETTE.s2;
   const periodo = monthFilter==='todos' ? 'Mayo-Septiembre 2026' : MONTH_LABEL[monthFilter];
@@ -8416,7 +8572,7 @@ function renderRetailModelosRankingChart(){
   const rowsSource = aapMode==='con' ? RETAIL_MODELOS : RETAIL_MODELOS_SIN_AAP;
   const rows = rowsSource.map(m=>({ name:m.name, value: metric==='ventas' ? mval(m.ventas) : mval(m.data) }))
                        .sort((a,b)=> b.value - a.value);
-  const formatter = metric==='ventas' ? fmtMoney : (v)=> `${fmt(v)} u.`;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
   const maxVal = Math.max(...rows.map(r=>r.value));
   const barColor = metric==='ventas' ? PALETTE.s1 : PALETTE.s2;
   const periodo = monthFilter==='todos' ? 'Mayo-Septiembre 2026' : MONTH_LABEL[monthFilter];
@@ -8598,7 +8754,7 @@ function renderTiendasModelosRankingChart(){
   const metric = metricState.tiendas;
   const rows = TIENDAS_MODELOS.map(m=>({ name:m.name, value: metric==='ventas' ? mval(m.ventas) : mval(m.data) }))
                        .sort((a,b)=> b.value - a.value);
-  const formatter = metric==='ventas' ? fmtMoney : (v)=> `${fmt(v)} u.`;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
   const maxVal = Math.max(...rows.map(r=>r.value));
   const barColor = metric==='ventas' ? PALETTE.s1 : PALETTE.s2;
   const periodo = monthFilter==='todos' ? 'Mayo-Septiembre 2026' : MONTH_LABEL[monthFilter];
@@ -8699,7 +8855,7 @@ function renderTiendasVendedoresRankingChart(){
   const rows = TIENDAS_VENDEDORES.map(v=>({ name:v.name, shortName: shortVendorName(v.name), value: metric==='ventas' ? mval(v.ventas) : mval(v.data) }))
                        .filter(r=>r.value>0)
                        .sort((a,b)=> b.value - a.value);
-  const formatter = metric==='ventas' ? fmtMoney : (v)=> `${fmt(v)} u.`;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
   const maxVal = Math.max(...rows.map(r=>r.value), 1);
   const barColor = metric==='ventas' ? PALETTE.s1 : PALETTE.s2;
   const periodo = monthFilter==='todos' ? 'Mayo-Septiembre 2026' : MONTH_LABEL[monthFilter];
@@ -8966,11 +9122,11 @@ function renderTiendasCharts(){
         labels: MONTHS,
         datasets:[{
           label:'Total tiendas', data: T,
-          borderColor: getVar('--tienda-1'), backgroundColor:'transparent',
+          borderColor: PALETTE.s3, backgroundColor:'transparent',
           fill:false, tension:0,
-          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
           pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--tienda-2'),
-          pointBorderColor: getVar('--tienda-1'), pointBorderWidth:2, borderWidth:2.5
+          pointBorderColor: PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
         }]
       },
       options:{
@@ -9001,10 +9157,10 @@ function renderTiendasCharts(){
       type:'line',
       data:{ labels: MONTHS, datasets:[{
         label:'Margen bruto', data: tieMargenPcts,
-        borderColor: getVar('--tienda-1'), backgroundColor:'transparent', fill:false, tension:0,
-        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+        borderColor: PALETTE.s3, backgroundColor:'transparent', fill:false, tension:0,
+        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
         pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--tienda-2'),
-        pointBorderColor: getVar('--tienda-1'), pointBorderWidth:2, borderWidth:2.5
+        pointBorderColor: PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
       }]},
       options:{
         responsive:true, maintainAspectRatio:false,
@@ -9031,10 +9187,10 @@ function renderTiendasCharts(){
       type:'line',
       data:{ labels: MONTHS, datasets:[{
         label:'Ticket promedio', data: tieTicketProm,
-        borderColor: getVar('--tienda-1'), backgroundColor:'transparent', fill:false, tension:0,
-        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+        borderColor: PALETTE.s3, backgroundColor:'transparent', fill:false, tension:0,
+        pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
         pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--tienda-2'),
-        pointBorderColor: getVar('--tienda-1'), pointBorderWidth:2, borderWidth:2.5
+        pointBorderColor: PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
       }]},
       options:{
         responsive:true, maintainAspectRatio:false,
@@ -9263,11 +9419,11 @@ function renderRepuestosCharts(){
         labels: MONTHS,
         datasets:[{
           label:'Total repuestos', data: T,
-          borderColor: getVar('--canal-1'), backgroundColor:'transparent',
+          borderColor: PALETTE.s3, backgroundColor:'transparent',
           fill:false, tension:0,
-          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 9 : 6,
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 7 : 5,
           pointBackgroundColor:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? PALETTE.s2 : getVar('--categoria-3'),
-          pointBorderColor: getVar('--canal-1'), pointBorderWidth:2, borderWidth:2.5
+          pointBorderColor: PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
         }]
       },
       options:{
@@ -9343,11 +9499,11 @@ function renderSioTrend(){
       labels: MONTHS,
       datasets:[
         {label:'Sell In',  data: SELLIN_TOTAL,  borderColor:PALETTE.s1, backgroundColor:'transparent', fill:false, tension:0,
-          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 8 : 5,
-          pointBackgroundColor:PALETTE.s1, pointBorderColor:PALETTE.s1, pointBorderWidth:2, borderWidth:2.5},
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 6 : 4,
+          pointBackgroundColor:PALETTE.s1, pointBorderColor:PALETTE.s1, pointBorderWidth:2, borderWidth:1.5},
         {label:'Sell Out', data: SELLOUT_TOTAL, borderColor:PALETTE.s2, backgroundColor:'transparent', fill:false, tension:0,
-          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 8 : 5,
-          pointBackgroundColor:PALETTE.s2, pointBorderColor:PALETTE.s2, pointBorderWidth:2, borderWidth:2.5},
+          pointRadius:(ctx)=> monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter] ? 6 : 4,
+          pointBackgroundColor:PALETTE.s2, pointBorderColor:PALETTE.s2, pointBorderWidth:2, borderWidth:1.5},
       ]
     },
     plugins:[sioGapFillPlugin],
@@ -9360,7 +9516,7 @@ function renderSioTrend(){
       },
       plugins:{
         legend:{display:false},
-        tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8, callbacks:{label:(ctx)=> `${ctx.dataset.label}: ${fmt(ctx.parsed.y)} u.`}},
+        tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8, callbacks:{label:(ctx)=> `${ctx.dataset.label}: ${fmt(ctx.parsed.y)}`}},
         datalabels:{
           display:(ctx)=> ctx.dataIndex===0 || ctx.dataIndex===ctx.chart.data.labels.length-1 || (monthFilter!=='todos' && ctx.dataIndex===MONTH_IDX[monthFilter]),
           font:{weight:700, size:10.5},
@@ -9447,7 +9603,7 @@ function renderSioCuentasChart(){
       },
       plugins:{
         legend:{display:false},
-        tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8, callbacks:{label:(ctx)=> `${ctx.dataset.label}: ${fmt(ctx.parsed.x)} u.`}},
+        tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8, callbacks:{label:(ctx)=> `${ctx.dataset.label}: ${fmt(ctx.parsed.x)}`}},
         datalabels:{
           display:true, anchor:'end', align:'end', font:{weight:700, size:9}, color:PALETTE.ink,
           formatter:v=> v>0 ? fmt(v) : ''
@@ -9611,7 +9767,7 @@ function renderRepuestosTopChart(){
             const r = rows[ctx.dataIndex];
             const u = mval(r.data), ve = mval(r.ventas);
             const pct = totalUnidades>0 ? Math.round(u/totalUnidades*100) : 0;
-            return `${fmt(u)} u. (${pct}%) · ${fmtMoney(ve)}`;
+            return `${fmt(u)} (${pct}%) · ${fmtMoney(ve)}`;
           }
         }
       }
@@ -9628,7 +9784,7 @@ function renderRepuestosSucursalChart(){
   const rows = canalRows(REPUESTOS_SUCURSALES).map(s=>({ name:s.name, u: mval(s.data), v: mval(s.ventas) })).sort((a,b)=> b.u-a.u);
   const barColor = metric==='ventas' ? PALETTE.s1 : PALETTE.s2;
   const periodo = monthFilter==='todos' ? 'Mayo–Septiembre 2026' : MONTH_LABEL[monthFilter];
-  document.getElementById('repuestosSucursalSub').textContent = `Unidades y $ por sucursal · ${periodo}`;
+  document.getElementById('repuestosSucursalSub').textContent = `Unidades por sucursal · ${periodo}`;
   if(chartRepuestosSucursalInst) chartRepuestosSucursalInst.destroy();
   chartRepuestosSucursalInst = makeOrigenRankingChart('chartRepuestosSucursal', rows, barColor, { showPct:true, rightPad:150 });
 }
@@ -9649,7 +9805,7 @@ let chartRepuestosProvinciaInst = null, chartRepuestosCanalInst = null;
 function renderRepuestosProvinciaChart(){
   const rows = canalRows(repuestosProvinciasRaw).map(p=>({ name:p.name, u: mval(p.data), v: mval(p.ventas) })).sort((a,b)=> b.u-a.u);
   const periodo = monthFilter==='todos' ? 'Mayo–Septiembre 2026' : MONTH_LABEL[monthFilter];
-  document.getElementById('repuestosProvinciaSub').textContent = `Unidades y $ por provincia · ${periodo}`;
+  document.getElementById('repuestosProvinciaSub').textContent = `Unidades por provincia · ${periodo}`;
   if(chartRepuestosProvinciaInst) chartRepuestosProvinciaInst.destroy();
   // Provincia solo muestra el top 10 de 16 (repuestosProvinciasRaw ya viene pre-curado — ver comentario junto a su definición).
   // El % de cada barra se calcula por UNIDADES (no $, aunque el toggle esté en $) y usa como base el total real de
@@ -9670,7 +9826,7 @@ function renderRepuestosCanalChart(){
   const rows = canalRows(repuestosCategoriasRaw).map(c=>({ name: CATEGORIA_LABEL_SHORT[c.name] || c.name, u: mval(c.data), v: mval(c.ventas) }))
     .sort((a,b)=> b.v-a.v);
   const periodo = monthFilter==='todos' ? 'Mayo–Septiembre 2026' : MONTH_LABEL[monthFilter];
-  document.getElementById('repuestosCanalSub').textContent = `Unidades y $ por categoría · 16 categorías · ${periodo}`;
+  document.getElementById('repuestosCanalSub').textContent = `$ por categoría · 16 categorías · ${periodo}`;
   if(chartRepuestosCanalInst) chartRepuestosCanalInst.destroy();
   const trueTotalV = mval(canalTotal(REPUESTOS_TOTAL_VENTA, REPUESTOS_TOTAL_VENTA_BY_COMBO));
   chartRepuestosCanalInst = makeOrigenRankingChart('chartRepuestosCanal', rows, PALETTE.s3, { showPct:true, rankBy:'ventas', totalOverride: trueTotalV });
@@ -9692,7 +9848,7 @@ function renderRepuestosModelosRankingChart(){
   const metric = metricState.repuestos;
   const rows = canalRows(REPUESTOS_MODELOS).map(m=>({ name:m.name, value: metric==='ventas' ? mval(m.ventas) : mval(m.data) }))
                        .sort((a,b)=> b.value - a.value).slice(0,10);
-  const formatter = metric==='ventas' ? fmtMoney : (v)=> `${fmt(v)} u.`;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
   const maxVal = Math.max(...rows.map(r=>r.value)) || 1;
   const barColor = metric==='ventas' ? PALETTE.s1 : PALETTE.s2;
   const periodo = monthFilter==='todos' ? 'Mayo-Septiembre 2026' : MONTH_LABEL[monthFilter];
@@ -9935,14 +10091,14 @@ function renderTouchPointCharts(){
     data:{
       labels: MONTHS,
       datasets:[
-        {label:'Tiendas Hero', data: TOUCHPOINT_TIENDAS_HERO, borderColor:PALETTE.s1, backgroundColor:'transparent', fill:false, tension:0.3,
-          pointRadius:5, pointBackgroundColor:PALETTE.s1, pointBorderColor:PALETTE.s1, pointBorderWidth:2, borderWidth:2.5,
+        {label:'Tiendas Hero', data: TOUCHPOINT_TIENDAS_HERO, borderColor:PALETTE.s1, backgroundColor:'transparent', fill:false, tension:0,
+          pointRadius:4, pointBackgroundColor:PALETTE.s1, pointBorderColor:PALETTE.s1, pointBorderWidth:2, borderWidth:1.5,
           datalabels:{anchor:'end', align:'bottom', offset:7}},
-        {label:'Retail', data: TOUCHPOINT_RETAIL, borderColor:tpRetailColor, backgroundColor:'transparent', fill:false, tension:0.3,
-          pointRadius:5, pointBackgroundColor:tpRetailColor, pointBorderColor:tpRetailColor, pointBorderWidth:2, borderWidth:2.5,
+        {label:'Retail', data: TOUCHPOINT_RETAIL, borderColor:tpRetailColor, backgroundColor:'transparent', fill:false, tension:0,
+          pointRadius:4, pointBackgroundColor:tpRetailColor, pointBorderColor:tpRetailColor, pointBorderWidth:2, borderWidth:1.5,
           datalabels:{anchor:'end', align:'top', offset:7}},
-        {label:'Mayoristas', data: TOUCHPOINT_MAYORISTAS, borderColor:tpMayoristasColor, backgroundColor:'transparent', fill:false, tension:0.3,
-          pointRadius:5, pointBackgroundColor:tpMayoristasColor, pointBorderColor:tpMayoristasColor, pointBorderWidth:2, borderWidth:2.5,
+        {label:'Mayoristas', data: TOUCHPOINT_MAYORISTAS, borderColor:tpMayoristasColor, backgroundColor:'transparent', fill:false, tension:0,
+          pointRadius:4, pointBackgroundColor:tpMayoristasColor, pointBorderColor:tpMayoristasColor, pointBorderWidth:2, borderWidth:1.5,
           datalabels:{anchor:'end', align:'top', offset:7}},
       ]
     },
@@ -9957,7 +10113,7 @@ function renderTouchPointCharts(){
         legend:{display:false},
         tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8, callbacks:{label:(ctx)=> `${ctx.dataset.label}: ${fmt(ctx.parsed.y)}`}},
         datalabels:{
-          display:true, font:{weight:700, size:10},
+          display:true, font:{weight:700, size:10.5},
           color:(ctx)=> ctx.dataset.borderColor,
           formatter:(v)=> fmt(v)
         }
@@ -9965,31 +10121,30 @@ function renderTouchPointCharts(){
     }
   });
 
+  // Línea recta + etiqueta en pastilla (mismo diseño que Margen bruto/Ticket promedio, vía trendPillLabels)
+  // — no depende de mes seleccionado (esta página no tiene toggle de mes) así que el punto queda con radio
+  // fijo, sin el resaltado por mes que sí usan los demás gráficos de tendencia.
   chartTouchPointTotalInst = new Chart(document.getElementById('chartTouchPointTotal'), {
     type:'line',
     data:{
       labels: MONTHS,
       datasets:[{
         label:'Total', data: TOUCHPOINT_TOTAL,
-        borderColor: PALETTE.s2, backgroundColor:'transparent', fill:false, tension:0.3,
-        pointRadius:6, pointBackgroundColor:PALETTE.s2, pointBorderColor:PALETTE.s2, pointBorderWidth:2, borderWidth:2.75
+        borderColor: PALETTE.s3, backgroundColor:'transparent', fill:false, tension:0,
+        pointRadius:5, pointBackgroundColor:PALETTE.s2, pointBorderColor:PALETTE.s3, pointBorderWidth:2, borderWidth:2.5
       }]
     },
     options:{
       responsive:true, maintainAspectRatio:false,
-      layout:{ padding:{top:30, right:14, left:8, bottom:4} },
+      layout:{ padding:{top:40, right:48, left:36} },
       scales:{
-        x:{ grid:{display:false}, border:{display:false}, ticks:{color: PALETTE.ink, font:{size:11, weight:600}} },
+        x:{ grid:{display:false}, border:{display:false}, ticks:{color: PALETTE.ink, font:{size:11.5, weight:600}} },
         y:{ display:false, beginAtZero:true, grace:'20%' }
       },
       plugins:{
         legend:{display:false},
         tooltip:{backgroundColor:'#101f38', padding:10, cornerRadius:8, callbacks:{label:(ctx)=> `Total: ${fmt(ctx.parsed.y)}`}},
-        datalabels:{
-          display:true, font:{weight:800, size:11.5}, color:PALETTE.s2,
-          anchor:'end', align:'top', offset:6,
-          formatter:(v)=> fmt(v)
-        }
+        datalabels: trendPillLabels(()=>TOUCHPOINT_TOTAL, ()=>fmt)
       }
     }
   });
@@ -10028,6 +10183,14 @@ navItems.forEach(item=>{
     pages.forEach(p=>p.classList.remove('active'));
     document.getElementById('page-'+key).classList.add('active');
     initFns[key]();
+    // Al volver a una página ya visitada, initFns[key]() no reconstruye sus gráficos (guard
+    // chartsInit más arriba), así que sin este resize quedan con el tamaño (a veces achicado a casi
+    // nada) que tenían justo antes de ocultarse. Chart.resize() fuerza a todas las instancias ya
+    // creadas a recalcular su tamaño ahora que su página volvió a ser visible; en las páginas que
+    // siguen ocultas es un no-op inofensivo.
+    if(window.Chart && Chart.instances){
+      Object.values(Chart.instances).forEach(c=>{ try{ c.resize(); }catch(e){} });
+    }
   });
 });
 
@@ -10065,10 +10228,10 @@ aapToggles.forEach(group=>{
 /* ================= METRIC TOGGLE (UNIDADES / $) — independiente por página ================= */
 const METRIC_RENDER = {
   general:     ()=>{ if(chartsInit.general) renderGeneral(); },
-  resumen:     ()=>{ if(chartsInit.resumen) renderResumen(); if(chartsInit.resumenModelos){ buildModelosTable(); renderModelosRankingChart(); } if(chartsInit.resumenPerfiles){ buildPerfilGeneralTable(); buildPerfilesTable(); } },
+  resumen:     ()=>{ if(chartsInit.resumen) renderResumen(); if(chartsInit.resumenModelos){ buildModelosTable(); renderModelosRankingChart(); } if(chartsInit.resumenPerfiles){ renderPerfilGeneralChart(); buildPerfilGeneralTable(); renderResumenPerfilChart(); buildPerfilesTable(); } },
   mayoristas:  ()=>{ if(chartsInit.mayoristas) renderMayoristas(); if(chartsInit.mayoristasModelos){ buildMayoristasModelosTable(); renderMayoristasModelosRankingChart(); } },
-  retail:      ()=>{ if(chartsInit.retail) renderRetail(); if(chartsInit.retailOrigen){ buildAapOrigenTable(); buildNonAapOrigenTable(); } if(chartsInit.retailPerfiles){ buildRetailPerfilGeneralTable(); buildRetailPerfilesTable(); } if(chartsInit.retailModelos){ buildRetailModelosTable(); renderRetailModelosRankingChart(); } },
-  tiendas:     ()=>{ if(chartsInit.tiendas) renderTiendas(); if(chartsInit.tiendasPerfiles){ buildTiendasPerfilGeneralTable(); buildTiendaPerfilMensualTable(PERFIL_TIENDA_AMERICAS_MENSUAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS, 'tblTiendaAmericasMensual', 'tiendaAmericasMensualSubtitle', 'tiendaAmericasMensualFootnote', 'Tienda Av. Américas.'); buildTiendaPerfilMensualTable(PERFIL_TIENDA_NACIONES_MENSUAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL_VENTAS, 'tblTiendaNacionesMensual', 'tiendaNacionesMensualSubtitle', 'tiendaNacionesMensualFootnote', 'Tienda Naciones Unidas.'); buildTiendaPerfilMensualTable(PERFIL_CANAL_DIGITAL_MENSUAL, PERFIL_CANAL_DIGITAL_MONTH_TOTAL, PERFIL_CANAL_DIGITAL_MONTH_TOTAL_VENTAS, 'tblTiendaDigitalMensual', 'tiendaDigitalMensualSubtitle', 'tiendaDigitalMensualFootnote', 'Canal Digital.'); } if(chartsInit.tiendasModelos){ buildTiendasModelosTable(); buildTiendasTicketMensualTable(); renderTiendasModelosRankingChart(); } if(chartsInit.tiendasVendedores){ buildTiendasVendedoresTable(); renderTiendasVendedoresRankingChart(); } },
+  retail:      ()=>{ if(chartsInit.retail) renderRetail(); if(chartsInit.retailOrigen){ renderRetailOrigenAAPChart(); buildAapOrigenTable(); renderRetailOrigenNonAAPChart(); buildNonAapOrigenTable(); } if(chartsInit.retailPerfiles){ renderRetailPerfilGeneralChart(); buildRetailPerfilGeneralTable(); renderRetailPerfilAAPChart(); buildRetailPerfilesTable(); } if(chartsInit.retailModelos){ buildRetailModelosTable(); renderRetailModelosRankingChart(); } },
+  tiendas:     ()=>{ if(chartsInit.tiendas) renderTiendas(); if(chartsInit.tiendasPerfiles){ renderTiendasPerfilGeneralChart(); buildTiendasPerfilGeneralTable(); renderTiendaAmericasPerfilChart(); renderTiendaNacionesPerfilChart(); renderTiendaDigitalPerfilChart(); buildTiendaPerfilMensualTable(PERFIL_TIENDA_AMERICAS_MENSUAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL, PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS, 'tblTiendaAmericasMensual', 'tiendaAmericasMensualSubtitle', 'tiendaAmericasMensualFootnote', 'Tienda Av. Américas.'); buildTiendaPerfilMensualTable(PERFIL_TIENDA_NACIONES_MENSUAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL, PERFIL_TIENDA_NACIONES_MONTH_TOTAL_VENTAS, 'tblTiendaNacionesMensual', 'tiendaNacionesMensualSubtitle', 'tiendaNacionesMensualFootnote', 'Tienda Naciones Unidas.'); buildTiendaPerfilMensualTable(PERFIL_CANAL_DIGITAL_MENSUAL, PERFIL_CANAL_DIGITAL_MONTH_TOTAL, PERFIL_CANAL_DIGITAL_MONTH_TOTAL_VENTAS, 'tblTiendaDigitalMensual', 'tiendaDigitalMensualSubtitle', 'tiendaDigitalMensualFootnote', 'Canal Digital.'); } if(chartsInit.tiendasModelos){ buildTiendasModelosTable(); buildTiendasTicketMensualTable(); renderTiendasModelosRankingChart(); } if(chartsInit.tiendasVendedores){ buildTiendasVendedoresTable(); renderTiendasVendedoresRankingChart(); } },
   repuestosresumen: ()=>{ if(chartsInit.repuestosresumen) renderRepuestosResumen(); },
   repuestos:   ()=>{ if(chartsInit.repuestos) renderRepuestos(); if(chartsInit.repuestosTop){ renderRepuestosTopChart(); buildRepuestosTopTable(); renderRepuestosSucursalChart(); buildRepuestosSucursalTable(); } if(chartsInit.repuestosProvincia){ renderRepuestosProvinciaChart(); buildRepuestosProvinciaTable(); renderRepuestosCanalChart(); buildRepuestosCanalTable(); } if(chartsInit.repuestosModelos){ buildRepuestosModelosTable(); renderRepuestosModelosRankingChart(); } },
   repuestosservicio: ()=>{ if(chartsInit.repuestosservicio) renderRepuestosServicio(); },
