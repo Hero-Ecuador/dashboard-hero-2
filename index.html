@@ -4462,17 +4462,19 @@ const PERFIL_TIENDA_AMERICAS_MENSUAL = [
   {name:'BB',          data:[0,2,3,0,1],   ventas:[0,5597.23,13240.54,0,3391.25]},
   {name:'B',           data:[0,0,0,1,0],   ventas:[0,0,0,3100,0]},
   {name:'B+',          data:[0,0,1,2,0],   ventas:[0,0,3780.07,7309.88,0]},
-  {name:'B-',          data:[0,1,1,4,6],   ventas:[0,3314.62,2232.91,10345.89,11602.31]},
+  {name:'B-',          data:[0,1,1,4,7],   ventas:[0,3314.62,2232.91,10345.89,12854.85]},
   {name:'CONTADO',     data:[5,10,3,2,0],  ventas:[12241.26,21874.79,8669.52,5024.71,0]},
   {name:'COLABORADOR', data:[5,6,3,2,0],   ventas:[5706.50,9052.04,5040.80,4715.25,0]},
 ];
 // Actualización 12-sep-2026: +1 u. AA en septiembre (XOOM 125R, $3.167,78, Av. Américas — ver nota arriba de
-// TIENDAS_TOTAL). La otra unidad nueva de Av. Américas (ECO DELUXE, $1.252,54) llegó con Perfil vacío en el
-// archivo fuente, así que no entra en ningún perfil todavía — Av. Américas vendió 10 u. reales en septiembre
-// pero este total de perfiles queda en 9 (1 u. pendiente de clasificar); se actualizará cuando el archivo
-// traiga el perfil de esa unidad asignado (mismo patrón ya visto varias veces este mes).
-const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL = [12,28,22,24,9];
-const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS = [21982.02,58170,64333.32,66570,21097.82];
+// TIENDAS_TOTAL).
+// Actualización 13-sep-2026: la unidad que quedó "pendiente de clasificar" (ECO DELUXE NEGRO, $1.252,54,
+// cliente CONDUCETES S.A.S., Crédito Tiendas) se asigna a B- — las otras 2 compras del mismo cliente en
+// septiembre (una de ellas en el mismo lote/factura que reemplaza una venta anulada) ya vienen con Perfil
+// "B-" en el archivo fuente, así que esta se clasifica igual. Av. Américas ahora suma 10 u. con perfil en
+// septiembre = sus 10 u. reales (ya no queda ninguna pendiente).
+const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL = [12,28,22,24,10];
+const PERFIL_TIENDA_AMERICAS_MONTH_TOTAL_VENTAS = [21982.02,58170,64333.32,66570,22350.36];
 
 // Anomalía 28-ago-2026: 1 u. de agosto (HUNK 125R, $3.043, perfil AAA) que en el corte anterior estaba
 // Facturada pasó a Estado "Anuladas" en este archivo — venta anulada, se resta de Naciones Unidas.
@@ -4512,7 +4514,7 @@ const PERFIL_RESUMEN = [
   {name:'BB',         v:49168.25, u:20},
   {name:'B',          v:24935, u:17},
   {name:'B+',         v:36158.53, u:17},
-  {name:'B-',         v:54550.73, u:29},
+  {name:'B-',         v:57408.27, u:31},
   {name:'C+',         v:9655,  u:8},
   {name:'NSSA',       v:2880,  u:2},
   {name:'CONTADO',    v:75565.09, u:39},
@@ -4533,7 +4535,7 @@ const PERFIL_RESUMEN_MENSUAL = [
   {name:'BB',         data:[1,3,7,7,2],   ventas:[1150,6747.23,19000.54,16329.23,5941.25]},
   {name:'B',          data:[1,1,5,10,0],  ventas:[1150,1480,6330,15975,0]},
   {name:'B+',         data:[0,1,7,9,1],   ventas:[0,1730,12378.07,22050.46,1480]},
-  {name:'B-',         data:[5,4,3,10,8],  ventas:[6785,6764.62,5112.91,22335.89,15157.31]},
+  {name:'B-',         data:[5,4,3,10,9],  ventas:[6785,6764.62,5112.91,22335.89,16409.85]},
   {name:'C+',         data:[2,3,2,1,0],   ventas:[2300,3450,2300,1605,0]},
   {name:'NSSA',       data:[0,0,2,0,0],   ventas:[0,0,2880,0,0]},
   {name:'CONTADO',    data:[6,13,10,7,3], ventas:[13391.26,26692.79,18483.34,13092.71,3905]},
@@ -4542,10 +4544,14 @@ const PERFIL_RESUMEN_MENSUAL = [
   {name:'NSSB',       data:[0,0,0,1,0],   ventas:[0,0,0,1150,0]},
 ];
 // Actualización 12-sep-2026: +4 u. clasificadas en septiembre — AA (XOOM 125R Tiendas, $3.167,78), A (ECO 150
-// AAP, $1.480), B+ (ECO 150 AAP, $1.480), B- (XOOM 110 AAP, $1.605). La ECO DELUXE nueva de Av. Américas
-// queda sin perfil todavía (ver nota en PERFIL_TIENDA_AMERICAS_MONTH_TOTAL), no está incluida aquí.
-const PERFIL_MONTH_TOTAL = [28,58,108,108,24]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
-const PERFIL_MONTH_TOTAL_VENTAS = [45377.02,103006.00,195821.14,220833.57,47374.30]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
+// AAP, $1.480), B+ (ECO 150 AAP, $1.480), B- (XOOM 110 AAP, $1.605).
+// Actualización 13-sep-2026: +1 u. B- (ECO DELUXE NEGRO, $1.252,54, cliente CONDUCETES S.A.S., Av. Américas —
+// era la unidad "sin perfil todavía" mencionada arriba; ver nota en PERFIL_TIENDA_AMERICAS_MONTH_TOTAL). De
+// paso se corrigió PERFIL_RESUMEN (acumulado): su fila B- se había quedado desactualizada desde el 12-sep y
+// no reflejaba todavía la unidad AAP ($1.605) de esa misma actualización — ya coincide con la suma de esta
+// tabla mensual.
+const PERFIL_MONTH_TOTAL = [28,58,108,108,25]; // unidades con perfil asignado, combinado AAP+Tiendas Hero, por mes
+const PERFIL_MONTH_TOTAL_VENTAS = [45377.02,103006.00,195821.14,220833.57,48626.84]; // $ con perfil asignado, combinado AAP+Tiendas Hero, por mes
 
 // Vista "SIN AAP" (Resumen): PERFIL_RESUMEN menos AAP = solo Tiendas Hero (Av. Américas + Naciones Unidas + Canal Digital).
 const PERFIL_RESUMEN_SIN_AAP = [
@@ -4556,7 +4562,7 @@ const PERFIL_RESUMEN_SIN_AAP = [
   {name:'BB',         v:28800.25, u:7},
   {name:'B',          v:3100,  u:1},
   {name:'B+',         v:16732.53, u:5},
-  {name:'B-',         v:32545.73, u:14},
+  {name:'B-',         v:33798.27, u:15},
   {name:'CONTADO',    v:51914.09, u:22},
   {name:'COLABORADOR',v:24514.59, u:16},
 ];
@@ -4566,6 +4572,8 @@ const PERFIL_RESUMEN_SIN_AAP = [
 // arriba de PERFIL_RESUMEN_MENSUAL): usa "Ventas" en vez de "Venta Neta" en las 3 tiendas propias, los 5 meses.
 // Actualización 12-sep-2026: AA +1 u. en septiembre (XOOM 125R, $3.167,78, Av. Américas — ver nota arriba de
 // TIENDAS_TOTAL).
+// Actualización 13-sep-2026: B- +1 u. en septiembre (ECO DELUXE NEGRO, $1.252,54, cliente CONDUCETES S.A.S.,
+// Av. Américas — ver nota arriba de PERFIL_TIENDA_AMERICAS_MONTH_TOTAL, unidad que estaba pendiente de perfil).
 const PERFIL_RESUMEN_MENSUAL_SIN_AAP = [
   {name:'AAA',        data:[2,6,7,6,0],  ventas:[4034.26,8612.70,20677.52,17162.32,0]},
   {name:'AA',         data:[0,1,3,8,2],  ventas:[0,2993,6965.95,23620.53,6104.26]},
@@ -4574,7 +4582,7 @@ const PERFIL_RESUMEN_MENSUAL_SIN_AAP = [
   {name:'BB',         data:[0,2,3,1,1],  ventas:[0,5597.23,13240.54,6571.23,3391.25]},
   {name:'B',          data:[0,0,0,1,0],  ventas:[0,0,0,3100,0]},
   {name:'B+',         data:[0,0,1,4,0],  ventas:[0,0,3780.07,12952.46,0]},
-  {name:'B-',         data:[0,1,1,5,7],  ventas:[0,3314.62,2232.91,13445.89,13552.31]},
+  {name:'B-',         data:[0,1,1,5,8],  ventas:[0,3314.62,2232.91,13445.89,14804.85]},
   {name:'CONTADO',    data:[5,10,4,3,0], ventas:[12241.26,21874.79,10673.34,7124.71,0]},
   {name:'COLABORADOR',data:[5,6,3,2,0],  ventas:[5706.50,9052.04,5040.80,4715.25,0]},
 ];
