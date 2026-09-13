@@ -292,6 +292,11 @@
   .kpi-delta{font-size:10.5px;font-weight:600;color:var(--good);margin-top:1px;}
   .kpi-card.accent .kpi-delta{visibility:hidden;}
   .kpi-delta.muted{color:var(--text-muted);}
+  /* Tarjetas de "Margen Bruto por Forma de Pago" (Tiendas): más pequeñas que el .kpi-card estándar — son 3
+     apiladas al lado del gráfico y el foco de ese panel son ellas, no el gráfico, así que van compactas. */
+  .kpi-card-compact{padding:7px 10px 6px;}
+  .kpi-card-compact .kpi-value{font-size:15px;margin-top:2px;}
+  .kpi-card-compact .kpi-delta{font-size:9.5px;}
   .kpi-progress-track{width:100%;height:9px;border-radius:5px;background:var(--page-plane);margin-top:5px;overflow:hidden;flex:0 0 auto;}
   .kpi-progress-fill{height:100%;border-radius:5px;background:var(--good);transition:width .2s;}
   .kpi-hero{font-size:25px;font-weight:800;letter-spacing:-.5px;line-height:1;margin:3px 0 5px;}
@@ -2235,6 +2240,40 @@
           </div>
         </div>
       </div>
+
+      <!-- Panel de control fijo: visible en cualquier pestaña (Unidades/Perfiles/Modelos/Vendedores), no es
+           una subvista más — vive fuera de .retail-subview a propósito. Las tarjetas KPI siguen el filtro de
+           mes global; la tendencia siempre muestra Mayo-Septiembre completo, sin importar el filtro. -->
+      <div class="panel" style="margin-top:10px;">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Margen Bruto por Forma de Pago</div>
+            <div class="panel-sub">Contado · Crédito · Crédito Colaborador — Tiendas</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:stretch;">
+          <div style="display:flex;flex-direction:column;gap:6px;flex:0 0 190px;">
+            <div class="kpi-card kpi-card-compact" id="kpiMargenPagoContadoCard">
+              <div class="kpi-top"><span class="kpi-label"><span class="legend-swatch" style="background:var(--series-1);margin-right:6px;vertical-align:middle;"></span>Contado</span></div>
+              <div class="kpi-value" id="kpiMargenPagoContadoValue">—</div>
+              <div class="kpi-delta muted" id="kpiMargenPagoContadoSub">Margen bruto</div>
+            </div>
+            <div class="kpi-card kpi-card-compact" id="kpiMargenPagoCreditoCard">
+              <div class="kpi-top"><span class="kpi-label"><span class="legend-swatch" style="background:var(--series-2);margin-right:6px;vertical-align:middle;"></span>Crédito</span></div>
+              <div class="kpi-value" id="kpiMargenPagoCreditoValue">—</div>
+              <div class="kpi-delta muted" id="kpiMargenPagoCreditoSub">Margen bruto</div>
+            </div>
+            <div class="kpi-card kpi-card-compact" id="kpiMargenPagoColabCard">
+              <div class="kpi-top"><span class="kpi-label"><span class="legend-swatch" style="background:var(--series-4);margin-right:6px;vertical-align:middle;"></span>Crédito Colaborador</span></div>
+              <div class="kpi-value" id="kpiMargenPagoColabValue">—</div>
+              <div class="kpi-delta muted" id="kpiMargenPagoColabSub">Margen bruto</div>
+            </div>
+          </div>
+          <div style="flex:1 1 auto;min-width:0;display:flex;">
+            <div class="chart-box" style="height:auto;"><canvas id="chartMargenPagoTrend"></canvas></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ================= PAGE: SELL IN / SELL OUT ================= -->
@@ -4042,6 +4081,29 @@ const TIENDAS_MARGEN_VENTAS      = TIENDAS_VENTAS;
 // Ventas−Costo ($27.236,84 − $15.735,44) = $11.501,40 (42.2%).
 const TIENDAS_MARGEN_UTILIDAD    = [6933.44, 22065.09, 33538.72, 56190.27, 11501.40];
 
+// Margen Bruto por Forma de Pago (Contado/Crédito/Crédito Colaborador) — canal TIENDAS. Verificado 13-sep-2026
+// contra el archivo fuente (CONSOLIDADO_HERO_3_2_1_1_1_1.xlsx) replicando en Python/pandas el análisis en R de
+// Santiago tras actualizar la columna "Forma Pago": Crédito Colaborador = pedidos "CREDITO TIENDAS" cuyo
+// "Perfil Tiendas Hero/AAP" == "COLABORADOR". Los 3 segmentos son tasas de margen independientes (no suman
+// 100%, cada uno es Utilidad/Ventas de su propio subconjunto). Septiembre aún no registra ventas con Crédito
+// Colaborador (null = sin dato). "todos" es el acumulado real Ventas−Costo de Mayo-Septiembre, no un promedio.
+// Corregido 13-sep-2026: Santiago detectó que Agosto tenía 1 fila ($2.598,22, XOOM 125R en HERO QUITO) con
+// Forma de Pago "CREDITO CANAL DIGITAL" (Perfil "AAA", no COLABORADOR) que no entraba en ninguno de los 3
+// segmentos — por eso CONTADO+CREDITO TIENDAS de Agosto daba $112.810,35 y no los $115.408,57 de Ventas total
+// de Tiendas que ya se muestra en el resto de la página. A pedido de Santiago esa fila se sumó a CREDITO (es
+// una venta a crédito, aunque el canal de pago diga "digital"): CREDITO Agosto pasó de 56.9% a 56.5% (Ventas
+// $81.611,30 − Costo $35.506,06) y el acumulado CREDITO (todos) de 55.1% a 54.9%. Los demás meses/segmentos
+// no cambian — esa fue la única fila de Mayo-Septiembre con "CREDITO CANAL DIGITAL".
+const MARGEN_PAGO_ORDER = ['mayo','junio','julio','agosto','septiembre'];
+const MARGEN_PAGO = {
+  mayo:       { contado:32.4, credito:55.4, colab:12.8 },
+  junio:      { contado:33.7, credito:49.9, colab:16.3 },
+  julio:      { contado:32.1, credito:56.9, colab:17.6 },
+  agosto:     { contado:31.6, credito:56.5, colab:18.9 },
+  septiembre: { contado:32.9, credito:48.5, colab:null },
+  todos:      { contado:32.5, credito:54.9, colab:16.3 },
+};
+
 // Margen bruto combinado (general de Resumen): Mayoristas + Retail (con AAP) + Tiendas — mismo universo de
 // canales que suma el total general de la página Resumen.
 const RESUMEN_MARGEN_VENTAS   = MONTHS.map((_,i)=> MAYORISTAS_MARGEN_VENTAS[i] + RETAIL_MARGEN_VENTAS[i] + TIENDAS_MARGEN_VENTAS[i]);
@@ -5785,6 +5847,43 @@ function trendPillLabels(getData, getFormatter, opts){
           return `${sign}${pct}%`;
         }
       }
+    }
+  };
+}
+
+// Igual que la "variation" de trendPillLabels (pill verde/rojo con el % de cambio vs. mes anterior) pero
+// SIN el pill de valor — pensado para gráficos de líneas múltiples (varias series a la vez), donde mostrar
+// el valor de cada punto además de su variación saturaría el gráfico.
+function variationPillOnly(getData, opts){
+  opts = opts || {};
+  const anchor = opts.anchor !== undefined ? opts.anchor : 'end';
+  const align = opts.align !== undefined ? opts.align : 'top';
+  const offset = opts.offset !== undefined ? opts.offset : 6;
+  return {
+    display:(ctx)=>{
+      const i = ctx.dataIndex, data = getData();
+      if(i===0) return false;
+      const prev = data[i-1], v = data[i];
+      return prev !== null && prev !== undefined && prev !== 0 && v !== null && v !== undefined;
+    },
+    anchor, align, offset,
+    font:{weight:800, size:9}, borderRadius:8, padding:{top:2,right:5,bottom:2,left:5},
+    backgroundColor:(ctx)=>{
+      const i = ctx.dataIndex, data = getData();
+      const diff = data[i]-data[i-1];
+      return diff>=0 ? 'rgba(12,163,12,0.14)' : 'rgba(208,59,59,0.14)';
+    },
+    color:(ctx)=>{
+      const i = ctx.dataIndex, data = getData();
+      const diff = data[i]-data[i-1];
+      return diff>=0 ? '#0ca30c' : '#d03b3b';
+    },
+    formatter:(v,ctx)=>{
+      const i = ctx.dataIndex, data = getData();
+      const prev = data[i-1];
+      const pct = Math.round((v-prev)/prev*100);
+      const sign = pct>0 ? '+' : '';
+      return `${sign}${pct}%`;
     }
   };
 }
@@ -9219,11 +9318,103 @@ function renderTiendas(){
   renderTiendasKpis();
   renderTiendaStoreCards();
   renderTiendasCharts();
+  renderMargenPago();
 }
 
 function initTiendas(){
   if(chartsInit.tiendas) return; chartsInit.tiendas = true;
   renderTiendas();
+}
+
+// Panel "Margen Bruto por Forma de Pago" (Contado/Crédito/Crédito Colaborador) — fijo al final de Tiendas,
+// visible en cualquier pestaña. Las 3 tarjetas KPI siguen monthFilter (mes seleccionado o "todos" =
+// acumulado); la tendencia de abajo siempre muestra los 5 meses completos, para no perder el contexto
+// histórico al filtrar — así lo pidió Santiago.
+let chartMargenPagoTrendInst = null;
+
+function renderMargenPago(){
+  const m = MARGEN_PAGO[monthFilter];
+  const fmtMargenPct = v => (v===null || v===undefined) ? 'Sin dato' : (Math.round(v*10)/10)+'%';
+  const subLabel = monthFilter==='todos' ? 'Acumulado Mayo–Septiembre' : MONTH_LABEL[monthFilter];
+
+  document.getElementById('kpiMargenPagoContadoValue').textContent = fmtMargenPct(m.contado);
+  document.getElementById('kpiMargenPagoCreditoValue').textContent = fmtMargenPct(m.credito);
+  document.getElementById('kpiMargenPagoColabValue').textContent = fmtMargenPct(m.colab);
+  document.getElementById('kpiMargenPagoContadoSub').textContent = subLabel;
+  document.getElementById('kpiMargenPagoCreditoSub').textContent = subLabel;
+  document.getElementById('kpiMargenPagoColabSub').textContent = (m.colab===null) ? `Sin ventas · ${subLabel}` : subLabel;
+
+  // Ordena las 3 tarjetas de mayor a menor margen (mes filtrado o acumulado) usando CSS order — sin dato
+  // (Crédito Colaborador en Septiembre) siempre queda al final, no compite por posición con un valor real.
+  const cardOrder = [
+    { id:'kpiMargenPagoContadoCard', v:m.contado },
+    { id:'kpiMargenPagoCreditoCard', v:m.credito },
+    { id:'kpiMargenPagoColabCard',   v:m.colab },
+  ].sort((a,b)=> (b.v===null?-Infinity:b.v) - (a.v===null?-Infinity:a.v));
+  cardOrder.forEach((c,i)=>{ document.getElementById(c.id).style.order = i; });
+
+  const contadoTrend = MARGEN_PAGO_ORDER.map(k=>MARGEN_PAGO[k].contado);
+  const creditoTrend = MARGEN_PAGO_ORDER.map(k=>MARGEN_PAGO[k].credito);
+  const colabTrend   = MARGEN_PAGO_ORDER.map(k=>MARGEN_PAGO[k].colab);
+  const curIdx = monthFilter!=='todos' ? MONTH_IDX[monthFilter] : -1;
+  const radiusFor = (arr)=> (ctx)=> (ctx.dataIndex===curIdx && arr[ctx.dataIndex]!==null) ? 7 : 5;
+
+  // Ajusta el eje Y (oculto) al mínimo/máximo real de los 3 segmentos — así el punto más alto y el más bajo
+  // usan todo el alto disponible del gráfico, en vez del padding automático de Chart.js.
+  const allVals = [...contadoTrend, ...creditoTrend, ...colabTrend].filter(v=>v!==null && v!==undefined);
+  const dataMin = Math.min(...allVals), dataMax = Math.max(...allVals);
+  const yPad = (dataMax-dataMin)*0.06 || 2;
+
+  if(!chartMargenPagoTrendInst){
+    chartMargenPagoTrendInst = new Chart(document.getElementById('chartMargenPagoTrend'), {
+      type:'line',
+      data:{
+        labels: MONTHS,
+        datasets:[
+          // Las 3 líneas comparten el mismo color y grosor que las demás Tendencias de Tiendas (PALETTE.s3,
+          // borderWidth 2.5, tension 0) — la identidad de cada segmento la dan solo las bolitas rellenas
+          // (pointBackgroundColor), no el trazo, para que el gráfico se lea limpio.
+          { label:'Contado', data:contadoTrend, borderColor:PALETTE.s3, backgroundColor:'transparent',
+            fill:false, tension:0, spanGaps:false, borderWidth:2.5,
+            pointRadius:radiusFor(contadoTrend), pointBackgroundColor:PALETTE.s1, pointBorderColor:PALETTE.s3, pointBorderWidth:2,
+            datalabels:variationPillOnly(()=>contadoTrend) },
+          { label:'Crédito', data:creditoTrend, borderColor:PALETTE.s3, backgroundColor:'transparent',
+            fill:false, tension:0, spanGaps:false, borderWidth:2.5,
+            pointRadius:radiusFor(creditoTrend), pointBackgroundColor:PALETTE.s2, pointBorderColor:PALETTE.s3, pointBorderWidth:2,
+            datalabels:variationPillOnly(()=>creditoTrend) },
+          { label:'Crédito Colaborador', data:colabTrend, borderColor:PALETTE.s3, backgroundColor:'transparent',
+            fill:false, tension:0, spanGaps:false, borderWidth:2.5,
+            pointRadius:radiusFor(colabTrend), pointBackgroundColor:PALETTE.s4, pointBorderColor:PALETTE.s3, pointBorderWidth:2,
+            datalabels:variationPillOnly(()=>colabTrend) },
+        ]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        interaction:{ mode:'index', intersect:false },
+        layout:{ padding:{top:26, right:10, left:10, bottom:2} },
+        scales:{
+          x:{ grid:{display:false}, border:{display:false}, ticks:{color:PALETTE.ink, font:{size:11.5, weight:600}} },
+          y:{ display:false, min:dataMin-yPad, max:dataMax+yPad }
+        },
+        plugins:{
+          legend:{ display:false },
+          tooltip:{ backgroundColor:'#101f38', padding:10, cornerRadius:8,
+            callbacks:{ label:(ctx)=> ctx.parsed.y===null ? `${ctx.dataset.label}: sin dato` : `${ctx.dataset.label}: ${ctx.parsed.y}%` } },
+          datalabels:{ display:false }
+        }
+      }
+    });
+  } else {
+    chartMargenPagoTrendInst.data.datasets[0].data = contadoTrend;
+    chartMargenPagoTrendInst.data.datasets[0].pointRadius = radiusFor(contadoTrend);
+    chartMargenPagoTrendInst.data.datasets[1].data = creditoTrend;
+    chartMargenPagoTrendInst.data.datasets[1].pointRadius = radiusFor(creditoTrend);
+    chartMargenPagoTrendInst.data.datasets[2].data = colabTrend;
+    chartMargenPagoTrendInst.data.datasets[2].pointRadius = radiusFor(colabTrend);
+    chartMargenPagoTrendInst.options.scales.y.min = dataMin-yPad;
+    chartMargenPagoTrendInst.options.scales.y.max = dataMax+yPad;
+    chartMargenPagoTrendInst.update();
+  }
 }
 
 /* ================= REPUESTOS ================= */
