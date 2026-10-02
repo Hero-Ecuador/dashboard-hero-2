@@ -2034,11 +2034,42 @@
             </div>
           </div>
         </div>
-        <!-- HERO SANTO DOMINGO: tarjeta quitada 14-sep-2026 a pedido de Santiago, la apertura de la tienda no
-             se va a dar este mes, así que no debe aparecer en el panel de Tiendas por ahora (también se excluyó
-             de tiendasActive en el JS, que la sacaba de los gráficos/tabla). Se puede volver a agregar el bloque
-             (mismo patrón que HERO PORTOVIEJO arriba, con prefijo kpiTiendaSantoDomingo) si la tienda abre más
-             adelante y hay presupuesto/ventas que trackear. -->
+        <!-- HERO SANTO DOMINGO: tarjeta quitada 14-sep-2026 a pedido de Santiago (la apertura no se daba ese
+             mes) y vuelta a agregar el 2-oct-2026 (a pedido de Santiago, "agrega la tarjeta... haz espacio para
+             el") porque ya tiene presupuesto de Octubre (6 u. / $14.364, ver HERO_SANTO_DOMINGO_BUDGET_UNITS/
+             VENTAS). Mismo patrón que HERO PORTOVIEJO arriba, prefijo kpiTiendaSantoDomingo. Sigue sin ventas
+             reales todavía (tienda sin apertura), igual que Portoviejo antes de su primera venta. -->
+        <div class="store-block" id="tiendaSantoDomingoStoreBlock">
+          <div class="store-block-name"><span class="legend-swatch" style="background:#d9d9d9;"></span>HERO SANTO DOMINGO</div>
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-top"><span class="kpi-label">Presupuesto total</span></div>
+              <div class="kpi-value" id="kpiTiendaSantoDomingoBudgetValue">—</div>
+              <div class="kpi-delta muted" id="kpiTiendaSantoDomingoBudgetDelta">Sin presupuesto asignado</div>
+            </div>
+            <div class="kpi-card accent">
+              <div class="kpi-top"><span class="kpi-label" id="kpiTiendaSantoDomingoTotalLabel">Unidades totales</span>
+                <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"></path><path d="M5 10v10h14V10"></path></svg></div>
+              </div>
+              <div class="kpi-value" id="kpiTiendaSantoDomingoTotalValue">0</div>
+              <div class="kpi-delta" id="kpiTiendaSantoDomingoTotalDelta">Mayo 0 · Junio 0 · Julio 0 · Agosto 0</div>
+              <div class="kpi-delta" id="kpiTiendaSantoDomingoCumplimiento" style="margin-top:2px;"></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-top"><span class="kpi-label">Cumplimiento</span><span class="kpi-state-tag neutral" id="kpiTiendaSantoDomingoStateTag">SIN DATO</span></div>
+              <div class="kpi-hero neutral" id="kpiTiendaSantoDomingoHero">—</div>
+              <div class="kpi-progress-track"><div class="kpi-progress-fill" id="kpiTiendaSantoDomingoProgressFill" style="width:0%;background:var(--border);"></div></div>
+              <div class="kpi-delta muted" id="kpiTiendaSantoDomingoProgressText">Tienda todavía sin apertura / sin ventas registradas</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-top"><span class="kpi-label" id="kpiTiendaSantoDomingoCompareLabel">Julio vs. Junio</span>
+                <div class="kpi-icon" id="kpiTiendaSantoDomingoCompareIcon" style="background:rgba(107,106,102,0.12);"><svg viewBox="0 0 24 24" fill="none" stroke="#6b6a66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path></svg></div>
+              </div>
+              <div class="kpi-value" id="kpiTiendaSantoDomingoCompareValue">0%</div>
+              <div class="kpi-delta muted" id="kpiTiendaSantoDomingoCompareSub">0 → 0 unidades</div>
+            </div>
+          </div>
+        </div>
           </div>
         </div>
 
@@ -4911,9 +4942,12 @@ const tiendas = {
 // Actualizado 11-sep-2026: "HERO SANTO DOMINGO" (tienda nueva, sin apertura/sin ventas reales todavía) tuvo
 // presupuesto propio de septiembre (10 u. / $27.618,07) y su propia tarjeta KPI, igual que HERO PORTOVIEJO.
 // CORRECCIÓN 14-sep-2026: Santiago pidió sacarla del panel de Tiendas por completo (tarjeta y gráficos) porque
-// la apertura no se va a dar este mes — vuelve a quedar excluida de tiendasActive, igual que antes del 11-sep
-// (cuando se llamaba "HERO ST DO"), así que no aparece en las barras, la dona ni la tabla de detalle mensual.
-const tiendasActive = tiendas.stores.filter(s=>s.name!=='HERO SANTO DOMINGO').map((s,i)=>({...s, color: TIENDA_COLORS[i]}));
+// la apertura no se va a dar este mes — quedó excluida de tiendasActive, igual que antes del 11-sep (cuando se
+// llamaba "HERO ST DO"), así que no aparecía en las barras, la dona ni la tabla de detalle mensual.
+// CORRECCIÓN 2-oct-2026: Santiago pidió volver a agregar su tarjeta ("haz espacio para el") ahora que tiene
+// presupuesto de Octubre (6 u. / $14.364) — se quita el filtro, vuelve a aparecer en tiendasActive y por lo
+// tanto en barras/dona/tabla (en 0 u./$ reales, igual que Portoviejo antes de su primera venta).
+const tiendasActive = tiendas.stores.map((s,i)=>({...s, color: TIENDA_COLORS[i]}));
 
 function computeTiendasModel(metric){
   const active = tiendasActive.map(s=>{
@@ -5558,7 +5592,9 @@ const GARANTIAS_CANAL_MENSUAL = [
 const GARANTIAS_BUDGET_UNITS  = [0, 0, 0, 0, 0,0]; // sin presupuesto en unidades asignado todavía
 // Septiembre: Santiago envió el 8-sep-2026 una tabla "PRESUPUESTO DE SEPTIEMBRE ARREGLEMOS" con una línea
 // "GEX" = $15.050 — confirmó (al preguntarle) que se refiere a Garantías Extendidas, o sea esta línea.
-const GARANTIAS_BUDGET_VENTAS = [0, 0, 0, 0, 15050,0];
+// Octubre 2-oct-2026: tabla nueva de presupuesto de Octubre, línea "Gext" = $10.000 — confirmado por Santiago
+// que es Garantías Extendidas (mismo concepto que "GEX" de septiembre).
+const GARANTIAS_BUDGET_VENTAS = [0, 0, 0, 0, 15050,10000];
 
 // Presupuesto en $ asignado a Tiendas Hero por mes, para el KPI de cumplimiento en Tiendas.
 // Septiembre: corregido 8-sep-2026 con la tabla "PRESUPUESTO DE SEPTIEMBRE ARREGLEMOS" de Santiago — antes
@@ -5571,14 +5607,14 @@ const GARANTIAS_BUDGET_VENTAS = [0, 0, 0, 0, 15050,0];
 // CANAL_DIGITAL_BUDGET_VENTAS/UNITS, ahora en 0 para septiembre). Queda $226.468,20 / 82 u. — cuadra exacto
 // con la línea TIENDA de ese cuadro (82 u., que además desglosa HERO GYE 40 + HERO QUITO 25 + HERO
 // PORTOVIEJO 17 = 82, sin Canal Digital ni Santo Domingo).
-const TIENDAS_BUDGET_VENTAS = [26835,67088,102650,147011.36,226468.20,210760.84]; // Octubre 30-sep-2026: $210.760,84 = HERO GYE $99.181,57 + HERO QUITO $49.590,79 + CANAL DIGITAL $24.795,39 + HERO PORTOVIEJO $37.193,09 (tabla de presupuesto de Octubre de Santiago, HERO SANTO DOMINGO sin presupuesto este mes)
+const TIENDAS_BUDGET_VENTAS = [26835,67088,102650,147011.36,226468.20,179550]; // CORREGIDO 2-oct-2026: tabla nueva de presupuesto de Octubre de Santiago reemplaza la del 30-sep-2026 — $179.550 = HERO GYE $74.214 + HERO QUITO $38.304 + CANAL DIGITAL $21.546 + HERO PORTOVIEJO $31.122 + HERO SANTO DOMINGO $14.364
 // Presupuesto en unidades asignado a Tiendas Hero por mes (Julio, Agosto y Septiembre 2026).
-const TIENDAS_BUDGET_UNITS = { julio:50, agosto:55, septiembre:82, octubre:85 };
+const TIENDAS_BUDGET_UNITS = { julio:50, agosto:55, septiembre:82, octubre:75 }; // Octubre corregido 2-oct-2026 (era 85)
 // Presupuesto por tienda por mes (Julio y Agosto 2026, únicos meses con dato disponible).
-const TIENDA_AMERICAS_BUDGET = { julio:{ ventas:76750, unidades:40 }, agosto:{ ventas:86611.36, unidades:30 }, octubre:{ ventas:99181.57, unidades:40 } }; // octubre = mismo presupuesto que HERO_GYE_BUDGET_VENTAS/UNITS[5]
-const TIENDA_NACIONES_BUDGET = { julio:{ ventas:25900, unidades:10 }, agosto:{ ventas:34400, unidades:15 }, octubre:{ ventas:49590.79, unidades:20 } }; // octubre = mismo presupuesto que HERO_QUITO_BUDGET_VENTAS/UNITS[5]
-const TIENDA_DIGITAL_BUDGET = { agosto:{ ventas:26000, unidades:10 }, octubre:{ ventas:24795.39, unidades:10 } }; // mismo presupuesto que CANAL_DIGITAL_BUDGET_VENTAS/UNITS
-const TIENDA_PORTOVIEJO_BUDGET = { septiembre:{ ventas:46950.72, unidades:17 }, octubre:{ ventas:37193.09, unidades:15 } }; // NUEVO 25-sep-2026: mismo presupuesto que HERO_PORTOVIEJO_BUDGET_VENTAS/UNITS[4] (mes de apertura real, ver nota arriba de esa tarjeta). octubre = mismo presupuesto que HERO_PORTOVIEJO_BUDGET_VENTAS/UNITS[5]
+const TIENDA_AMERICAS_BUDGET = { julio:{ ventas:76750, unidades:40 }, agosto:{ ventas:86611.36, unidades:30 }, octubre:{ ventas:74214, unidades:31 } }; // octubre = mismo presupuesto que HERO_GYE_BUDGET_VENTAS/UNITS[5], corregido 2-oct-2026
+const TIENDA_NACIONES_BUDGET = { julio:{ ventas:25900, unidades:10 }, agosto:{ ventas:34400, unidades:15 }, octubre:{ ventas:38304, unidades:16 } }; // octubre = mismo presupuesto que HERO_QUITO_BUDGET_VENTAS/UNITS[5], corregido 2-oct-2026
+const TIENDA_DIGITAL_BUDGET = { agosto:{ ventas:26000, unidades:10 }, octubre:{ ventas:21546, unidades:9 } }; // mismo presupuesto que CANAL_DIGITAL_BUDGET_VENTAS/UNITS, corregido 2-oct-2026
+const TIENDA_PORTOVIEJO_BUDGET = { septiembre:{ ventas:46950.72, unidades:17 }, octubre:{ ventas:31122, unidades:13 } }; // NUEVO 25-sep-2026: mismo presupuesto que HERO_PORTOVIEJO_BUDGET_VENTAS/UNITS[4] (mes de apertura real, ver nota arriba de esa tarjeta). octubre = mismo presupuesto que HERO_PORTOVIEJO_BUDGET_VENTAS/UNITS[5], corregido 2-oct-2026
 
 // Versión en arreglo [Mayo,Junio,Julio,Agosto,Septiembre] (0 = sin dato) de los presupuestos por tienda propia Hero,
 // para las tarjetas "Presupuesto total / Cumplimiento" por tienda (HERO GYE = Av. Américas, HERO QUITO = Naciones Unidas).
@@ -5588,29 +5624,32 @@ const TIENDA_PORTOVIEJO_BUDGET = { septiembre:{ ventas:46950.72, unidades:17 }, 
 // ACTUALIZADO 16-sep-2026 #3: Mayo/Junio — Santiago confirmó que el presupuesto de Tiendas de esos meses
 // recae entero sobre HERO GYE (única tienda propia que existía y vendía), así que se le asigna el mismo total
 // que TIENDAS_BUDGET_VENTAS/TIENDAS_BUDGET_UNITS_ARR: 12 u. / $26.835 Mayo, 30 u. / $67.088 Junio.
-const HERO_GYE_BUDGET_UNITS = [12, 30, 40, 30, 40,40]; // Octubre 30-sep-2026: 40 u. — tabla de presupuesto de Octubre de Santiago (ver nota completa arriba de MAYORISTAS_BUDGET_VENTAS/RETAIL_AAP_BUDGET_UNITS)
-const HERO_GYE_BUDGET_VENTAS = [26835, 67088, 76750, 86611.36, 110472.29,99181.57]; // Octubre 30-sep-2026: $99.181,57 — tabla de presupuesto de Octubre de Santiago
-const HERO_QUITO_BUDGET_UNITS = [0, 0, 10, 15, 25,20]; // Octubre 30-sep-2026: 20 u. — tabla de presupuesto de Octubre de Santiago
-const HERO_QUITO_BUDGET_VENTAS = [0, 0, 25900, 34400, 69045.18,49590.79]; // Octubre 30-sep-2026: $49.590,79 — tabla de presupuesto de Octubre de Santiago
+const HERO_GYE_BUDGET_UNITS = [12, 30, 40, 30, 40,31]; // CORREGIDO 2-oct-2026: 31 u. — tabla nueva de presupuesto de Octubre de Santiago (reemplaza los 40 u. del 30-sep-2026)
+const HERO_GYE_BUDGET_VENTAS = [26835, 67088, 76750, 86611.36, 110472.29,74214]; // CORREGIDO 2-oct-2026: $74.214 (reemplaza $99.181,57 del 30-sep-2026)
+const HERO_QUITO_BUDGET_UNITS = [0, 0, 10, 15, 25,16]; // CORREGIDO 2-oct-2026: 16 u. (reemplaza los 20 u. del 30-sep-2026)
+const HERO_QUITO_BUDGET_VENTAS = [0, 0, 25900, 34400, 69045.18,38304]; // CORREGIDO 2-oct-2026: $38.304 (reemplaza $49.590,79 del 30-sep-2026)
 // CORRECCIÓN 14-sep-2026: Santiago pidió quitar el presupuesto de septiembre de CANAL DIGITAL (unidades y $)
 // en el "Resumen Mix de Ventas Motos" que envió — se deja en 0, igual que se hizo con HERO SANTO DOMINGO, y
 // la tarjeta cae en la rama "sin presupuesto" de renderBudgetCards ese mes (mismo mecanismo que ya usaba
 // Canal Digital en Mayo-Julio antes de tener presupuesto asignado).
-const CANAL_DIGITAL_BUDGET_UNITS = [0, 0, 0, 10, 0,10]; // Octubre 30-sep-2026: 10 u. — tabla de presupuesto de Octubre de Santiago
-const CANAL_DIGITAL_BUDGET_VENTAS = [0, 0, 0, 26000, 0,24795.39]; // Octubre 30-sep-2026: $24.795,39 — tabla de presupuesto de Octubre de Santiago
+const CANAL_DIGITAL_BUDGET_UNITS = [0, 0, 0, 10, 0,9]; // CORREGIDO 2-oct-2026: 9 u. (reemplaza los 10 u. del 30-sep-2026)
+const CANAL_DIGITAL_BUDGET_VENTAS = [0, 0, 0, 26000, 0,21546]; // CORREGIDO 2-oct-2026: $21.546 (reemplaza $24.795,39 del 30-sep-2026)
 // HERO PORTOVIEJO: tienda nueva sin ventas reales todavía (sin apertura), se muestra igual en el panel a
 // pedido de gerencia. Septiembre: subió de 16 a 17 u. y sumó $46.950,72 de presupuesto en la corrección del
 // 8-sep-2026 ("PRESUPUESTO DE SEPTIEMBRE ARREGLEMOS"), aunque la tienda siga sin ventas reales registradas.
-const HERO_PORTOVIEJO_BUDGET_UNITS = [0, 0, 0, 0, 17,15]; // Octubre 30-sep-2026: 15 u. — tabla de presupuesto de Octubre de Santiago
-const HERO_PORTOVIEJO_BUDGET_VENTAS = [0, 0, 0, 0, 46950.72,37193.09]; // Octubre 30-sep-2026: $37.193,09 — tabla de presupuesto de Octubre de Santiago
+const HERO_PORTOVIEJO_BUDGET_UNITS = [0, 0, 0, 0, 17,13]; // CORREGIDO 2-oct-2026: 13 u. (reemplaza los 15 u. del 30-sep-2026)
+const HERO_PORTOVIEJO_BUDGET_VENTAS = [0, 0, 0, 0, 46950.72,31122]; // CORREGIDO 2-oct-2026: $31.122 (reemplaza $37.193,09 del 30-sep-2026)
 // HERO SANTO DOMINGO: tienda nueva sin ventas reales todavía (sin apertura). Tuvo presupuesto de septiembre
 // asignado en la tabla "PRESUPUESTO DE SEPTIEMBRE ARREGLEMOS" de Santiago del 8-sep-2026 (10 u. / $27.618,07),
 // y tarjeta propia agregada el 11-sep-2026. CORRECCIÓN 14-sep-2026: Santiago pidió quitar el presupuesto de
 // septiembre (unidades y $) porque la apertura de la tienda no se va a dar este mes — se deja en 0, igual que
 // los meses previos, y la tarjeta cae en la rama "sin presupuesto" de renderBudgetCards (mismo mecanismo que
 // ya usan Canal Digital/Portoviejo en meses sin presupuesto asignado).
-const HERO_SANTO_DOMINGO_BUDGET_UNITS = [0, 0, 0, 0, 0,0];
-const HERO_SANTO_DOMINGO_BUDGET_VENTAS = [0, 0, 0, 0, 0,0];
+// Octubre 2-oct-2026: la tabla nueva de presupuesto de Octubre de Santiago vuelve a traer a HERO SANTO
+// DOMINGO (6 u. / $14.364) — se carga el número aunque la tienda sigue sin tarjeta propia ni ventas reales
+// (ver nota de línea 2040 sobre cómo agregar su tarjeta si llega a abrir).
+const HERO_SANTO_DOMINGO_BUDGET_UNITS = [0, 0, 0, 0, 0,6];
+const HERO_SANTO_DOMINGO_BUDGET_VENTAS = [0, 0, 0, 0, 0,14364];
 
 // Presupuesto en UNIDADES de Septiembre 2026, por cuenta — enviado por Santiago el 2-sep-2026, y confirmado/
 // simplificado en un segundo mensaje ese mismo día con los subtotales "GENERAL" por canal (Tiendas 100,
@@ -5710,15 +5749,15 @@ const PRESUPUESTO_SEPTIEMBRE_POSTVENTA_VENTAS = {
 
 // Presupuesto en unidades asignado a AAP por mes, para el KPI "Cuenta líder" en Retail.
 // Septiembre corregido 8-sep-2026 (era 80) con la tabla "PRESUPUESTO DE SEPTIEMBRE ARREGLEMOS" de Santiago.
-const RETAIL_AAP_BUDGET_UNITS = { julio:105, agosto:150, septiembre:83, octubre:82 }; // Octubre 30-sep-2026: 82 u. — tabla de presupuesto de Octubre de Santiago
+const RETAIL_AAP_BUDGET_UNITS = { julio:105, agosto:150, septiembre:83, octubre:50 }; // CORREGIDO 2-oct-2026 #2: 50 u. — Santiago mandó el desglose real CON AAP/SIN AAP de la tabla nueva de Octubre (reemplaza los 82 u. del 30-sep-2026, que eran de la tabla anterior)
 // Presupuesto en $ asignado a AAP. Septiembre agregado 8-sep-2026 (antes sin $ asignado).
-const RETAIL_AAP_BUDGET_VENTAS = { agosto:238195.50, septiembre:144508, octubre:135041.62 }; // Octubre 30-sep-2026: $135.041,62 — tabla de presupuesto de Octubre de Santiago
+const RETAIL_AAP_BUDGET_VENTAS = { agosto:238195.50, septiembre:144508, octubre:83250 }; // CORREGIDO 2-oct-2026 #2: $83.250 — Santiago mandó el desglose real CON AAP/SIN AAP de la tabla nueva de Octubre (reemplaza $135.041,62 del 30-sep-2026, que era de la tabla anterior)
 
 // Presupuesto total (CON AAP) por mes (Julio y Agosto 2026, únicos meses con dato disponible), para el KPI "Total retail" en Retail.
-const RETAIL_TOTAL_BUDGET = { julio:{ ventas:79398.50, unidades:50 }, agosto:{ ventas:79398.50, unidades:50 }, octubre:{ ventas:225618.33, unidades:137 } }; // octubre = RETAIL_BUDGET_VENTAS/UNITS_CON_AAP[5] (AAP $135.041,62/82u + sin AAP $90.576,71/55u, ver nota completa arriba de RETAIL_BUDGET_UNITS)
+const RETAIL_TOTAL_BUDGET = { julio:{ ventas:79398.50, unidades:50 }, agosto:{ ventas:79398.50, unidades:50 }, octubre:{ ventas:174825, unidades:105 } }; // CORREGIDO 2-oct-2026 #2: octubre = RETAIL_BUDGET_VENTAS/UNITS_CON_AAP[5] = CON AAP $83.250/50u + SIN AAP $91.575/55u, desglose real que Santiago confirmó con una captura de su tabla de presupuesto de Octubre (ver RETAIL_AAP_BUDGET_UNITS/VENTAS.octubre y RETAIL_BUDGET_UNITS/VENTAS abajo)
 
 // Presupuesto total por mes (Julio y Agosto 2026, únicos meses con dato disponible), para el KPI "Total mayoristas" en Mayoristas.
-const MAYORISTAS_TOTAL_BUDGET = { julio:{ ventas:476391.26, unidades:300 }, agosto:{ ventas:242850.80, unidades:155 }, octubre:{ ventas:378775.29, unidades:230 } }; // octubre = MAYORISTAS_BUDGET_VENTAS/UNITS[5], ver desglose por zona en su nota completa
+const MAYORISTAS_TOTAL_BUDGET = { julio:{ ventas:476391.26, unidades:300 }, agosto:{ ventas:242850.80, unidades:155 }, octubre:{ ventas:460620, unidades:270 } }; // CORREGIDO 2-oct-2026: octubre = MAYORISTAS_BUDGET_VENTAS/UNITS[5] — tabla nueva de presupuesto de Octubre de Santiago (reemplaza $378.775,29/230u del 30-sep-2026); esta vez sin desglose por zona
 
 // Versión en arreglo [Mayo,Junio,Julio,Agosto,Septiembre] (0 = sin dato) de los presupuestos anteriores,
 // para las tarjetas "Presupuesto total / Cumplimiento" de Mayoristas, Retail y Tiendas (mismo formato que RESUMEN).
@@ -5731,10 +5770,10 @@ const MAYORISTAS_TOTAL_BUDGET = { julio:{ ventas:476391.26, unidades:300 }, agos
 // (tabla MAYO/JUNIO por canal, en unidades y $) — hasta ahora estos dos meses estaban en 0 para Mayoristas y
 // Retail (solo Tiendas y el total GENERAL ya tenían los suyos, ver RESUMEN_BUDGET_VENTAS_OVERRIDE arriba).
 // Mayoristas: Mayo 270 u. / $465.099, Junio 250 u. / $419.535,14.
-const MAYORISTAS_BUDGET_UNITS = [270, 250, 300, 155, 170,230]; // Octubre 30-sep-2026: 230 u. = ORIENTE 85 + MANABÍ 35 + LOS RÍOS 55 + GUAYAS 35 + SIERRA 20 (tabla de presupuesto de Octubre de Santiago, desglose por zona documentado abajo por si se arma un desglose visual en el futuro: ORIENTE $139.982,17/85u, MANABÍ $57.639,72/35u, LOS RÍOS $90.576,70/55u, GUAYAS $57.639,72/35u, SIERRA $32.936,98/20u)
-const MAYORISTAS_BUDGET_VENTAS = [465099, 419535.14, 476391.26, 242850.80, 284015.81,378775.29]; // Octubre 30-sep-2026: $378.775,29 = suma de las 5 zonas (ver nota completa arriba de MAYORISTAS_BUDGET_UNITS)
-const RETAIL_BUDGET_UNITS = [0, 20, 50, 50, 65,55]; // Octubre 30-sep-2026: 55 u. "SIN AAP" = OTOM 15 + ESPAÑA 10 + MASTER MOTO 15 + MARCIMEX 15 (tabla de presupuesto de Octubre de Santiago; AAP 82 u. va aparte en RETAIL_AAP_BUDGET_UNITS.octubre). "SIN AAP": presupuesto propio de Retail sin AAP. Junio 20 u. viene de la misma imagen ("20(SIN AAP)"); Mayo no trae ese desglose, solo el total CON AAP de abajo — queda en 0/sin dato hasta que Santiago lo confirme.
-const RETAIL_BUDGET_VENTAS = [0, 0, 79398.50, 79398.50, 108747,90576.71]; // Octubre 30-sep-2026: $90.576,71 "SIN AAP" = OTOM $24.702,74 + ESPAÑA $16.468,49 + MASTER MOTO $24.702,74 + MARCIMEX $24.702,74 (tabla de presupuesto de Octubre de Santiago; AAP $135.041,62 va aparte en RETAIL_AAP_BUDGET_VENTAS.octubre). $ SIN AAP: la imagen de Mayo/Junio solo trae el total CON AAP (ver RETAIL_BUDGET_VENTAS_CON_AAP) — queda en 0/sin dato.
+const MAYORISTAS_BUDGET_UNITS = [270, 250, 300, 155, 170,270]; // CORREGIDO 2-oct-2026: 270 u. — tabla nueva de presupuesto de Octubre de Santiago (reemplaza los 230 u. del 30-sep-2026; esta vez sin desglose por zona, así que el desglose ORIENTE/MANABÍ/LOS RÍOS/GUAYAS/SIERRA que estaba documentado aquí para los 230 u. anteriores ya no aplica)
+const MAYORISTAS_BUDGET_VENTAS = [465099, 419535.14, 476391.26, 242850.80, 284015.81,460620]; // CORREGIDO 2-oct-2026: $460.620 (reemplaza $378.775,29 del 30-sep-2026) — tabla nueva de presupuesto de Octubre de Santiago, ticket $1.706 × 270 u.
+const RETAIL_BUDGET_UNITS = [0, 20, 50, 50, 65,55]; // CORREGIDO 2-oct-2026 #2: 55 u. "SIN AAP" — Santiago confirmó con una captura el desglose real de su tabla de presupuesto de Octubre (CON AAP 50u/$83.250 + SIN AAP 55u/$91.575 = 105u/$174.825). Reemplaza el valor anterior de 23 u., que era una resta mía asumiendo que AAP se mantenía igual que en septiembre — era incorrecto, el desglose real es distinto.
+const RETAIL_BUDGET_VENTAS = [0, 0, 79398.50, 79398.50, 108747,91575]; // CORREGIDO 2-oct-2026 #2: $91.575 "SIN AAP" — ver nota completa arriba de RETAIL_BUDGET_UNITS (reemplaza $39.783,38, que era una resta mía con el AAP de octubre equivocado)
 // "CON AAP": el presupuesto de Retail (SIN AAP) más el presupuesto asignado a AAP ese mes (Julio +105 u., Agosto +150 u. / +$238.195,50, Septiembre +83 u. / +$144.508).
 // Mayo/Junio: la imagen de Santiago da directamente el total CON AAP (18 u./$30.666 Mayo; 120 u./$201.376,86
 // Junio), sin pasar por la fórmula de arriba (no hay presupuesto de AAP por separado para esos meses).
@@ -5750,7 +5789,7 @@ const RETAIL_BUDGET_VENTAS_CON_AAP = [30666, 201376.86, RETAIL_BUDGET_VENTAS[2] 
 // las tarjetas por tienda (GYE 40 + QUITO 25 + DIGITAL 0 + PORTOVIEJO 17 = 82).
 // ACTUALIZADO 16-sep-2026 #3: Mayo 12 u. / Junio 30 u., de la misma imagen de presupuesto (el lado de $ ya
 // estaba completo en TIENDAS_BUDGET_VENTAS arriba desde antes; solo faltaban las unidades).
-const TIENDAS_BUDGET_UNITS_ARR = [12, 30, 50, 55, 82,85]; // Octubre 30-sep-2026: 85 u. = 40 GYE + 20 QUITO + 10 DIGITAL + 15 PORTOVIEJO (tabla de presupuesto de Octubre de Santiago)
+const TIENDAS_BUDGET_UNITS_ARR = [12, 30, 50, 55, 82,75]; // CORREGIDO 2-oct-2026: 75 u. = 31 GYE + 16 QUITO + 9 DIGITAL + 13 PORTOVIEJO + 6 SANTO DOMINGO (tabla nueva de presupuesto de Octubre de Santiago, reemplaza los 85 u. del 30-sep-2026)
 
 // Presupuesto GENERAL de Motos para Mayo y Junio 2026 (total de los 3 canales, confirmado por el usuario).
 // ACTUALIZADO 16-sep-2026 #3: el desglose por Mayoristas/Retail/Tiendas de esos dos meses ya está completo
@@ -11067,9 +11106,11 @@ function renderTiendasKpis(){
 // asignado, así que su tarjeta de Unidades/Ventas muestra 0 con Presupuesto/Cumplimiento activos. Canal
 // Digital, antes de agosto, no tenía presupuesto asignado (arreglo en 0) y su tarjeta caía en la rama "sin
 // dato" de renderBudgetCards — mismo mecanismo que cubre a Portoviejo en los meses sin presupuesto.
-// HERO SANTO DOMINGO tuvo tarjeta propia del 11-sep-2026 al 14-sep-2026, pero se quitó (junto con su bloque
-// HTML y su entrada en tiendasActive) porque la apertura de la tienda no se va a dar este mes — Santiago pidió
-// sacarla del panel de Tiendas por completo, no solo dejarla en "sin dato".
+// HERO SANTO DOMINGO tuvo tarjeta propia del 11-sep-2026 al 14-sep-2026, se quitó (junto con su bloque HTML y
+// su entrada en tiendasActive) porque la apertura no se iba a dar ese mes, y volvió a agregarse el 2-oct-2026
+// (a pedido de Santiago) ahora que tiene presupuesto de Octubre (6 u. / $14.364) — sigue sin ventas reales
+// (tienda sin apertura), mismo tratamiento que Portoviejo antes de su primera venta: tarjeta oculta en los
+// meses sin presupuesto (Mayo-Septiembre) y visible en Octubre/Todos.
 // CANAL DIGITAL, a diferencia de Santo Domingo, sí tuvo ventas reales (Agosto: 6 u. / $21.028,46), así que
 // su tarjeta NO se quita del arreglo/HTML — Santiago pidió (14-sep-2026 #2) solo ocultarla al ver Septiembre
 // específicamente ("no habrá" Canal Digital ese mes), mientras que en Agosto/Todos/otros meses debe seguir
@@ -11093,6 +11134,7 @@ function renderTiendaStoreCards(){
   document.getElementById('tiendaDigitalStoreBlock').style.display = (monthFilter==='agosto' || monthFilter==='octubre' || monthFilter==='todos') ? '' : 'none';
   document.getElementById('tiendaQuitoStoreBlock').style.display = (monthFilter==='mayo' || monthFilter==='junio') ? 'none' : '';
   document.getElementById('tiendaPortoviejoStoreBlock').style.display = (monthFilter==='mayo' || monthFilter==='junio' || monthFilter==='julio' || monthFilter==='agosto') ? 'none' : '';
+  document.getElementById('tiendaSantoDomingoStoreBlock').style.display = (monthFilter==='octubre' || monthFilter==='todos') ? '' : 'none';
 
   const stores = [
     { prefix:'kpiTiendaGye',     unitsArr: tiendas.stores.find(s=>s.name==='HERO GYE').data,      ventasArr: TIENDAS_VENTAS_STORE['HERO GYE'],
@@ -11103,8 +11145,10 @@ function renderTiendaStoreCards(){
       budgetUnits: CANAL_DIGITAL_BUDGET_UNITS, budgetVentas: CANAL_DIGITAL_BUDGET_VENTAS },
     { prefix:'kpiTiendaPortoviejo', unitsArr: tiendas.stores.find(s=>s.name==='HERO PORTOVIEJO').data, ventasArr: TIENDAS_VENTAS_STORE['HERO PORTOVIEJO'],
       budgetUnits: HERO_PORTOVIEJO_BUDGET_UNITS, budgetVentas: HERO_PORTOVIEJO_BUDGET_VENTAS },
-    // HERO SANTO DOMINGO: quitada de este arreglo el 14-sep-2026 junto con su tarjeta en el HTML (ver comentario
-    // en el bloque "store-block" de Tiendas) — la apertura de la tienda no se va a dar este mes.
+    // HERO SANTO DOMINGO: vuelta a agregar 2-oct-2026 (ver comentario en el bloque "store-block" de Tiendas y
+    // en tiendasActive) ahora que tiene presupuesto de Octubre.
+    { prefix:'kpiTiendaSantoDomingo', unitsArr: tiendas.stores.find(s=>s.name==='HERO SANTO DOMINGO').data, ventasArr: TIENDAS_VENTAS_STORE['HERO SANTO DOMINGO'],
+      budgetUnits: HERO_SANTO_DOMINGO_BUDGET_UNITS, budgetVentas: HERO_SANTO_DOMINGO_BUDGET_VENTAS },
   ];
 
   stores.forEach(s=>{
