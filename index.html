@@ -678,6 +678,29 @@
       <div class="panel" style="margin-bottom:10px;">
         <div class="panel-head">
           <div>
+            <div class="panel-title">Margen General</div>
+            <div class="panel-sub">Ponderado de Motos + Repuestos + Mano de Obra + Garantías</div>
+          </div>
+        </div>
+        <div class="kpi-row kpi-row-6">
+          <div class="kpi-card">
+            <div class="kpi-top"><span class="kpi-label">Ventas totales</span></div>
+            <div class="kpi-value" id="kpiGeneralMargenVentasValue">—</div>
+            <div class="kpi-delta muted" id="kpiGeneralMargenVentasSub"></div>
+          </div>
+          <div class="kpi-card accent">
+            <div class="kpi-top"><span class="kpi-label">Margen General</span>
+              <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="18" r="3"></circle><circle cx="18" cy="18" r="3"></circle><path d="M5 18h5l3-6h4l3 6"></path><path d="M13 12 11 7H8"></path></svg></div>
+            </div>
+            <div class="kpi-value" id="kpiGeneralMargenPctValue">—</div>
+            <div class="kpi-delta muted" id="kpiGeneralMargenPctSub"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-bottom:10px;">
+        <div class="panel-head">
+          <div>
             <div class="panel-title">Cumplimiento por líneas y metas</div>
           </div>
         </div>
@@ -1428,6 +1451,21 @@
               </div>
             </div>
             <div class="chart-box h180"><canvas id="chartMayoristasTicketTrend"></canvas></div>
+          </div>
+        </div>
+
+        <div class="grid-2b">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Zona Manabi/Santo Domingo</div>
+                <div class="panel-sub" id="mayoristasInfanteSub">Unidades vendidas</div>
+              </div>
+            </div>
+            <table class="data-table compact">
+              <thead><tr><th>Zona</th><th style="text-align:right">Mayo</th><th style="text-align:right">Junio</th><th style="text-align:right">Julio</th><th style="text-align:right">Agosto</th><th style="text-align:right">Septiembre</th><th style="text-align:right">Octubre</th><th style="text-align:right">Total</th></tr></thead>
+              <tbody id="tblMayoristasInfante"></tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -4010,8 +4048,8 @@ const TIENDAS_TOTAL    = [12,28,24,39,37,0]; // ACTUALIZADO 1-oct-2026: +3 u. Se
 // arriba de TIENDAS_TOTAL). Mayoristas sin cambios (0 filas nuevas). Verificado exacto contra el cuadro de
 // verificación en R de Santiago: GENERAL Septiembre 157 u./$298.531 (105 Mayoristas + 26 Retail/$46.580 +
 // 26 Tiendas/$63.740).
-const AAP_DATA          = [16,30,84,69,40,0]; // ACTUALIZADO 1-oct-2026: neto +1 u. Septiembre (archivo BASE nuevo 4c4f5598) — +4 u. nuevas Perfil A ×3/BB ×1 ($4.600) menos reversión de 2 anomalías ya corregidas por Santiago: MOREIRA VACA (XOOM 110, Perfil CONTADO, $1.605, pasó a NC + fila de reversa) y la venta DUPLICADA de chasis MBLKCU124THA00583 que ya se había reportado (RODRIGUEZ ALAVA, HUNK 160 4V, 2 filas Perfil BB, $2.550 c/u, ambas pasaron a NC + reversas) — neto AAP Septiembre: +1 u./-$2.105. Verificado exacto contra Santiago en R (RETAIL Septiembre: 54 u./$89.918). ACTUALIZADO 30-sep-2026: +4 u. Septiembre (archivo BASE nuevo 9b20e246, 4 filas AAP nuevas: ECO DELUXE ×2 $1.150 c/u Perfil A/B [ESMERALDAS], HUNK 125R $1.730 Perfil B [MANTA], HUNK 160 4V $2.550 Perfil BB [GUASMO — ver anomalía de chasis duplicado MBLKCU124THA00583]. Verificado exacto contra Santiago en R (GENERAL Septiembre 297 u./$535.239, RETAIL 53 u./$92.023). ACTUALIZADO 28-sep-2026: +3 u. Septiembre (archivo BASE nuevo a40e37d7, 3 filas AAP nuevas: HUNK 125R $1.730 Perfil B [BUENA FE], HUNK 160 4V $2.550 Perfil BB [GUASMO], ECO DELUXE $1.150 Perfil A [9 DE OCTUBRE]. Verificado exacto contra el cuadro de Santiago en R: GENERAL Septiembre 216 u./$392.257, RETAIL 48 u./$84.293). ACTUALIZADO 26-sep-2026: +4 u. Septiembre — archivo BASE nuevo (61a4138e), 4 filas AAP nuevas, todas HUNK 125R $1.730 c/u: Perfil A (LIBERTAD, BORBOR CLEMENTE), Perfil A (DURÁN, Andrade Andrade), Perfil AA (BABAHOYO, GUEVARA RIVADENEIRA), Perfil AA (MILAGRO, VEGA NOELIA). Verificado exacto contra el cuadro de Santiago en R (GENERAL Septiembre: 209 u.). ACTUALIZADO 25-sep-2026: +4 u. Septiembre — archivo BASE nuevo (2d56ea5e), 4 filas AAP nuevas: XOOM 110 $1.605 (PARQUE CALIFORNIA, Perfil AA), XOOM 110 $1.605 (MILAGRO, Perfil A), HUNK 125R $1.730 (QUITO LA PRENSA, Perfil B-), XOOM 125R $1.938 (MILAGRO, Perfil CONTADO).
-const RETAIL_TOTAL     = [18,58,107,85,54,0];   // AAP + OTOM + MASTER MOTO + CRESA + MARCIMEX (ESPAÑA/ARTEFACTA sin ventas) — ACTUALIZADO 1-oct-2026: +1 u. Septiembre (neto AAP, ver nota completa arriba de AAP_DATA; sin AAP sin cambio). Verificado exacto contra Santiago en R (RETAIL Septiembre: 54 u./$89.918). ACTUALIZADO 30-sep-2026: +4 u. Septiembre (4 filas AAP nuevas, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (RETAIL Septiembre: 53 u./$92.023). ACTUALIZADO 29-sep-2026: +1 u. Septiembre (comprobante 447, cliente facturado MMOTASA CIA. LTDA., ECO DELUXE, zona DAULE/GUAYAS — agrupada bajo la cuenta OTOM, ver nota completa arriba de retailAccounts/NONAAP_ORIGEN_MENSUAL). Verificado exacto contra Santiago en R (RETAIL Septiembre: 49 u./$85.443). ACTUALIZADO 28-sep-2026: +3 u. Septiembre (3 filas AAP nuevas, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (RETAIL Septiembre: 48 u.). ACTUALIZADO 26-sep-2026: +10 u. Septiembre (archivo BASE nuevo 61a4138e: 4 filas AAP nuevas [HUNK 125R] + MASTERMOTO 4 u. + MARCIMEX S.A. 2 u. [primera venta real de esta cuenta] — ver nota completa arriba de AAP_DATA/retailAccounts). Verificado exacto contra Santiago en R (RETAIL Septiembre: 45 u.). ACTUALIZADO 25-sep-2026: +5 u. Septiembre (+1 CRESA-RETAIL nueva, comprobante 409, HUNK 125R, $1.730 + 4 AAP nuevas, ver nota completa arriba de AAP_DATA)
+const AAP_DATA          = [16,30,84,69,40,0]; // CORREGIDO 1-oct-2026 #3: Santiago mandó un archivo nuevo (5cbe7f5c) donde "quit[ó] las 4 últimas de AAP" — revierte íntegro el ajuste #2 de abajo (las 2 ECO DELUXE + 2 XOOM 110 sin Perfil). Verificado exacto contra su nuevo cuadro de R (tabla_canales: AAP Septiembre vuelve a 40 u., RETAIL Septiembre 54 u./$89.918). Se deshacen también los cambios en RETAIL_TOTAL/VENTAS, retailAccounts, RETAIL_MODELOS (ECO DELUXE/XOOM 110), AAP_ORIGEN_MENSUAL (ORO VERDE/9 DE OCTUBRE/EMPRESARIAL), AAP_ORIGEN acumulado, PERFIL_AAP_MENSUAL (se quita la fila "SIN PERFIL"), SELLOUT_CANAL_MENSUAL y SELLOUT_MODELO_MENSUAL. ACTUALIZADO 1-oct-2026 #2: +4 u. Septiembre (archivo BASE nuevo 305d4a37, confirmado por Santiago: "solo fueron 4 nuevas de AAP") — 2 filas ECO DELUXE $1.150 c/u (orígenes ORO VERDE y 9 DE OCTUBRE, ambas Facturadas sin Perfil asignado) + 2 filas XOOM 110 $1.605 c/u (origen CANAL DIGITAL, que por convención ya establecida con Santiago se suma a EMPRESARIAL por ser cuenta AAP — ver nota arriba de retailAccounts). Neto Septiembre: +4 u./+$5.510. Verificado exacto contra el cuadro de Santiago en R (tabla_canales: AAP Septiembre 44 u./$69.408). Nota: las 4 filas nuevas no traen Perfil Tiendas Hero/AAP asignado (primera vez que ocurre) — ver PERFIL_AAP_MENSUAL fila "SIN PERFIL". También se detectaron 2 filas históricas (27-jul y 5-ago) con Origen_Ventas reclasificado de EMPRESARIAL a CANAL DIGITAL — sin impacto en el dashboard por la misma convención de agrupación. ACTUALIZADO 1-oct-2026: neto +1 u. Septiembre (archivo BASE nuevo 4c4f5598) — +4 u. nuevas Perfil A ×3/BB ×1 ($4.600) menos reversión de 2 anomalías ya corregidas por Santiago: MOREIRA VACA (XOOM 110, Perfil CONTADO, $1.605, pasó a NC + fila de reversa) y la venta DUPLICADA de chasis MBLKCU124THA00583 que ya se había reportado (RODRIGUEZ ALAVA, HUNK 160 4V, 2 filas Perfil BB, $2.550 c/u, ambas pasaron a NC + reversas) — neto AAP Septiembre: +1 u./-$2.105. Verificado exacto contra Santiago en R (RETAIL Septiembre: 54 u./$89.918). ACTUALIZADO 30-sep-2026: +4 u. Septiembre (archivo BASE nuevo 9b20e246, 4 filas AAP nuevas: ECO DELUXE ×2 $1.150 c/u Perfil A/B [ESMERALDAS], HUNK 125R $1.730 Perfil B [MANTA], HUNK 160 4V $2.550 Perfil BB [GUASMO — ver anomalía de chasis duplicado MBLKCU124THA00583]. Verificado exacto contra Santiago en R (GENERAL Septiembre 297 u./$535.239, RETAIL 53 u./$92.023). ACTUALIZADO 28-sep-2026: +3 u. Septiembre (archivo BASE nuevo a40e37d7, 3 filas AAP nuevas: HUNK 125R $1.730 Perfil B [BUENA FE], HUNK 160 4V $2.550 Perfil BB [GUASMO], ECO DELUXE $1.150 Perfil A [9 DE OCTUBRE]. Verificado exacto contra el cuadro de Santiago en R: GENERAL Septiembre 216 u./$392.257, RETAIL 48 u./$84.293). ACTUALIZADO 26-sep-2026: +4 u. Septiembre — archivo BASE nuevo (61a4138e), 4 filas AAP nuevas, todas HUNK 125R $1.730 c/u: Perfil A (LIBERTAD, BORBOR CLEMENTE), Perfil A (DURÁN, Andrade Andrade), Perfil AA (BABAHOYO, GUEVARA RIVADENEIRA), Perfil AA (MILAGRO, VEGA NOELIA). Verificado exacto contra el cuadro de Santiago en R (GENERAL Septiembre: 209 u.). ACTUALIZADO 25-sep-2026: +4 u. Septiembre — archivo BASE nuevo (2d56ea5e), 4 filas AAP nuevas: XOOM 110 $1.605 (PARQUE CALIFORNIA, Perfil AA), XOOM 110 $1.605 (MILAGRO, Perfil A), HUNK 125R $1.730 (QUITO LA PRENSA, Perfil B-), XOOM 125R $1.938 (MILAGRO, Perfil CONTADO).
+const RETAIL_TOTAL     = [18,58,107,85,54,0];   // AAP + OTOM + MASTER MOTO + CRESA + MARCIMEX (ESPAÑA/ARTEFACTA sin ventas) — CORREGIDO 1-oct-2026 #3: revertido a 54 u. (Santiago quitó las 4 AAP nuevas, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (RETAIL Septiembre: 54 u./$89.918). ACTUALIZADO 1-oct-2026 #2: +4 u. Septiembre (neto AAP, archivo BASE nuevo 305d4a37, ver nota completa arriba de AAP_DATA; sin AAP sin cambio). Verificado exacto contra Santiago en R (RETAIL Septiembre: 58 u./$95.428). ACTUALIZADO 1-oct-2026: +1 u. Septiembre (neto AAP, ver nota completa arriba de AAP_DATA; sin AAP sin cambio). Verificado exacto contra Santiago en R (RETAIL Septiembre: 54 u./$89.918). ACTUALIZADO 30-sep-2026: +4 u. Septiembre (4 filas AAP nuevas, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (RETAIL Septiembre: 53 u./$92.023). ACTUALIZADO 29-sep-2026: +1 u. Septiembre (comprobante 447, cliente facturado MMOTASA CIA. LTDA., ECO DELUXE, zona DAULE/GUAYAS — agrupada bajo la cuenta OTOM, ver nota completa arriba de retailAccounts/NONAAP_ORIGEN_MENSUAL). Verificado exacto contra Santiago en R (RETAIL Septiembre: 49 u./$85.443). ACTUALIZADO 28-sep-2026: +3 u. Septiembre (3 filas AAP nuevas, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (RETAIL Septiembre: 48 u.). ACTUALIZADO 26-sep-2026: +10 u. Septiembre (archivo BASE nuevo 61a4138e: 4 filas AAP nuevas [HUNK 125R] + MASTERMOTO 4 u. + MARCIMEX S.A. 2 u. [primera venta real de esta cuenta] — ver nota completa arriba de AAP_DATA/retailAccounts). Verificado exacto contra Santiago en R (RETAIL Septiembre: 45 u.). ACTUALIZADO 25-sep-2026: +5 u. Septiembre (+1 CRESA-RETAIL nueva, comprobante 409, HUNK 125R, $1.730 + 4 AAP nuevas, ver nota completa arriba de AAP_DATA)
 const RETAIL_SIN_AAP   = [2,28,23,16,14,0];     // RETAIL_TOTAL minus AAP_DATA — used only in the Resumen channel chart below — ACTUALIZADO 29-sep-2026: +1 u. Septiembre (MMOTASA, ver nota completa arriba de RETAIL_TOTAL). ACTUALIZADO 26-sep-2026: +6 u. Septiembre (MASTERMOTO 4 u. + MARCIMEX 2 u., ver nota completa arriba de RETAIL_TOTAL). ACTUALIZADO 25-sep-2026: +1 u. Septiembre (CRESA-RETAIL nueva, comprobante 409, ver nota completa arriba de AAP_DATA)
 const MAYORISTAS_TOTAL = [273,152,84,136,243,0]; // CORREGIDO 1-oct-2026 #2: -10 u. Septiembre — Santiago avisó "se anularon 10 motos en mayoristas": comprobante VE-FV 01-01-000000372 (cliente CORONEL NOBOA JOSE DAVID, vendedor PLUAS NAVARRO GABRIEL ALEJANDRO, zona GUAYAS, 10× XOOM 125R a $1.938 c/u) cambió de Estado "Facturadas" a "Anuladas" en el archivo BASE más reciente (1df9b7f0) — ya no cuenta. Verificado exacto contra Santiago en R (MAYORISTAS Septiembre: 243 u./$414.483, GENERAL: 334 u./$592.972). ACTUALIZADO 1-oct-2026: +43 u. Septiembre (archivo BASE nuevo 4c4f5598, Santiago subió un extracto más reciente con más facturación de fin de mes — GUAYAS +19 u./$33.650,12, LOS RIOS +10 u./$14.800, MANABI +5 u. neto/$8.010 [incluye reversión -$30 de un comprobante que se anuló y reemitió, cliente CEDEÑO MACIAS], SIERRA +9 u./$14.236, ORIENTE sin cambio — ver nota completa arriba de MAYORISTAS_VENTAS_ZONA. 3 vendedores nuevos en el archivo: INFANTE ZAMBRANO PEDRO JUNIOR y MORA ESCALANTE ALISSON STEVEN ya tenían cuentas facturadas en meses anteriores [zona asignada por Provincia del cliente, consistente con el resto del archivo]; ANDINO MONTALVO DIEGO EDUARDO es nuevo y su único cliente este mes (ECHEVERRIA CHAMORRO, Provincia PICHINCHA, 1u ECO DELUXE $1.120) se asignó provisionalmente a zona MANABI — Provincia PICHINCHA es ambigua en este archivo (ver anomalía ya reportada con GARCIA RUEDA), vale la pena que Santiago confirme esta cuenta. Verificado exacto contra Santiago en R (MAYORISTAS Septiembre: 253 u./$433.863,33). ACTUALIZADO 30-sep-2026: +7 u. Septiembre (archivo BASE nuevo 9b20e246: comprobante 452 ORIENTE 1u XOOM 125R $1.938 cliente TOABANDA YUNGAN + comprobante 453 MANABÍ 6u ECO DELUXE $6.750 cliente CEDEÑO MACIAS, ver nota completa arriba de MAYORISTAS_VENTAS_ZONA. Verificado exacto contra Santiago en R: MAYORISTAS Septiembre 210 u./$363.167, GENERAL 297 u./$535.239). ACTUALIZADO 29-sep-2026: +18 u. Septiembre (archivo BASE nuevo cbaa6dde, 18 filas nuevas en Canal=MAYORISTAS, comprobantes 448/449/450/451: LOS RÍOS 10 u./$14.800 [comprobante 448, ATENEAEC S.A.S., ECO 150], ORIENTE 8 u./$13.355,91 [comprobantes 449/450/451] — ver nota completa arriba de MAYORISTAS_VENTAS_ZONA. Verificado exacto contra el cuadro de Santiago en R: MAYORISTAS Septiembre 203 u./$354.479, GENERAL 284 u./$516.186). ACTUALIZADO 28-sep-2026 #3: +48 u. Septiembre (archivo BASE nuevo 557b3979, 48 filas nuevas en Canal=MAYORISTAS, comprobantes 425-446: ORIENTE 32 u./$64.342,10, LOS RÍOS 7 u./$9.700, GUAYAS 4 u./$7.294, MANABÍ 3 u./$5.510, SIERRA 2 u./$3.668 — ver nota completa arriba de MAYORISTAS_VENTAS_ZONA. Verificado exacto contra el cuadro de Santiago en R: MAYORISTAS Septiembre 185 u./$326.323, GENERAL 265 u./$486.880). ACTUALIZADO 28-sep-2026 #2: +3 u. Septiembre (archivo BASE nuevo a40e37d7, 3 filas nuevas en Canal=MAYORISTAS: comprobante VE-FV 01-01-000000424, cliente JIMENEZ ROMAN GEOVANNY MILTON, 3× ECO DELUXE, zona LOS RIOS [Origen_Ventas=LOS RÍOS, Provincia=COTOPAXI], $1.150 c/u/Costo $917,92 c/u. Verificado exacto contra el cuadro de Santiago en R: MAYORISTAS Septiembre 137 u./$235.809, GENERAL 216 u./$392.257). ACTUALIZADO 28-sep-2026: +1 u. Septiembre (archivo BASE nuevo c77e33fe, 1 fila nueva en Canal=MAYORISTAS: comprobante VE-FV 01-01-000000423, cliente SUQUILANDA STTOPER, ECO DELUXE, zona LOS RIOS [Origen_Ventas=LOS RÍOS], $1.150/Costo $917,92. Verificado exacto contra el cuadro de Santiago en R: MAYORISTAS Septiembre 134 u./$232.359). ACTUALIZADO 26-sep-2026: +20 u. Septiembre (archivo BASE nuevo 61a4138e, 20 filas nuevas en Canal=MAYORISTAS — ORIENTE 14 u./$18.225,20, MANABÍ 6 u./$9.540, ver nota completa arriba de MAYORISTAS_VENTAS_ZONA). Verificado exacto contra el cuadro de Santiago en R (MAYORISTAS Septiembre: 133 u./$231.209,20). ACTUALIZADO 24-sep-2026: +8 u. Septiembre (comprobantes 401 [2 u.], 402, 403, 404, 405, 406, 408 — ver nota completa arriba de TIENDAS_TOTAL; el comprobante 407, mismos modelos/cliente, quedó Anuladas y no se cuenta). CORREGIDO 22-sep-2026: revertido a 105 u. — archivo CONSOLIDADO_HERO_3_2_1_1_1_1_1_1_1.xlsx re-subido (d22c3b0a) muestra que el comprobante VE-FV 01-01-000000387 (PEREZ GUTIERREZ, 4 u. XOOM 125R, zona GUAYAS, $7.752 — el que motivó la nota del 21-sep-2026 #2 de abajo) cambió de Estado "Facturadas" a "Anuladas". Esto explica la coincidencia detectada ayer: no era una segunda compra, era la MISMA factura anulada y re-emitida como comprobante 398 (3 de los 4 chasis son idénticos entre 387 y 398 — solo el "plomo" cambió de unidad física). Neto: +4 u. de ayer (398) − 4 u. de hoy (387 anulada) = sin cambio, vuelve a 105 u./$188.211 (idéntico al de antes del 21-sep-2026 #2). Verificado exacto contra el cuadro de Santiago en R (MAYORISTAS Septiembre: 105 u./$188.211, Costo $141.325,88). ACTUALIZADO 21-sep-2026 #2 (ver historia detallada, ya revertida): +4 u. Septiembre — comprobante VE-FV 01-01-000000398, cliente PEREZ GUTIERREZ EDINSON ANTONIO, zona GUAYAS/MILAGRO, 4 u. XOOM 125R ($1.938 c/u = $7.752), colores rojo×2/amarillo/plomo. ACTUALIZADO 16-sep-2026 #2: +25 u. en Septiembre — el archivo CONSOLIDADO_HERO_3_2_1_1_1_1_1_1_1.xlsx (mismo de la actualización "Actualiza con BASE" de Tiendas) traía además 25 filas 100% nuevas en Canal=MAYORISTAS que no se habían incorporado (el análisis de esa actualización se enfocó solo en Tiendas, que era donde estaban los 34 cambios reales; las filas nuevas de Mayoristas quedaron pendientes). Encontrado al comparar contra un cuadro de verificación aparte que Santiago compartió (resumen por Canal/Mes) — GENERAL de Septiembre no cuadraba (93 vs. 118 u.). Las 25 filas: LOS RÍOS 15 u./$23.866, ORIENTE 7 u./$15.765, SIERRA 3 u./$5.430 (ver MAYORISTAS_VENTAS_ZONA/MAYORISTAS_MODELOS más abajo), todas Septiembre/Facturadas.
 // ACTUALIZADO 17-sep-2026: +19 u./+$33.906 Septiembre — 19 filas nuevas en Canal=MAYORISTAS (ver nota completa
@@ -4028,7 +4066,7 @@ const MAYORISTAS_TOTAL = [273,152,84,136,243,0]; // CORREGIDO 1-oct-2026 #2: -10
 // Septiembre: 86 u./$154.305).
 
 // Ventas $ por mes (columna "Ventas" del CONSOLIDADO_HERO, filtrado Estado en {Facturadas, NC}), por cuenta retail
-const RETAIL_VENTAS_TOTAL    = [26275, 88601, 161681, 134603, 89918,0]; // ACTUALIZADO 1-oct-2026: -$2.105 Septiembre (neto AAP, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (RETAIL Septiembre: $89.918). ACTUALIZADO 30-sep-2026: +$6.580 Septiembre (4 filas AAP nuevas, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (RETAIL Septiembre: $92.023). ACTUALIZADO 29-sep-2026: +$1.150 Septiembre (MMOTASA CIA. LTDA., primera venta, ver nota completa arriba de RETAIL_TOTAL). Verificado exacto contra Santiago en R (RETAIL Septiembre: $85.443). ACTUALIZADO 28-sep-2026: +$5.430 Septiembre (3 filas AAP nuevas, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (RETAIL Septiembre: $84.293). ACTUALIZADO 26-sep-2026: +$18.620 Septiembre (10 u. nuevas, ver nota completa arriba de RETAIL_TOTAL). Verificado exacto contra Santiago en R (RETAIL Septiembre: $78.863). ACTUALIZADO 25-sep-2026: archivo BASE nuevo (2d56ea5e) trae una revisión retroactiva de precio en CRESA-RETAIL S.A.S. (-$30 en 8 filas Facturadas: 1 en Junio, 6 en Julio, 1 en Septiembre — Costo sin cambio) + 1 fila CRESA-RETAIL nueva en Septiembre (+$1.730, HUNK 125R) + 4 filas AAP nuevas en Septiembre (+$6.878, ver nota completa arriba de AAP_DATA). Junio 88631→88601 (-$30), Julio 161861→161681 (-$180), Septiembre 51665→60243 (-$30 revisión +$1.730 CRESA +$6.878 AAP = +$8.578). Verificado exacto contra el cuadro de Santiago en R (RETAIL: Junio $88.601, Julio $161.681, Septiembre $60.243).
+const RETAIL_VENTAS_TOTAL    = [26275, 88601, 161681, 134603, 89918,0]; // CORREGIDO 1-oct-2026 #3: revertido a $89.918 (Santiago quitó las 4 AAP nuevas, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (RETAIL Septiembre: $89.918). NOTA: la discrepancia de Julio (ORO VERDE/RETAIL, 106 vs 107 u.) sigue pendiente de confirmar con Santiago; Julio se deja sin tocar. ACTUALIZADO 1-oct-2026 #2: +$5.510 Septiembre (neto AAP, archivo BASE nuevo 305d4a37, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (RETAIL Septiembre: $95.428). ACTUALIZADO 1-oct-2026: -$2.105 Septiembre (neto AAP, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (RETAIL Septiembre: $89.918). ACTUALIZADO 30-sep-2026: +$6.580 Septiembre (4 filas AAP nuevas, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (RETAIL Septiembre: $92.023). ACTUALIZADO 29-sep-2026: +$1.150 Septiembre (MMOTASA CIA. LTDA., primera venta, ver nota completa arriba de RETAIL_TOTAL). Verificado exacto contra Santiago en R (RETAIL Septiembre: $85.443). ACTUALIZADO 28-sep-2026: +$5.430 Septiembre (3 filas AAP nuevas, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (RETAIL Septiembre: $84.293). ACTUALIZADO 26-sep-2026: +$18.620 Septiembre (10 u. nuevas, ver nota completa arriba de RETAIL_TOTAL). Verificado exacto contra Santiago en R (RETAIL Septiembre: $78.863). ACTUALIZADO 25-sep-2026: archivo BASE nuevo (2d56ea5e) trae una revisión retroactiva de precio en CRESA-RETAIL S.A.S. (-$30 en 8 filas Facturadas: 1 en Junio, 6 en Julio, 1 en Septiembre — Costo sin cambio) + 1 fila CRESA-RETAIL nueva en Septiembre (+$1.730, HUNK 125R) + 4 filas AAP nuevas en Septiembre (+$6.878, ver nota completa arriba de AAP_DATA). Junio 88631→88601 (-$30), Julio 161861→161681 (-$180), Septiembre 51665→60243 (-$30 revisión +$1.730 CRESA +$6.878 AAP = +$8.578). Verificado exacto contra el cuadro de Santiago en R (RETAIL: Junio $88.601, Julio $161.681, Septiembre $60.243).
 const RETAIL_VENTAS_SIN_AAP  = [2880, 43765, 33890, 29178, 26020,0]; // ACTUALIZADO 29-sep-2026: +$1.150 Septiembre (MMOTASA, ver nota completa arriba de RETAIL_TOTAL). ACTUALIZADO 26-sep-2026: +$11.700 Septiembre (MASTERMOTO +$8.490 + MARCIMEX +$3.210, ver nota completa arriba de RETAIL_TOTAL). ACTUALIZADO 25-sep-2026: misma revisión CRESA-RETAIL que RETAIL_VENTAS_TOTAL (ver nota completa arriba) — Junio 43795→43765 (-$30), Julio 34070→33890 (-$180), Septiembre 11470→13170 (-$30 revisión +$1.730 CRESA nueva)
 
 // Modelos vendidos, canal Retail únicamente (con AAP). data = unidades [Mayo,Junio,Julio,Agosto]; ventas = $ [Mayo,Junio,Julio,Agosto].
@@ -4036,9 +4074,9 @@ const RETAIL_VENTAS_SIN_AAP  = [2880, 43765, 33890, 29178, 26020,0]; // ACTUALIZ
 // Actualización 12-sep-2026: Retail AAP +3 u. en septiembre (ver nota arriba de TIENDAS_TOTAL) — ECO 150 ×2
 // en PEDERNALES ($1.480 c/u) y XOOM 110 en BABAHOYO ($1.605).
 const RETAIL_MODELOS = [
-  {name:'ECO DELUXE',   data:[11, 23, 42, 29, 15,0], ventas:[12650, 26450, 48300, 33350, 17250,0]}, // ACTUALIZADO 1-oct-2026: +4 u./+$4.600 Septiembre (4 filas AAP nuevas, archivo BASE nuevo 4c4f5598 — Infante Alarcón, PIZA, ARCE, GARCIA VERDUGA, ver nota completa arriba de AAP_DATA). ACTUALIZADO 30-sep-2026: +2 u./+$2.300 Septiembre (2 filas AAP nuevas, ESMERALDAS Perfil A + Perfil B, ver nota completa arriba de AAP_DATA). ACTUALIZADO 29-sep-2026: +1 u./+$1.150 Septiembre (comprobante 447, cuenta OTOM/MMOTASA, ver nota completa arriba de retailAccounts). ACTUALIZADO 28-sep-2026: +1 u./+$1.150 Septiembre (AAP nueva, 9 DE OCTUBRE Perfil A, ver nota completa arriba de AAP_DATA). ACTUALIZADO 25-sep-2026: revisión retroactiva CRESA-RETAIL -$30 (Junio comprobante 137, Julio 4 filas 200/207/225/253, Septiembre comprobante 400 — ver nota completa arriba de RETAIL_VENTAS_TOTAL)
+  {name:'ECO DELUXE',   data:[11, 23, 42, 29, 15,0], ventas:[12650, 26450, 48300, 33350, 17250,0]}, // CORREGIDO 1-oct-2026 #3: revertido a 15 u./$17.250 (Santiago quitó las 2 filas AAP nuevas, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026 #2: +2 u./+$2.300 Septiembre (2 filas AAP nuevas, orígenes ORO VERDE y 9 DE OCTUBRE, archivo BASE nuevo 305d4a37 — ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026: +4 u./+$4.600 Septiembre (4 filas AAP nuevas, archivo BASE nuevo 4c4f5598 — Infante Alarcón, PIZA, ARCE, GARCIA VERDUGA, ver nota completa arriba de AAP_DATA). ACTUALIZADO 30-sep-2026: +2 u./+$2.300 Septiembre (2 filas AAP nuevas, ESMERALDAS Perfil A + Perfil B, ver nota completa arriba de AAP_DATA). ACTUALIZADO 29-sep-2026: +1 u./+$1.150 Septiembre (comprobante 447, cuenta OTOM/MMOTASA, ver nota completa arriba de retailAccounts). ACTUALIZADO 28-sep-2026: +1 u./+$1.150 Septiembre (AAP nueva, 9 DE OCTUBRE Perfil A, ver nota completa arriba de AAP_DATA). ACTUALIZADO 25-sep-2026: revisión retroactiva CRESA-RETAIL -$30 (Junio comprobante 137, Julio 4 filas 200/207/225/253, Septiembre comprobante 400 — ver nota completa arriba de RETAIL_VENTAS_TOTAL)
   {name:'HUNK 125R',    data:[4, 14, 31, 29, 23,0],  ventas:[6920, 24250, 53630, 50170, 39790,0]}, // ACTUALIZADO 30-sep-2026: +1 u./+$1.730 Septiembre (AAP nueva, MANTA Perfil B, ver nota completa arriba de AAP_DATA). ACTUALIZADO 28-sep-2026: +1 u./+$1.730 Septiembre (AAP nueva, BUENA FE Perfil B, ver nota completa arriba de AAP_DATA). ACTUALIZADO 26-sep-2026: +8 u./+$13.840 Septiembre (archivo BASE nuevo 61a4138e: MASTERMOTO 3 u./$5.190 + MARCIMEX 1 u./$1.730 + 4 AAP nuevas [2 Perfil A + 2 Perfil AA] $6.920, ver nota completa arriba de AAP_DATA/retailAccounts). ACTUALIZADO 25-sep-2026: Julio -$60 (revisión CRESA-RETAIL, comprobantes 199/227) + Septiembre +2 u./+$3.460 (CRESA-RETAIL nueva comprobante 409 +$1.730, AAP nueva QUITO LA PRENSA Perfil B- +$1.730 — ver nota completa arriba de AAP_DATA/RETAIL_VENTAS_TOTAL)
-  {name:'XOOM 110',     data:[1, 13, 7, 9, 4,0],   ventas:[1605, 20865, 11235, 14445, 6420,0]}, // ACTUALIZADO 1-oct-2026: -1 u./-$1.605 Septiembre (reversión venta duplicada/errónea, cliente MOREIRA VACA — Facturada reclasificada a NC, archivo BASE nuevo 4c4f5598, ver ANOMALÍA reportada a Santiago). ACTUALIZADO 25-sep-2026: +2 u./+$3.210 Septiembre (2 filas AAP nuevas, PARQUE CALIFORNIA Perfil AA + MILAGRO Perfil A, ver nota completa arriba de AAP_DATA)
+  {name:'XOOM 110',     data:[1, 13, 7, 9, 4,0],   ventas:[1605, 20865, 11235, 14445, 6420,0]}, // CORREGIDO 1-oct-2026 #3: revertido a 4 u./$6.420 (Santiago quitó las 2 filas AAP nuevas, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026 #2: +2 u./+$3.210 Septiembre (2 filas AAP nuevas, origen CANAL DIGITAL → EMPRESARIAL, archivo BASE nuevo 305d4a37 — ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026: -1 u./-$1.605 Septiembre (reversión venta duplicada/errónea, cliente MOREIRA VACA — Facturada reclasificada a NC, archivo BASE nuevo 4c4f5598, ver ANOMALÍA reportada a Santiago). ACTUALIZADO 25-sep-2026: +2 u./+$3.210 Septiembre (2 filas AAP nuevas, PARQUE CALIFORNIA Perfil AA + MILAGRO Perfil A, ver nota completa arriba de AAP_DATA)
   {name:'ECO 150',      data:[0, 2, 15, 7, 4,0],   ventas:[0, 2960, 22200, 10360, 5920,0]}, // ACTUALIZADO 26-sep-2026: +1 u./+$1.480 Septiembre (MARCIMEX S.A., primera venta de esta cuenta — ver nota completa arriba de retailAccounts)
   {name:'HUNK 160 4V',  data:[2, 4, 5, 3, 6,0],    ventas:[5100, 10200, 12750, 7650, 15300,0]}, // ACTUALIZADO 1-oct-2026: -2 u./-$5.100 Septiembre (reversión chasis duplicado MBLKCU124THA00583 — ya reportado a Santiago, ahora corregido en archivo BASE nuevo 4c4f5598: Facturada×2 reclasificada a NC + 2 filas NC negativas nuevas, neto -2 u.). ACTUALIZADO 30-sep-2026: +1 u./+$2.550 Septiembre (AAP nueva, GUASMO Perfil BB — chasis MBLKCU124THA00583, ver ANOMALÍA de posible duplicado reportada a Santiago). ACTUALIZADO 28-sep-2026: +1 u./+$2.550 Septiembre (AAP nueva, GUASMO Perfil BB, ver nota completa arriba de AAP_DATA). ACTUALIZADO 21-sep-2026: +2 u./+$5.100 Septiembre (AAP, QUITO - SUR + PORTOVIEJO, ver nota completa arriba de AAP_DATA)
   {name:'XOOM 125R',    data:[0, 2, 7, 6, 1,0],    ventas:[0, 3876, 13566, 11628, 1938,0]}, // ACTUALIZADO 25-sep-2026: +1 u./+$1.938 Septiembre (1 fila AAP nueva, MILAGRO Perfil CONTADO, ver nota completa arriba de AAP_DATA)
@@ -4135,7 +4173,7 @@ const TIENDAS_VENDEDORES = [
 // Ventas $ por mes — canales (Resumen). AAP repite el mismo dato que su fila en retailAccounts.ventas.
 const TIENDAS_VENTAS     = [21661.02, 57528.00, 66522.14, 112369.57, 88570.65,0];    // ACTUALIZADO 1-oct-2026: +$8.521,38 Septiembre (3 filas nuevas, ver nota completa arriba de TIENDAS_TOTAL). Verificado exacto contra Santiago en R (TIENDAS Septiembre: $88.570,65). ACTUALIZADO 30-sep-2026: +$3.785,13 Septiembre (2 filas nuevas, ver nota completa arriba de TIENDAS_TOTAL). Verificado exacto contra Santiago en R (TIENDAS Septiembre: $80.049,27). ACTUALIZADO 28-sep-2026: +$4.108,87 Septiembre (1 fila nueva, ver nota completa arriba de TIENDAS_TOTAL). Verificado exacto contra el cuadro de Santiago en R (TIENDAS Septiembre: $76.264,14). ACTUALIZADO 26-sep-2026: +$4.258,17 Septiembre (2 filas nuevas — CABRERA ROSADO $2.060,17 + LULIGO BALCAZAR $2.198,00, ver nota completa arriba de TIENDAS_TOTAL). Verificado exacto contra el cuadro de Santiago en R (TIENDAS Septiembre: $72.155,27). ACTUALIZADO 25-sep-2026: +$4.634,66 Septiembre (2 filas nuevas — ANCHUNDIA MORAN $1.948 + TUMBACO $2.686,66, ver nota completa arriba de TIENDAS_TOTAL).
 // ACTUALIZADO 24-sep-2026 #3: +$214 Septiembre — Santiago "arreglé algunos clientes Perez y Arias" (Tiendas): 2 filas subieron +$107 c/u, Costo sin cambio — ARIAS LLANOS RODOLFO HERNAN (comprobante 511, XOOM 125R, Tienda Américas, Crédito, Perfil AA, Vendedor FREIRE VERGARA) y PAREDES RIVADENEIRA GRACIELA FERNANDA (comprobante 131, HUNK 125R, Tienda Naciones Unidas, Crédito, Perfil AA, Vendedor ZAMBRANO ALCIVAR — el segundo cliente no es "Pérez" en el archivo, es Paredes; no se encontró ninguna otra fila de un cliente Pérez modificada en Tiendas, verificado con diff completo fila por fila). HERO GYE + HERO QUITO + CANAL DIGITAL.
-const AAP_VENTAS         = [23395, 44836, 127791, 105425, 63898,0]; // ACTUALIZADO 1-oct-2026: -$2.105 Septiembre neto (ver nota completa arriba de AAP_DATA). ACTUALIZADO 30-sep-2026: +$6.580 Septiembre (4 filas AAP nuevas, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (AAP Septiembre: $66.003). ACTUALIZADO 28-sep-2026: +$5.430 Septiembre (3 filas AAP nuevas, ver nota completa arriba de AAP_DATA). ACTUALIZADO 26-sep-2026: +$6.920 Septiembre (4 filas AAP nuevas, HUNK 125R $1.730 c/u — 2 Perfil A + 2 Perfil AA, ver nota completa arriba de AAP_DATA). ACTUALIZADO 25-sep-2026: +$6.878 Septiembre (4 filas AAP nuevas: XOOM 110 ×2 [AA+A] +$3.210, HUNK 125R [B-] +$1.730, XOOM 125R [CONTADO] +$1.938, ver nota completa arriba de AAP_DATA). ACTUALIZADO 22-sep-2026: +$3.905 Septiembre (ver nota completa arriba de AAP_DATA). ACTUALIZADO 21-sep-2026: +$10.290 Septiembre
+const AAP_VENTAS         = [23395, 44836, 127791, 105425, 63898,0]; // CORREGIDO 1-oct-2026 #3: revertido a $63.898 (Santiago quitó las 4 filas AAP nuevas, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (AAP Septiembre: $63.898). ACTUALIZADO 1-oct-2026 #2: +$5.510 Septiembre (archivo BASE nuevo 305d4a37, 4 filas AAP nuevas — ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (AAP Septiembre: $69.408). ACTUALIZADO 1-oct-2026: -$2.105 Septiembre neto (ver nota completa arriba de AAP_DATA). ACTUALIZADO 30-sep-2026: +$6.580 Septiembre (4 filas AAP nuevas, ver nota completa arriba de AAP_DATA). Verificado exacto contra Santiago en R (AAP Septiembre: $66.003). ACTUALIZADO 28-sep-2026: +$5.430 Septiembre (3 filas AAP nuevas, ver nota completa arriba de AAP_DATA). ACTUALIZADO 26-sep-2026: +$6.920 Septiembre (4 filas AAP nuevas, HUNK 125R $1.730 c/u — 2 Perfil A + 2 Perfil AA, ver nota completa arriba de AAP_DATA). ACTUALIZADO 25-sep-2026: +$6.878 Septiembre (4 filas AAP nuevas: XOOM 110 ×2 [AA+A] +$3.210, HUNK 125R [B-] +$1.730, XOOM 125R [CONTADO] +$1.938, ver nota completa arriba de AAP_DATA). ACTUALIZADO 22-sep-2026: +$3.905 Septiembre (ver nota completa arriba de AAP_DATA). ACTUALIZADO 21-sep-2026: +$10.290 Septiembre
 const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 238274, 414483.33,0]; // suma de las 5 zonas (ver MAYORISTAS_VENTAS_ZONA) — CORREGIDO 1-oct-2026 #2: -$19.380 Septiembre (comprobante 372 anulado, 10× XOOM 125R, zona GUAYAS, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 1-oct-2026: +$70.696,12 Septiembre (ver nota completa arriba de MAYORISTAS_TOTAL). Verificado exacto contra Santiago en R (MAYORISTAS Septiembre: $433.863,33). ACTUALIZADO 30-sep-2026: +$8.688 Septiembre (7 u. nuevas, ver nota completa arriba de MAYORISTAS_TOTAL). Verificado exacto contra Santiago en R (MAYORISTAS Septiembre: $363.167). ACTUALIZADO 29-sep-2026: +$28.155,91 Septiembre (18 u. nuevas, ver nota completa arriba de MAYORISTAS_TOTAL). Verificado exacto contra Santiago en R (MAYORISTAS Septiembre: $354.479). ACTUALIZADO 28-sep-2026 #3: +$90.514,10 Septiembre (48 u. nuevas, ver nota completa arriba de MAYORISTAS_TOTAL). Verificado exacto contra Santiago en R (MAYORISTAS Septiembre: $326.323,30). ACTUALIZADO 28-sep-2026 #2: +$3.450 Septiembre (3 u. nuevas, ver nota completa arriba de MAYORISTAS_TOTAL). Verificado exacto contra Santiago en R (MAYORISTAS Septiembre: $235.809,20). ACTUALIZADO 28-sep-2026: +$1.150 Septiembre (1 u. nueva, ver nota completa arriba de MAYORISTAS_TOTAL). Verificado exacto contra Santiago en R (MAYORISTAS Septiembre: $232.359,20). ACTUALIZADO 26-sep-2026: +$27.765,20 Septiembre (20 u. nuevas, ver nota completa arriba de MAYORISTAS_TOTAL). Verificado exacto contra Santiago en R (MAYORISTAS Septiembre: $231.209,20). ACTUALIZADO 24-sep-2026: +$15.233 Septiembre (8 u. nuevas, ver nota completa arriba de MAYORISTAS_TOTAL). CORREGIDO 22-sep-2026: revertido a $188.211 (comprobante 387 anulado, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 16-sep-2026 #2: +$45.061 en Septiembre (25 filas nuevas de Mayoristas, ver nota arriba de MAYORISTAS_TOTAL). ACTUALIZADO 16-sep-2026 #4: +$9.690 en Septiembre (5 u. XOOM 125R, ver nota arriba de MAYORISTAS_TOTAL). ACTUALIZADO 17-sep-2026: +$33.906 Septiembre (19 u., ver nota completa arriba de MAYORISTAS_TOTAL)
 
 // Ventas $ por mes, por zona Mayoristas (columna Ventas, agrupado por Vendedor — mismo mapeo validado con el usuario).
@@ -4146,6 +4184,7 @@ const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 238274, 414483.33,0]; // sum
 // Septiembre GUAYAS actualizado 12-sep-2026 (+$6.920, 4× HUNK 125R nuevas — ver nota arriba de TIENDAS_TOTAL).
 // SIERRA sin cambio neto: la NC/FV nueva de XOOM 125R se anula a sí misma ($0).
 // Nombre de fila acortado a "MANABI" (antes "ST DOMINGO / MANABI") a pedido de Santiago, 12-sep-2026.
+// RENOMBRADO 1-oct-2026: Santiago pidió volver a mostrar Santo Domingo en la etiqueta — ahora "MANABI/SANTO DOM."
 // Anomalía 14-sep-2026 (archivo CONSOLIDADO_HERO_3_2_1_1_1_1_1.xlsx, cliente GARCIA RUEDA JOSE LUIS, zona
 // SIERRA/PICHINCHA): el archivo reclasifica de nuevo el mismo trío XOOM 125R plomo/amarillo — la factura
 // FV-374 (amarillo, $1.938) pasa de Estado "Facturadas" a "NC", la NC-014 (plomo, -$1.938) pasa de "NC" a
@@ -4161,7 +4200,7 @@ const MAYORISTAS_VENTAS  = [472554, 234771, 145985, 238274, 414483.33,0]; // sum
 // SANCHEZ, provincia TUNGURAHUA, y cliente SSGMOTORCYCLE, provincia IMBABURA). MANABI y GUAYAS sin cambio.
 const MAYORISTAS_VENTAS_ZONA = {
   'ORIENTE':              [303707, 93692, 82092, 127651, 210775.21,0], // sin cambio Septiembre en esta vuelta (1-oct-2026) — ACTUALIZADO 30-sep-2026: +$1.938 Septiembre (comprobante 452, XOOM 125R, cliente TOABANDA YUNGAN JOHNNY XAVIER, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 29-sep-2026: +$13.355,91 Septiembre (8 u. nuevas, comprobantes 449/450/451, XOOM 125R+ECO DELUXE×2+ECO 150+HUNK 160 4V+XOOM 110×2, cliente GUALLI MULLO/PRADO GRANDA/YUNGAN HIPO, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 28-sep-2026 #3: +$64.342,10 Septiembre (32 u. nuevas, comprobantes 425/426/427/429/431/432/433/434/435/436/437/438/440/441/442, mayormente XOOM 125R + HUNK 125R/HUNK 160 4V/XPULSE 200 4V FI/ECO DELUXE, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 26-sep-2026: +$18.225,20 Septiembre (14 u. nuevas — comprobantes 410/412/415/416/417, ECO DELUXE ×5+XOOM 110 ×3+XOOM 125R ×1, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 24-sep-2026: +$5.305 Septiembre (ECO DELUXE+HUNK 160 4V comprobante 401, XOOM 110 comprobante 404 — ver nota completa arriba de MAYORISTAS_TOTAL)
-  'MANABI':               [40595,  37109, 30913, 30023, 34328.00,0], // CORREGIDO 1-oct-2026 #3: Septiembre $36.928,00→$34.328,00 (recompute directo desde BASE_MADRE, ver nota completa arriba de mayoristasAccounts/MANABI — misma corrección de zonas, ahora en $). ACTUALIZADO 1-oct-2026: +$8.010 Septiembre neto (archivo BASE nuevo 4c4f5598: IMPORTADORA KIKAR S.A. 3u/$5.440 [ECO DELUXE ×2 + XPULSE 200 4V FI, Santo Domingo, vendedor INFANTE ZAMBRANO] + TENELEMA QUIÑONEZ 1u/$1.480 [ECO 150, Esmeraldas/Quinindé, vendedor MORA ESCALANTE] + ECHEVERRIA CHAMORRO 1u/$1.120 [ECO DELUXE, Pichincha/Quito, vendedor ANDINO MONTALVO — zona provisional, confirmar con Santiago] + reversión -$30 del comprobante CEDEÑO MACIAS reemitido [ver nota completa arriba de MAYORISTAS_TOTAL]). ACTUALIZADO 30-sep-2026: +$6.750 Septiembre (comprobante 453, 6× ECO DELUXE, cliente CEDEÑO MACIAS CARLOS HUMBERTO, ver nota completa arriba de MAYORISTAS_TOTAL). CORREGIDO 29-sep-2026 #2 (archivo BASE nuevo 0f30f110, sin filas nuevas — solo reclasificación de zona): -$1.810 Septiembre neto (comprobante 423 SUQUILANDA STTOPER, ECO DELUXE $1.150, reclasificado de LOS RÍOS → MANABÍ [+$1.150] + comprobante 446 TAIPE CHANALATA, ECO 150 ×2 $2.960, reclasificado de MANABÍ → SIERRA [-$2.960], ver notas completas arriba de LOS RIOS/SIERRA). ACTUALIZADO 28-sep-2026 #3: +$5.510 Septiembre (3 u. nuevas, comprobantes 430/439/446, ECO 150 ×3 + HUNK 160 4V, zona MANABÍ [Provincia PICHINCHA/ESMERALDAS], ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 26-sep-2026: +$9.540 Septiembre (6 u. nuevas — comprobantes 411/413/414, ECO 150+HUNK 160 4V+ECO DELUXE ×2+XOOM 110 ×2, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 24-sep-2026: +$3.418 Septiembre (XOOM 125R comprobante 403, ECO 150 comprobante 408)
+  'MANABI/SANTO DOM.':    [40595,  37109, 30913, 30023, 34328.00,0], // RENOMBRADO 1-oct-2026: misma clave que mayoristasAccounts (ver nota ahí) — Santiago pidió volver a "Manabi/Santo Dom.". CORREGIDO 1-oct-2026 #3: Septiembre $36.928,00→$34.328,00 (recompute directo desde BASE_MADRE, ver nota completa arriba de mayoristasAccounts/MANABI — misma corrección de zonas, ahora en $). ACTUALIZADO 1-oct-2026: +$8.010 Septiembre neto (archivo BASE nuevo 4c4f5598: IMPORTADORA KIKAR S.A. 3u/$5.440 [ECO DELUXE ×2 + XPULSE 200 4V FI, Santo Domingo, vendedor INFANTE ZAMBRANO] + TENELEMA QUIÑONEZ 1u/$1.480 [ECO 150, Esmeraldas/Quinindé, vendedor MORA ESCALANTE] + ECHEVERRIA CHAMORRO 1u/$1.120 [ECO DELUXE, Pichincha/Quito, vendedor ANDINO MONTALVO — zona provisional, confirmar con Santiago] + reversión -$30 del comprobante CEDEÑO MACIAS reemitido [ver nota completa arriba de MAYORISTAS_TOTAL]). ACTUALIZADO 30-sep-2026: +$6.750 Septiembre (comprobante 453, 6× ECO DELUXE, cliente CEDEÑO MACIAS CARLOS HUMBERTO, ver nota completa arriba de MAYORISTAS_TOTAL). CORREGIDO 29-sep-2026 #2 (archivo BASE nuevo 0f30f110, sin filas nuevas — solo reclasificación de zona): -$1.810 Septiembre neto (comprobante 423 SUQUILANDA STTOPER, ECO DELUXE $1.150, reclasificado de LOS RÍOS → MANABÍ [+$1.150] + comprobante 446 TAIPE CHANALATA, ECO 150 ×2 $2.960, reclasificado de MANABÍ → SIERRA [-$2.960], ver notas completas arriba de LOS RIOS/SIERRA). ACTUALIZADO 28-sep-2026 #3: +$5.510 Septiembre (3 u. nuevas, comprobantes 430/439/446, ECO 150 ×3 + HUNK 160 4V, zona MANABÍ [Provincia PICHINCHA/ESMERALDAS], ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 26-sep-2026: +$9.540 Septiembre (6 u. nuevas — comprobantes 411/413/414, ECO 150+HUNK 160 4V+ECO DELUXE ×2+XOOM 110 ×2, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 24-sep-2026: +$3.418 Septiembre (XOOM 125R comprobante 403, ECO 150 comprobante 408)
   'LOS RIOS':             [40634,  64229, 23510,  44535, 93278.00,0], // CORREGIDO 1-oct-2026 #3: Septiembre $74.602,00→$93.278,00 (recompute directo desde BASE_MADRE, ver nota completa arriba de mayoristasAccounts/MANABI). ACTUALIZADO 1-oct-2026: +$14.800 Septiembre (archivo BASE nuevo 4c4f5598: MONTIEL ROMAN 7u/$10.360 + CHIZA HERRERA 3u/$4.440, ambos ECO 150, Los Ríos/Quevedo, vendedor MORA ESCALANTE — ver nota completa arriba de MAYORISTAS_TOTAL). CORREGIDO 29-sep-2026 #2 (archivo BASE nuevo 0f30f110): -$1.150 Septiembre (comprobante 423, SUQUILANDA STTOPER, ECO DELUXE, reclasificado de LOS RÍOS → MANABÍ — corrección de zona en el archivo, ver nota completa arriba de MANABI). ACTUALIZADO 29-sep-2026: +$14.800 Septiembre (10 u. nuevas, comprobante 448, ATENEAEC S.A.S., ECO 150 ×10, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 28-sep-2026 #3: +$9.700 Septiembre (7 u. nuevas, comprobante 439, ECO 150 ×5 + ECO DELUXE ×2, zona LOS RÍOS [Provincia ESMERALDAS], ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 28-sep-2026 #2: +$3.450 Septiembre (comprobante 424, 3× ECO DELUXE, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 28-sep-2026: +$1.150 Septiembre (comprobante 423, ECO DELUXE, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 24-sep-2026: +$1.480 Septiembre (ECO 150 comprobante 405)
   'GUAYAS':               [73688,  31489, 4440,   18327, 55956.12,0], // CORREGIDO 1-oct-2026 #3: Septiembre $58.916,12→$55.956,12 (recompute directo desde BASE_MADRE, ver nota completa arriba de mayoristasAccounts/MANABI). CORREGIDO 1-oct-2026 #2: -$19.380 Septiembre (comprobante 372 anulado, CORONEL NOBOA JOSE DAVID, 10× XOOM 125R, vendedor PLUAS NAVARRO, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 1-oct-2026: +$33.650,12 Septiembre (archivo BASE nuevo 4c4f5598: CORONEL NOBOA 10u/$19.347,80 [XOOM 125R] + ALONZO MERA 3u/$4.440 [ECO 150] + PEÑALOZA LOPEZ 4u/$6.902,32 [XOOM 110 ×2 + XOOM 125R ×2, El Oro/Huaquillas], los 3 vía vendedor PLUAS NAVARRO [zona GUAYAS ya confirmada] + VARGAS LIMONES 2u/$2.960 [ECO 150, Guayaquil, vendedor MORA ESCALANTE] — ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 28-sep-2026 #3: +$7.294 Septiembre (4 u. nuevas, comprobantes 428/444, XOOM 125R ×3 + ECO 150, zona GUAYAS, ver nota completa arriba de MAYORISTAS_TOTAL)
   'SIERRA':               [13930,  8252, 5030,  17738, 20146.00,0], // CORREGIDO 1-oct-2026 #3: Septiembre $33.262,00→$20.146,00 (recompute directo desde BASE_MADRE, ver nota completa arriba de mayoristasAccounts/MANABI). ACTUALIZADO 1-oct-2026: +$14.236 Septiembre (archivo BASE nuevo 4c4f5598: SALAZAR GUERRERO, Cotopaxi/La Maná, 9u [XOOM 125R ×2 + ECO 150 ×7], vendedor MORA ESCALANTE — ver nota completa arriba de MAYORISTAS_TOTAL). CORREGIDO 29-sep-2026 #2 (archivo BASE nuevo 0f30f110): +$2.960 Septiembre (comprobante 446, TAIPE CHANALATA LUIS ARMANDO, ECO 150 ×2, reclasificado de MANABÍ → SIERRA — corrección de zona en el archivo, ver nota completa arriba de MANABI). ACTUALIZADO 28-sep-2026 #3: +$3.668 Septiembre (2 u. nuevas, comprobante 443, XOOM 125R + HUNK 125R, zona SIERRA [Provincia COTOPAXI], ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 24-sep-2026: +$5.030 Septiembre (HUNK 125R comprobante 402, XPULSE 200 4V FI comprobante 406)
@@ -4543,7 +4582,7 @@ const RETAIL_MARGEN_VENTAS       = RETAIL_VENTAS_TOTAL;
 // completo desde BASE: Septiembre = Ventas $46.580,00 − Costo $35.551,27 = $11.028,73 (23,7%, sube de 23% a
 // 24% redondeado). Mayo-Agosto y TIENDAS/MAYORISTAS de los 5 meses se verificaron contra BASE y sí cuadran
 // exactos (dentro de $0,01 de redondeo) — sin cambios ahí.
-const RETAIL_MARGEN_UTILIDAD     = [6345.33, 21625.79, 40071.64, 31477.70, 21272.80,0]; // ACTUALIZADO 1-oct-2026: recomputado desde BASE nuevo (4c4f5598) — Ventas $89.918,00 − Costo $68.645,20 = $21.272,80 (23,7%). Baja $690,59 vs. la vuelta anterior porque el archivo nuevo revierte (correctamente) la venta duplicada del chasis MBLKCU124THA00583 que ya se había reportado como anomalía — ver nota completa arriba de AAP_DATA. Verificado exacto contra Santiago en R. CORREGIDO 30-sep-2026: Santiago preguntó "¿están bien calculados los márgenes de RETAIL y Tiendas, coinciden con R?" — al auditar (recompute directo Ventas−Costo desde BASE, Canal=RETAIL, Estado en {Facturadas,NC}, Septiembre) se encontró que el valor arrastrado (20.257,67) venía $232,08 bajo desde antes de esta vuelta — el mismo tipo de desfase que ya se había corregido una vez el 21-sep-2026 #4 pero que volvió a colarse en alguna actualización posterior sin que el checker automático lo detectara (los checkers verifican unidades/$ pero no margen). Recalculado completo: Ventas $92.023,00 − Costo $70.059,61 = $21.963,39 (23,9%) — esto YA incluye las 4 filas AAP nuevas de este archivo (+$6.580 ventas/+$5.106,36 costo = +$1.473,64 utilidad, ver nota completa arriba de AAP_DATA). Mayo-Agosto se verificaron también contra BASE y sí cuadran exactos, sin cambios ahí. TIENDAS_MARGEN_UTILIDAD se verificó igual (los 5 meses, incluyendo Septiembre $34.897,96) y coincide exacto con BASE — sin errores ahí. ACTUALIZADO 28-sep-2026: +$1.241,56 Septiembre (Ventas +$5.430 − Costo +$4.188,44 de las 3 filas AAP nuevas, ver nota completa arriba de AAP_DATA). ACTUALIZADO 26-sep-2026: +$4.624,79 Septiembre (Ventas +$18.620 − Costo +$13.995,21 de las 10 filas nuevas, ver nota completa arriba de RETAIL_TOTAL). ACTUALIZADO 25-sep-2026: recomputado desde BASE nuevo (2d56ea5e) — Junio/Julio bajan por la revisión retroactiva CRESA-RETAIL (Costo sin cambio, ver nota completa arriba de RETAIL_VENTAS_TOTAL): Junio 21655,79→21625,79 (-$30), Julio 40251,64→40071,64 (-$180). Septiembre sube: revisión CRESA -$30 + 1 fila CRESA nueva (+$1.730 ventas/+$1.326,31 costo = +$403,69 utilidad) + 4 filas AAP nuevas (+$6.878 ventas/+$5.180,15 costo = +$1.697,85 utilidad) → $12.319,78 + $2.071,54 = $14.391,32 (23,9%). Verificado exacto contra suma directa del archivo BASE.
+const RETAIL_MARGEN_UTILIDAD     = [6345.33, 21625.79, 40071.64, 31477.70, 21272.80,0]; // CORREGIDO 1-oct-2026 #3: revertido a $21.272,80 (Santiago quitó las 4 filas AAP nuevas, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA) — Ventas $89.918,00 − Costo $68.645,20 = $21.272,80 (23,7%). ACTUALIZADO 1-oct-2026 #2: +$1.278,84 Septiembre (Ventas +$5.510 − Costo +$4.231,16 de las 4 filas AAP nuevas, archivo BASE nuevo 305d4a37 — ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026: recomputado desde BASE nuevo (4c4f5598) — Ventas $89.918,00 − Costo $68.645,20 = $21.272,80 (23,7%). Baja $690,59 vs. la vuelta anterior porque el archivo nuevo revierte (correctamente) la venta duplicada del chasis MBLKCU124THA00583 que ya se había reportado como anomalía — ver nota completa arriba de AAP_DATA. Verificado exacto contra Santiago en R. CORREGIDO 30-sep-2026: Santiago preguntó "¿están bien calculados los márgenes de RETAIL y Tiendas, coinciden con R?" — al auditar (recompute directo Ventas−Costo desde BASE, Canal=RETAIL, Estado en {Facturadas,NC}, Septiembre) se encontró que el valor arrastrado (20.257,67) venía $232,08 bajo desde antes de esta vuelta — el mismo tipo de desfase que ya se había corregido una vez el 21-sep-2026 #4 pero que volvió a colarse en alguna actualización posterior sin que el checker automático lo detectara (los checkers verifican unidades/$ pero no margen). Recalculado completo: Ventas $92.023,00 − Costo $70.059,61 = $21.963,39 (23,9%) — esto YA incluye las 4 filas AAP nuevas de este archivo (+$6.580 ventas/+$5.106,36 costo = +$1.473,64 utilidad, ver nota completa arriba de AAP_DATA). Mayo-Agosto se verificaron también contra BASE y sí cuadran exactos, sin cambios ahí. TIENDAS_MARGEN_UTILIDAD se verificó igual (los 5 meses, incluyendo Septiembre $34.897,96) y coincide exacto con BASE — sin errores ahí. ACTUALIZADO 28-sep-2026: +$1.241,56 Septiembre (Ventas +$5.430 − Costo +$4.188,44 de las 3 filas AAP nuevas, ver nota completa arriba de AAP_DATA). ACTUALIZADO 26-sep-2026: +$4.624,79 Septiembre (Ventas +$18.620 − Costo +$13.995,21 de las 10 filas nuevas, ver nota completa arriba de RETAIL_TOTAL). ACTUALIZADO 25-sep-2026: recomputado desde BASE nuevo (2d56ea5e) — Junio/Julio bajan por la revisión retroactiva CRESA-RETAIL (Costo sin cambio, ver nota completa arriba de RETAIL_VENTAS_TOTAL): Junio 21655,79→21625,79 (-$30), Julio 40251,64→40071,64 (-$180). Septiembre sube: revisión CRESA -$30 + 1 fila CRESA nueva (+$1.730 ventas/+$1.326,31 costo = +$403,69 utilidad) + 4 filas AAP nuevas (+$6.878 ventas/+$5.180,15 costo = +$1.697,85 utilidad) → $12.319,78 + $2.071,54 = $14.391,32 (23,9%). Verificado exacto contra suma directa del archivo BASE.
 const TIENDAS_MARGEN_VENTAS      = TIENDAS_VENTAS;
 // Historial (Ventas=Venta Neta, método anterior): Corregido 8-sep-2026 (Agosto), 10-sep-2026 (Septiembre) —
 // ver detalle de esas correcciones en versiones previas de este archivo. El +107 de sobrecosto de accesorio
@@ -4895,12 +4934,30 @@ const ZONE_COLORS = ['--zone-1','--zone-2','--zone-3','--zone-4','--zone-5'].map
 // cuadra con MAYORISTAS_TOTAL.
 const mayoristasAccounts = [
   {name:'ORIENTE',              data:[181,60,43,70,118,0]}, // sin cambio Septiembre en esta vuelta (1-oct-2026) — ACTUALIZADO 30-sep-2026: +1 u. Septiembre (comprobante 452, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 29-sep-2026: +8 u. Septiembre (ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 28-sep-2026 #3: +32 u. Septiembre (ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 26-sep-2026: +14 u./+$18.225,20 Septiembre (comprobantes 410 ×4, 412 ×7, 415, 416, 417 — todos Provincia SUCUMBIOS, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 24-sep-2026: +3 u. Septiembre
-  {name:'MANABI',               data:[28,24,19,20,22,0]}, // CORREGIDO 1-oct-2026 #3 (a pedido de Santiago, "están mal las unidades... por zonas"): Septiembre 24→22 — recompute completo desde cero de las 5 zonas de Septiembre, directo contra BASE_MADRE (1df9b7f0-CONSOLIDADO..., columna Origen_Ventas, Canal=MAYORISTAS, Mes=9, excluyendo Anuladas, 255 filas). Mayo-Agosto ya coincidían EXACTO con este mismo método (Origen_Ventas crudo, sin reclasificar por Provincia) — confirma que es el campo correcto. El historial de ediciones manuales de Septiembre en esta y las 3 filas siguientes (reclasificaciones comprobante a comprobante) se había ido desviando del total real: el total de 243 u. seguía cuadrando porque las 4 zonas (MANABI/LOS RIOS/GUAYAS/SIERRA, no ORIENTE) se compensaban entre sí, pero cada zona individual quedó mal. Se reemplaza por el recompute directo. ACTUALIZADO 1-oct-2026: +5 u. neto Septiembre (ver nota completa arriba de MAYORISTAS_VENTAS_ZONA). ACTUALIZADO 30-sep-2026: +6 u. Septiembre (comprobante 453, cliente CEDEÑO MACIAS, ver nota completa arriba de MAYORISTAS_TOTAL). CORREGIDO 29-sep-2026 #2 (archivo BASE nuevo 0f30f110, reclasificación de zona, sin filas nuevas): -1 u. neto Septiembre (comprobante 423 entra desde LOS RÍOS +1 u. / comprobante 446 sale hacia SIERRA -2 u., ver nota completa arriba de MAYORISTAS_VENTAS_ZONA). ACTUALIZADO 28-sep-2026 #3: +3 u. Septiembre (ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 26-sep-2026: +6 u./+$9.540 Septiembre (comprobantes 411 ×2 Provincia PICHINCHA, 413 ×2 y 414 ×2 Provincia SANTO DOMINGO DE LOS TSÁCHILAS — esta zona agrupa esas provincias, no solo Manabí, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 24-sep-2026: +2 u. Septiembre
+  {name:'MANABI/SANTO DOM.',    data:[28,24,19,20,22,0]}, // RENOMBRADO 1-oct-2026: Santiago pidió que esta fila vuelva a decir "Manabi/Santo Dom." (antes solo "MANABI" — ver nota más abajo, el 12-sep-2026 se había acortado a pedido suyo). Sin cambio de datos, solo de etiqueta — esta zona ya agrupaba Manabí + Santo Domingo de los Tsáchilas (y Pichincha) desde antes, ver nota de MAYORISTAS_VENTAS_ZONA. CORREGIDO 1-oct-2026 #3 (a pedido de Santiago, "están mal las unidades... por zonas"): Septiembre 24→22 — recompute completo desde cero de las 5 zonas de Septiembre, directo contra BASE_MADRE (1df9b7f0-CONSOLIDADO..., columna Origen_Ventas, Canal=MAYORISTAS, Mes=9, excluyendo Anuladas, 255 filas). Mayo-Agosto ya coincidían EXACTO con este mismo método (Origen_Ventas crudo, sin reclasificar por Provincia) — confirma que es el campo correcto. El historial de ediciones manuales de Septiembre en esta y las 3 filas siguientes (reclasificaciones comprobante a comprobante) se había ido desviando del total real: el total de 243 u. seguía cuadrando porque las 4 zonas (MANABI/LOS RIOS/GUAYAS/SIERRA, no ORIENTE) se compensaban entre sí, pero cada zona individual quedó mal. Se reemplaza por el recompute directo. ACTUALIZADO 1-oct-2026: +5 u. neto Septiembre (ver nota completa arriba de MAYORISTAS_VENTAS_ZONA). ACTUALIZADO 30-sep-2026: +6 u. Septiembre (comprobante 453, cliente CEDEÑO MACIAS, ver nota completa arriba de MAYORISTAS_TOTAL). CORREGIDO 29-sep-2026 #2 (archivo BASE nuevo 0f30f110, reclasificación de zona, sin filas nuevas): -1 u. neto Septiembre (comprobante 423 entra desde LOS RÍOS +1 u. / comprobante 446 sale hacia SIERRA -2 u., ver nota completa arriba de MAYORISTAS_VENTAS_ZONA). ACTUALIZADO 28-sep-2026 #3: +3 u. Septiembre (ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 26-sep-2026: +6 u./+$9.540 Septiembre (comprobantes 411 ×2 Provincia PICHINCHA, 413 ×2 y 414 ×2 Provincia SANTO DOMINGO DE LOS TSÁCHILAS — esta zona agrupa esas provincias, no solo Manabí, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 24-sep-2026: +2 u. Septiembre
   {name:'LOS RIOS',             data:[24,45,17,29,62,0]}, // CORREGIDO 1-oct-2026 #3: Septiembre 50→62 (recompute directo desde BASE_MADRE, ver nota completa arriba de MANABI). ACTUALIZADO 1-oct-2026: +10 u. Septiembre (ver nota completa arriba de MAYORISTAS_VENTAS_ZONA). CORREGIDO 29-sep-2026 #2 (archivo BASE nuevo 0f30f110): -1 u. Septiembre (comprobante 423, reclasificado a MANABÍ, ver nota completa arriba de MAYORISTAS_VENTAS_ZONA). ACTUALIZADO 29-sep-2026: +10 u. Septiembre (comprobante 448, ATENEAEC S.A.S., ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 28-sep-2026 #3: +7 u. Septiembre (ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 28-sep-2026 #2: +3 u. Septiembre (comprobante 424, 3× ECO DELUXE, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 28-sep-2026: +1 u. Septiembre (comprobante 423, ECO DELUXE, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 24-sep-2026: +1 u. Septiembre
   {name:'GUAYAS',               data:[36,19,3,11,30,0]}, // CORREGIDO 1-oct-2026 #3: Septiembre 32→30 (recompute directo desde BASE_MADRE, ver nota completa arriba de MANABI). CORREGIDO 1-oct-2026 #2: -10 u. Septiembre (comprobante 372 anulado, ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 1-oct-2026: +19 u. Septiembre (ver nota completa arriba de MAYORISTAS_VENTAS_ZONA). ACTUALIZADO 28-sep-2026 #3: +4 u. Septiembre (ver nota completa arriba de MAYORISTAS_TOTAL)
   {name:'SIERRA',               data:[4,4,2,6,11,0]}, // CORREGIDO 1-oct-2026 #3: Septiembre 19→11 (recompute directo desde BASE_MADRE, ver nota completa arriba de MANABI). ACTUALIZADO 1-oct-2026: +9 u. Septiembre (ver nota completa arriba de MAYORISTAS_VENTAS_ZONA). CORREGIDO 29-sep-2026 #2 (archivo BASE nuevo 0f30f110): +2 u. Septiembre (comprobante 446, reclasificado desde MANABÍ, ver nota completa arriba de MAYORISTAS_VENTAS_ZONA). ACTUALIZADO 28-sep-2026 #3: +2 u. Septiembre (ver nota completa arriba de MAYORISTAS_TOTAL). ACTUALIZADO 24-sep-2026: +2 u. Septiembre
 ].map(a=>({...a, ventas: MAYORISTAS_VENTAS_ZONA[a.name], total:a.data.reduce((x,y)=>x+y,0)})).sort((a,b)=>b.total-a.total)
  .map((a,i)=>({...a, color: ZONE_COLORS[i]}));
+
+// NUEVO 1-oct-2026: desglose del vendedor INFANTE ZAMBRANO PEDRO JUNIOR (Mayoristas), a pedido de Santiago
+// ("en MAYORISTAS, UNIDADES $/U necesito que al final aparezca un desgloce de las ventas en unidades de
+// Pedro Infante... por ZONAS la abierta de unidades y dolares"). Fuente: tabla_retail_mayoristas (R) que
+// mandó Santiago, filtro Estado %in% c("Facturadas","NC"), Canal %in% c("MAYORISTASS","MAYORISTAS"),
+// Vendedor=="INFANTE ZAMBRANO PEDRO JUNIOR", agrupado por Mes/Origen_Ventas2/Cliente — aquí colapsado a
+// nivel de ZONA (sin cliente). CORREGIDO 1-oct-2026 #2 (a pedido de Santiago): MANABI y SANTO DOMINGO
+// separados de nuevo en dos filas (ya no fusionadas), orden alfabético igual que su tabla en R. Verificado:
+// la suma de las zonas de cada mes cuadra exacto contra la fila "TOTAL MES" de su tabla (Mayo 28, Junio 24,
+// Julio 19, Agosto 20, Septiembre 22).
+const MAYORISTAS_INFANTE_ZONA = [
+  {name:'ESMERALDAS',     data:[0,5,0,0,0,0],   ventas:[0,7115,0,0,0,0]},
+  {name:'MANABI',         data:[5,10,6,6,2,0],  ventas:[7625,15383,8803,7230,4030,0]},
+  {name:'PICHINCHA',      data:[0,0,0,0,4,0],   ventas:[0,0,0,0,8060,0]},
+  {name:'SANTO DOMINGO',  data:[23,9,13,14,16,0], ventas:[32970,14611,22110,22793,22238,0]},
+];
+const MAYORISTAS_INFANTE_TOTAL = [28,24,19,20,22,0];
+const MAYORISTAS_INFANTE_TOTAL_VENTAS = [40595,37109,30913,30023,34328,0];
 
 function computeMayoristasModel(metric){
   const active = mayoristasAccounts.map(a=>{
@@ -4938,7 +4995,7 @@ const RETAIL_COLORS = ['--retail-1','--retail-2','--retail-3','--retail-4','--re
 
 const retailAccounts = [
   // ACTUALIZADO 26-sep-2026: mismo valor que AAP_DATA/AAP_VENTAS (32 u./$53.993, ver nota completa arriba de AAP_DATA).
-  {name:'AAP',          data:[16, 30, 84, 69, 40,0], ventas:[23395, 44836, 127791, 105425, 63898,0]}, // ACTUALIZADO 1-oct-2026 #2: mismo valor que AAP_DATA/AAP_VENTAS (40 u./$63.898, ver nota completa arriba de AAP_DATA) — esta tabla se había quedado en el valor del 30-sep (39 u./$66.003) sin recoger el ajuste neto +1u./-$2.105 del 1-oct (reversión MOREIRA VACA + venta duplicada MBLKCU124THA00583, compensada con 4 filas AAP nuevas), que sí se aplicó a AAP_DATA pero no se propagó aquí (bug reportado por Santiago). ACTUALIZADO 30-sep-2026: mismo valor que AAP_DATA/AAP_VENTAS (39 u./$66.003, ver nota completa arriba de AAP_DATA). ACTUALIZADO 28-sep-2026: mismo valor que AAP_DATA/AAP_VENTAS (35 u./$59.423, ver nota completa arriba de AAP_DATA).
+  {name:'AAP',          data:[16, 30, 84, 69, 40,0], ventas:[23395, 44836, 127791, 105425, 63898,0]}, // CORREGIDO 1-oct-2026 #4: revertido a 40 u./$63.898 (Santiago quitó las 4 filas AAP nuevas, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026 #3: mismo valor que AAP_DATA/AAP_VENTAS (44 u./$69.408, archivo BASE nuevo 305d4a37, ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026 #2: mismo valor que AAP_DATA/AAP_VENTAS (40 u./$63.898, ver nota completa arriba de AAP_DATA) — esta tabla se había quedado en el valor del 30-sep (39 u./$66.003) sin recoger el ajuste neto +1u./-$2.105 del 1-oct (reversión MOREIRA VACA + venta duplicada MBLKCU124THA00583, compensada con 4 filas AAP nuevas), que sí se aplicó a AAP_DATA pero no se propagó aquí (bug reportado por Santiago). ACTUALIZADO 30-sep-2026: mismo valor que AAP_DATA/AAP_VENTAS (39 u./$66.003, ver nota completa arriba de AAP_DATA). ACTUALIZADO 28-sep-2026: mismo valor que AAP_DATA/AAP_VENTAS (35 u./$59.423, ver nota completa arriba de AAP_DATA).
   {name:'OTOM',         data:[0, 28, 12, 12, 1,0],  ventas:[0, 43735, 17760, 20688, 1150,0]}, // ACTUALIZADO 29-sep-2026: +1 u./+$1.150 Septiembre (comprobante 447, cliente facturado "MMOTASA CIA. LTDA.", ECO DELUXE, zona DAULE — Nombre Bodega del archivo es "CONSIGNACION OTOM"; el propio dashboard ya documentaba esta cuenta como "OTOM/MMOTASA" desde una venta de Agosto, ver nota completa arriba de NONAAP_ORIGEN_MENSUAL, así que se agrupa aquí y no como cuenta nueva separada)
   {name:'CRESA',        data:[2, 0, 7, 0, 2,0],     ventas:[2880, 30, 9210, 0, 2880,0]}, // ACTUALIZADO 25-sep-2026: revisión retroactiva -$30 (Junio comprobante 137, Julio ×6 comprobantes) + 1 fila nueva Septiembre (comprobante 409, +$1.730) neto con la revisión de comprobante 400 (-$30) — ver nota completa arriba de RETAIL_VENTAS_TOTAL
   {name:'MASTER MOTO',  data:[0, 0, 4, 4, 9,0],     ventas:[0, 0, 6920, 8490, 18780,0]}, // ACTUALIZADO 26-sep-2026: +4 u./+$8.490 Septiembre (cliente MASTERMOTO: HUNK 125R ×3/$5.190 + XPULSE 200 4V FI ×1/$3.300 — comprobantes 418/420/421/422)
@@ -4965,15 +5022,15 @@ const retailAccounts = [
 // 9 DE OCTUBRE, PARQUE CALIFORNIA y PORTOVIEJO +1 u./+$1.730 o +$2.550 c/u; QUITO - SUR nuevo (1 u./$2.550).
 const AAP_ORIGEN = [
   {name:'BABAHOYO',           u:33, v:51464}, // ACTUALIZADO 1-oct-2026: +1u./+$1.150 Septiembre (AAP nueva, ECO DELUXE Perfil A, archivo BASE nuevo 4c4f5598 — ver nota completa arriba de AAP_ORIGEN_MENSUAL). ACTUALIZADO 26-sep-2026: +1u./+$1.730 Septiembre (AAP nueva, HUNK 125R Perfil AA, ver nota completa arriba de AAP_DATA)
-  {name:'9 DE OCTUBRE',       u:26, v:38932}, // ACTUALIZADO 1-oct-2026: +1u./+$1.150 Septiembre (AAP nueva, ECO DELUXE Perfil A, archivo BASE nuevo 4c4f5598 — ver nota completa arriba de AAP_ORIGEN_MENSUAL). ACTUALIZADO 28-sep-2026: +1u./+$1.150 Septiembre (AAP nueva, ECO DELUXE Perfil A, ver nota completa arriba de AAP_DATA)
+  {name:'9 DE OCTUBRE',       u:26, v:38932}, // CORREGIDO 1-oct-2026 #3: revertido a 26u/$38.932 (Santiago quitó la fila AAP nueva, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026 #2: +1u./+$1.150 Septiembre (AAP nueva, ECO DELUXE sin Perfil asignado, archivo BASE nuevo 305d4a37). ACTUALIZADO 1-oct-2026: +1u./+$1.150 Septiembre (ECO DELUXE Perfil A, archivo BASE nuevo 4c4f5598 — ver nota completa arriba de AAP_ORIGEN_MENSUAL). ACTUALIZADO 28-sep-2026: +1u./+$1.150 Septiembre (AAP nueva, ECO DELUXE Perfil A, ver nota completa arriba de AAP_DATA)
   {name:'DURÁN',              u:20, v:27598}, // ACTUALIZADO 26-sep-2026: +1u./+$1.730 Septiembre (AAP nueva, HUNK 125R Perfil A, ver nota completa arriba de AAP_DATA)
   {name:'PARQUE CALIFORNIA',  u:17, v:28365}, // ACTUALIZADO 25-sep-2026: +1u./+$1.605 Septiembre (AAP nueva, XOOM 110 Perfil AA, ver nota completa arriba de AAP_DATA)
   {name:'ESMERALDAS',         u:16, v:21870}, // ACTUALIZADO 1-oct-2026: -1u./-$1.605 Septiembre (reversión venta duplicada/errónea, XOOM 110 Perfil CONTADO — Facturada reclasificada a NC + fila NC negativa nueva, archivo BASE nuevo 4c4f5598, ver ANOMALÍA reportada a Santiago). ACTUALIZADO 30-sep-2026: +2u./+$2.300 Septiembre (2 AAP nuevas, ECO DELUXE Perfil A + Perfil BB, $1.150 c/u, ver nota completa arriba de AAP_DATA)
   {name:'PORTOVIEJO',         u:13, v:21729},
   {name:'LIBERTAD',           u:14, v:20980}, // ACTUALIZADO 26-sep-2026: +1u./+$1.730 Septiembre (AAP nueva, HUNK 125R Perfil A, ver nota completa arriba de AAP_DATA)
-  {name:'EMPRESARIAL',        u:11, v:16575},
+  {name:'EMPRESARIAL',        u:11, v:16575}, // CORREGIDO 1-oct-2026: revertido a 11u/$16.575 (Santiago quitó las 2 filas AAP nuevas, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA)
   {name:'MILAGRO',            u:24, v:38638}, // ACTUALIZADO 26-sep-2026: +1u./+$1.730 Septiembre (AAP nueva, HUNK 125R Perfil AA, ver nota completa arriba de AAP_DATA). ACTUALIZADO 25-sep-2026: +2u./+$3.543 Septiembre (2 AAP nuevas, XOOM 110 Perfil A +$1.605 + XOOM 125R Perfil CONTADO +$1.938, ver nota completa arriba de AAP_DATA)
-  {name:'ORO VERDE',          u:9,  v:16133},
+  {name:'ORO VERDE',          u:9,  v:16133}, // CORREGIDO 1-oct-2026: revertido a 9u/$16.133 (Santiago quitó la fila AAP nueva, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA)
   {name:'BUENA FE',           u:9,  v:15438}, // ACTUALIZADO 28-sep-2026: +1u./+$1.730 Septiembre (AAP nueva, HUNK 125R Perfil B, ver nota completa arriba de AAP_DATA)
   {name:'GUASMO',             u:9,  v:14285}, // ACTUALIZADO 1-oct-2026: -2u./-$5.100 Septiembre (reversión chasis duplicado MBLKCU124THA00583 — ambas facturas [26-sep y 29-sep] reclasificadas a NC + 2 filas NC negativas nuevas, neto -2u. Ya reportado a Santiago como anomalía, ahora corregido en archivo BASE nuevo 4c4f5598). ACTUALIZADO 30-sep-2026: +1u./+$2.550 Septiembre (AAP nueva, HUNK 160 4V Perfil BB — chasis MBLKCU124THA00583, IDÉNTICO al añadido el 28-sep-2026, mismo modelo/precio/origen/Comprobante=NaN sin NC intermedia — ver ANOMALÍA de posible duplicado reportada a Santiago. Ver nota completa arriba de AAP_DATA). ACTUALIZADO 28-sep-2026: +1u./+$2.550 Septiembre (AAP nueva, HUNK 160 4V Perfil BB, ver nota completa arriba de AAP_DATA)
   {name:'SANTO DOMINGO',      u:11, v:15300}, // ACTUALIZADO 1-oct-2026: +1u./+$1.150 Septiembre (AAP nueva, ECO DELUXE Perfil A, archivo BASE nuevo 4c4f5598 — ver nota completa arriba de AAP_ORIGEN_MENSUAL)
@@ -5007,15 +5064,15 @@ const NONAAP_ORIGEN = [
 // (origen nuevo, nunca antes visto en AAP) +1/+$2.550.
 const AAP_ORIGEN_MENSUAL = [
   {name:'BABAHOYO',           data:[2, 8, 8, 8, 7,0],  ventas:[3700, 13118, 12843, 10988, 10815,0]}, // ACTUALIZADO 1-oct-2026: +1 u./+$1.150 Septiembre (ECO DELUXE, Perfil A, archivo BASE nuevo 4c4f5598 — ver nota completa arriba de AAP_ORIGEN_MONTH_TOTAL). ACTUALIZADO 26-sep-2026: +1 u./+$1.730 Septiembre (HUNK 125R, Perfil AA, ver nota completa arriba de AAP_DATA). ACTUALIZADO 22-sep-2026: +1 u./+$1.150 Septiembre (ECO DELUXE, Perfil B-, ver nota completa arriba de AAP_DATA)
-  {name:'9 DE OCTUBRE',       data:[1, 5, 10, 6, 4,0], ventas:[1150, 8028, 15271, 9303, 5180,0]}, // ACTUALIZADO 1-oct-2026: +1 u./+$1.150 Septiembre (ECO DELUXE, Perfil A, archivo BASE nuevo 4c4f5598 — ver nota completa arriba de AAP_ORIGEN_MONTH_TOTAL). ACTUALIZADO 28-sep-2026: +1 u./+$1.150 Septiembre (ECO DELUXE, Perfil A, ver nota completa arriba de AAP_DATA)
+  {name:'9 DE OCTUBRE',       data:[1, 5, 10, 6, 4,0], ventas:[1150, 8028, 15271, 9303, 5180,0]}, // CORREGIDO 1-oct-2026 #3: revertido a 4 u./$5.180 (Santiago quitó la fila AAP nueva, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026 #2: +1 u./+$1.150 Septiembre (ECO DELUXE, sin Perfil asignado, archivo BASE nuevo 305d4a37 — ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026: +1 u./+$1.150 Septiembre (ECO DELUXE, Perfil A, archivo BASE nuevo 4c4f5598 — ver nota completa arriba de AAP_ORIGEN_MONTH_TOTAL). ACTUALIZADO 28-sep-2026: +1 u./+$1.150 Septiembre (ECO DELUXE, Perfil A, ver nota completa arriba de AAP_DATA)
   {name:'DURÁN',              data:[3, 4, 6, 6, 1,0],  ventas:[3450, 5510, 8848, 8060, 1730,0]}, // ACTUALIZADO 26-sep-2026: +1 u./+$1.730 Septiembre (HUNK 125R, Perfil A, ver nota completa arriba de AAP_DATA)
   {name:'PARQUE CALIFORNIA',  data:[0, 0, 8, 6, 3,0],  ventas:[0, 0, 12680, 9800, 5885,0]}, // ACTUALIZADO 25-sep-2026: +1u./+$1.605 Septiembre (AAP nueva, XOOM 110 Perfil AA, ver nota completa arriba de AAP_DATA)
   {name:'ESMERALDAS',         data:[0, 5, 3, 6, 2,0],  ventas:[0, 6330, 3450, 9790, 2300,0]}, // ACTUALIZADO 1-oct-2026: -1 u./-$1.605 Septiembre (reversión venta duplicada XOOM 110 Perfil CONTADO — Facturada reclasificada a NC + fila NC negativa nueva, archivo BASE nuevo 4c4f5598, ver ANOMALÍA reportada a Santiago). ACTUALIZADO 30-sep-2026: +2u./+$2.300 Septiembre (2 AAP nuevas, ECO DELUXE Perfil A + Perfil BB, ver nota completa arriba de AAP_DATA)
   {name:'PORTOVIEJO',         data:[1, 2, 5, 3, 2,0],  ventas:[2550, 3335, 7326, 4238, 4280,0]},
   {name:'LIBERTAD',           data:[1, 0, 6, 4, 3,0],  ventas:[1150, 0, 9460, 5760, 4610,0]}, // ACTUALIZADO 26-sep-2026: +1 u./+$1.730 Septiembre (HUNK 125R, Perfil A, ver nota completa arriba de AAP_DATA)
-  {name:'EMPRESARIAL',        data:[0, 0, 6, 4, 1,0],  ventas:[0, 0, 9335, 5635, 1605,0]}, // ACTUALIZADO 22-sep-2026: +1 u./+$1.605 Septiembre (XOOM 110, Perfil COLABORADOR, Vendedor "INTERNO, INTERNO" — ver nota completa arriba de AAP_DATA)
+  {name:'EMPRESARIAL',        data:[0, 0, 6, 4, 1,0],  ventas:[0, 0, 9335, 5635, 1605,0]}, // CORREGIDO 1-oct-2026 #2: revertido a 1 u./$1.605 (Santiago quitó las 2 filas XOOM 110 nuevas, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026: +2 u./+$3.210 Septiembre (2 filas XOOM 110 $1.605 c/u, origen real CANAL DIGITAL — por convención ya establecida con Santiago se agrupan en EMPRESARIAL por ser cuenta AAP). ACTUALIZADO 22-sep-2026: +1 u./+$1.605 Septiembre (XOOM 110, Perfil COLABORADOR, Vendedor "INTERNO, INTERNO" — ver nota completa arriba de AAP_DATA)
   {name:'MILAGRO',            data:[3, 2, 8, 7, 4,0],  ventas:[3905, 2755, 14400, 10575, 7003,0]}, // ACTUALIZADO 26-sep-2026: +1u./+$1.730 Septiembre (HUNK 125R, Perfil AA, ver nota completa arriba de AAP_DATA). ACTUALIZADO 25-sep-2026: +2u./+$3.543 Septiembre (2 AAP nuevas, XOOM 110 Perfil A +$1.605 + XOOM 125R Perfil CONTADO +$1.938, ver nota completa arriba de AAP_DATA)
-  {name:'ORO VERDE',          data:[0, 0, 2, 6, 1,0],  ventas:[0, 0, 2300, 12103, 1730,0]},
+  {name:'ORO VERDE',          data:[0, 0, 2, 6, 1,0],  ventas:[0, 0, 2300, 12103, 1730,0]}, // CORREGIDO 1-oct-2026 #2: revertido a 1 u./$1.730 (Santiago quitó la fila AAP nueva, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA). NOTA: el recálculo directo desde el archivo BASE solo sustenta 1 fila ORO VERDE en Julio ($1.150), no 2 ($2.300) como aparece arriba — posible desfase histórico, pendiente de confirmar con Santiago; Julio se deja sin tocar. ACTUALIZADO 1-oct-2026: +1 u./+$1.150 Septiembre (ECO DELUXE, sin Perfil asignado, archivo BASE nuevo 305d4a37)
   {name:'BUENA FE',           data:[0, 3, 3, 2, 1,0],  ventas:[0, 4610, 5430, 3668, 1730,0]}, // ACTUALIZADO 28-sep-2026: +1 u./+$1.730 Septiembre (HUNK 125R, Perfil B, ver nota completa arriba de AAP_DATA)
   {name:'GUASMO',             data:[1, 0, 4, 3, 1,0],  ventas:[1730, 0, 6340, 4485, 1730,0]}, // ACTUALIZADO 1-oct-2026: -2 u./-$5.100 Septiembre (reversión chasis duplicado MBLKCU124THA00583 — ambas facturas [26-sep y 29-sep] reclasificadas a NC + 2 filas NC negativas nuevas, archivo BASE nuevo 4c4f5598 — ver ANOMALÍA reportada a Santiago, ya corregida). ACTUALIZADO 30-sep-2026: +1 u./+$2.550 Septiembre (HUNK 160 4V, Perfil BB — chasis duplicado MBLKCU124THA00583, ver nota completa arriba de AAP_ORIGEN). ACTUALIZADO 28-sep-2026: +1 u./+$2.550 Septiembre (HUNK 160 4V, Perfil BB, ver nota completa arriba de AAP_DATA)
   {name:'SANTO DOMINGO',      data:[2, 1, 4, 1, 3,0],  ventas:[2880, 1150, 5760, 1480, 4030,0]}, // ACTUALIZADO 1-oct-2026: +1 u./+$1.150 Septiembre (ECO DELUXE, Perfil A, archivo BASE nuevo 4c4f5598 — ver nota completa arriba de AAP_ORIGEN_MONTH_TOTAL)
@@ -5026,8 +5083,8 @@ const AAP_ORIGEN_MENSUAL = [
   {name:'CDC',                data:[1, 0, 0, 0, 0,0],  ventas:[1150, 0, 0, 0, 0,0]},
   {name:'QUITO - SUR',        data:[0, 0, 0, 0, 1,0],  ventas:[0, 0, 0, 0, 2550,0]}, // NUEVO 21-sep-2026: origen nunca antes visto en AAP (HUNK 160 4V, Perfil AAA)
 ];
-const AAP_ORIGEN_MONTH_TOTAL = [16, 30, 84, 69, 40,0]; // ACTUALIZADO 1-oct-2026: neto +1 Septiembre (archivo BASE nuevo 4c4f5598: +4 AAP nuevas ECO DELUXE [9 DE OCTUBRE, BABAHOYO, SANTO DOMINGO, MANTA] -1 ESMERALDAS -2 GUASMO [reversiones] — coincide con AAP_DATA). ACTUALIZADO 30-sep-2026: +4 Septiembre — coincide con AAP_DATA. ACTUALIZADO 28-sep-2026: +3 Septiembre — coincide con AAP_DATA. ACTUALIZADO 26-sep-2026: +4 Septiembre — coincide con AAP_DATA.
-const AAP_ORIGEN_MONTH_TOTAL_VENTAS = [23395, 44836, 127791, 105425, 63898,0]; // ACTUALIZADO 1-oct-2026: neto -$2.105 Septiembre (archivo BASE nuevo 4c4f5598 — coincide con AAP_VENTAS). ACTUALIZADO 30-sep-2026: +$6.580 Septiembre — coincide con AAP_VENTAS. ACTUALIZADO 28-sep-2026: +$5.430 Septiembre — coincide con AAP_VENTAS. ACTUALIZADO 26-sep-2026: +$6.920 Septiembre — coincide con AAP_VENTAS.
+const AAP_ORIGEN_MONTH_TOTAL = [16, 30, 84, 69, 40,0]; // CORREGIDO 1-oct-2026 #3: revertido a 40 (Santiago quitó las 4 filas AAP nuevas, archivo nuevo 5cbe7f5c — coincide con AAP_DATA). ACTUALIZADO 1-oct-2026 #2: +4 Septiembre (archivo BASE nuevo 305d4a37 — coincide con AAP_DATA). ACTUALIZADO 1-oct-2026: neto +1 Septiembre (archivo BASE nuevo 4c4f5598: +4 AAP nuevas ECO DELUXE [9 DE OCTUBRE, BABAHOYO, SANTO DOMINGO, MANTA] -1 ESMERALDAS -2 GUASMO [reversiones] — coincide con AAP_DATA). ACTUALIZADO 30-sep-2026: +4 Septiembre — coincide con AAP_DATA. ACTUALIZADO 28-sep-2026: +3 Septiembre — coincide con AAP_DATA. ACTUALIZADO 26-sep-2026: +4 Septiembre — coincide con AAP_DATA.
+const AAP_ORIGEN_MONTH_TOTAL_VENTAS = [23395, 44836, 127791, 105425, 63898,0]; // CORREGIDO 1-oct-2026 #3: revertido a $63.898 (Santiago quitó las 4 filas AAP nuevas, archivo nuevo 5cbe7f5c — coincide con AAP_VENTAS). ACTUALIZADO 1-oct-2026 #2: +$5.510 Septiembre (archivo BASE nuevo 305d4a37 — coincide con AAP_VENTAS). ACTUALIZADO 1-oct-2026: neto -$2.105 Septiembre (archivo BASE nuevo 4c4f5598 — coincide con AAP_VENTAS). ACTUALIZADO 30-sep-2026: +$6.580 Septiembre — coincide con AAP_VENTAS. ACTUALIZADO 28-sep-2026: +$5.430 Septiembre — coincide con AAP_VENTAS. ACTUALIZADO 26-sep-2026: +$6.920 Septiembre — coincide con AAP_VENTAS.
 
 // Sin AAP: los orígenes con ventas registradas (OTOM, CRESA, Master Moto). Agosto 2026: 1 u. nueva
 // ($3.700, XPULSE 200 RALLY, cuenta OTOM/MMOTASA) en origen DAULE.
@@ -5080,13 +5137,15 @@ const PERFIL_AAP_MENSUAL = [
   {name:'EXCEPCION',  data:[1, 0, 1, 1, 0,0],  ventas:[1150, 0, 1605, 1605, 0,0]},
   {name:'COLABORADOR',data:[0, 0, 0, 0, 1,0],  ventas:[0, 0, 0, 0, 1605,0]}, // NUEVO 22-sep-2026: primera venta AAP con Perfil COLABORADOR (XOOM 110, EMPRESARIAL/Guayaquil — ver nota completa arriba de AAP_DATA)
   {name:'NSSB',       data:[0, 0, 0, 1, 0,0],  ventas:[0, 0, 0, 1150, 0,0]},
+  // QUITADO 1-oct-2026: la fila "SIN PERFIL" (4 u./$5.510, archivo BASE nuevo 305d4a37) se retira — Santiago
+  // mandó un archivo nuevo (5cbe7f5c) donde esas 4 filas AAP ya no están ("quite las 4 ultimas de AAP").
 ];
 // Actualización 12-sep-2026: +3 u. AAP en septiembre — ECO 150 ×2 en PEDERNALES (perfiles A y B+, $1.480
 // c/u) y XOOM 110 en BABAHOYO (perfil B-, $1.605).
 // Actualización 14-sep-2026 (archivo CONSOLIDADO_HERO_3_2_1_1_1_1_1.xlsx): +1 u. AAP en septiembre — HUNK 125R
 // en MILAGRO (perfil A, $1.730).
-const PERFIL_AAP_MONTH_TOTAL = [16, 30, 84, 69, 40,0]; // unidades con perfil asignado, AAP, por mes — CORREGIDO 1-oct-2026 #2: +4 u. Septiembre (A +1, BB +2, B +1 — ver notas arriba) tras recalcular directo desde BASE 4c4f5598 (Cliente=AAP, Canal=RETAIL, Mes=9: 40 u. reales, no 36) — ahora cuadra exacto con AAP_DATA Septiembre (bug "AAP en Retail salen 39/36, hay 40" reportado por Santiago). ACTUALIZADO 1-oct-2026: +1u. neto Septiembre (+3 A -1 BB -1 CONTADO, ver notas arriba). ACTUALIZADO 28-sep-2026: +3 u. Septiembre (A, BB, B — ver nota arriba). ACTUALIZADO 26-sep-2026: +4 u. Septiembre (AA ×2, A ×2 — ver nota arriba). ACTUALIZADO 25-sep-2026: +4 u. Septiembre (AA, A, B-, CONTADO — ver nota arriba).
-const PERFIL_AAP_MONTH_TOTAL_VENTAS = [23395, 44836, 127791, 105425, 63898,0]; // $ con perfil asignado, AAP, por mes — CORREGIDO 1-oct-2026 #2: +$6.580 Septiembre (A +$1.150, BB +$3.700, B +$1.730 — ver notas arriba), ahora cuadra exacto con AAP_VENTAS Septiembre ($63.898). ACTUALIZADO 1-oct-2026: -$2.105 neto Septiembre (ver notas arriba). ACTUALIZADO 28-sep-2026: +$5.430 Septiembre. ACTUALIZADO 26-sep-2026: +$6.920 Septiembre. ACTUALIZADO 25-sep-2026: +$6.878 Septiembre.
+const PERFIL_AAP_MONTH_TOTAL = [16, 30, 84, 69, 40,0]; // unidades con perfil asignado, AAP, por mes — CORREGIDO 1-oct-2026 #4: revertido a 40 (se quitó la fila "SIN PERFIL", Santiago mandó archivo nuevo 5cbe7f5c sin esas 4 filas AAP — ver nota arriba) — cuadra exacto con AAP_DATA Septiembre (40). CORREGIDO 1-oct-2026 #2: +4 u. Septiembre (A +1, BB +2, B +1 — ver notas arriba) tras recalcular directo desde BASE 4c4f5598 (Cliente=AAP, Canal=RETAIL, Mes=9: 40 u. reales, no 36) — ahora cuadra exacto con AAP_DATA Septiembre (bug "AAP en Retail salen 39/36, hay 40" reportado por Santiago). ACTUALIZADO 1-oct-2026: +1u. neto Septiembre (+3 A -1 BB -1 CONTADO, ver notas arriba). ACTUALIZADO 28-sep-2026: +3 u. Septiembre (A, BB, B — ver nota arriba). ACTUALIZADO 26-sep-2026: +4 u. Septiembre (AA ×2, A ×2 — ver nota arriba). ACTUALIZADO 25-sep-2026: +4 u. Septiembre (AA, A, B-, CONTADO — ver nota arriba).
+const PERFIL_AAP_MONTH_TOTAL_VENTAS = [23395, 44836, 127791, 105425, 63898,0]; // $ con perfil asignado, AAP, por mes — CORREGIDO 1-oct-2026 #4: revertido a $63.898 (se quitó la fila "SIN PERFIL", Santiago mandó archivo nuevo 5cbe7f5c sin esas 4 filas AAP — ver nota arriba) — cuadra exacto con AAP_VENTAS Septiembre ($63.898). CORREGIDO 1-oct-2026 #2: +$6.580 Septiembre (A +$1.150, BB +$3.700, B +$1.730 — ver notas arriba), ahora cuadra exacto con AAP_VENTAS Septiembre ($63.898). ACTUALIZADO 1-oct-2026: -$2.105 neto Septiembre (ver notas arriba). ACTUALIZADO 28-sep-2026: +$5.430 Septiembre. ACTUALIZADO 26-sep-2026: +$6.920 Septiembre. ACTUALIZADO 25-sep-2026: +$6.878 Septiembre.
 
 // Perfil de cliente por tienda propia Hero (columna Origen_Ventas = TIENDA AMERICAS / TIENDA NACIONES UNIDAS,
 // esta última incluyendo Canal Digital). Orden fijo por tienda — acumulado Mayo-Septiembre 2026, actualizado con
@@ -5627,7 +5686,7 @@ const PRESUPUESTO_SEPTIEMBRE_UNIDADES = {
     general: 170, // corregido 8-sep-2026 (era 165→160); corregido 14-sep-2026 (era 160) con "Resumen Mix de Ventas Motos"
     cuentas: {
       'ORIENTE':             60,
-      'MANABI':              30,
+      'MANABI/SANTO DOM.':   30, // RENOMBRADO 1-oct-2026 (consistencia con mayoristasAccounts/MAYORISTAS_VENTAS_ZONA, aunque este objeto no está conectado a ninguna vista todavía)
       'LOS RIOS':            60,
       'GUAYAS':              10,
       'SIERRA':              5,
@@ -5833,7 +5892,7 @@ const SELLIN_MODELO_MENSUAL = [
 // 17→19 (=TIENDAS_TOTAL[4]; Canal Digital sigue en 0 este mes, así que no hace falta restarlo). MAYORISTA y
 // RETAIL de Septiembre siguen siendo el reporte manual de Santiago (no vienen de BASE) — sin cambio.
 const SELLOUT_CANAL_MENSUAL = [
-  {name:'TIENDAS AAP',  data:[16, 30, 84, 69, 40,0]}, // ACTUALIZADO 1-oct-2026: se vuelve a jalar AAP_DATA[4] (neto +1 u., archivo BASE nuevo 4c4f5598, ver nota completa arriba de AAP_DATA). ACTUALIZADO 30-sep-2026: se vuelve a jalar AAP_DATA[4] (+4 u., ver nota completa arriba de AAP_DATA). ACTUALIZADO 28-sep-2026: se vuelve a jalar AAP_DATA[4] (+3 u., ver nota completa arriba de AAP_DATA). ACTUALIZADO 26-sep-2026: se vuelve a jalar AAP_DATA[4] (+4 u., ver nota completa arriba de AAP_DATA)
+  {name:'TIENDAS AAP',  data:[16, 30, 84, 69, 40,0]}, // CORREGIDO 1-oct-2026 #3: se vuelve a jalar AAP_DATA[4] (revertido a 40 u., archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026 #2: se vuelve a jalar AAP_DATA[4] (+4 u., archivo BASE nuevo 305d4a37). ACTUALIZADO 1-oct-2026: se vuelve a jalar AAP_DATA[4] (neto +1 u., archivo BASE nuevo 4c4f5598). ACTUALIZADO 30-sep-2026: se vuelve a jalar AAP_DATA[4] (+4 u., ver nota completa arriba de AAP_DATA). ACTUALIZADO 28-sep-2026: se vuelve a jalar AAP_DATA[4] (+3 u., ver nota completa arriba de AAP_DATA). ACTUALIZADO 26-sep-2026: se vuelve a jalar AAP_DATA[4] (+4 u., ver nota completa arriba de AAP_DATA)
   {name:'TIENDAS HERO', data:[12, 28, 24, 33, 37,0]}, // ACTUALIZADO 1-oct-2026: se vuelve a jalar TIENDAS_TOTAL[4] (+3 u., archivo BASE nuevo 4c4f5598, ver nota completa arriba de TIENDAS_TOTAL). ACTUALIZADO 30-sep-2026: se vuelve a jalar TIENDAS_TOTAL[4] (+2 u., ver nota completa arriba de TIENDAS_TOTAL). ACTUALIZADO 28-sep-2026: se vuelve a jalar TIENDAS_TOTAL[4] (+1 u., ver nota completa arriba de TIENDAS_TOTAL). ACTUALIZADO 26-sep-2026: se vuelve a jalar TIENDAS_TOTAL[4] (+2 u., ver nota completa arriba de TIENDAS_TOTAL)
   {name:'MAYORISTA',    data:[7, 32, 43, 52, 42,0]}, // CORREGIDO 21-sep-2026 #2: Santiago mandó el desglose real de Sell Out Mayoristas de Septiembre por modelo (cuadro "MAYORISTAS": ECO DELUXE 8, ECO 150 5, HUNK 125 6, HUNK 160 5, XOOM 110 4, XOOM 125 14, XPULSE 200/RALLY 0, TOTAL 42) — reemplaza el reporte manual anterior (13 u.). 13→42.
   {name:'RETAIL',       data:[2, 0, 11, 21, 5,0]},
@@ -5892,10 +5951,10 @@ const SELLOUT_CANAL_MENSUAL = [
 // total por canal (24+26+42+5+0=97).
 const SELLOUT_MODELO_MENSUAL = [
   {name:'HUNK 125',      data:[6, 19, 49, 52, 33,0]}, // ACTUALIZADO 1-oct-2026: sin cambio Septiembre (ver nota completa arriba de AAP_DATA/TIENDAS_TOTAL, archivo BASE nuevo 4c4f5598). ACTUALIZADO 30-sep-2026: +1 u. Septiembre (AAP nueva, MANTA, ver nota completa arriba de AAP_DATA). ACTUALIZADO 28-sep-2026: +1 u. Septiembre (AAP nueva, BUENA FE, ver nota completa arriba de AAP_DATA). ACTUALIZADO 26-sep-2026: +4 u. Septiembre (4 AAP nuevas, todas HUNK 125R — 2 Perfil A + 2 Perfil AA — ver nota completa arriba de AAP_DATA). ACTUALIZADO 25-sep-2026: +2 u. Septiembre (AAP nueva Perfil B- +1, TIENDAS HERO ANCHUNDIA MORAN +1 — ver nota completa arriba de TIENDAS_TOTAL/AAP_DATA)
-  {name:'ECO DELUXE',    data:[20, 33, 46, 44, 28,0]}, // ACTUALIZADO 1-oct-2026: +5 u. Septiembre (archivo BASE nuevo 4c4f5598: AAP +4 [9 DE OCTUBRE, BABAHOYO, SANTO DOMINGO, MANTA] + TIENDAS HERO GYE +1 [GONZALEZ MOSERRATE], ver notas completas arriba de AAP_DATA/TIENDAS_TOTAL). ACTUALIZADO 30-sep-2026: +2 u. Septiembre (2 AAP nuevas, ESMERALDAS Perfil A + Perfil BB, ver nota completa arriba de AAP_DATA). ACTUALIZADO 28-sep-2026: +1 u. Septiembre (AAP nueva, 9 DE OCTUBRE, ver nota completa arriba de AAP_DATA). ACTUALIZADO 26-sep-2026: +1 u. Septiembre (TIENDAS HERO GYE, CABRERA ROSADO JOSE LUIS — ver nota completa arriba de TIENDAS_TOTAL). ACTUALIZADO 25-sep-2026: +1 u. Septiembre (TIENDAS HERO PORTOVIEJO, TUMBACO ALEJANDRO — primera venta de esa tienda, ver nota completa arriba de TIENDAS_TOTAL)
+  {name:'ECO DELUXE',    data:[20, 33, 46, 44, 28,0]}, // CORREGIDO 1-oct-2026 #3: revertido a 28 u. (Santiago quitó las 2 filas AAP nuevas, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026 #2: +2 u. Septiembre (2 AAP nuevas, ORO VERDE + 9 DE OCTUBRE, archivo BASE nuevo 305d4a37). ACTUALIZADO 1-oct-2026: +5 u. Septiembre (archivo BASE nuevo 4c4f5598: AAP +4 [9 DE OCTUBRE, BABAHOYO, SANTO DOMINGO, MANTA] + TIENDAS HERO GYE +1 [GONZALEZ MOSERRATE], ver notas completas arriba de AAP_DATA/TIENDAS_TOTAL). ACTUALIZADO 30-sep-2026: +2 u. Septiembre (2 AAP nuevas, ESMERALDAS Perfil A + Perfil BB, ver nota completa arriba de AAP_DATA). ACTUALIZADO 28-sep-2026: +1 u. Septiembre (AAP nueva, 9 DE OCTUBRE, ver nota completa arriba de AAP_DATA). ACTUALIZADO 26-sep-2026: +1 u. Septiembre (TIENDAS HERO GYE, CABRERA ROSADO JOSE LUIS — ver nota completa arriba de TIENDAS_TOTAL). ACTUALIZADO 25-sep-2026: +1 u. Septiembre (TIENDAS HERO PORTOVIEJO, TUMBACO ALEJANDRO — primera venta de esa tienda, ver nota completa arriba de TIENDAS_TOTAL)
   {name:'ECO 150',       data:[0, 3, 14, 26, 13,0]}, // ACTUALIZADO 30-sep-2026: +1 u. Septiembre (TIENDAS HERO GYE, HUMANITAS S.A., ver nota completa arriba de TIENDAS_TOTAL)
   {name:'XOOM 125',      data:[0, 17, 24, 23, 24,0]}, // ACTUALIZADO 1-oct-2026: +1 u. Septiembre (TIENDAS HERO GYE, FREIRE VERGARA, archivo BASE nuevo 4c4f5598 — ver nota completa arriba de TIENDAS_TOTAL). ACTUALIZADO 30-sep-2026: +1 u. Septiembre (TIENDAS HERO QUITO, TUCTA JARAMILLO, ver nota completa arriba de TIENDAS_TOTAL). ACTUALIZADO 26-sep-2026: +1 u. Septiembre (TIENDAS HERO QUITO, LULIGO BALCAZAR YANETH ARLEIZA — ver nota completa arriba de TIENDAS_TOTAL). ACTUALIZADO 25-sep-2026: +1 u. Septiembre (AAP nueva Perfil CONTADO, ver nota completa arriba de AAP_DATA)
-  {name:'XOOM 110',      data:[5, 11, 10, 14, 9,0]}, // ACTUALIZADO 1-oct-2026: -1 u. Septiembre (reversión AAP ESMERALDAS, venta duplicada/errónea, archivo BASE nuevo 4c4f5598 — ver ANOMALÍA reportada a Santiago, nota completa arriba de AAP_DATA). ACTUALIZADO 25-sep-2026: +2 u. Septiembre (2 AAP nuevas, Perfil AA + A, ver nota completa arriba de AAP_DATA)
+  {name:'XOOM 110',      data:[5, 11, 10, 14, 9,0]}, // CORREGIDO 1-oct-2026 #3: revertido a 9 u. (Santiago quitó las 2 filas AAP nuevas, archivo nuevo 5cbe7f5c, ver nota completa arriba de AAP_DATA). ACTUALIZADO 1-oct-2026 #2: +2 u. Septiembre (2 AAP nuevas, origen CANAL DIGITAL→EMPRESARIAL, archivo BASE nuevo 305d4a37). ACTUALIZADO 1-oct-2026: -1 u. Septiembre (reversión AAP ESMERALDAS, venta duplicada/errónea, archivo BASE nuevo 4c4f5598 — ver ANOMALÍA reportada a Santiago, nota completa arriba de AAP_DATA). ACTUALIZADO 25-sep-2026: +2 u. Septiembre (2 AAP nuevas, Perfil AA + A, ver nota completa arriba de AAP_DATA)
   {name:'HUNK 160',      data:[5, 7, 16, 16, 16,0]}, // ACTUALIZADO 1-oct-2026: -2 u. Septiembre (reversión chasis duplicado MBLKCU124THA00583 en AAP GUASMO, ahora corregido en archivo BASE nuevo 4c4f5598 — ver ANOMALÍA reportada a Santiago, ya corregida). ACTUALIZADO 30-sep-2026: +1 u. Septiembre (AAP nueva, GUASMO — chasis duplicado MBLKCU124THA00583, ver nota completa arriba de AAP_ORIGEN/AAP_DATA). ACTUALIZADO 28-sep-2026 #2: +1 u. Septiembre (TIENDAS HERO QUITO, TORRES MORETA, ver nota completa arriba de TIENDAS_TOTAL). ACTUALIZADO 28-sep-2026: +1 u. Septiembre (AAP nueva, GUASMO, ver nota completa arriba de AAP_DATA)
   {name:'XPULSE 200',    data:[1, 0, 3, 4, 1,0]}, // ACTUALIZADO 1-oct-2026: +1 u. Septiembre (TIENDAS HERO QUITO/Naciones Unidas, GUARNIZO LUCIO, XPULSE 200 4V FI, archivo BASE nuevo 4c4f5598 — ver nota completa arriba de TIENDAS_TOTAL)
   {name:'XPULSE RALLY',  data:[0, 0, 0, 2, 0,0]},
@@ -5998,10 +6057,13 @@ const REPUESTOS_TOTAL_MARGEN = [-0.3856, 0.4746, 0.4752, 0.4958, 0.5120,0];
 // Septiembre mostrador.amer 260→241 u./$2.631,79→$2.510,12, taller.amer 96→115 u./$444,57→$566,23 (naciones/
 // HERO QUITO no cambia: ya estaba correcto en 116/6 u.). Verificado exacto contra tabla_canal de Santiago
 // (MOSTRADOR 357 u./$4.077,48, TALLER 121 u./$760,60 — 241+116=357, 115+6=121).
-const REPUESTOS_TOTAL_UNIDADES_BY_COMBO = { mostrador:{amer:[6, 276, 312, 312, 430,0], naciones:[0, 0, 55, 115, 166,0]}, taller:{amer:[4, 2, 229, 100, 217,0], naciones:[0, 0, 0, 31, 7,0]} };
-const REPUESTOS_TOTAL_VENTA_BY_COMBO = { mostrador:{amer:[78.93, 1975.48, 2896.75, 2670.55, 4631.31,0], naciones:[0.0, 0.0, 651.98, 1719.73, 2265.89,0]}, taller:{amer:[31.42, 24.15, 1404.24, 704.51, 1888.81,0], naciones:[0.0, 0.0, 0.0, 192.37, 198.25,0]} };
-const REPUESTOS_TOTAL_COSTO_BY_COMBO = { mostrador:{amer:[125.84, 1040.06, 1476.6, 1339.99, 2356.72,0], naciones:[0.0, 0.0, 337.08, 853.95, 1062.46,0]}, taller:{amer:[27.08, 10.57, 785.4, 366.62, 840.46,0], naciones:[0.0, 0.0, 0.0, 105.09, 125.08,0]} };
-const REPUESTOS_TOTAL_UTILIDAD_BY_COMBO = { mostrador:{amer:[-46.9, 935.42, 1420.15, 1330.56, 2274.59,0], naciones:[0.0, 0.0, 314.9, 865.77, 1203.43,0]}, taller:{amer:[4.35, 13.57, 618.84, 337.89, 1048.35,0], naciones:[0.0, 0.0, 0.0, 87.28, 73.17,0]} };
+// CORREGIDO 1-oct-2026 #4: mismo recálculo de los 5 repuestos reclasificados de MOSTRADOR a TALLER (ver nota
+// completa junto a repuestosCanalesRaw, arriba) aplicado aquí — Septiembre mostrador.amer -5 u./-$33,85
+// (ventas), -$19,55 (costo), -$14,30 (utilidad); taller.amer +5 u./+$33,85/+$19,55/+$14,30. naciones no cambia.
+const REPUESTOS_TOTAL_UNIDADES_BY_COMBO = { mostrador:{amer:[6, 276, 312, 312, 425,0], naciones:[0, 0, 55, 115, 166,0]}, taller:{amer:[4, 2, 229, 100, 222,0], naciones:[0, 0, 0, 31, 7,0]} };
+const REPUESTOS_TOTAL_VENTA_BY_COMBO = { mostrador:{amer:[78.93, 1975.48, 2896.75, 2670.55, 4597.46,0], naciones:[0.0, 0.0, 651.98, 1719.73, 2265.89,0]}, taller:{amer:[31.42, 24.15, 1404.24, 704.51, 1922.66,0], naciones:[0.0, 0.0, 0.0, 192.37, 198.25,0]} };
+const REPUESTOS_TOTAL_COSTO_BY_COMBO = { mostrador:{amer:[125.84, 1040.06, 1476.6, 1339.99, 2337.17,0], naciones:[0.0, 0.0, 337.08, 853.95, 1062.46,0]}, taller:{amer:[27.08, 10.57, 785.4, 366.62, 860.01,0], naciones:[0.0, 0.0, 0.0, 105.09, 125.08,0]} };
+const REPUESTOS_TOTAL_UTILIDAD_BY_COMBO = { mostrador:{amer:[-46.9, 935.42, 1420.15, 1330.56, 2260.29,0], naciones:[0.0, 0.0, 314.9, 865.77, 1203.43,0]}, taller:{amer:[4.35, 13.57, 618.84, 337.89, 1062.65,0], naciones:[0.0, 0.0, 0.0, 87.28, 73.17,0]} };
 
 // N° de líneas de venta (filas de BASE_DATOS, no unidades físicas) — el archivo fuente (hoja CALCULOS,
 // "Ticket Promedio" = Venta Neta ÷ N° de líneas) usa esto, no Unidades, para el Ticket Promedio de Repuestos:
@@ -6009,7 +6071,10 @@ const REPUESTOS_TOTAL_UTILIDAD_BY_COMBO = { mostrador:{amer:[-46.9, 935.42, 1420
 // no por pieza. Por eso el Ticket Promedio de Repuestos (aquí, en Resumen de Postventa y en GENERAL) se calcula
 // con estos arreglos en vez de REPUESTOS_TOTAL_UNIDADES.
 const REPUESTOS_TOTAL_LINEAS = [10, 163, 366, 427, 531,0];
-const REPUESTOS_TOTAL_LINEAS_BY_COMBO = { mostrador:{amer:[6, 161, 238, 233, 243,0], naciones:[0, 0, 47, 81, 96,0]}, taller:{amer:[4, 2, 81, 97, 185,0], naciones:[0, 0, 0, 16, 7,0]} }; // ACTUALIZADO 1-oct-2026: ver nota completa arriba de REPUESTOS_TOTAL_UNIDADES_BY_COMBO
+// CORREGIDO 1-oct-2026 #4: las 5 líneas reclasificadas de MOSTRADOR a TALLER (ver nota junto a
+// repuestosCanalesRaw) mueven también el conteo de líneas (no solo unidades): Septiembre mostrador.amer
+// 243→238, taller.amer 185→190 (531 líneas totales no cambia).
+const REPUESTOS_TOTAL_LINEAS_BY_COMBO = { mostrador:{amer:[6, 161, 238, 233, 238,0], naciones:[0, 0, 47, 81, 96,0]}, taller:{amer:[4, 2, 81, 97, 190,0], naciones:[0, 0, 0, 16, 7,0]} }; // ACTUALIZADO 1-oct-2026: ver nota completa arriba de REPUESTOS_TOTAL_UNIDADES_BY_COMBO
 
 // Categorías (hoja SKU_CATEGORIAS del archivo de ventas, mapeo directo por SKU — reemplaza la reclasificación
 // por reglas de texto usada antes), ordenadas de mayor a menor venta neta. 17 categorías en total (antes 16;
@@ -6507,15 +6572,26 @@ const repuestosProvinciasRaw = [
 
 const CANAL_COLORS = ['--canal-1','--canal-2'].map(getVar);
 const ZERO4 = [0, 0, 0, 0, 0,0];
+// CORREGIDO 1-oct-2026 #4: Santiago subió BASE_MADRE_REPUESTOS_2.xlsx con 5 líneas de Septiembre (2
+// comprobantes, hoja REPUESTOS EN CURSO, todas en HERO GUAYAQUIL/Av. Américas) donde cambió la columna CANAL
+// de MOSTRADOR a TALLER (las pintó de amarillo, pero ese resaltado no se guardó al exportar — el dato SÍ
+// cambió: se verificó con un diff por clave COMPROBANTE+ITEMCODIGO+UNIDADES contra el archivo anterior, ya
+// que la hoja venía reordenada). Total: 5 u. / $33,85 que se mueven de MOSTRADOR a TALLER dentro de Av.
+// Américas (naciones/Hero Quito no se toca). MOSTRADOR Septiembre 596→591 u. / $6.897,20→$6.863,35, TALLER
+// 224→229 u. / $2.087,07→$2.120,92. Mismo recálculo aplicado a REPUESTOS_SUCURSALES (más abajo), a los 13
+// modelos de REPUESTOS_MODELOS que tienen alguno de esos 5 repuestos en su "MODELO QUE APLICA" (repartidos
+// fraccionalmente igual que siempre — ver notas "CORREGIDO 1-oct-2026 #4" junto a cada modelo afectado), y a
+// REPUESTOS_TOTAL_*_BY_COMBO (más abajo). REPUESTOS_TOTAL_UNIDADES/VENTA (el total general) no cambia, solo
+// la atribución por canal.
 const repuestosCanalesRaw = [
-  {name:'MOSTRADOR', data:[6, 276, 367, 427, 596,0], ventas:[78.93, 1975.48, 3548.73, 4390.28, 6897.2,0], byCanal:{mostrador:{data:[6, 276, 367, 427, 596,0], ventas:[78.93, 1975.48, 3548.73, 4390.28, 6897.2,0]}, taller:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}}, byCombo:{mostrador:{amer:{data:[6, 276, 312, 312, 430,0], ventas:[78.93, 1975.48, 2896.75, 2670.55, 4631.31,0]}, naciones:{data:[0, 0, 55, 115, 166,0], ventas:[0.0, 0.0, 651.98, 1719.73, 2265.89,0]}}, taller:{amer:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}, naciones:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}}}},
-  {name:'TALLER', data:[4, 2, 229, 131, 224,0], ventas:[31.42, 24.15, 1404.24, 896.88, 2087.07,0], byCanal:{mostrador:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}, taller:{data:[4, 2, 229, 131, 224,0], ventas:[31.42, 24.15, 1404.24, 896.88, 2087.07,0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}, naciones:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}}, taller:{amer:{data:[4, 2, 229, 100, 217,0], ventas:[31.42, 24.15, 1404.24, 704.51, 1888.81,0]}, naciones:{data:[0, 0, 0, 31, 7,0], ventas:[0.0, 0.0, 0.0, 192.37, 198.25,0]}}}},
+  {name:'MOSTRADOR', data:[6, 276, 367, 427, 591,0], ventas:[78.93, 1975.48, 3548.73, 4390.28, 6863.35,0], byCanal:{mostrador:{data:[6, 276, 367, 427, 591,0], ventas:[78.93, 1975.48, 3548.73, 4390.28, 6863.35,0]}, taller:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}}, byCombo:{mostrador:{amer:{data:[6, 276, 312, 312, 425,0], ventas:[78.93, 1975.48, 2896.75, 2670.55, 4597.46,0]}, naciones:{data:[0, 0, 55, 115, 166,0], ventas:[0.0, 0.0, 651.98, 1719.73, 2265.89,0]}}, taller:{amer:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}, naciones:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}}}},
+  {name:'TALLER', data:[4, 2, 229, 131, 229,0], ventas:[31.42, 24.15, 1404.24, 896.88, 2120.92,0], byCanal:{mostrador:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}, taller:{data:[4, 2, 229, 131, 229,0], ventas:[31.42, 24.15, 1404.24, 896.88, 2120.92,0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}, naciones:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}}, taller:{amer:{data:[4, 2, 229, 100, 222,0], ventas:[31.42, 24.15, 1404.24, 704.51, 1922.66,0]}, naciones:{data:[0, 0, 0, 31, 7,0], ventas:[0.0, 0.0, 0.0, 192.37, 198.25,0]}}}},
 ].map((c,i)=>({...c, color: CANAL_COLORS[i], total: sum(c.data)}));
 
 // Ventas de repuestos por sucursal (columna "Sucursal" de BASE_DATOS). Se muestran con los mismos
 // nombres que usa la página Tiendas: HERO GUAYAQUIL = AV. AMÉRICAS, HERO QUITO = NACIONES UNIDAS.
 const REPUESTOS_SUCURSALES = [
-  {name:'AV. AMÉRICAS', data:[10, 278, 541, 412, 647,0], ventas:[110.36, 1999.63, 4300.99, 3375.06, 6520.12,0], byCanal:{mostrador:{data:[6, 276, 312, 312, 430,0], ventas:[78.93, 1975.48, 2896.75, 2670.55, 4631.31,0]}, taller:{data:[4, 2, 229, 100, 217,0], ventas:[31.42, 24.15, 1404.24, 704.51, 1888.81,0]}}, byCombo:{mostrador:{amer:{data:[6, 276, 312, 312, 430,0], ventas:[78.93, 1975.48, 2896.75, 2670.55, 4631.31,0]}, naciones:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}}, taller:{amer:{data:[4, 2, 229, 100, 217,0], ventas:[31.42, 24.15, 1404.24, 704.51, 1888.81,0]}, naciones:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}}}},
+  {name:'AV. AMÉRICAS', data:[10, 278, 541, 412, 647,0], ventas:[110.36, 1999.63, 4300.99, 3375.06, 6520.12,0], byCanal:{mostrador:{data:[6, 276, 312, 312, 425,0], ventas:[78.93, 1975.48, 2896.75, 2670.55, 4597.46,0]}, taller:{data:[4, 2, 229, 100, 222,0], ventas:[31.42, 24.15, 1404.24, 704.51, 1922.66,0]}}, byCombo:{mostrador:{amer:{data:[6, 276, 312, 312, 425,0], ventas:[78.93, 1975.48, 2896.75, 2670.55, 4597.46,0]}, naciones:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}}, taller:{amer:{data:[4, 2, 229, 100, 222,0], ventas:[31.42, 24.15, 1404.24, 704.51, 1922.66,0]}, naciones:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}}}},
   {name:'NACIONES UNIDAS', data:[0, 0, 55, 146, 173,0], ventas:[0.0, 0.0, 651.98, 1912.1, 2464.14,0], byCanal:{mostrador:{data:[0, 0, 55, 115, 166,0], ventas:[0.0, 0.0, 651.98, 1719.73, 2265.89,0]}, taller:{data:[0, 0, 0, 31, 7,0], ventas:[0.0, 0.0, 0.0, 192.37, 198.25,0]}}, byCombo:{mostrador:{amer:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}, naciones:{data:[0, 0, 55, 115, 166,0], ventas:[0.0, 0.0, 651.98, 1719.73, 2265.89,0]}}, taller:{amer:{data:[0, 0, 0, 0, 0,0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0,0]}, naciones:{data:[0, 0, 0, 31, 7,0], ventas:[0.0, 0.0, 0.0, 192.37, 198.25,0]}}}},
 ].map(s=>({...s, total: sum(s.data)}));
 
@@ -6564,56 +6640,100 @@ const REPUESTOS_SUCURSALES = [
 // que quedó corregido al mismo tiempo (ahora 17 en ambos). Mayo-Agosto no cambian.
 const REPUESTOS_MODELOS = [
   {name:'XPULSE 200 4V', data:[3, 33, 191, 47, 72, 0], ventas:[42.86, 444.73, 966.83, 680.54, 1283.71, 0],
-    byCanal:{mostrador:{data:[2, 33, 34, 36, 58, 0], ventas:[39.7, 444.73, 463.42, 539.62, 994.34, 0]}, taller:{data:[0, 0, 156, 11, 14, 0], ventas:[3.15, 0.0, 503.41, 140.92, 289.36, 0]}},
-    byCombo:{mostrador:{amer:{data:[2, 33, 28, 18, 36, 0], ventas:[39.7, 444.73, 404.33, 112.38, 646.9, 0]}, naciones:{data:[0, 0, 6, 18, 22, 0], ventas:[0.0, 0.0, 59.1, 427.24, 347.45, 0]}}, taller:{amer:{data:[0, 0, 156, 5, 12, 0], ventas:[3.15, 0.0, 503.41, 31.91, 199.5, 0]}, naciones:{data:[0, 0, 0, 6, 2, 0], ventas:[0.0, 0.0, 0.0, 109.0, 89.87, 0]}}}},
+    // CORREGIDO 1-oct-2026 #4 (CANAL reclasificado por Santiago — ver nota completa junto a repuestosCanalesRaw
+    // más abajo): el reparto fraccionario de Septiembre cambia muy poco ($0,59) y no cruza el redondeo a
+    // entero — unidades sin cambio, solo $ (mostrador.amer 646,90→639,65, taller.amer 199,50→206,75).
+    byCanal:{mostrador:{data:[2, 33, 34, 36, 58, 0], ventas:[39.7, 444.73, 463.42, 539.62, 987.1, 0]}, taller:{data:[0, 0, 156, 11, 14, 0], ventas:[3.15, 0.0, 503.41, 140.92, 296.62, 0]}},
+    byCombo:{mostrador:{amer:{data:[2, 33, 28, 18, 36, 0], ventas:[39.7, 444.73, 404.33, 112.38, 639.65, 0]}, naciones:{data:[0, 0, 6, 18, 22, 0], ventas:[0.0, 0.0, 59.1, 427.24, 347.45, 0]}}, taller:{amer:{data:[0, 0, 156, 5, 12, 0], ventas:[3.15, 0.0, 503.41, 31.91, 206.75, 0]}, naciones:{data:[0, 0, 0, 6, 2, 0], ventas:[0.0, 0.0, 0.0, 109.0, 89.87, 0]}}}},
   {name:'XPULSE 200 2V', data:[1, 13, 19, 24, 58, 0], ventas:[5.07, 76.38, 130.91, 145.78, 793.4, 0],
-    byCanal:{mostrador:{data:[1, 13, 15, 18, 47, 0], ventas:[1.92, 76.38, 109.59, 108.92, 632.71, 0]}, taller:{data:[0, 0, 4, 7, 11, 0], ventas:[3.15, 0.0, 21.32, 36.85, 160.69, 0]}},
-    byCombo:{mostrador:{amer:{data:[1, 13, 12, 11, 27, 0], ventas:[1.92, 76.38, 76.27, 57.57, 352.92, 0]}, naciones:{data:[0, 0, 4, 7, 20, 0], ventas:[0.0, 0.0, 33.32, 51.35, 279.79, 0]}}, taller:{amer:{data:[0, 0, 4, 3, 9, 0], ventas:[3.15, 0.0, 21.32, 12.54, 61.9, 0]}, naciones:{data:[0, 0, 0, 4, 3, 0], ventas:[0.0, 0.0, 0.0, 24.31, 98.79, 0]}}}},
+    // CORREGIDO 1-oct-2026 #4 (CANAL reclasificado por Santiago en BASE_MADRE_REPUESTOS_2.xlsx — ver nota
+    // completa junto a repuestosCanalesRaw más abajo): Septiembre mostrador 47→46 u., taller 11→12 u.
+    byCanal:{mostrador:{data:[1, 13, 15, 18, 46, 0], ventas:[1.92, 76.38, 109.59, 108.92, 625.46, 0]}, taller:{data:[0, 0, 4, 7, 12, 0], ventas:[3.15, 0.0, 21.32, 36.85, 167.94, 0]}},
+    byCombo:{mostrador:{amer:{data:[1, 13, 12, 11, 26, 0], ventas:[1.92, 76.38, 76.27, 57.57, 345.67, 0]}, naciones:{data:[0, 0, 4, 7, 20, 0], ventas:[0.0, 0.0, 33.32, 51.35, 279.79, 0]}}, taller:{amer:{data:[0, 0, 4, 3, 9, 0], ventas:[3.15, 0.0, 21.32, 12.54, 69.15, 0]}, naciones:{data:[0, 0, 0, 4, 3, 0], ventas:[0.0, 0.0, 0.0, 24.31, 98.79, 0]}}}},
   {name:'VARIOS / UNIVERSAL', data:[0, 5, 13, 67, 85, 0], ventas:[0.0, 52.15, 81.41, 1409.63, 1022.02, 0],
     byCanal:{mostrador:{data:[0, 5, 9, 51, 51, 0], ventas:[0.0, 52.15, 39.69, 1138.65, 664.03, 0]}, taller:{data:[0, 0, 4, 16, 34, 0], ventas:[0.0, 0.0, 41.72, 270.98, 357.99, 0]}},
     byCombo:{mostrador:{amer:{data:[0, 5, 6, 37, 47, 0], ventas:[0.0, 52.15, 38.27, 931.3, 633.66, 0]}, naciones:{data:[0, 0, 3, 14, 4, 0], ventas:[0.0, 0.0, 1.42, 207.35, 30.37, 0]}}, taller:{amer:{data:[0, 0, 4, 15, 34, 0], ventas:[0.0, 0.0, 41.72, 259.63, 357.99, 0]}, naciones:{data:[0, 0, 0, 1, 0, 0], ventas:[0.0, 0.0, 0.0, 11.35, 0.0, 0]}}}},
   {name:'HUNK 200R', data:[1, 29, 35, 37, 29, 0], ventas:[5.98, 407.54, 536.6, 383.42, 282.29, 0],
-    byCanal:{mostrador:{data:[1, 29, 26, 28, 24, 0], ventas:[2.83, 407.54, 377.4, 361.12, 270.29, 0]}, taller:{data:[0, 0, 9, 9, 5, 0], ventas:[3.15, 0.0, 159.2, 22.3, 12.0, 0]}},
-    byCombo:{mostrador:{amer:{data:[1, 29, 23, 17, 18, 0], ventas:[2.83, 407.54, 353.27, 108.08, 194.2, 0]}, naciones:{data:[0, 0, 3, 11, 6, 0], ventas:[0.0, 0.0, 24.13, 253.04, 76.09, 0]}}, taller:{amer:{data:[0, 0, 9, 5, 5, 0], ventas:[3.15, 0.0, 159.2, 16.27, 11.14, 0]}, naciones:{data:[0, 0, 0, 4, 0, 0], ventas:[0.0, 0.0, 0.0, 6.03, 0.86, 0]}}}},
+    // CORREGIDO 1-oct-2026 #4 (CANAL reclasificado por Santiago — ver nota completa junto a repuestosCanalesRaw
+    // más abajo): el reparto fraccionario de Septiembre cambia muy poco ($0,09) y no cruza el redondeo a
+    // entero — unidades sin cambio, solo $ (mostrador.amer 194,2→194,11, taller.amer 11,14→11,23).
+    byCanal:{mostrador:{data:[1, 29, 26, 28, 24, 0], ventas:[2.83, 407.54, 377.4, 361.12, 270.2, 0]}, taller:{data:[0, 0, 9, 9, 5, 0], ventas:[3.15, 0.0, 159.2, 22.3, 12.09, 0]}},
+    byCombo:{mostrador:{amer:{data:[1, 29, 23, 17, 18, 0], ventas:[2.83, 407.54, 353.27, 108.08, 194.11, 0]}, naciones:{data:[0, 0, 3, 11, 6, 0], ventas:[0.0, 0.0, 24.13, 253.04, 76.09, 0]}}, taller:{amer:{data:[0, 0, 9, 5, 5, 0], ventas:[3.15, 0.0, 159.2, 16.27, 11.23, 0]}, naciones:{data:[0, 0, 0, 4, 0, 0], ventas:[0.0, 0.0, 0.0, 6.03, 0.86, 0]}}}},
   {name:'HUNK 160 4V', data:[1, 18, 58, 63, 86, 0], ventas:[33.82, 102.72, 708.81, 541.31, 746.2, 0],
-    byCanal:{mostrador:{data:[1, 18, 46, 41, 60, 0], ventas:[30.86, 102.72, 517.3, 432.46, 617.21, 0]}, taller:{data:[0, 0, 12, 22, 26, 0], ventas:[2.95, 0.0, 191.51, 108.85, 128.99, 0]}},
-    byCombo:{mostrador:{amer:{data:[1, 18, 43, 31, 45, 0], ventas:[30.86, 102.72, 412.87, 155.24, 389.04, 0]}, naciones:{data:[0, 0, 2, 9, 15, 0], ventas:[0.0, 0.0, 104.43, 277.22, 228.18, 0]}}, taller:{amer:{data:[0, 0, 12, 20, 25, 0], ventas:[2.95, 0.0, 191.51, 101.51, 126.34, 0]}, naciones:{data:[0, 0, 0, 2, 1, 0], ventas:[0.0, 0.0, 0.0, 7.34, 2.64, 0]}}}},
+    // CORREGIDO 1-oct-2026 #4 (CANAL reclasificado por Santiago — ver nota completa junto a repuestosCanalesRaw
+    // más abajo): Septiembre mostrador 60→58 u., taller 26→28 u. (el modelo más afectado de los 13 que aplican
+    // a alguna de las 5 líneas reclasificadas: entra en 3 de ellas).
+    byCanal:{mostrador:{data:[1, 18, 46, 41, 58, 0], ventas:[30.86, 102.72, 517.3, 432.46, 610.64, 0]}, taller:{data:[0, 0, 12, 22, 28, 0], ventas:[2.95, 0.0, 191.51, 108.85, 135.56, 0]}},
+    byCombo:{mostrador:{amer:{data:[1, 18, 43, 31, 43, 0], ventas:[30.86, 102.72, 412.87, 155.24, 382.46, 0]}, naciones:{data:[0, 0, 2, 9, 15, 0], ventas:[0.0, 0.0, 104.43, 277.22, 228.18, 0]}}, taller:{amer:{data:[0, 0, 12, 20, 27, 0], ventas:[2.95, 0.0, 191.51, 101.51, 132.92, 0]}, naciones:{data:[0, 0, 0, 2, 1, 0], ventas:[0.0, 0.0, 0.0, 7.34, 2.64, 0]}}}},
   {name:'ECO DELUXE', data:[0, 39, 32, 40, 81, 0], ventas:[0.0, 257.63, 355.35, 337.62, 954.7, 0],
-    byCanal:{mostrador:{data:[0, 39, 29, 33, 56, 0], ventas:[0.0, 257.63, 330.7, 288.23, 824.06, 0]}, taller:{data:[0, 0, 3, 6, 25, 0], ventas:[0.0, 0.0, 24.65, 49.39, 130.64, 0]}},
-    byCombo:{mostrador:{amer:{data:[0, 39, 21, 29, 45, 0], ventas:[0.0, 257.63, 226.05, 198.56, 734.42, 0]}, naciones:{data:[0, 0, 9, 5, 11, 0], ventas:[0.0, 0.0, 104.65, 89.67, 89.63, 0]}}, taller:{amer:{data:[0, 0, 3, 6, 25, 0], ventas:[0.0, 0.0, 24.65, 45.01, 130.64, 0]}, naciones:{data:[0, 0, 0, 1, 0, 0], ventas:[0.0, 0.0, 0.0, 4.38, 0.0, 0]}}}},
+    // CORREGIDO 1-oct-2026 #4 (CANAL reclasificado por Santiago — ver nota completa junto a repuestosCanalesRaw
+    // más abajo): el reparto fraccionario de Septiembre cambia muy poco ($3,42) y no cruza el redondeo a
+    // entero — unidades sin cambio, solo $ (mostrador.amer 734,42→731,00, taller.amer 130,64→134,07).
+    byCanal:{mostrador:{data:[0, 39, 29, 33, 56, 0], ventas:[0.0, 257.63, 330.7, 288.23, 820.63, 0]}, taller:{data:[0, 0, 3, 6, 25, 0], ventas:[0.0, 0.0, 24.65, 49.39, 134.07, 0]}},
+    byCombo:{mostrador:{amer:{data:[0, 39, 21, 29, 45, 0], ventas:[0.0, 257.63, 226.05, 198.56, 731.0, 0]}, naciones:{data:[0, 0, 9, 5, 11, 0], ventas:[0.0, 0.0, 104.65, 89.67, 89.63, 0]}}, taller:{amer:{data:[0, 0, 3, 6, 25, 0], ventas:[0.0, 0.0, 24.65, 45.01, 134.07, 0]}, naciones:{data:[0, 0, 0, 1, 0, 0], ventas:[0.0, 0.0, 0.0, 4.38, 0.0, 0]}}}},
   {name:'ECO 150', data:[1, 13, 40, 59, 54, 0], ventas:[4.06, 57.87, 337.99, 590.18, 688.18, 0],
-    byCanal:{mostrador:{data:[0, 13, 34, 50, 45, 0], ventas:[0.91, 57.87, 292.97, 538.59, 637.08, 0]}, taller:{data:[0, 0, 6, 9, 8, 0], ventas:[3.15, 0.0, 45.02, 51.59, 51.11, 0]}},
-    byCombo:{mostrador:{amer:{data:[0, 13, 30, 37, 34, 0], ventas:[0.91, 57.87, 265.81, 345.18, 328.74, 0]}, naciones:{data:[0, 0, 3, 13, 11, 0], ventas:[0.0, 0.0, 27.16, 193.41, 308.33, 0]}}, taller:{amer:{data:[0, 0, 6, 6, 8, 0], ventas:[3.15, 0.0, 45.02, 44.04, 50.25, 0]}, naciones:{data:[0, 0, 0, 3, 0, 0], ventas:[0.0, 0.0, 0.0, 7.55, 0.86, 0]}}}},
+    // CORREGIDO 1-oct-2026 #4 (CANAL reclasificado por Santiago — ver nota completa junto a repuestosCanalesRaw
+    // más abajo): Septiembre mostrador 45→45 u. (sin cambio), taller 8→9 u. De paso se corrige un desajuste
+    // previo (igual categoría que el ya corregido en HUNK 125 el 1-oct-2026 #3): mostrador+taller sumaba 53,
+    // no 54 como el total de la fila — ahora sí cuadra (45+9=54).
+    byCanal:{mostrador:{data:[0, 13, 34, 50, 45, 0], ventas:[0.91, 57.87, 292.97, 538.59, 633.56, 0]}, taller:{data:[0, 0, 6, 9, 9, 0], ventas:[3.15, 0.0, 45.02, 51.59, 54.62, 0]}},
+    byCombo:{mostrador:{amer:{data:[0, 13, 30, 37, 34, 0], ventas:[0.91, 57.87, 265.81, 345.18, 325.23, 0]}, naciones:{data:[0, 0, 3, 13, 11, 0], ventas:[0.0, 0.0, 27.16, 193.41, 308.33, 0]}}, taller:{amer:{data:[0, 0, 6, 6, 9, 0], ventas:[3.15, 0.0, 45.02, 44.04, 53.76, 0]}, naciones:{data:[0, 0, 0, 3, 0, 0], ventas:[0.0, 0.0, 0.0, 7.55, 0.86, 0]}}}},
   {name:'DASH', data:[0, 8, 17, 11, 19, 0], ventas:[0.0, 54.01, 198.47, 255.8, 148.8, 0],
-    byCanal:{mostrador:{data:[0, 6, 12, 8, 16, 0], ventas:[0.0, 29.86, 55.04, 190.44, 145.51, 0]}, taller:{data:[0, 2, 6, 3, 2, 0], ventas:[0.0, 24.15, 143.43, 65.36, 3.29, 0]}},
-    byCombo:{mostrador:{amer:{data:[0, 6, 10, 7, 12, 0], ventas:[0.0, 29.86, 47.94, 188.36, 111.79, 0]}, naciones:{data:[0, 0, 1, 1, 5, 0], ventas:[0.0, 0.0, 7.1, 2.08, 33.73, 0]}}, taller:{amer:{data:[0, 2, 6, 3, 2, 0], ventas:[0.0, 24.15, 143.43, 65.31, 3.29, 0]}, naciones:{data:[0, 0, 0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.05, 0.0, 0]}}}},
+    // CORREGIDO 1-oct-2026 #4 (CANAL reclasificado por Santiago — ver nota completa junto a repuestosCanalesRaw
+    // más abajo): Septiembre mostrador 16→16 u. (sin cambio), taller 2→3 u. De paso se corrige un desajuste
+    // previo (mismo tipo de bug ya corregido en HUNK 125/ECO 150): mostrador+taller sumaba 18, no 19 como el
+    // total de la fila, y dentro de mostrador amer+naciones sumaba 17, no 16 — ahora todo cuadra.
+    byCanal:{mostrador:{data:[0, 6, 12, 8, 16, 0], ventas:[0.0, 29.86, 55.04, 190.44, 145.43, 0]}, taller:{data:[0, 2, 6, 3, 3, 0], ventas:[0.0, 24.15, 143.43, 65.36, 3.38, 0]}},
+    byCombo:{mostrador:{amer:{data:[0, 6, 10, 7, 11, 0], ventas:[0.0, 29.86, 47.94, 188.36, 111.7, 0]}, naciones:{data:[0, 0, 1, 1, 5, 0], ventas:[0.0, 0.0, 7.1, 2.08, 33.73, 0]}}, taller:{amer:{data:[0, 2, 6, 3, 3, 0], ventas:[0.0, 24.15, 143.43, 65.31, 3.38, 0]}, naciones:{data:[0, 0, 0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.05, 0.0, 0]}}}},
   {name:'ECO 100', data:[0, 30, 17, 20, 42, 0], ventas:[0.0, 179.19, 186.98, 122.35, 264.17, 0], // CORREGIDO 1-oct-2026 #3: Septiembre 43→42 (ver nota de re-redondeo más abajo del array)
     byCanal:{mostrador:{data:[0, 30, 16, 17, 26, 0], ventas:[0.0, 179.19, 183.74, 115.82, 210.32, 0]}, taller:{data:[0, 0, 1, 3, 16, 0], ventas:[0.0, 0.0, 3.24, 6.53, 53.85, 0]}},
     byCombo:{mostrador:{amer:{data:[0, 30, 10, 15, 19, 0], ventas:[0.0, 179.19, 77.01, 99.18, 160.53, 0]}, naciones:{data:[0, 0, 6, 2, 7, 0], ventas:[0.0, 0.0, 106.73, 16.64, 49.79, 0]}}, taller:{amer:{data:[0, 0, 1, 3, 16, 0], ventas:[0.0, 0.0, 3.24, 5.31, 53.85, 0]}, naciones:{data:[0, 0, 0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 1.22, 0.0, 0]}}}},
   {name:'HUNK 125', data:[0, 5, 28, 31, 47, 0], ventas:[2.59, 28.39, 270.53, 146.81, 285.42, 0], // CORREGIDO 1-oct-2026 #3: Septiembre 48→47 (ver nota de re-redondeo más abajo del array)
-    byCanal:{mostrador:{data:[0, 5, 20, 16, 30, 0], ventas:[0.0, 28.39, 93.27, 79.03, 193.54, 0]}, taller:{data:[0, 0, 9, 14, 17, 0], ventas:[2.59, 0.0, 177.26, 67.78, 91.88, 0]}},
-    byCombo:{mostrador:{amer:{data:[0, 5, 19, 16, 21, 0], ventas:[0.0, 28.39, 89.98, 77.94, 143.92, 0]}, naciones:{data:[0, 0, 0, 0, 9, 0], ventas:[0.0, 0.0, 3.28, 1.09, 49.62, 0]}}, taller:{amer:{data:[0, 0, 9, 13, 17, 0], ventas:[2.59, 0.0, 177.26, 62.48, 90.1, 0]}, naciones:{data:[0, 0, 0, 1, 0, 0], ventas:[0.0, 0.0, 0.0, 5.3, 1.78, 0]}}}},
+    // CORREGIDO 1-oct-2026 #4 (CANAL reclasificado por Santiago — ver nota completa junto a repuestosCanalesRaw
+    // más abajo): Septiembre mostrador 30→29 u., taller 17→18 u.
+    byCanal:{mostrador:{data:[0, 5, 20, 16, 29, 0], ventas:[0.0, 28.39, 93.27, 79.03, 188.33, 0]}, taller:{data:[0, 0, 9, 14, 18, 0], ventas:[2.59, 0.0, 177.26, 67.78, 97.08, 0]}},
+    byCombo:{mostrador:{amer:{data:[0, 5, 19, 16, 20, 0], ventas:[0.0, 28.39, 89.98, 77.94, 138.71, 0]}, naciones:{data:[0, 0, 0, 0, 9, 0], ventas:[0.0, 0.0, 3.28, 1.09, 49.62, 0]}}, taller:{amer:{data:[0, 0, 9, 13, 18, 0], ventas:[2.59, 0.0, 177.26, 62.48, 95.3, 0]}, naciones:{data:[0, 0, 0, 1, 0, 0], ventas:[0.0, 0.0, 0.0, 5.3, 1.78, 0]}}}},
   {name:'DAWN 125', data:[1, 13, 34, 41, 39, 0], ventas:[4.06, 39.96, 201.43, 193.2, 348.13, 0],
-    byCanal:{mostrador:{data:[0, 13, 29, 34, 33, 0], ventas:[0.91, 39.96, 177.48, 175.47, 332.41, 0]}, taller:{data:[0, 0, 4, 7, 7, 0], ventas:[3.15, 0.0, 23.96, 17.73, 15.72, 0]}},
-    byCombo:{mostrador:{amer:{data:[0, 13, 26, 24, 22, 0], ventas:[0.91, 39.96, 152.26, 117.88, 101.75, 0]}, naciones:{data:[0, 0, 3, 10, 11, 0], ventas:[0.0, 0.0, 25.22, 57.58, 230.66, 0]}}, taller:{amer:{data:[0, 0, 4, 4, 6, 0], ventas:[3.15, 0.0, 23.96, 13.33, 14.85, 0]}, naciones:{data:[0, 0, 0, 3, 0, 0], ventas:[0.0, 0.0, 0.0, 4.4, 0.86, 0]}}}},
+    // CORREGIDO 1-oct-2026 #4 (CANAL reclasificado por Santiago — ver nota completa junto a repuestosCanalesRaw
+    // más abajo): Septiembre mostrador 33→33 u. (sin cambio), taller 7→6 u. De paso se corrige un desajuste
+    // previo (mismo tipo de bug ya corregido en HUNK 125/ECO 150/DASH): mostrador+taller sumaba 40, no 39
+    // como el total de la fila — ahora sí cuadra (33+6=39).
+    byCanal:{mostrador:{data:[0, 13, 29, 34, 33, 0], ventas:[0.91, 39.96, 177.48, 175.47, 332.32, 0]}, taller:{data:[0, 0, 4, 7, 6, 0], ventas:[3.15, 0.0, 23.96, 17.73, 15.8, 0]}},
+    byCombo:{mostrador:{amer:{data:[0, 13, 26, 24, 22, 0], ventas:[0.91, 39.96, 152.26, 117.88, 101.66, 0]}, naciones:{data:[0, 0, 3, 10, 11, 0], ventas:[0.0, 0.0, 25.22, 57.58, 230.66, 0]}}, taller:{amer:{data:[0, 0, 4, 4, 6, 0], ventas:[3.15, 0.0, 23.96, 13.33, 14.94, 0]}, naciones:{data:[0, 0, 0, 3, 0, 0], ventas:[0.0, 0.0, 0.0, 4.4, 0.86, 0]}}}},
   {name:'IGNITOR 125', data:[0, 1, 18, 4, 19, 0], ventas:[1.63, 2.3, 378.56, 16.33, 243.5, 0],
+    // CORREGIDO 1-oct-2026 #4 (detectado al revisar el reclasificado de CANAL de Santiago, no relacionado con
+    // él): byCombo.mostrador (amer+naciones) sumaba 17, no 18 como byCanal.mostrador — mismo tipo de desajuste
+    // ya visto en HUNK 125/ECO 150/DASH/DAWN 125/XOOM 110 (mostrador.naciones 13→14).
     byCanal:{mostrador:{data:[0, 1, 18, 3, 18, 0], ventas:[0.0, 2.3, 377.75, 8.38, 240.2, 0]}, taller:{data:[0, 0, 0, 1, 1, 0], ventas:[1.63, 0.0, 0.81, 7.95, 3.3, 0]}},
-    byCombo:{mostrador:{amer:{data:[0, 1, 18, 2, 4, 0], ventas:[0.0, 2.3, 377.45, 6.83, 121.91, 0]}, naciones:{data:[0, 0, 0, 0, 13, 0], ventas:[0.0, 0.0, 0.31, 1.55, 118.29, 0]}}, taller:{amer:{data:[0, 0, 0, 1, 1, 0], ventas:[1.63, 0.0, 0.81, 7.95, 3.3, 0]}, naciones:{data:[0, 0, 0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0, 0]}}}},
+    byCombo:{mostrador:{amer:{data:[0, 1, 18, 2, 4, 0], ventas:[0.0, 2.3, 377.45, 6.83, 121.91, 0]}, naciones:{data:[0, 0, 0, 0, 14, 0], ventas:[0.0, 0.0, 0.31, 1.55, 118.29, 0]}}, taller:{amer:{data:[0, 0, 0, 1, 1, 0], ventas:[1.63, 0.0, 0.81, 7.95, 3.3, 0]}, naciones:{data:[0, 0, 0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0, 0]}}}},
   {name:'DAWN 150', data:[1, 11, 31, 38, 31, 0], ventas:[4.06, 36.35, 191.03, 172.34, 306.16, 0],
-    byCanal:{mostrador:{data:[0, 11, 27, 32, 26, 0], ventas:[0.91, 36.35, 167.42, 163.1, 296.62, 0]}, taller:{data:[0, 0, 4, 6, 5, 0], ventas:[3.15, 0.0, 23.61, 9.24, 9.55, 0]}},
-    byCombo:{mostrador:{amer:{data:[0, 11, 24, 22, 18, 0], ventas:[0.91, 36.35, 144.73, 108.51, 79.64, 0]}, naciones:{data:[0, 0, 3, 10, 8, 0], ventas:[0.0, 0.0, 22.7, 54.59, 216.98, 0]}}, taller:{amer:{data:[0, 0, 4, 3, 5, 0], ventas:[3.15, 0.0, 23.61, 4.84, 8.68, 0]}, naciones:{data:[0, 0, 0, 3, 0, 0], ventas:[0.0, 0.0, 0.0, 4.4, 0.86, 0]}}}},
+    // CORREGIDO 1-oct-2026 #4 (CANAL reclasificado por Santiago — ver nota completa junto a repuestosCanalesRaw
+    // más abajo): el reparto fraccionario de Septiembre cambia muy poco ($0,09) y no cruza el redondeo a
+    // entero — unidades sin cambio, solo $ (mostrador.amer 79,64→79,55, taller.amer 8,68→8,77).
+    byCanal:{mostrador:{data:[0, 11, 27, 32, 26, 0], ventas:[0.91, 36.35, 167.42, 163.1, 296.53, 0]}, taller:{data:[0, 0, 4, 6, 5, 0], ventas:[3.15, 0.0, 23.61, 9.24, 9.63, 0]}},
+    byCombo:{mostrador:{amer:{data:[0, 11, 24, 22, 18, 0], ventas:[0.91, 36.35, 144.73, 108.51, 79.55, 0]}, naciones:{data:[0, 0, 3, 10, 8, 0], ventas:[0.0, 0.0, 22.7, 54.59, 216.98, 0]}}, taller:{amer:{data:[0, 0, 4, 3, 5, 0], ventas:[3.15, 0.0, 23.61, 4.84, 8.77, 0]}, naciones:{data:[0, 0, 0, 3, 0, 0], ventas:[0.0, 0.0, 0.0, 4.4, 0.86, 0]}}}},
   {name:'HF DELUXE', data:[0, 32, 19, 15, 41, 0], ventas:[0.0, 179.06, 153.9, 55.34, 234.88, 0],
     byCanal:{mostrador:{data:[0, 32, 18, 12, 26, 0], ventas:[0.0, 179.06, 150.66, 48.8, 197.41, 0]}, taller:{data:[0, 0, 1, 3, 15, 0], ventas:[0.0, 0.0, 3.24, 6.53, 37.46, 0]}},
     byCombo:{mostrador:{amer:{data:[0, 32, 11, 11, 18, 0], ventas:[0.0, 179.06, 54.27, 45.68, 151.36, 0]}, naciones:{data:[0, 0, 7, 1, 8, 0], ventas:[0.0, 0.0, 96.39, 3.12, 46.06, 0]}}, taller:{amer:{data:[0, 0, 1, 3, 15, 0], ventas:[0.0, 0.0, 3.24, 5.31, 37.46, 0]}, naciones:{data:[0, 0, 0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 1.22, 0.0, 0]}}}},
   {name:'THRILLER', data:[1, 10, 19, 33, 19, 0], ventas:[4.06, 29.59, 89.57, 112.09, 87.07, 0],
-    byCanal:{mostrador:{data:[0, 10, 15, 27, 13, 0], ventas:[0.91, 29.59, 65.02, 101.59, 73.26, 0]}, taller:{data:[0, 0, 5, 7, 6, 0], ventas:[3.15, 0.0, 24.55, 10.5, 13.81, 0]}},
-    byCombo:{mostrador:{amer:{data:[0, 10, 14, 18, 9, 0], ventas:[0.91, 29.59, 56.64, 66.62, 38.47, 0]}, naciones:{data:[0, 0, 1, 8, 4, 0], ventas:[0.0, 0.0, 8.38, 34.97, 34.79, 0]}}, taller:{amer:{data:[0, 0, 5, 4, 6, 0], ventas:[3.15, 0.0, 24.55, 5.47, 12.95, 0]}, naciones:{data:[0, 0, 0, 3, 0, 0], ventas:[0.0, 0.0, 0.0, 5.03, 0.86, 0]}}}},
+    // CORREGIDO 1-oct-2026 #4 (CANAL reclasificado por Santiago — ver nota completa junto a repuestosCanalesRaw
+    // más abajo): el reparto fraccionario de Septiembre cambia muy poco ($0,09) y no cruza el redondeo a
+    // entero — unidades sin cambio, solo $ (mostrador.amer 38,47→38,37, taller.amer 12,95→13,04).
+    byCanal:{mostrador:{data:[0, 10, 15, 27, 13, 0], ventas:[0.91, 29.59, 65.02, 101.59, 73.16, 0]}, taller:{data:[0, 0, 5, 7, 6, 0], ventas:[3.15, 0.0, 24.55, 10.5, 13.9, 0]}},
+    byCombo:{mostrador:{amer:{data:[0, 10, 14, 18, 9, 0], ventas:[0.91, 29.59, 56.64, 66.62, 38.37, 0]}, naciones:{data:[0, 0, 1, 8, 4, 0], ventas:[0.0, 0.0, 8.38, 34.97, 34.79, 0]}}, taller:{amer:{data:[0, 0, 5, 4, 6, 0], ventas:[3.15, 0.0, 24.55, 5.47, 13.04, 0]}, naciones:{data:[0, 0, 0, 3, 0, 0], ventas:[0.0, 0.0, 0.0, 5.03, 0.86, 0]}}}},
   {name:'XOOM 110', data:[0, 7, 10, 7, 22, 0], ventas:[0.0, 35.08, 68.22, 24.95, 180.67, 0],
-    byCanal:{mostrador:{data:[0, 7, 8, 5, 16, 0], ventas:[0.0, 35.08, 60.77, 17.9, 143.73, 0]}, taller:{data:[0, 0, 1, 3, 6, 0], ventas:[0.0, 0.0, 7.45, 7.05, 36.94, 0]}},
-    byCombo:{mostrador:{amer:{data:[0, 7, 6, 4, 13, 0], ventas:[0.0, 35.08, 45.05, 12.22, 117.1, 0]}, naciones:{data:[0, 0, 2, 1, 4, 0], ventas:[0.0, 0.0, 15.72, 5.68, 26.63, 0]}}, taller:{amer:{data:[0, 0, 1, 3, 6, 0], ventas:[0.0, 0.0, 7.45, 7.0, 36.94, 0]}, naciones:{data:[0, 0, 0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.05, 0.0, 0]}}}},
+    // CORREGIDO 1-oct-2026 #4 (CANAL reclasificado por Santiago — ver nota completa junto a repuestosCanalesRaw
+    // más abajo): mostrador 16→16 u. (sin cambio al nivel canal), pero dentro de mostrador amer+naciones
+    // sumaba 17, no 16 — desajuste previo del mismo tipo que HUNK 125/ECO 150/DASH/DAWN 125, ahora corregido
+    // (amer 13→12).
+    byCanal:{mostrador:{data:[0, 7, 8, 5, 16, 0], ventas:[0.0, 35.08, 60.77, 17.9, 143.64, 0]}, taller:{data:[0, 0, 1, 3, 6, 0], ventas:[0.0, 0.0, 7.45, 7.05, 37.03, 0]}},
+    byCombo:{mostrador:{amer:{data:[0, 7, 6, 4, 12, 0], ventas:[0.0, 35.08, 45.05, 12.22, 117.01, 0]}, naciones:{data:[0, 0, 2, 1, 4, 0], ventas:[0.0, 0.0, 15.72, 5.68, 26.63, 0]}}, taller:{amer:{data:[0, 0, 1, 3, 6, 0], ventas:[0.0, 0.0, 7.45, 7.0, 37.03, 0]}, naciones:{data:[0, 0, 0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.05, 0.0, 0]}}}},
   {name:'XOOM 125', data:[0, 6, 6, 9, 61, 0], ventas:[0.0, 7.58, 31.75, 41.79, 998.51, 0],
-    byCanal:{mostrador:{data:[0, 6, 5, 6, 39, 0], ventas:[0.0, 7.58, 24.36, 34.75, 320.56, 0]}, taller:{data:[0, 0, 1, 3, 22, 0], ventas:[0.0, 0.0, 7.39, 7.05, 677.94, 0]}},
-    byCombo:{mostrador:{amer:{data:[0, 6, 4, 4, 36, 0], ventas:[0.0, 7.58, 15.8, 13.19, 301.38, 0]}, naciones:{data:[0, 0, 1, 2, 3, 0], ventas:[0.0, 0.0, 8.57, 21.56, 19.18, 0]}}, taller:{amer:{data:[0, 0, 1, 3, 22, 0], ventas:[0.0, 0.0, 7.39, 7.0, 677.94, 0]}, naciones:{data:[0, 0, 0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.05, 0.0, 0]}}}},
+    // CORREGIDO 1-oct-2026 #4 (CANAL reclasificado por Santiago — ver nota completa junto a repuestosCanalesRaw
+    // más abajo): el reparto fraccionario de Septiembre cambia muy poco ($0,09) y no cruza el redondeo a
+    // entero — unidades sin cambio, solo $ (mostrador.amer 301,38→301,29, taller.amer 677,94→678,03).
+    byCanal:{mostrador:{data:[0, 6, 5, 6, 39, 0], ventas:[0.0, 7.58, 24.36, 34.75, 320.47, 0]}, taller:{data:[0, 0, 1, 3, 22, 0], ventas:[0.0, 0.0, 7.39, 7.05, 678.03, 0]}},
+    byCombo:{mostrador:{amer:{data:[0, 6, 4, 4, 36, 0], ventas:[0.0, 7.58, 15.8, 13.19, 301.29, 0]}, naciones:{data:[0, 0, 1, 2, 3, 0], ventas:[0.0, 0.0, 8.57, 21.56, 19.18, 0]}}, taller:{amer:{data:[0, 0, 1, 3, 22, 0], ventas:[0.0, 0.0, 7.39, 7.0, 678.03, 0]}, naciones:{data:[0, 0, 0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.05, 0.0, 0]}}}},
   {name:'GLAMOUR', data:[0, 2, 6, 5, 11, 0], ventas:[1.63, 4.89, 52.89, 23.47, 102.28, 0],
     byCanal:{mostrador:{data:[0, 2, 5, 4, 9, 0], ventas:[0.0, 4.89, 51.82, 15.52, 97.29, 0]}, taller:{data:[0, 0, 1, 1, 2, 0], ventas:[1.63, 0.0, 1.07, 7.95, 5.0, 0]}},
     byCombo:{mostrador:{amer:{data:[0, 2, 5, 3, 4, 0], ventas:[0.0, 4.89, 49.03, 11.23, 21.07, 0]}, naciones:{data:[0, 0, 0, 1, 5, 0], ventas:[0.0, 0.0, 2.79, 4.29, 76.21, 0]}}, taller:{amer:{data:[0, 0, 1, 1, 2, 0], ventas:[1.63, 0.0, 1.07, 7.95, 5.0, 0]}, naciones:{data:[0, 0, 0, 0, 0, 0], ventas:[0.0, 0.0, 0.0, 0.0, 0.0, 0]}}}},
@@ -6736,22 +6856,31 @@ const MANOOBRA_PUNTO_AGOSTO = [
 // (Quito)" — un kilometraje específico que no es 500/3000/9000 — también cayó en ese cajón genérico) — vale
 // la pena confirmar con Santiago si 6000km es un nuevo intervalo programado que debería tener su propia fila,
 // o si de verdad es "preventivo" genérico.
-// ACTUALIZADO 28-sep-2026: Santiago mandó un cuadro nuevo por Punto/Tipo (Hero Gye + Hero Quito), más
-// avanzado que el corte 19/9/2026 — todas las cantidades suben (Hero Gye 82→104, Hero Quito 6→8, total
-// 88→112) y, por primera vez, Mantenimiento Correctivo trae $ real desglosado por punto: Hero Gye $489,24
-// (confirmado por Santiago: es Cantidad + Mano de Obra en $, dos columnas — no había una tercera columna de
-// "Total" en este cuadro) y Hero Quito $40,00 (sin cambio). MANTENIMIENTO CORRECTIVO total sube de $335,00 a
-// $529,24 (+$194,24) — cantidad sigue en 7 (6 Gye + 1 Quito, sin cambio). El resto de tipos siguen en $0 (no
-// vienen con $ en este cuadro). MANTENIMIENTO 6000km (1 u., Hero Gye) se mantiene asignado a MANTENIMIENTO
-// PREVENTIVO, mismo criterio que el corte anterior (ver ANOMALÍA arriba).
+// ACTUALIZADO 1-oct-2026 #2: Santiago mandó un cuadro nuevo por Punto/Tipo (corte "1/9/2026"), que REEMPLAZA
+// por completo el anterior (confirmado con Santiago: no se suma, se reemplaza). Filas recibidas — Hero Gye:
+// 500km 42u/$4,74, 3000km 13u/$2,37, 6000km 1u (sin $, va a MANTENIMIENTO PREVENTIVO, mismo criterio que
+// siempre), Correctivo 14u/$801,34 ("m/o")/$335,00 ("Total"), Alistamiento 50u (sin $), Garantías 11u (sin $).
+// Hero Quito: 500km 3u (sin $), Correctivo 1u/$40,00 (sin cambio contra todos los cortes anteriores),
+// Alistamiento 5u (sin $). Mantenimiento 9000 y Preventivo "real" (no el cajón de 6000km) no aparecen en este
+// corte — confirmado con Santiago que es porque no tuvieron actividad, van en 0.
+// CORREGIDO 1-oct-2026 #3: la primera pasada (#2, más arriba) usó $335,00 ("Total") para Correctivo Gye,
+// siguiendo el criterio de cortes anteriores donde solo el "Total" contaba y el "m/o" era "no facturado aún".
+// Santiago corrigió esto explícitamente: el total real de este corte es $848,45 (cantidad 140, sin cambio) —
+// eso SOLO cuadra usando el "m/o" $801,34 de Correctivo Gye en vez del "Total" $335,00 (4,74+2,37+801,34+40,00
+// = 848,45 exacto). Entonces para este corte el criterio es al revés: cuenta el "m/o", no el "Total" — Santiago
+// confirmó este número puntualmente, así que no se asume que el criterio general cambió para cortes futuros.
+// Totales: cantidad 140 (131 Gye + 9 Quito, antes 112), $ 848,45 (antes $529,24 — ahora sí incluye el "m/o"
+// $801,34 de Correctivo Gye + Quito $40,00 + los $7,11 de 500/3000km).
+// ventasReal pasa a true (antes false): por primera vez Septiembre trae $ real en más de un tipo (500km,
+// 3000km y Correctivo), no solo uno — mismo criterio que activó ventasReal en Agosto.
 const MANOOBRA_TIPOS_SEPTIEMBRE = [
-  {name:'MANTENIMIENTO 500',        color: getVar('--manttipo-1'), cantidad: 41, valor: 0.00},
-  {name:'MANTENIMIENTO 3000',       color: getVar('--manttipo-2'), cantidad: 10, valor: 0.00},
+  {name:'MANTENIMIENTO 500',        color: getVar('--manttipo-1'), cantidad: 45, valor: 4.74},
+  {name:'MANTENIMIENTO 3000',       color: getVar('--manttipo-2'), cantidad: 13, valor: 2.37},
   {name:'MANTENIMIENTO 9000',       color: getVar('--manttipo-3'), cantidad: 0,  valor: 0.00},
-  {name:'MANTENIMIENTO CORRECTIVO', color: getVar('--manttipo-4'), cantidad: 7,  valor: 529.24},
+  {name:'MANTENIMIENTO CORRECTIVO', color: getVar('--manttipo-4'), cantidad: 15, valor: 841.34},
   {name:'MANTENIMIENTO PREVENTIVO', color: getVar('--manttipo-5'), cantidad: 1,  valor: 0.00},
-  {name:'ALISTAMIENTO',  color: getVar('--servicio-2'), cantidad: 43, valor: 0.00},
-  {name:'GARANTÍA',      color: getVar('--servicio-4'), cantidad: 10, valor: 0.00},
+  {name:'ALISTAMIENTO',  color: getVar('--servicio-2'), cantidad: 55, valor: 0.00},
+  {name:'GARANTÍA',      color: getVar('--servicio-4'), cantidad: 11, valor: 0.00},
 ];
 // CORREGIDO 22-sep-2026: Santiago corrigió dos cosas sobre el $ real de mano de obra de Septiembre. (1) El
 // total real NO es $350,10 (eso fue un error suyo al decirlo el 21-sep) — es $335,00. (2) A diferencia de lo
@@ -6770,19 +6899,23 @@ const MANOOBRA_TIPOS_SEPTIEMBRE = [
 // "total" de esa fila muestra $1.775,02 — no cuadra con la suma de sus propias columnas (sí cuadra con el
 // total general de $3.179,54 de la tabla, así que el número en sí está bien tomado, pero vale la pena
 // confirmar si esa fila tiene algún cargo adicional no desglosado en m/o/repuesto/terceros).
-const MANOOBRA_SEPTIEMBRE_REAL = sum(MANOOBRA_TIPOS_SEPTIEMBRE.map(t=>t.valor)); // 529.24 (ACTUALIZADO 28-sep-2026, ver nota completa arriba)
-const MANOOBRA_SEPTIEMBRE_REAL_CANTIDAD = sum(MANOOBRA_TIPOS_SEPTIEMBRE.map(t=>t.cantidad)); // 112 (ACTUALIZADO 28-sep-2026, ver nota completa arriba)
+const MANOOBRA_SEPTIEMBRE_REAL = sum(MANOOBRA_TIPOS_SEPTIEMBRE.map(t=>t.valor)); // 848.45 (CORREGIDO 1-oct-2026 #3, ver nota completa arriba)
+const MANOOBRA_SEPTIEMBRE_REAL_CANTIDAD = sum(MANOOBRA_TIPOS_SEPTIEMBRE.map(t=>t.cantidad)); // 140 (ACTUALIZADO 1-oct-2026 #2, ver nota completa arriba)
 
-// Mismo cuadro de Septiembre (CORTE 19/9/2026), desglosado por "Punto" (taller) en vez de por tipo —
-// cantidad de los 3 puntos suma exactamente MANOOBRA_TIPOS_SEPTIEMBRE (88). Talleres Autorizados sigue sin
-// actividad en Septiembre (no aparece en el cuadro, queda en 0, igual que el corte anterior).
-// ACTUALIZADO 28-sep-2026: mismo cuadro nuevo (ver nota completa arriba de MANOOBRA_TIPOS_SEPTIEMBRE) — Av.
-// Américas (Hero Gye) 82→104 u./$0→$489,24 (Mantenimiento Correctivo); Naciones Unidas/Quito (Hero Quito)
-// 6→8 u./$0→$40,00 (Mantenimiento Correctivo, sin cambio). Talleres Autorizados sigue sin actividad.
+// Mismo cuadro de Septiembre (corte 1/9/2026), desglosado por "Punto" (taller) en vez de por tipo —
+// cantidad de los 3 puntos suma exactamente MANOOBRA_TIPOS_SEPTIEMBRE (140). Talleres Autorizados sigue sin
+// actividad en Septiembre (no aparece en el cuadro, queda en 0, igual que todos los cortes anteriores).
+// ACTUALIZADO 1-oct-2026 #2: mismo cuadro nuevo, reemplaza por completo el anterior (ver nota completa arriba
+// de MANOOBRA_TIPOS_SEPTIEMBRE) — Av. Américas (Hero Gye) 104→131 u.; Naciones Unidas/Quito (Hero Quito) 8→9
+// u. / $40,00 sin cambio (Mantenimiento Correctivo).
+// CORREGIDO 1-oct-2026 #3: Av. Américas (Hero Gye) en $ pasa de $342,11 a $808,45 ($4,74 + $2,37 + $801,34 de
+// Correctivo) — mismo motivo que la corrección de MANOOBRA_TIPOS_SEPTIEMBRE (Santiago confirmó el total real
+// del corte en $848,45, lo que solo cuadra usando el "m/o" $801,34 de Correctivo Gye en vez del "Total"
+// $335,00; ver nota completa arriba). Total $808,45 + $0,00 + $40,00 = $848,45 ✓.
 const MANOOBRA_PUNTO_SEPTIEMBRE = [
-  {name:'Av. Américas',            color: getVar('--servicio-3'), cantidad: 104, valor: 489.24},
+  {name:'Av. Américas',            color: getVar('--servicio-3'), cantidad: 131, valor: 808.45},
   {name:'Talleres Autorizados',    color: getVar('--servicio-2'), cantidad: 0,   valor: 0.00},
-  {name:'Naciones Unidas (Quito)', color: getVar('--servicio-4'), cantidad: 8,   valor: 40.00},
+  {name:'Naciones Unidas (Quito)', color: getVar('--servicio-4'), cantidad: 9,   valor: 40.00},
 ];
 
 // Lookup genérico por mes de los datos reales de Mano de Obra — generaliza el caso especial que antes solo
@@ -6798,7 +6931,7 @@ const MANOOBRA_PUNTO_SEPTIEMBRE = [
 // posición de mes (0=Mayo…4=Septiembre), para acceso O(1) desde las funciones de render.
 const MANOOBRA_REAL = {
   agosto:     { idx: MONTH_IDX.agosto,     tipos: MANOOBRA_TIPOS_AGOSTO,     puntos: MANOOBRA_PUNTO_AGOSTO,     real: MANOOBRA_AGOSTO_REAL,     realCantidad: MANOOBRA_AGOSTO_REAL_CANTIDAD,     ventasReal: true,  ventasRealTotal: true },
-  septiembre: { idx: MONTH_IDX.septiembre, tipos: MANOOBRA_TIPOS_SEPTIEMBRE, puntos: MANOOBRA_PUNTO_SEPTIEMBRE, real: MANOOBRA_SEPTIEMBRE_REAL, realCantidad: MANOOBRA_SEPTIEMBRE_REAL_CANTIDAD, ventasReal: false, ventasRealTotal: true },
+  septiembre: { idx: MONTH_IDX.septiembre, tipos: MANOOBRA_TIPOS_SEPTIEMBRE, puntos: MANOOBRA_PUNTO_SEPTIEMBRE, real: MANOOBRA_SEPTIEMBRE_REAL, realCantidad: MANOOBRA_SEPTIEMBRE_REAL_CANTIDAD, ventasReal: true, ventasRealTotal: true }, // ventasReal pasa a true 1-oct-2026 #2: ver nota completa arriba de MANOOBRA_TIPOS_SEPTIEMBRE
 };
 const MANOOBRA_REAL_BY_IDX = {};
 Object.values(MANOOBRA_REAL).forEach(m=> MANOOBRA_REAL_BY_IDX[m.idx] = m);
@@ -7500,8 +7633,11 @@ function renderGeneralLineas(){
   renderMargenCard('kpiGeneralLineaManoObra', manoObraGen.ventas, manoObraGen.ventas.map(v=>v*MANOOBRA_MARGEN_PCT));
   renderTicketCard('kpiGeneralLineaManoObra', manoObraGen.ventas, manoObraGen.unidades, 'servicios atendidos');
 
-  // Garantías: sin columna "Costo" en la hoja fuente todavía, así que no hay Margen bruto que calcular
-  // (la tarjeta de Margen queda fija en "—", ver HTML). Sí hay Ticket promedio (Ventas ÷ unidades).
+  // Garantías: la hoja fuente no trae columna "Costo" porque no hay costo real para Hero — el fabricante/
+  // distribuidor cubre la pieza o el servicio bajo garantía, así que para efecto del dashboard el Margen
+  // Bruto es 100% (Utilidad = Ventas). CORREGIDO 2-oct-2026 a pedido de Santiago ("El Margen Bruto de las
+  // garantias es del 100% ubicalo por favor") — antes la tarjeta quedaba fija en "—".
+  renderMargenCard('kpiGeneralLineaGarantias', GARANTIAS_MONTH_TOTAL_VENTAS, GARANTIAS_MONTH_TOTAL_VENTAS);
   renderTicketCard('kpiGeneralLineaGarantias', GARANTIAS_MONTH_TOTAL_VENTAS, GARANTIAS_MONTH_TOTAL);
 }
 
@@ -7614,11 +7750,51 @@ function renderGeneralCharts(){
   }
 }
 
+// NUEVO 2-oct-2026: Margen General Compañía — ponderado de las 4 líneas (Motos, Repuestos, Mano de Obra,
+// Garantías), a pedido de Santiago ("quiero calcular el margen general de la compañia... el ponderado de
+// todo los rubros"). Utilidad de cada línea = Ventas × Margen% de esa línea: Motos y Repuestos usan su
+// margen REAL (Ventas−Costo del archivo BASE/Repuestos); Mano de Obra usa el margen FIJO que definió
+// gerencia (MANOOBRA_MARGEN_PCT = 60%, no hay costo real registrado); Garantías usa 100% (no hay columna de
+// Costo en esa hoja — confirmado con Santiago el 1-oct-2026, "el margen bruto de garantías es del 100%").
+// El cálculo siempre usa los arreglos de Utilidad en $ de plena precisión (nunca el % ya redondeado que se
+// muestra en pantalla) — así Ventas−Utilidad cuadra exacto al centavo, sin el error de redondeo que detectó
+// Santiago al verificar a mano (592.971,98 × 0,2792 ≠ 165.555,17 exacto, por el redondeo del %).
+function computeGeneralMargenArrays(){
+  const manoObraVentas = computeManoObraModel('ventas').ventas;
+  const moUtilidad = manoObraVentas.map(v=>v*MANOOBRA_MARGEN_PCT);
+  const garVentas = GARANTIAS_MONTH_TOTAL_VENTAS;
+  const garUtilidad = GARANTIAS_MONTH_TOTAL_VENTAS; // 100% de margen — ver nota arriba
+  const ventas = MONTHS.map((_,i)=> RESUMEN_MARGEN_VENTAS[i] + REPUESTOS_TOTAL_VENTA[i] + manoObraVentas[i] + garVentas[i]);
+  const utilidad = MONTHS.map((_,i)=> RESUMEN_MARGEN_UTILIDAD[i] + REPUESTOS_TOTAL_UTILIDAD[i] + moUtilidad[i] + garUtilidad[i]);
+  return { ventas, utilidad };
+}
+
+function renderGeneralMargenCompania(){
+  const { ventas, utilidad } = computeGeneralMargenArrays();
+  const ventasGrand = mval(ventas), utilidadGrand = mval(utilidad);
+  const margenPct = ventasGrand ? (utilidadGrand/ventasGrand*100) : 0;
+
+  document.getElementById('kpiGeneralMargenVentasValue').textContent = fmtMoney(ventasGrand);
+  // Tarjeta de "Utilidad" quitada del panel a pedido de Santiago (2-oct-2026); utilidadGrand/utilidad
+  // se siguen calculando arriba porque margenPct los necesita, solo ya no se muestran en pantalla.
+  document.getElementById('kpiGeneralMargenPctValue').textContent = Math.round(margenPct) + '%'; // redondeado sin decimales, a pedido de Santiago (2-oct-2026) — internamente sigue calculando con $ de precisión completa, solo se redondea en pantalla
+
+  if(monthFilter==='todos'){
+    document.getElementById('kpiGeneralMargenVentasSub').textContent =
+      `Mayo ${fmtMoney(ventas[0])} · Junio ${fmtMoney(ventas[1])} · Julio ${fmtMoney(ventas[2])} · Agosto ${fmtMoney(ventas[3])} · Septiembre ${fmtMoney(ventas[4])}`;
+    document.getElementById('kpiGeneralMargenPctSub').textContent = 'Ponderado Mayo-Septiembre 2026 (Motos + Repuestos + Mano de Obra + Garantías)';
+  } else {
+    document.getElementById('kpiGeneralMargenVentasSub').textContent = MONTH_LABEL[monthFilter];
+    document.getElementById('kpiGeneralMargenPctSub').textContent = `Ponderado · ${MONTH_LABEL[monthFilter]} (Motos + Repuestos + Mano de Obra + Garantías)`;
+  }
+}
+
 function renderGeneral(){
   general = computeGeneralModel(metricState.general);
   buildGeneralTable();
   renderGeneralLegends();
   renderGeneralLineas();
+  renderGeneralMargenCompania();
   renderGeneralCharts();
 }
 
@@ -8173,11 +8349,15 @@ function buildManoObraTable(){
 
   // MANOOBRA_TIPOS_AGOSTO y MANOOBRA_TIPOS_SEPTIEMBRE comparten el mismo orden/nombres de 7 tipos — se
   // buscan por nombre (no por índice) para no depender de que ese orden se mantenga si cambia más adelante.
+  // CORREGIDO 1-oct-2026 #2: la celda de Septiembre en $ estaba forzada a "—" sin mirar ventasReal (quedó
+  // así de cuando Septiembre todavía no tenía $ real por tipo) — ahora mira MANOOBRA_REAL.septiembre.ventasReal
+  // directamente (esta tabla siempre muestra la columna de Septiembre, sin importar qué mes esté activo en el
+  // selector, así que no puede usar manoObraShowsBreakdown(metric), que depende de monthFilter).
   const tipoRows = MANOOBRA_TIPOS_AGOSTO.map(t=>{
     const tSept = MANOOBRA_TIPOS_SEPTIEMBRE.find(x=>x.name===t.name);
     const vAgosto = metric==='unidades' ? t.cantidad : t.valor;
-    const vSept = metric==='unidades' ? tSept.cantidad : tSept.valor; // $ de Septiembre siempre 0 por ahora (no es real todavía)
-    const septCell = metric==='unidades' ? formatter(vSept) : dash; // Septiembre: solo Unidades es dato real por ahora
+    const vSept = metric==='unidades' ? tSept.cantidad : tSept.valor;
+    const septCell = (metric==='unidades' || MANOOBRA_REAL.septiembre.ventasReal) ? formatter(vSept) : dash;
     return `
     <tr>
       <td><span class="legend-swatch" style="background:${t.color};display:inline-block;margin-right:6px;"></span>${t.name[0]+t.name.slice(1).toLowerCase()}</td>
@@ -8360,11 +8540,13 @@ function buildManoObraPuntoTable(){
 
   // MANOOBRA_PUNTO_AGOSTO y MANOOBRA_PUNTO_SEPTIEMBRE comparten los mismos 3 nombres de punto — se buscan
   // por nombre, no por índice.
+  // CORREGIDO 1-oct-2026 #2: mismo fix que buildManoObraTable — la celda de Septiembre en $ ya no se fuerza
+  // a "—", mira MANOOBRA_REAL.septiembre.ventasReal directamente.
   const puntoRows = MANOOBRA_PUNTO_AGOSTO.map(p=>{
     const pSept = MANOOBRA_PUNTO_SEPTIEMBRE.find(x=>x.name===p.name);
     const vAgosto = metric==='unidades' ? p.cantidad : p.valor;
-    const vSept = metric==='unidades' ? pSept.cantidad : pSept.valor; // $ de Septiembre siempre 0 por ahora
-    const septCell = metric==='unidades' ? formatter(vSept) : dash;
+    const vSept = metric==='unidades' ? pSept.cantidad : pSept.valor;
+    const septCell = (metric==='unidades' || MANOOBRA_REAL.septiembre.ventasReal) ? formatter(vSept) : dash;
     return `
     <tr>
       <td><span class="legend-swatch" style="background:${p.color};display:inline-block;margin-right:6px;"></span>${p.name}</td>
@@ -8924,12 +9106,45 @@ function renderMayoristasCharts(){
   }
 }
 
+function buildMayoristasInfanteTables(){
+  const metric = metricState.mayoristas;
+  const formatter = metric==='ventas' ? fmtMoney : fmt;
+  const monthTotal = metric==='ventas' ? MAYORISTAS_INFANTE_TOTAL_VENTAS : MAYORISTAS_INFANTE_TOTAL;
+
+  document.getElementById('mayoristasInfanteSub').textContent = metric==='ventas' ? 'Ventas en $' : 'Unidades vendidas';
+
+  // CORREGIDO 1-oct-2026 #2 (a pedido de Santiago): se pinta de azul, por mes, la zona con más unidades/$
+  // (según el filtro activo) — mismo criterio que el resto del dashboard (ver buildMayoristasModelosTable).
+  const leaders = [0,1,2,3,4,5].map(mi=>{
+    let bestIdx = 0, bestV = -1;
+    MAYORISTAS_INFANTE_ZONA.forEach((z,i)=>{
+      const v = metric==='ventas' ? z.ventas[mi] : z.data[mi];
+      if(v > bestV){ bestV = v; bestIdx = i; }
+    });
+    return bestIdx;
+  });
+
+  const tbody = document.getElementById('tblMayoristasInfante');
+  tbody.innerHTML = MAYORISTAS_INFANTE_ZONA.map((z,i)=>{
+    const series = metric==='ventas' ? z.ventas : z.data;
+    const cells = [0,1,2,3,4,5].map(mi=>{
+      const v = formatter(series[mi]);
+      return leaders[mi]===i ? `<td class="num"><span style="color:#2a78d6;font-weight:700;">${v}</span></td>` : `<td class="num">${v}</td>`;
+    }).join('');
+    return `<tr><td style="font-weight:700;">${z.name}</td>${cells}<td class="num">${formatter(sum(series))}</td></tr>`;
+  }).join('') +
+    `<tr style="font-weight:800;background:var(--page-plane);">
+      <td>TOTAL MES</td><td class="num">${formatter(monthTotal[0])}</td><td class="num">${formatter(monthTotal[1])}</td><td class="num">${formatter(monthTotal[2])}</td><td class="num">${formatter(monthTotal[3])}</td><td class="num">${formatter(monthTotal[4])}</td><td class="num">${formatter(monthTotal[5])}</td><td class="num">${formatter(sum(monthTotal))}</td>
+    </tr>`;
+}
+
 function renderMayoristas(){
   mayoristasModel = computeMayoristasModel(metricState.mayoristas);
   buildMayoristasTable();
   renderMayoristasLegends();
   renderMayoristasKpis();
   renderMayoristasCharts();
+  buildMayoristasInfanteTables();
 }
 
 function initMayoristas(){
@@ -12498,7 +12713,11 @@ document.querySelectorAll('[data-subnav]').forEach(nav=>{
     window.__CONSISTENCY_REPORT__ = { results, ok: results.length === 0, checkedAt: new Date().toISOString() };
     if (results.length) {
       console.warn('%c[Chequeo de consistencia] ⚠ ' + results.length + ' diferencia(s) NUEVA(S) — alguna tabla no cuadra contra su total (revisar antes de confiar en estos datos):', 'color:#b45309;font-weight:bold;font-size:13px');
-      console.table(results);
+      if (typeof console.table === 'function') {
+        try { console.table(results); } catch (e2) { console.log(JSON.stringify(results, null, 2)); }
+      } else {
+        console.log(JSON.stringify(results, null, 2));
+      }
     } else {
       console.log('%c[Chequeo de consistencia] ✓ OK — todas las tablas cuadran contra sus totales (aparte de los residuos ya conocidos).', 'color:#15803d;font-weight:bold');
     }
