@@ -486,17 +486,24 @@
      paneles "por punto" quedan ocultos.
      Agosto (ambas métricas) y Septiembre en Unidades: dona por tipo + dona por punto lado a lado arriba,
      cada una con su Detalle mensual debajo (4 paneles), y Tendencia a todo lo ancho debajo de los 4. */
+  /* 6-oct-2026: las tablas "Detalle mensual" (7 columnas + Total) ya no caben en media pantalla (quedaban con
+     Septiembre/Octubre/Total cortados bajo scroll horizontal) — ahora van siempre a TODO el ancho, debajo.
+     Por defecto: dona (izq.) + tendencia (der.) arriba y Detalle mensual a todo lo ancho debajo.
+     Agosto/Septiembre-Unidades: dona por tipo + dona por punto arriba, luego cada Detalle mensual a todo lo ancho
+     (tipo y punto, uno debajo del otro) y la Tendencia a todo lo ancho al final. */
   #manoObraLayoutGrid #manoObraTipoDonutPanel{ grid-column:1; grid-row:1; }
-  #manoObraLayoutGrid #manoObraTrendPanel{ grid-column:1; grid-row:2; }
-  #manoObraLayoutGrid #manoObraDetalleMensualPanel{ grid-column:2; grid-row:1 / span 2; }
+  #manoObraLayoutGrid #manoObraTrendPanel{ grid-column:2; grid-row:1; }
+  #manoObraLayoutGrid #manoObraDetalleMensualPanel{ grid-column:1 / -1; grid-row:2; }
   #manoObraLayoutGrid #manoObraPuntoDonutPanel,
   #manoObraLayoutGrid #manoObraPuntoTablePanel{ display:none; }
 
   #manoObraLayoutGrid.mo-agosto-layout #manoObraTipoDonutPanel{ grid-column:1; grid-row:1; }
   #manoObraLayoutGrid.mo-agosto-layout #manoObraPuntoDonutPanel{ grid-column:2; grid-row:1; display:flex; }
-  #manoObraLayoutGrid.mo-agosto-layout #manoObraDetalleMensualPanel{ grid-column:1; grid-row:2; }
-  #manoObraLayoutGrid.mo-agosto-layout #manoObraPuntoTablePanel{ grid-column:2; grid-row:2; display:flex; }
-  #manoObraLayoutGrid.mo-agosto-layout #manoObraTrendPanel{ grid-column:1 / -1; grid-row:3; }
+  #manoObraLayoutGrid.mo-agosto-layout #manoObraDetalleMensualPanel{ grid-column:1 / -1; grid-row:2; }
+  #manoObraLayoutGrid.mo-agosto-layout #manoObraPuntoTablePanel{ grid-column:1 / -1; grid-row:3; display:flex; }
+  #manoObraLayoutGrid.mo-agosto-layout #manoObraTrendPanel{ grid-column:1 / -1; grid-row:4; }
+  @media (max-width:1330px){ #manoObraLayoutGrid #manoObraTrendPanel{ grid-column:1 / -1; grid-row:2; } #manoObraLayoutGrid #manoObraDetalleMensualPanel{ grid-row:3; } }
+  #manoObraLayoutGrid table.data-table td:first-child, #manoObraLayoutGrid table.data-table th:first-child{ white-space:nowrap; }
   .legend-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:5px;flex:0 0 auto;}
   .legend-item{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--text-secondary);font-weight:600;}
   .legend-swatch{width:9px;height:9px;border-radius:1px;display:inline-block;}
@@ -3674,7 +3681,7 @@
             </div>
           </div>
           <table class="data-table compact">
-            <thead><tr><th>Mes</th><th style="text-align:right" id="garantiasMensualValueHeader">Unidades</th></tr></thead>
+            <thead><tr><th>Mes</th><th style="text-align:center" id="garantiasMensualValueHeader">Unidades</th></tr></thead>
             <tbody id="tblGarantiasMensual"></tbody>
           </table>
         </div>
@@ -8579,12 +8586,16 @@ function manoObraShowsBreakdown(metric){
 // un array fijo: cada mes con desglose real trae su propia lista de tipos/puntos.
 // Solo los meses/métrica con manoObraShowsBreakdown() tienen desglose real por tipo; el resto (incl. "Todos")
 // muestran una leyenda simple de un solo ítem, para no insinuar un desglose que no existe ahí.
+// 6-oct-2026: en las donas/leyendas de Mano de Obra solo se muestran los tipos/puntos con valor > 0 en el mes y la
+// métrica activos (los que valen 0 se ocultan); y en las tablas "Detalle mensual" se quitan las filas que valen 0 en
+// TODOS los meses visibles de la métrica activa.
+const moPositive = (arr, metric) => arr.filter(x => (metric==='unidades' ? x.cantidad : x.valor) > 0);
 function renderManoObraLegends(){
   const metric = manoObra.metric;
   const formatter = metric==='unidades' ? fmt : fmtMoney;
   if(manoObraShowsBreakdown(metric)){
     const real = MANOOBRA_REAL_BY_IDX[MONTH_IDX[monthFilter]];
-    document.getElementById('legendManoObraDonut').innerHTML = real.tipos.map(t=>{
+    document.getElementById('legendManoObraDonut').innerHTML = moPositive(real.tipos, metric).map(t=>{
       const v = metric==='unidades' ? t.cantidad : t.valor;
       const label = t.name[0]+t.name.slice(1).toLowerCase(); // "MANTENIMIENTO 500" -> "Mantenimiento 500" (7 ítems ya no entran en mayúsculas sin desbordar)
       return `<span class="legend-item"><span class="legend-swatch" style="background:${t.color}"></span>${label} ${formatter(v)}${metric==='unidades' ? ' uds.' : ''}</span>`;
@@ -8628,7 +8639,7 @@ function buildManoObraTable(){
   const M = manoObra.manoObra;
   const formatter = metric==='unidades' ? fmt : fmtMoney;
   document.getElementById('manoObraTableSub').textContent = metric==='unidades' ? 'Unidades (servicios atendidos)' : 'Ventas ($)';
-  const dash = '<span style="color:var(--text-muted);">—</span>';
+  const dash = ''; // 6-oct-2026: sin dato = celda en blanco (antes mostraba una raya "—")
 
   // MANOOBRA_TIPOS_AGOSTO y MANOOBRA_TIPOS_SEPTIEMBRE comparten el mismo orden/nombres de 7 tipos — se
   // buscan por nombre (no por índice) para no depender de que ese orden se mantenga si cambia más adelante.
@@ -8636,19 +8647,23 @@ function buildManoObraTable(){
   // así de cuando Septiembre todavía no tenía $ real por tipo) — ahora mira MANOOBRA_REAL.septiembre.ventasReal
   // directamente (esta tabla siempre muestra la columna de Septiembre, sin importar qué mes esté activo en el
   // selector, así que no puede usar manoObraShowsBreakdown(metric), que depende de monthFilter).
-  const tipoRows = MANOOBRA_TIPOS_AGOSTO.map(t=>{
+  const septShown = (metric==='unidades' || MANOOBRA_REAL.septiembre.ventasReal);
+  const tipoRows = MANOOBRA_TIPOS_AGOSTO.filter(t=>{
+    const tS = MANOOBRA_TIPOS_SEPTIEMBRE.find(x=>x.name===t.name);
+    return (metric==='unidades' ? t.cantidad : t.valor) > 0 || (septShown && (metric==='unidades' ? tS.cantidad : tS.valor) > 0);
+  }).map(t=>{
     const tSept = MANOOBRA_TIPOS_SEPTIEMBRE.find(x=>x.name===t.name);
     const vAgosto = metric==='unidades' ? t.cantidad : t.valor;
     const vSept = metric==='unidades' ? tSept.cantidad : tSept.valor;
-    const septCell = (metric==='unidades' || MANOOBRA_REAL.septiembre.ventasReal) ? formatter(vSept) : dash;
+    const septShownCell = (metric==='unidades' || MANOOBRA_REAL.septiembre.ventasReal);
     return `
     <tr>
       <td><span class="legend-swatch" style="background:${t.color};display:inline-block;margin-right:6px;"></span>${t.name[0]+t.name.slice(1).toLowerCase()}</td>
       <td class="num">${dash}</td>
       <td class="num">${dash}</td>
       <td class="num">${dash}</td>
-      <td class="num">${formatter(vAgosto)}</td>
-      <td class="num">${septCell}</td>
+      <td class="num">${pctCellPill(vAgosto, undefined, undefined, formatter)}</td>
+      <td class="num">${septShownCell ? pctCellPill(vSept, undefined, undefined, formatter) : dash}</td>
       <td class="num">${dash}</td>
       <td class="num">${formatter(vAgosto + vSept)}</td>
     </tr>`;}).join('');
@@ -8682,9 +8697,10 @@ function renderManoObraCharts(){
     const real = MANOOBRA_REAL_BY_IDX[MONTH_IDX[monthFilter]];
     document.getElementById('manoObraDonutTitle').textContent = 'Participación por tipo';
 
-    const tipoLabels = real.tipos.map(t=>t.name[0]+t.name.slice(1).toLowerCase());
-    const tipoValores = real.tipos.map(t=> metric==='unidades' ? t.cantidad : t.valor);
-    const tipoColores = real.tipos.map(t=>t.color);
+    const tiposVis = moPositive(real.tipos, metric);
+    const tipoLabels = tiposVis.map(t=>t.name[0]+t.name.slice(1).toLowerCase());
+    const tipoValores = tiposVis.map(t=> metric==='unidades' ? t.cantidad : t.valor);
+    const tipoColores = tiposVis.map(t=>t.color);
     const donutTotalTipo = metric==='unidades' ? real.realCantidad : real.real;
 
     document.getElementById('donutManoObraTotal').textContent = formatter(donutTotalTipo);
@@ -8733,7 +8749,7 @@ function renderManoObraCharts(){
       ? `Total real, sin desglose por tipo (${MONTH_LABEL_SHORT[monthFilter]} — no hay cómo clasificarlo por ahora)`
       : (realThisMonth && metric==='ventas')
       ? `Sin desglose por tipo en $ (${MONTH_LABEL_SHORT[monthFilter]} solo tiene Unidades reales por ahora)`
-      : 'Sin desglose por tipo real para este mes (ver Agosto, y Septiembre en Unidades)';
+      : (monthFilter==='todos' ? 'Mayo-Octubre 2026' : MONTH_LABEL[monthFilter]);
 
     chartManoObraDonutInst = new Chart(document.getElementById('chartManoObraDonut'), {
       type:'doughnut',
@@ -8818,26 +8834,30 @@ function buildManoObraPuntoTable(){
   const metric = manoObra.metric;
   const formatter = metric==='unidades' ? fmt : fmtMoney;
   const M = manoObra.manoObra;
-  const dash = '<span style="color:var(--text-muted);">—</span>';
+  const dash = ''; // 6-oct-2026: sin dato = celda en blanco (antes mostraba una raya "—")
   document.getElementById('manoObraPuntoTableSub').textContent = metric==='unidades' ? 'Unidades (servicios atendidos)' : 'Ventas ($)';
 
   // MANOOBRA_PUNTO_AGOSTO y MANOOBRA_PUNTO_SEPTIEMBRE comparten los mismos 3 nombres de punto — se buscan
   // por nombre, no por índice.
   // CORREGIDO 1-oct-2026 #2: mismo fix que buildManoObraTable — la celda de Septiembre en $ ya no se fuerza
   // a "—", mira MANOOBRA_REAL.septiembre.ventasReal directamente.
-  const puntoRows = MANOOBRA_PUNTO_AGOSTO.map(p=>{
+  const septShownP = (metric==='unidades' || MANOOBRA_REAL.septiembre.ventasReal);
+  const puntoRows = MANOOBRA_PUNTO_AGOSTO.filter(p=>{
+    const pS = MANOOBRA_PUNTO_SEPTIEMBRE.find(x=>x.name===p.name);
+    return (metric==='unidades' ? p.cantidad : p.valor) > 0 || (septShownP && (metric==='unidades' ? pS.cantidad : pS.valor) > 0);
+  }).map(p=>{
     const pSept = MANOOBRA_PUNTO_SEPTIEMBRE.find(x=>x.name===p.name);
     const vAgosto = metric==='unidades' ? p.cantidad : p.valor;
     const vSept = metric==='unidades' ? pSept.cantidad : pSept.valor;
-    const septCell = (metric==='unidades' || MANOOBRA_REAL.septiembre.ventasReal) ? formatter(vSept) : dash;
+    const septShownCell = (metric==='unidades' || MANOOBRA_REAL.septiembre.ventasReal);
     return `
     <tr>
       <td><span class="legend-swatch" style="background:${p.color};display:inline-block;margin-right:6px;"></span>${p.name}</td>
       <td class="num">${dash}</td>
       <td class="num">${dash}</td>
       <td class="num">${dash}</td>
-      <td class="num">${formatter(vAgosto)}</td>
-      <td class="num">${septCell}</td>
+      <td class="num">${pctCellPill(vAgosto, undefined, undefined, formatter)}</td>
+      <td class="num">${septShownCell ? pctCellPill(vSept, undefined, undefined, formatter) : dash}</td>
       <td class="num">${dash}</td>
       <td class="num">${formatter(vAgosto + vSept)}</td>
     </tr>`;}).join('');
@@ -8870,16 +8890,17 @@ function renderManoObraPuntoCharts(){
   if(chartManoObraPuntoDonutInst) chartManoObraPuntoDonutInst.destroy();
 
   const formatter = metric==='unidades' ? fmt : fmtMoney;
-  const puntoLabels = real.puntos.map(p=>p.name);
-  const puntoValores = real.puntos.map(p=> metric==='unidades' ? p.cantidad : p.valor);
-  const puntoColores = real.puntos.map(p=>p.color);
+  const puntosVis = moPositive(real.puntos, metric);
+  const puntoLabels = puntosVis.map(p=>p.name);
+  const puntoValores = puntosVis.map(p=> metric==='unidades' ? p.cantidad : p.valor);
+  const puntoColores = puntosVis.map(p=>p.color);
   const puntoTotal = sum(puntoValores);
 
   document.getElementById('manoObraPuntoDonutSub').textContent = MONTH_LABEL[monthFilter];
   document.getElementById('donutManoObraPuntoTotal').textContent = formatter(puntoTotal);
   document.getElementById('donutManoObraPuntoLabel').textContent = MONTH_LABEL_SHORT[monthFilter];
 
-  document.getElementById('legendManoObraPuntoDonut').innerHTML = real.puntos.map(p=>{
+  document.getElementById('legendManoObraPuntoDonut').innerHTML = puntosVis.map(p=>{
     const v = metric==='unidades' ? p.cantidad : p.valor;
     return `<span class="legend-item"><span class="legend-swatch" style="background:${p.color}"></span>${p.name} ${formatter(v)}${metric==='unidades' ? ' uds.' : ''}</span>`;
   }).join('');
@@ -8999,7 +9020,7 @@ function buildGarantiasMensualTable(){
   const tbody = document.getElementById('tblGarantiasMensual');
   document.getElementById('garantiasTableSub').textContent = metric==='ventas' ? 'Ventas por mes' : 'Unidades por mes';
   document.getElementById('garantiasMensualValueHeader').textContent = metric==='ventas' ? 'Ventas' : 'Unidades';
-  tbody.innerHTML = MONTHS.map((m,i)=> `<tr><td>${m}</td><td class="num">${formatter(monthTotal[i])}</td></tr>`).join('')
+  tbody.innerHTML = MONTHS.map((m,i)=> `<tr><td>${m}</td><td class="num">${totCell(formatter, monthTotal[i])}</td></tr>`).join('')
     + `<tr style="font-weight:800;background:var(--page-plane);"><td>Total</td><td class="num">${totCell(formatter, sum(monthTotal))}</td></tr>`;
 }
 
@@ -10529,22 +10550,22 @@ function buildTicketMensualTable(){
   tbody.innerHTML = rows.map((r,i)=>{
     const cells = [0,1,2,3,4,5].map(mi=>{
       const curr = r.tickets[mi];
-      if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;">—</td>`;
+      if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;"></td>`;
       const prev = mi>0 ? r.tickets[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${fmtMoney(v)}</span>` : fmtMoney;
       const cell = pctCellPill(curr, prev===null ? undefined : prev, undefined, cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
-    return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? totCell(fmtMoney, r.blended) : '—'}</td></tr>`;
+    return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? totCell(fmtMoney, r.blended) : ''}</td></tr>`;
   }).join('') +
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Promedio</td>
-    <td class="num">${monthBlended[0]!==null ? pctCellPill(monthBlended[0], undefined, undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[4]!==null ? pctCellPill(monthBlended[4], monthBlended[3], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[5]!==null ? pctCellPill(monthBlended[5], monthBlended[4], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[0]!==null ? pctCellPill(monthBlended[0], undefined, undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[4]!==null ? pctCellPill(monthBlended[4], monthBlended[3], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[5]!==null ? pctCellPill(monthBlended[5], monthBlended[4], undefined, fmtMoney) : ''}</td>
     <td class="num">${totCell(fmtMoney, totalBlended)}</td>
   </tr>`;
 }
@@ -10702,22 +10723,22 @@ function buildMayoristasTicketMensualTable(){
   tbody.innerHTML = rows.map((r,i)=>{
     const cells = [0,1,2,3,4,5].map(mi=>{
       const curr = r.tickets[mi];
-      if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;">—</td>`;
+      if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;"></td>`;
       const prev = mi>0 ? r.tickets[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${fmtMoney(v)}</span>` : fmtMoney;
       const cell = pctCellPill(curr, prev===null ? undefined : prev, undefined, cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
-    return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? totCell(fmtMoney, r.blended) : '—'}</td></tr>`;
+    return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? totCell(fmtMoney, r.blended) : ''}</td></tr>`;
   }).join('') +
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Promedio</td>
-    <td class="num">${monthBlended[0]!==null ? pctCellPill(monthBlended[0], undefined, undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[4]!==null ? pctCellPill(monthBlended[4], monthBlended[3], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[5]!==null ? pctCellPill(monthBlended[5], monthBlended[4], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[0]!==null ? pctCellPill(monthBlended[0], undefined, undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[4]!==null ? pctCellPill(monthBlended[4], monthBlended[3], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[5]!==null ? pctCellPill(monthBlended[5], monthBlended[4], undefined, fmtMoney) : ''}</td>
     <td class="num">${totCell(fmtMoney, totalBlended)}</td>
   </tr>`;
 }
@@ -10896,22 +10917,22 @@ function buildRetailTicketMensualTable(){
   tbody.innerHTML = rows.map((r,i)=>{
     const cells = [0,1,2,3,4,5].map(mi=>{
       const curr = r.tickets[mi];
-      if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;">—</td>`;
+      if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;"></td>`;
       const prev = mi>0 ? r.tickets[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${fmtMoney(v)}</span>` : fmtMoney;
       const cell = pctCellPill(curr, prev===null ? undefined : prev, undefined, cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
-    return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? totCell(fmtMoney, r.blended) : '—'}</td></tr>`;
+    return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? totCell(fmtMoney, r.blended) : ''}</td></tr>`;
   }).join('') +
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Promedio</td>
-    <td class="num">${monthBlended[0]!==null ? pctCellPill(monthBlended[0], undefined, undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[4]!==null ? pctCellPill(monthBlended[4], monthBlended[3], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[5]!==null ? pctCellPill(monthBlended[5], monthBlended[4], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[0]!==null ? pctCellPill(monthBlended[0], undefined, undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[4]!==null ? pctCellPill(monthBlended[4], monthBlended[3], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[5]!==null ? pctCellPill(monthBlended[5], monthBlended[4], undefined, fmtMoney) : ''}</td>
     <td class="num">${totCell(fmtMoney, totalBlended)}</td>
   </tr>`;
 }
@@ -11069,22 +11090,22 @@ function buildTiendasTicketMensualTable(){
   tbody.innerHTML = rows.map((r,i)=>{
     const cells = [0,1,2,3,4,5].map(mi=>{
       const curr = r.tickets[mi];
-      if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;">—</td>`;
+      if(curr===null) return `<td class="num" style="color:var(--text-muted);font-weight:600;"></td>`;
       const prev = mi>0 ? r.tickets[mi-1] : undefined;
       const cellFormatter = leaders[mi]===i ? (v)=> `<span style="color:#2a78d6;">${fmtMoney(v)}</span>` : fmtMoney;
       const cell = pctCellPill(curr, prev===null ? undefined : prev, undefined, cellFormatter);
       return `<td class="num">${cell}</td>`;
     }).join('');
-    return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? totCell(fmtMoney, r.blended) : '—'}</td></tr>`;
+    return `<tr><td style="font-weight:700;">${r.name}</td>${cells}<td class="num">${r.blended!==null ? totCell(fmtMoney, r.blended) : ''}</td></tr>`;
   }).join('') +
   `<tr style="font-weight:800;background:var(--page-plane);">
     <td>Promedio</td>
-    <td class="num">${monthBlended[0]!==null ? pctCellPill(monthBlended[0], undefined, undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[4]!==null ? pctCellPill(monthBlended[4], monthBlended[3], undefined, fmtMoney) : '—'}</td>
-    <td class="num">${monthBlended[5]!==null ? pctCellPill(monthBlended[5], monthBlended[4], undefined, fmtMoney) : '—'}</td>
+    <td class="num">${monthBlended[0]!==null ? pctCellPill(monthBlended[0], undefined, undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[1]!==null ? pctCellPill(monthBlended[1], monthBlended[0], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[2]!==null ? pctCellPill(monthBlended[2], monthBlended[1], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[3]!==null ? pctCellPill(monthBlended[3], monthBlended[2], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[4]!==null ? pctCellPill(monthBlended[4], monthBlended[3], undefined, fmtMoney) : ''}</td>
+    <td class="num">${monthBlended[5]!==null ? pctCellPill(monthBlended[5], monthBlended[4], undefined, fmtMoney) : ''}</td>
     <td class="num">${totCell(fmtMoney, totalBlended)}</td>
   </tr>`;
 }
@@ -11247,7 +11268,7 @@ function renderTiendasDetalle(){
   document.getElementById('detalleCount').textContent = `${rows.length} venta${rows.length===1?'':'s'} · ${fmtMoney(totalVentas)}`;
   document.getElementById('tblTiendasDetalle').innerHTML = rows.map(r=>{
     const margen = r.v ? (1 - r.co/r.v) : null;
-    const margenTxt = margen===null ? '—' : (Math.round(margen*1000)/10)+'%';
+    const margenTxt = margen===null ? '' : (Math.round(margen*1000)/10)+'%';
     // Semáforo: rojo si es negativo, ámbar si está entre 0% y 20% (margen bajo), verde si es saludable (>=20%).
     const margenCls = margen===null ? '' : margen<0 ? 'margen-neg' : margen<0.20 ? 'margen-warn' : 'margen-good';
     const rowCls = margen!==null && margen<0 ? ' class="detalle-row-neg"' : '';
@@ -11261,7 +11282,7 @@ function renderTiendasDetalle(){
     const margenPct = margen===null ? null : margen*100;
     const bajoObjetivo = margenObjetivo!==null && margenPct!==null && margenPct < (margenObjetivo - MARGEN_OBJETIVO_TOLERANCIA);
     const margenClsFinal = margenCls + (bajoObjetivo ? ' margen-objetivo-bajo' : '');
-    const objetivoTxt = margenObjetivo===null ? '—' : margenObjetivo.toFixed(1)+'%';
+    const objetivoTxt = margenObjetivo===null ? '' : margenObjetivo.toFixed(1)+'%';
     const objetivoCls = bajoObjetivo ? ' margen-objetivo-bajo' : '';
     const objetivoAttr = margenObjetivo!==null
       ? ` title="Objetivo ${r.p}: ${margenObjetivo.toFixed(2)}%${tiendasDetalleEsListaAnterior(r) ? ' (lista anterior — chasis '+r.ch+', caso único: aún sin lista de precios nueva)' : ''} · Real: ${margenTxt}${bajoObjetivo ? ' — por debajo del objetivo (tolerancia 0,2 p.p.)' : ''}"`
@@ -12006,7 +12027,7 @@ function buildSioMensualTable(){
     return `<tr><td style="font-weight:700;">${m}</td><td class="num">${fmt(si)}</td><td class="num">${fmt(so)}</td><td class="num">${st}</td></tr>`;
   }).join('') +
   `<tr style="font-weight:800;background:var(--page-plane);">
-    <td>Total</td><td class="num">${fmt(sum(SELLIN_TOTAL))}</td><td class="num">${fmt(sum(SELLOUT_TOTAL))}</td><td class="num">${sum(SELLIN_TOTAL)>0 ? Math.round(sum(SELLOUT_TOTAL)/sum(SELLIN_TOTAL)*100)+'%' : '—'}</td>
+    <td>Total</td><td class="num">${fmt(sum(SELLIN_TOTAL))}</td><td class="num">${fmt(sum(SELLOUT_TOTAL))}</td><td class="num">${sum(SELLIN_TOTAL)>0 ? Math.round(sum(SELLOUT_TOTAL)/sum(SELLIN_TOTAL)*100)+'%' : ''}</td>
   </tr>`;
 }
 
